@@ -3,15 +3,20 @@ from django.utils import timezone
 from django.utils.translation import get_language, ugettext_lazy as _, override
 
 from cms.models.fields import PlaceholderField
+from cms.models.pluginmodel import CMSPlugin
 from parler.models import TranslatableModel, TranslatedFields
+# from filer.fields.image import FilerImageField
 
 
 class Article(TranslatableModel):
+    CLONE_FIELDS = ['title', ]
     translations = TranslatedFields(
-        title = models.CharField(_("Title"))
+        title = models.CharField(_('Title'), max_length=234),
+
         content = PlaceholderField(
             'aldryn_newsblog_article_content',
-            related_name='aldryn_newsblog_articles')
+            related_name='aldryn_newsblog_articles'),
+
         slug = models.SlugField(
             verbose_name=_('Slug'),
             max_length=255,
@@ -19,13 +24,27 @@ class Article(TranslatableModel):
             blank=True,
             help_text=_(
                 'Used in the URL. If changed, the URL will change. '
-                'Clean it to have it re-created.')
+                'Clean it to have it re-created.'),
         )
     )
-    publication_start = models.DateTimeField(
-        verbose_name=_('Published Since'), default=timezone.now,
-        help_text=_('Used in the URL. If changed, the URL will change.')
-    )
-    publication_end = models.DateTimeField(
-        verbose_name=_('Published Until'), null=True, blank=True)
-    key_visual = FilerImageField(verbose_name=_('Key Visual'), blank=True, null=True)
+
+    published = models.BooleanField(default=False)
+
+    def publish(self):
+        """Publish this article.
+
+        If the instance is a draft, find the corresponding published instance
+        and update it. If a published instance doesn't exist, create one."""
+        # TODO : find existing object
+        published_instance = self.__class__()
+        # TODO : copy values from draft to published instance
+        published_instance.published = True
+        published_instance.save()
+
+    @property
+    def published(self):
+        return self.objects.filter(published=True)
+
+    @property
+    def drafts(self):
+        return self.objects.filter(published=False)
