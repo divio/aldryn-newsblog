@@ -38,6 +38,7 @@ class Article(TranslatableModel):
         # TODO : find existing object
         published_instance = self.__class__()
         # TODO : copy values from draft to published instance
+        # TODO : clone translated instances
         published_instance.published = True
         published_instance.save()
 
