@@ -49,6 +49,15 @@ class Article(TranslatableModel):
             (fld.name, getattr(self, fld.name)) for fld
             in self._meta.fields
             if fld.name != self._meta.pk.name]))
+        for language_code in self.get_available_languages():
+            draft_translation = self.get_translation(language_code)
+            published_translation = published_instance.create_translation(
+                language_code)
+            for fld in draft_translation._meta.fields:
+                if fld.name != self._meta.pk.name:
+                    setattr(published_translation, fld.name,
+                            getattr(draft_translation, fld.name))
+
         # TODO : clone translated instances
         published_instance.is_published = True
         published_instance.save()
