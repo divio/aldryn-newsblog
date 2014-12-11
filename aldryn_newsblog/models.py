@@ -19,7 +19,6 @@ class PublishedManager(models.Manager):
 
 
 class Article(TranslatableModel):
-    CLONE_FIELDS = ['title', ]
     translations = TranslatedFields(
         title = models.CharField(_('Title'), max_length=234),
 
@@ -46,11 +45,14 @@ class Article(TranslatableModel):
         If the instance is a draft, find the corresponding published instance
         and update it. If a published instance doesn't exist, create one."""
         # TODO : find existing object
-        published_instance = self.__class__()
-        # TODO : copy values from draft to published instance
+        published_instance = self.__class__.objects.create(**dict([
+            (fld.name, getattr(self, fld.name)) for fld
+            in self._meta.fields
+            if fld.name != self._meta.pk.name]))
         # TODO : clone translated instances
         published_instance.is_published = True
         published_instance.save()
+        return published_instance
 
     published_objects = PublishedManager(is_published=True)
     draft_objects = PublishedManager(is_published=False)
