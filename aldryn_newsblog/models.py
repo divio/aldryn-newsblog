@@ -8,6 +8,16 @@ from parler.models import TranslatableModel, TranslatedFields
 # from filer.fields.image import FilerImageField
 
 
+class PublishedManager(models.Manager):
+    def __init__(self, is_published=True):
+        super(PublishedManager, self).__init__()
+        self.is_published = is_published
+
+    def get_query_set(self):
+        return super(PublishedManager, self).get_query_set().filter(
+            is_published=self.is_published)
+
+
 class Article(TranslatableModel):
     CLONE_FIELDS = ['title', ]
     translations = TranslatedFields(
@@ -28,7 +38,7 @@ class Article(TranslatableModel):
         )
     )
 
-    published = models.BooleanField(default=False)
+    is_published = models.BooleanField(default=False)
 
     def publish(self):
         """Publish this article.
@@ -39,13 +49,8 @@ class Article(TranslatableModel):
         published_instance = self.__class__()
         # TODO : copy values from draft to published instance
         # TODO : clone translated instances
-        published_instance.published = True
+        published_instance.is_published = True
         published_instance.save()
 
-    @property
-    def published(self):
-        return self.objects.filter(published=True)
-
-    @property
-    def drafts(self):
-        return self.objects.filter(published=False)
+    published_objects = PublishedManager(is_published=True)
+    draft_objects = PublishedManager(is_published=False)
