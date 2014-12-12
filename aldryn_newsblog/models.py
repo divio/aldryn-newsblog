@@ -1,11 +1,13 @@
+from django.core.urlresolvers import reverse, NoReverseMatch
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import get_language, ugettext_lazy as _, override
+import reversion
 
 from cms.models.fields import PlaceholderField
 from cms.models.pluginmodel import CMSPlugin
 from parler.models import TranslatableModel, TranslatedFields
-# from filer.fields.image import FilerImageField
+from aldryn_people.models import Person
 
 
 class PublishedManager(models.Manager):
@@ -13,11 +15,12 @@ class PublishedManager(models.Manager):
         super(PublishedManager, self).__init__()
         self.is_published = is_published
 
-    def get_query_set(self):
-        return super(PublishedManager, self).get_query_set().filter(
+    def get_queryset(self):
+        return super(PublishedManager, self).get_queryset().filter(
             is_published=self.is_published)
 
 
+@reversion.register
 class Article(TranslatableModel):
     translations = TranslatedFields(
         title = models.CharField(_('Title'), max_length=234),
@@ -25,17 +28,19 @@ class Article(TranslatableModel):
         content = PlaceholderField(
             'aldryn_newsblog_article_content',
             related_name='aldryn_newsblog_articles'),
-
-        slug = models.SlugField(
-            verbose_name=_('Slug'),
-            max_length=255,
-            unique=True,
-            blank=True,
-            help_text=_(
-                'Used in the URL. If changed, the URL will change. '
-                'Clean it to have it re-created.'),
-        )
     )
+
+    slug = models.SlugField(
+        verbose_name=_('Slug'),
+        max_length=255,
+        unique=True,
+        blank=True,
+        help_text=_(
+            'Used in the URL. If changed, the URL will change. '
+            'Clean it to have it re-created.'),
+    )
+
+    author = models.ForeignKey(Person)
 
     is_published = models.BooleanField(default=False)
 
@@ -65,3 +70,6 @@ class Article(TranslatableModel):
 
     published_objects = PublishedManager(is_published=True)
     draft_objects = PublishedManager(is_published=False)
+
+    def get_absolute_url(self):
+        return reverse('aldryn_newsblog:article-detail', kwargs={'slug': self.slug})
