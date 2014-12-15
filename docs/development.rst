@@ -33,7 +33,14 @@ Aldryn NewsBlog is a django CMS application, and shares much of django CMS's sta
 
 These include:
 
-* guidelines and policies for contributing to the project, including standards for code and
-  documentation
-* standards for managing the project's development
-* a code of conduct for community activity
+* `guidelines and policies
+  <http://docs.django-cms.org/en/support-3.0.x/contributing/contributing.html>`_ for contributing
+  to the project, including standards for code and documentation
+* standards for `managing the project's development
+  <http://docs.django-cms.org/en/support-3.0.x/contributing/management.html>`_
+* a `code of conduct
+  <http://docs.django-cms.org/en/support-3.0.x/contributing/code_of_conduct.html>`_ for community
+  activity
+
+Please familiarise yourself with this documentation if you'd like to contribute to
+Aldryn NewsBlog.
