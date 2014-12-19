@@ -1,0 +1,15 @@
+djangocms-helper
+django>=1.6,<1.7
+South
+dj-database-url
+django-classy-tags
+django-cms
+django-mptt
+django-sekizai
+djangocms-admin-style
+docopt
+html5lib
+pyflakes
+six
+django-parler
+selenium

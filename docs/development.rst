@@ -44,3 +44,32 @@ These include:
 
 Please familiarise yourself with this documentation if you'd like to contribute to
 Aldryn NewsBlog.
+
+*************
+Running tests
+*************
+
+Aldryn NewsBlog uses `django CMS Helper <https://github.com/nephila/djangocms-helper>`_ to run its
+test suite.
+
+There's more than one way to do this, but here's one to help you get started::
+
+    # create a virtual environment
+    virtualenv test-aldryn-newsblog
+
+    # activate it
+    cd test-aldryn-newsblog/
+    source bin/activate
+
+    # get Aldryn NewsBlog from GitHub
+    git clone git@github.com:aldryn/aldryn-newsblog.git
+
+    # install the dependencies for testing
+    pip install -Ur aldryn-newsblog/test_requirements.txt
+
+    # run the test suite
+    # note that you must be in the aldryn-newsblog directory when you do this,
+    # otherwise you'll get "Template not found" errors
+    cd aldryn-newsblog
+    python develop.py test
+
