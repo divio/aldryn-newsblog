@@ -32,6 +32,7 @@ parts
 bin
 /dist
 *~
+/docs/_build
 /docs/*.html
 distribute-*.tar.gz
 include/
