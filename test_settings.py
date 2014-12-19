@@ -1,0 +1,12 @@
+HELPER_SETTINGS = {
+    'TIME_ZONE': 'Europe/Zurich',
+    'LANGUAGES': (
+        ('en', 'English'),
+        ('de', 'German'),
+    ),
+    'INSTALLED_APPS': [
+        'aldryn_newsblog',
+        'aldryn_people',
+        'filer',
+    ],
+}
