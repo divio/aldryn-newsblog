@@ -2,7 +2,7 @@ from django.core.urlresolvers import reverse, NoReverseMatch
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import get_language, ugettext_lazy as _, override
-import reversion
+from django.contrib.auth.models import User
 
 from cms.models.fields import PlaceholderField
 from cms.models.pluginmodel import CMSPlugin
@@ -10,17 +10,6 @@ from parler.models import TranslatableModel, TranslatedFields
 from aldryn_people.models import Person
 
 
-class PublishedManager(models.Manager):
-    def __init__(self, is_published=True):
-        super(PublishedManager, self).__init__()
-        self.is_published = is_published
-
-    def get_queryset(self):
-        return super(PublishedManager, self).get_queryset().filter(
-            is_published=self.is_published)
-
-
-@reversion.register
 class Article(TranslatableModel):
     translations = TranslatedFields(
         title = models.CharField(_('Title'), max_length=234),
@@ -41,35 +30,10 @@ class Article(TranslatableModel):
     )
 
     author = models.ForeignKey(Person)
-
-    is_published = models.BooleanField(default=False)
-
-    def publish(self):
-        """Publish this article.
-
-        If the instance is a draft, find the corresponding published instance
-        and update it. If a published instance doesn't exist, create one."""
-        # TODO : find existing object
-        published_instance = self.__class__.objects.create(**dict([
-            (fld.name, getattr(self, fld.name)) for fld
-            in self._meta.fields
-            if fld.name != self._meta.pk.name]))
-        for language_code in self.get_available_languages():
-            draft_translation = self.get_translation(language_code)
-            published_translation = published_instance.create_translation(
-                language_code)
-            for fld in draft_translation._meta.fields:
-                if fld.name != self._meta.pk.name:
-                    setattr(published_translation, fld.name,
-                            getattr(draft_translation, fld.name))
-
-        # TODO : clone translated instances
-        published_instance.is_published = True
-        published_instance.save()
-        return published_instance
-
-    published_objects = PublishedManager(is_published=True)
-    draft_objects = PublishedManager(is_published=False)
+    owner = models.ForeignKey(User)
+    namespace = models.CharField(max_length=123, blank=True, default='')
+    category = models.CharField(max_length=123, blank=True, default='')
 
     def get_absolute_url(self):
-        return reverse('aldryn_newsblog:article-detail', kwargs={'slug': self.slug})
+        return reverse(
+            'aldryn_newsblog:article-detail', kwargs={'slug': self.slug})

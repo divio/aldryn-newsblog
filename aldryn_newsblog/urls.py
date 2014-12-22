@@ -6,7 +6,10 @@ from aldryn_newsblog.views import (
 
 urlpatterns = patterns(
     '',
-    url(r'^(?P<slug>\w[-\w]*)/$', ArticleDetail.as_view(), name='article-detail'),
+    url(r'^(?P<slug>\w[-\w]*)/$', ArticleDetail.as_view(),
+        name='article-detail'),
     url(r'^author/(?P<author>\w[-\w]*)/$', AuthorArticleList.as_view(),
         name='article-list-by-author'),
+    url(r'^category/(?P<category>\w[-\w]*)/$', CategoryArticleList.as_view(),
+        name='article-list-by-category'),
 )
