@@ -1,6 +1,8 @@
 import unittest
 import random
 import string
+from datetime import datetime, timedelta
+from random import randint
 
 from cms import api
 from cms.utils import get_cms_setting
@@ -38,7 +40,7 @@ class TestAldrynNewsBlog(TestCase):
         author = self.create_person()
         article = Article.objects.create(
             title=title, slug=rand_str(), author=author, owner=author.user,
-            namespace='NewsBlog')
+            namespace='NewsBlog', publishing_date=datetime.now())
         response = self.client.get(article.get_absolute_url())
         self.assertContains(response, title)
 
@@ -48,7 +50,7 @@ class TestAldrynNewsBlog(TestCase):
         author = self.create_person()
         article = Article.objects.create(
             title=title, slug=slug, author=author, owner=author.user,
-            namespace='NewsBlog')
+            namespace='NewsBlog', publishing_date=datetime.now())
         article_url = article.get_absolute_url()
         response = self.client.get(article_url)
         self.assertContains(response, title)
@@ -62,7 +64,8 @@ class TestAldrynNewsBlog(TestCase):
             articles = [
                 Article.objects.create(
                     title=rand_str(), slug=rand_str(), namespace='NewsBlog',
-                    author=author, owner=author.user)
+                    author=author, owner=author.user,
+                    publishing_date=datetime.now())
                 for _ in range(10)]
             response = self.client.get(reverse(
                 'aldryn_newsblog:article-list-by-author',
@@ -77,7 +80,8 @@ class TestAldrynNewsBlog(TestCase):
             articles = [
                 Article.objects.create(
                     title=rand_str(), slug=rand_str(), namespace='NewsBlog',
-                    author=author, owner=author.user, category=category)
+                    author=author, owner=author.user, category=category,
+                    publishing_date=datetime.now())
                 for _ in range(10)]
             response = self.client.get(reverse(
                 'aldryn_newsblog:article-list-by-category',
@@ -85,6 +89,76 @@ class TestAldrynNewsBlog(TestCase):
             for article in articles:
                 self.assertContains(response, article.title)
 
+    def test_articles_by_date(self):
+        author = self.create_person()
+        in_articles = [
+            Article.objects.create(
+                title=rand_str(), slug=rand_str(), namespace='NewsBlog',
+                author=author, owner=author.user,
+                publishing_date=datetime(1914, 7, 28,
+                                         randint(0, 23), randint(0, 59)))
+            for _ in range(10)]
+        out_articles = [
+            Article.objects.create(
+                title=rand_str(), slug=rand_str(), namespace='NewsBlog',
+                author=author, owner=author.user,
+                publishing_date=datetime(1939, 9, 1,
+                                         randint(0, 23), randint(0, 59)))
+            for _ in range(10)]
+        response = self.client.get(reverse(
+            'aldryn_newsblog:article-list-by-day',
+            kwargs={'year': '1914', 'month': '07', 'day': '28'}))
+        for article in out_articles:
+            self.assertNotContains(response, article.title)
+        for article in in_articles:
+            self.assertContains(response, article.title)
+
+    def test_articles_by_month(self):
+        author = self.create_person()
+        in_articles = [
+            Article.objects.create(
+                title=rand_str(), slug=rand_str(), namespace='NewsBlog',
+                author=author, owner=author.user,
+                publishing_date=datetime(1914, 7, randint(1, 31),
+                                         randint(0, 23), randint(0, 59)))
+            for _ in range(10)]
+        out_articles = [
+            Article.objects.create(
+                title=rand_str(), slug=rand_str(), namespace='NewsBlog',
+                author=author, owner=author.user,
+                publishing_date=datetime(1939, 9, 1,
+                                         randint(0, 23), randint(0, 59)))
+            for _ in range(10)]
+        response = self.client.get(reverse(
+            'aldryn_newsblog:article-list-by-month',
+            kwargs={'year': '1914', 'month': '07'}))
+        for article in out_articles:
+            self.assertNotContains(response, article.title)
+        for article in in_articles:
+            self.assertContains(response, article.title)
+
+    def test_articles_by_year(self):
+        author = self.create_person()
+        in_articles = [
+            Article.objects.create(
+                title=rand_str(), slug=rand_str(), namespace='NewsBlog',
+                author=author, owner=author.user,
+                publishing_date=datetime(1914, randint(1, 12), randint(1, 28),
+                                         randint(0, 23), randint(0, 59)))
+            for _ in range(10)]
+        out_articles = [
+            Article.objects.create(
+                title=rand_str(), slug=rand_str(), namespace='NewsBlog',
+                author=author, owner=author.user,
+                publishing_date=datetime(1939, randint(1, 12), randint(1, 28),
+                                         randint(0, 23), randint(0, 59)))
+            for _ in range(10)]
+        response = self.client.get(reverse(
+            'aldryn_newsblog:article-list-by-year', kwargs={'year': '1914'}))
+        for article in out_articles:
+            self.assertNotContains(response, article.title)
+        for article in in_articles:
+            self.assertContains(response, article.title)
 
 
 if __name__ == '__main__':
