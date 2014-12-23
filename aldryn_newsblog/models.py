@@ -33,6 +33,7 @@ class Article(TranslatableModel):
     owner = models.ForeignKey(User)
     namespace = models.CharField(max_length=123, blank=True, default='')
     category = models.CharField(max_length=123, blank=True, default='')
+    publishing_date = models.DateTimeField()
 
     def get_absolute_url(self):
         return reverse(
