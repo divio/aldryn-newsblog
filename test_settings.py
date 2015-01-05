@@ -8,5 +8,6 @@ HELPER_SETTINGS = {
         'aldryn_newsblog',
         'aldryn_people',
         'filer',
+        'djangocms_text_ckeditor',
     ],
 }

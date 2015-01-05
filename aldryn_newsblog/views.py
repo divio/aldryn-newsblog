@@ -3,6 +3,7 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from django.core.urlresolvers import resolve
 from django.views.generic import View, ListView
+from django.views.generic.detail import DetailView
 from django.http import HttpResponse
 
 from .models import Article
@@ -19,10 +20,9 @@ class NamespaceView(View):
             context, **response_kwargs)
 
 
-class ArticleDetail(NamespaceView):
-    def get(self, request, slug):
-        return HttpResponse(Article.objects.get(
-            slug=slug, namespace=self.current_app).title)
+class ArticleDetail(NamespaceView, DetailView):
+    def get_queryset(self):
+        return Article.objects
 
 
 class ArticleList(NamespaceView, ListView):

@@ -38,3 +38,21 @@ class Article(TranslatableModel):
     def get_absolute_url(self):
         return reverse(
             'aldryn_newsblog:article-detail', kwargs={'slug': self.slug})
+
+
+class LatestEntriesPlugin(CMSPlugin):
+
+    latest_entries = models.IntegerField(
+        default=5,
+        help_text=_('The number of latests entries to be displayed.')
+    )
+
+    def __unicode__(self):
+        return str(self.latest_entries).decode('utf8')
+
+    def copy_relations(self, oldinstance):
+        self.tags = oldinstance.tags.all()
+
+    def get_articles(self):
+        articles = Article.objects.filter_by_language(self.language)
+        return articles[:self.latest_entries]

@@ -4,12 +4,22 @@ from cms.models.pluginmodel import CMSPlugin
 from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
 
-from aldryn_newsblog import models
+from aldryn_newsblog import forms, models
 
 
 class NewsBlogPlugin(CMSPluginBase):
     module = 'NewsBlog'
-    render_template = 'aldryn_newsblog/plugins/newsblog_articles.html'
 
 
-plugin_pool.register_plugin(NewsBlogPlugin)
+class LatestEntriesPlugin(NewsBlogPlugin):
+    render_template = 'aldryn_newsblog/plugins/latest_entries.html'
+    name = _('Latest Entries')
+    model = models.LatestEntriesPlugin
+    form = forms.LatestEntriesForm
+
+    def render(self, context, instance, placeholder):
+        context['instance'] = instance
+        return context
+
+
+plugin_pool.register_plugin(LatestEntriesPlugin)
