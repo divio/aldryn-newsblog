@@ -12,7 +12,7 @@ from django.contrib.auth.models import User
 from django.test import TestCase, TransactionTestCase
 from django.core.urlresolvers import reverse
 from django.db import transaction
-from django.utils.translation import activate
+from django.utils.translation import override
 from aldryn_people.models import Person
 import reversion
 
@@ -255,59 +255,54 @@ class TestVersioning(NewsBlogTestsMixin, TransactionTestCase):
         article.set_current_language('de')
         self.create_revision(article, title=title1_de)
 
-        activate('en')
         response = self.client.get(article.get_absolute_url())
         self.assertContains(response, title1_en)
 
-        activate('de')
-        response = self.client.get(article.get_absolute_url())
-        self.assertContains(response, title1_de)
+        with override('de'):
+            response = self.client.get(article.get_absolute_url())
+            self.assertContains(response, title1_de)
 
         # Revision 2a (modify just EN)
         article.set_current_language('en')
         self.create_revision(article, title=title2_en)
 
-        activate('en')
         response = self.client.get(article.get_absolute_url())
         self.assertContains(response, title2_en)
 
-        activate('de')
-        response = self.client.get(article.get_absolute_url())
-        self.assertContains(response, title1_de)
+        with override('de'):
+            response = self.client.get(article.get_absolute_url())
+            self.assertContains(response, title1_de)
 
         # Revision 2b (modify just DE)
         article.set_current_language('de')
         self.create_revision(article, title=title2_de)
 
-        activate('en')
         response = self.client.get(article.get_absolute_url())
         self.assertContains(response, title2_en)
 
-        activate('de')
-        response = self.client.get(article.get_absolute_url())
-        self.assertContains(response, title2_de)
+        with override('de'):
+            response = self.client.get(article.get_absolute_url())
+            self.assertContains(response, title2_de)
 
         # Revert to revision 2a (EN=2, DE=1)
         self.revert_to(article, 1)
 
-        activate('en')
         response = self.client.get(article.get_absolute_url())
         self.assertContains(response, title2_en)
 
-        activate('de')
-        response = self.client.get(article.get_absolute_url())
-        self.assertContains(response, title1_de)
+        with override('de'):
+            response = self.client.get(article.get_absolute_url())
+            self.assertContains(response, title1_de)
 
         # Revert to revision 1 (EN=1, DE=1)
         self.revert_to(article, 2)
 
-        activate('en')
         response = self.client.get(article.get_absolute_url())
         self.assertContains(response, title1_en)
 
-        activate('de')
-        response = self.client.get(article.get_absolute_url())
-        self.assertContains(response, title1_de)
+        with override('de'):
+            response = self.client.get(article.get_absolute_url())
+            self.assertContains(response, title1_de)
 
 
 if __name__ == '__main__':
