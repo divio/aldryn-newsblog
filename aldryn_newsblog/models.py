@@ -1,15 +1,46 @@
-from django.core.urlresolvers import reverse, NoReverseMatch
+from functools import partial
+
+from django.core.urlresolvers import reverse
 from django.db import models
-from django.utils import timezone
-from django.utils.translation import get_language, ugettext_lazy as _, override
+from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
 
 from cms.models.fields import PlaceholderField
 from cms.models.pluginmodel import CMSPlugin
 from parler.models import TranslatableModel, TranslatedFields
 from aldryn_people.models import Person
+import reversion
+from reversion.revisions import VersionAdapter
+from parler import cache
 
 
+class TranslatableVersionAdapter(VersionAdapter):
+    revision_manager = None
+
+    def __init__(self, model):
+        super(TranslatableVersionAdapter, self).__init__(model)
+
+        # Register the translation model to be tracked as well
+        root_model = model._parler_meta.root_model
+        self.revision_manager.register(root_model)
+        self.follow += (model._parler_meta.root_rel_name, )
+        post_save.connect(self._clear_cache, sender=root_model)
+
+        # Exclude all translated fields, as those are tracked separately
+        self.exclude += tuple(model._parler_meta.get_translated_fields())
+
+    def _clear_cache(self, sender, instance, raw, **kwargs):
+        if raw:
+            cache._cache_translation(instance)
+
+
+register_translatable = partial(reversion.register,
+                                adapter_cls=TranslatableVersionAdapter,
+                                revision_manager=reversion)
+
+
+@register_translatable
 class Article(TranslatableModel):
     translations = TranslatedFields(
         title = models.CharField(_('Title'), max_length=234),
