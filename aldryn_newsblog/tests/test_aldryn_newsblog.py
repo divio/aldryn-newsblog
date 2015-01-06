@@ -55,8 +55,8 @@ class TestAldrynNewsBlog(TestCase):
         response = self.client.get(article_url)
         self.assertContains(response, title)
         Article.objects.get(slug=slug).delete()
-        with self.assertRaises(Article.DoesNotExist):
-            response = self.client.get(article_url)
+        response = self.client.get(article_url)
+        self.assertEqual(response.status_code, 404)
 
     def test_articles_by_author(self):
         author1, author2 = self.create_person(), self.create_person()
@@ -159,6 +159,21 @@ class TestAldrynNewsBlog(TestCase):
             self.assertNotContains(response, article.title)
         for article in in_articles:
             self.assertContains(response, article.title)
+
+    def test_has_content(self):
+        title = rand_str()
+        content = rand_str()
+        author = self.create_person()
+        article = Article.objects.create(
+            title=title, slug=rand_str(), author=author, owner=author.user,
+            namespace='NewsBlog', publishing_date=datetime.now())
+        api.add_plugin(article.content, 'TextPlugin', self.language)
+        plugin = article.content.get_plugins()[0].get_plugin_instance()[0]
+        plugin.body = content
+        plugin.save()
+        response = self.client.get(article.get_absolute_url())
+        self.assertContains(response, title)
+        self.assertContains(response, content)
 
 
 if __name__ == '__main__':

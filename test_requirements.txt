@@ -13,3 +13,4 @@ pyflakes
 six
 django-parler
 selenium
+djangocms_text_ckeditor
