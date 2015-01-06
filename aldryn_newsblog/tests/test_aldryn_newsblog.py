@@ -1,30 +1,53 @@
 import unittest
 import random
 import string
-from datetime import datetime, timedelta
+from datetime import datetime
 from random import randint
 
+import six
 from cms import api
 from cms.utils import get_cms_setting
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.test import TestCase
+from django.test import TestCase, TransactionTestCase
 from django.core.urlresolvers import reverse
+from django.db import transaction
+from django.utils.translation import override
 from aldryn_people.models import Person
+import reversion
 
 from aldryn_newsblog.models import Article
 
 
-def rand_str():
-    return ''.join(random.choice(string.ascii_letters) for _ in range(23))
+def rand_str(prefix='', length=23, chars=string.ascii_letters):
+    return prefix + ''.join(random.choice(chars) for _ in range(length))
 
 
-class TestAldrynNewsBlog(TestCase):
+class NewsBlogTestsMixin(object):
     def create_person(self):
         user = User.objects.create(
             username=rand_str(), first_name=rand_str(), last_name=rand_str())
         person = Person.objects.create(user=user, slug=rand_str())
         return person
+
+    def create_article(self, **kwargs):
+        try:
+            author = kwargs['author']
+        except KeyError:
+            author = self.create_person()
+
+        fields = {
+            'title': rand_str(),
+            'slug': rand_str(),
+            'author': author,
+            'owner': author.user,
+            'namespace': 'NewsBlog',
+            'publishing_date': datetime.now()
+        }
+
+        fields.update(kwargs)
+
+        return Article.objects.create(**fields)
 
     def setUp(self):
         self.template = get_cms_setting('TEMPLATES')[0][0]
@@ -34,6 +57,13 @@ class TestAldrynNewsBlog(TestCase):
             apphook='NewsBlogApp', apphook_namespace='NewsBlog')
         self.page.publish('en')
         self.placeholder = self.page.placeholders.all()[0]
+
+        for language, _ in settings.LANGUAGES[1:]:
+            api.create_title(language, 'page', self.page)
+            self.page.publish(language)
+
+
+class TestAldrynNewsBlog(NewsBlogTestsMixin, TestCase):
 
     def test_create_post(self):
         title = rand_str()
@@ -174,6 +204,105 @@ class TestAldrynNewsBlog(TestCase):
         response = self.client.get(article.get_absolute_url())
         self.assertContains(response, title)
         self.assertContains(response, content)
+
+
+class TestVersioning(NewsBlogTestsMixin, TransactionTestCase):
+    def create_revision(self, article, **kwargs):
+        with transaction.atomic(), reversion.create_revision():
+            for k, v in six.iteritems(kwargs):
+                setattr(article, k, v)
+            article.save()
+
+    def revert_to(self, article, revision):
+        reversion.get_for_object(article)[revision].revision.revert()
+
+    def test_revert_revision(self):
+        title1 = rand_str(prefix='title1_')
+        title2 = rand_str(prefix='title2_')
+
+        article = self.create_article()
+
+        # Revision 1
+        self.create_revision(article, title=title1)
+
+        response = self.client.get(article.get_absolute_url())
+        self.assertContains(response, title1)
+
+        # Revision 2
+        self.create_revision(article, title=title2)
+
+        response = self.client.get(article.get_absolute_url())
+        self.assertContains(response, title2)
+
+        # Revert to revision 1
+        self.revert_to(article, 1)
+
+        response = self.client.get(article.get_absolute_url())
+        self.assertContains(response, title1)
+
+    def test_revert_translated_revision(self):
+        title1_en = rand_str(prefix='title1_en_')
+        title1_de = rand_str(prefix='title1_de_')
+        title2_en = rand_str(prefix='title2_en_')
+        title2_de = rand_str(prefix='title2_de_')
+
+        article = self.create_article()
+
+        # Revision 1
+        article.set_current_language('en')
+        self.create_revision(article, title=title1_en)
+
+        article.set_current_language('de')
+        self.create_revision(article, title=title1_de)
+
+        response = self.client.get(article.get_absolute_url())
+        self.assertContains(response, title1_en)
+
+        with override('de'):
+            response = self.client.get(article.get_absolute_url())
+            self.assertContains(response, title1_de)
+
+        # Revision 2a (modify just EN)
+        article.set_current_language('en')
+        self.create_revision(article, title=title2_en)
+
+        response = self.client.get(article.get_absolute_url())
+        self.assertContains(response, title2_en)
+
+        with override('de'):
+            response = self.client.get(article.get_absolute_url())
+            self.assertContains(response, title1_de)
+
+        # Revision 2b (modify just DE)
+        article.set_current_language('de')
+        self.create_revision(article, title=title2_de)
+
+        response = self.client.get(article.get_absolute_url())
+        self.assertContains(response, title2_en)
+
+        with override('de'):
+            response = self.client.get(article.get_absolute_url())
+            self.assertContains(response, title2_de)
+
+        # Revert to revision 2a (EN=2, DE=1)
+        self.revert_to(article, 1)
+
+        response = self.client.get(article.get_absolute_url())
+        self.assertContains(response, title2_en)
+
+        with override('de'):
+            response = self.client.get(article.get_absolute_url())
+            self.assertContains(response, title1_de)
+
+        # Revert to revision 1 (EN=1, DE=1)
+        self.revert_to(article, 2)
+
+        response = self.client.get(article.get_absolute_url())
+        self.assertContains(response, title1_en)
+
+        with override('de'):
+            response = self.client.get(article.get_absolute_url())
+            self.assertContains(response, title1_de)
 
 
 if __name__ == '__main__':

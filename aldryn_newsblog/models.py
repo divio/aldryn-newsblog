@@ -1,15 +1,53 @@
-from django.core.urlresolvers import reverse, NoReverseMatch
+from functools import partial
+
+from django.core.urlresolvers import reverse
 from django.db import models
-from django.utils import timezone
-from django.utils.translation import get_language, ugettext_lazy as _, override
+from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
 
 from cms.models.fields import PlaceholderField
 from cms.models.pluginmodel import CMSPlugin
-from parler.models import TranslatableModel, TranslatedFields
 from aldryn_people.models import Person
+import reversion
+from reversion.revisions import VersionAdapter
+from parler.models import TranslatableModel, TranslatedFields
+from parler import cache
 
 
+# TODO: The followng class and registration function shall be extracted in a
+# command addon module (as soon as we have one).
+
+class TranslatableVersionAdapter(VersionAdapter):
+    revision_manager = None
+
+    def __init__(self, model):
+        super(TranslatableVersionAdapter, self).__init__(model)
+
+        # Register the translation model to be tracked as well
+        root_model = model._parler_meta.root_model
+        self.revision_manager.register(root_model)
+
+        # Also add the translations to the models to follow
+        self.follow = list(self.follow) + [model._parler_meta.root_rel_name]
+
+        # And make sure that when we revert them, we update the translations
+        # cache (this is normally done in the translation `save_base` method,
+        # but it is not caled when reverting changes).
+        post_save.connect(self._update_cache, sender=root_model)
+
+    def _update_cache(self, sender, instance, raw, **kwargs):
+        if raw:
+            # Raw is set to true only when restoring from fixtures
+            cache._cache_translation(instance)
+
+
+register_translatable = partial(reversion.register,
+                                adapter_cls=TranslatableVersionAdapter,
+                                revision_manager=reversion)
+
+
+@register_translatable
 class Article(TranslatableModel):
     translations = TranslatedFields(
         title = models.CharField(_('Title'), max_length=234),

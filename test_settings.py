@@ -5,6 +5,7 @@ HELPER_SETTINGS = {
         ('de', 'German'),
     ),
     'INSTALLED_APPS': [
+        'reversion',
         'aldryn_newsblog',
         'aldryn_people',
         'filer',
