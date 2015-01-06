@@ -208,10 +208,11 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TestCase):
 
 class TestVersioning(NewsBlogTestsMixin, TransactionTestCase):
     def create_revision(self, article, **kwargs):
-        with transaction.atomic(), reversion.create_revision():
-            for k, v in six.iteritems(kwargs):
-                setattr(article, k, v)
-            article.save()
+        with transaction.atomic():
+            with reversion.create_revision():
+                for k, v in six.iteritems(kwargs):
+                    setattr(article, k, v)
+                article.save()
 
     def revert_to(self, article, revision):
         reversion.get_for_object(article)[revision].revision.revert()
