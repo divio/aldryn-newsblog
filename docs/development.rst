@@ -64,7 +64,7 @@ There's more than one way to do this, but here's one to help you get started::
     # get Aldryn NewsBlog from GitHub
     git clone git@github.com:aldryn/aldryn-newsblog.git
 
-    # Downgrade pip to a version < 1.5.6
+    # Downgrade pip to a version < 6
     pip install -U 'pip<6'
 
     # install the dependencies for testing
