@@ -8,10 +8,10 @@ from django.db.models.signals import post_save
 
 from cms.models.fields import PlaceholderField
 from cms.models.pluginmodel import CMSPlugin
-from parler.models import TranslatableModel, TranslatedFields
 from aldryn_people.models import Person
 import reversion
 from reversion.revisions import VersionAdapter
+from parler.models import TranslatableModel, TranslatedFields
 from parler import cache
 
 
