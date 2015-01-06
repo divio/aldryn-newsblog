@@ -5,30 +5,20 @@ from django.core.urlresolvers import resolve
 from django.views.generic import View, ListView
 from django.views.generic.detail import DetailView
 from django.http import HttpResponse
+from aldryn_apphooks_config.mixins import AppConfigMixin
 
 from .models import Article
 
 
-class NamespaceView(View):
-    def dispatch(self, request, *args, **kwargs):
-        self.current_app = resolve(self.request.path).namespace
-        return super(NamespaceView, self).dispatch(request, *args, **kwargs)
-
-    def render_to_response(self, context, **response_kwargs):
-        response_kwargs['current_app'] = self.current_app
-        return super(NamespaceView, self).render_to_response(
-            context, **response_kwargs)
-
-
-class ArticleDetail(NamespaceView, DetailView):
+class ArticleDetail(AppConfigMixin, DetailView):
     def get_queryset(self):
         return Article.objects
 
 
-class ArticleList(NamespaceView, ListView):
+class ArticleList(AppConfigMixin, ListView):
     @property
     def queryset(self):
-        return Article.objects.filter(namespace=self.current_app)
+        return Article.objects.filter(namespace__namespace=self.namespace)
 
     def get(self, request):
         return HttpResponse('\n'.join(

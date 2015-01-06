@@ -14,6 +14,12 @@ from reversion.revisions import VersionAdapter
 from parler.models import TranslatableModel, TranslatedFields
 from parler import cache
 
+from aldryn_apphooks_config.models import AppHookConfig
+
+
+class NewsBlogConfig(AppHookConfig):
+    pass
+
 
 class MockCategory(models.Model):
     name = models.CharField(_('Name'), max_length=123)
@@ -124,7 +130,7 @@ class Article(TranslatableModel):
 
     author = models.ForeignKey(Person)
     owner = models.ForeignKey(User)
-    namespace = models.CharField(max_length=123, blank=True, default='')
+    namespace = models.ForeignKey(NewsBlogConfig)
     categories = models.ManyToManyField(MockCategory)
     tags = models.ManyToManyField(MockTag)
     publishing_date = models.DateTimeField()
