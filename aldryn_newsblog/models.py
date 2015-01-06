@@ -24,14 +24,18 @@ class TranslatableVersionAdapter(VersionAdapter):
         # Register the translation model to be tracked as well
         root_model = model._parler_meta.root_model
         self.revision_manager.register(root_model)
-        self.follow += (model._parler_meta.root_rel_name, )
-        post_save.connect(self._clear_cache, sender=root_model)
 
-        # Exclude all translated fields, as those are tracked separately
-        self.exclude += tuple(model._parler_meta.get_translated_fields())
+        # Also add the translations to the models to follow
+        self.follow = list(self.follow) + [model._parler_meta.root_rel_name]
 
-    def _clear_cache(self, sender, instance, raw, **kwargs):
+        # And make sure that when we revert them, we update the translations
+        # cache (this is normally done in the translation `save_base` method,
+        # but it is not caled when reverting changes).
+        post_save.connect(self._update_cache, sender=root_model)
+
+    def _update_cache(self, sender, instance, raw, **kwargs):
         if raw:
+            # Raw is set to true only when restoring from fixtures
             cache._cache_translation(instance)
 
 
