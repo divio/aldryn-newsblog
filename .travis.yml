@@ -1,0 +1,38 @@
+# Config file for automatic testing at travis-ci.org
+
+language: python
+
+# Use container based infrastructure
+sudo: false
+
+env:
+  - CMD=./test
+
+python:
+  - 2.7
+  - 2.6
+  - 3.4
+  - 3.3
+
+matrix:
+  allow_failures:
+    - python: 3.3
+    - python: 3.4
+    - env: CMD="flake8 aldryn_newsblog"
+  fast_finish: true
+  include:
+    - python: 2.7
+      env: CMD="flake8 aldryn_newsblog"
+
+cache:
+  directories:
+    - $HOME/.pip-cache/
+    - $HOME/virtualenv/python*/lib/python*/site-packages
+
+install:
+  - pip install -r test_requirements.txt flake8 -e . --download-cache $HOME/.pip-cache
+
+script: $CMD
+
+# TODO: Add coverage reporting
+# after_success: coveralls
