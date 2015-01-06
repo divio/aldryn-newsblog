@@ -4,9 +4,10 @@ from aldryn_newsblog import __version__
 REQUIREMENTS = [
     'django-parler',
     'django-filer',
-    'aldryn_common',
+    'aldryn-common',
     'django-appdata',
     'django-cms',
+    'aldryn-people',
 ]
 
 CLASSIFIERS = [
