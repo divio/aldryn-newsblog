@@ -64,12 +64,17 @@ There's more than one way to do this, but here's one to help you get started::
     # get Aldryn NewsBlog from GitHub
     git clone git@github.com:aldryn/aldryn-newsblog.git
 
+    # Downgrade pip to a version < 6
+    pip install -U 'pip<6'
+
     # install the dependencies for testing
     pip install -Ur aldryn-newsblog/test_requirements.txt
+
+    # Install the package
+    pip install -Ue aldryn-newsblog
 
     # run the test suite
     # note that you must be in the aldryn-newsblog directory when you do this,
     # otherwise you'll get "Template not found" errors
     cd aldryn-newsblog
-    python develop.py test
-
+    ./test
