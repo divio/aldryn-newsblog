@@ -15,6 +15,9 @@ from parler.models import TranslatableModel, TranslatedFields
 from parler import cache
 
 
+# TODO: The followng class and registration function shall be extracted in a
+# command addon module (as soon as we have one).
+
 class TranslatableVersionAdapter(VersionAdapter):
     revision_manager = None
 
