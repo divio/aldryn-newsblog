@@ -168,5 +168,5 @@ class LatestEntriesPlugin(CMSPlugin):
     #     self.tags = old_instance.tags.all()
 
     def get_articles(self):
-        articles = Article.objects.filter_by_language(self.language)
+        articles = Article.objects.active_translations()
         return articles[:self.latest_entries]
