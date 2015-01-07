@@ -30,9 +30,8 @@ cache:
     - $HOME/.wheelhouse
 
 install:
-  - pip wheel --wheel-dir $HOME/.wheelhouse --download-cache $HOME/.pip-cache -r test_requirements.txt -e .
-  - ls -al $HOME/.wheelhouse
-  - pip install --use-wheel --no-index --find-links=$HOME/.wheelhouse -r test_requirements.txt -e .
+  - pip wheel --wheel-dir $HOME/.wheelhouse --download-cache $HOME/.pip-cache -r test_requirements.txt
+  - pip install --use-wheel --no-index --find-links=$HOME/.wheelhouse -r test_requirements.txt
 
 script: $CMD
 
