@@ -26,12 +26,13 @@ matrix:
 
 cache:
   directories:
-    - $HOME/.pip-cache/
-    - $HOME/virtualenv/python*/lib/python*/site-packages
-    - $HOME/virtualenv/python*/bin
+    - $HOME/.pip-cache
+    - $HOME/.wheelhouse
 
 install:
-  - pip install -r test_requirements.txt flake8 -e . --download-cache $HOME/.pip-cache
+  - pip install wheel
+  - pip wheel --wheel-dir $HOME/.wheelhouse --download-cache $HOME/.pip-cache -r test_requirements.txt
+  - pip install --use-wheel --no-index --find-links=/tmp/wheelhouse pyramid
 
 script: $CMD
 

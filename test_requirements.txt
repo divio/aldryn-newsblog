@@ -1,3 +1,4 @@
+-e .
 djangocms-helper
 django>=1.6,<1.7
 South
@@ -14,3 +15,4 @@ six
 django-parler
 selenium
 djangocms_text_ckeditor
+flake8
