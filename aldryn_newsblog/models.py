@@ -4,6 +4,7 @@ from functools import partial
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
+from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
@@ -151,6 +152,11 @@ class Article(TranslatableModel):
 
     def __str__(self):
         return self.title
+
+    def save(self, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        return super(Article, self).save(**kwargs)
 
     def get_absolute_url(self):
         return reverse(
