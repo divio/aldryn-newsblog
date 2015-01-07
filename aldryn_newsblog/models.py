@@ -66,7 +66,7 @@ class TranslatableVersionAdapter(VersionAdapter):
             rev_ctx.add_to_context(self.revision_manager, obj, version_data)
 
         if rev_ctx.is_active() and not rev_ctx.is_managing_manually():
-            ph_ids = [getattr(instance, '{}_id'.format(name))
+            ph_ids = [getattr(instance, '{0}_id'.format(name))
                       for name in instance._meta.placeholder_field_names]
 
             # Add all plugins to the revision
