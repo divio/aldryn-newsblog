@@ -15,15 +15,14 @@ from parler.models import TranslatableModel, TranslatedFields
 from parler import cache
 
 
-# TODO: The followng class and registration function shall be extracted in a
-# command addon module (as soon as we have one).
+# TODO: The followng classes and registration function shall be extracted in a
+# common addon module (as soon as we have one).
 
-class TranslatableVersionAdapter(VersionAdapter):
+class TranslatableVersionAdapterMixin(object):
     revision_manager = None
-    follow_placeholders = True
 
     def __init__(self, model):
-        super(TranslatableVersionAdapter, self).__init__(model)
+        super(TranslatableVersionAdapterMixin, self).__init__(model)
 
         # Register the translation model to be tracked as well, by following
         # all placeholder fields, if any.
@@ -32,12 +31,6 @@ class TranslatableVersionAdapter(VersionAdapter):
 
         # Also add the translations to the models to follow.
         self.follow = list(self.follow) + [model._parler_meta.root_rel_name]
-
-        # ...and the placeholders
-        placeholders = getattr(model._meta, 'placeholder_field_names', None)
-        if self.follow_placeholders and placeholders:
-            self.follow += placeholders
-            post_save.connect(self._add_plugins_to_revision, sender=model)
 
         # And make sure that when we revert them, we update the translations
         # cache (this is normally done in the translation `save_base` method,
@@ -50,6 +43,19 @@ class TranslatableVersionAdapter(VersionAdapter):
             # Raw is set to true (only) when restoring from fixtures or,
             # django-reversion
             cache._cache_translation(instance)
+
+
+class PlaceholderVersionAdapterMixin(object):
+    follow_placeholders = True
+
+    def __init__(self, model):
+        super(PlaceholderVersionAdapterMixin, self).__init__(model)
+
+        # Add the to the models to follow.
+        placeholders = getattr(model._meta, 'placeholder_field_names', None)
+        if self.follow_placeholders and placeholders:
+            self.follow = list(self.follow) + placeholders
+            post_save.connect(self._add_plugins_to_revision, sender=model)
 
     def _add_plugins_to_revision(self, sender, instance, **kwargs):
         """Manually add plugins to the revision.
@@ -78,12 +84,18 @@ class TranslatableVersionAdapter(VersionAdapter):
                 add_to_context(plugin)
 
 
-register_translatable = partial(
-    reversion.register, adapter_cls=TranslatableVersionAdapter,
+class ContentEnabledVersionAdapter(TranslatableVersionAdapterMixin,
+                                   PlaceholderVersionAdapterMixin,
+                                   VersionAdapter):
+    pass
+
+
+register_content_model = partial(
+    reversion.register, adapter_cls=ContentEnabledVersionAdapter,
     revision_manager=reversion.default_revision_manager)
 
 
-@register_translatable
+@register_content_model
 class Article(TranslatableModel):
     translations = TranslatedFields(
         title = models.CharField(_('Title'), max_length=234),
