@@ -90,12 +90,12 @@ class ContentEnabledVersionAdapter(TranslatableVersionAdapterMixin,
     pass
 
 
-register_content_model = partial(
+version_controlled_content = partial(
     reversion.register, adapter_cls=ContentEnabledVersionAdapter,
     revision_manager=reversion.default_revision_manager)
 
 
-@register_content_model
+@version_controlled_content
 class Article(TranslatableModel):
     translations = TranslatedFields(
         title = models.CharField(_('Title'), max_length=234),
