@@ -9,6 +9,7 @@ REQUIREMENTS = [
     'django-cms',
     'aldryn-people',
     'django-reversion',
+    'django>=1.6,<1.7',
 ]
 
 CLASSIFIERS = [

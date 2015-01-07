@@ -14,3 +14,9 @@ six
 django-parler
 selenium
 djangocms_text_ckeditor
+flake8
+django-filer
+aldryn-common
+django-appdata
+aldryn-people
+django-reversion

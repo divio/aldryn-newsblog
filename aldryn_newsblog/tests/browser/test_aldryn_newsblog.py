@@ -1,7 +1,6 @@
 from django.test import LiveServerTestCase
 
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
 
 
 class NewVisitorTest(LiveServerTestCase):
@@ -28,7 +27,4 @@ class NewVisitorTest(LiveServerTestCase):
         # go to the admin
         self.browser.get("http://localhost:8000/admin")
 
-
-
         self.fail("finish the test")
-
