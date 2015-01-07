@@ -81,14 +81,13 @@ class YearArticleList(DateRangeArticleList):
         date_from = datetime(int(kwargs['year']), 1, 1)
         date_to = date_from + relativedelta(years=1)
         return date_from, date_to
-        
+
 
 class MonthArticleList(DateRangeArticleList):
     def _daterange_from_kwargs(self, kwargs):
         date_from = datetime(int(kwargs['year']), int(kwargs['month']), 1)
         date_to = date_from + relativedelta(months=1)
         return date_from, date_to
-
 
 
 class DayArticleList(DateRangeArticleList):
