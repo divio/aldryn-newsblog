@@ -30,7 +30,7 @@ class NewsBlogTestsMixin(object):
         person = Person.objects.create(user=user, slug=rand_str())
         return person
 
-    def create_article(self, **kwargs):
+    def create_article(self, content=None, **kwargs):
         try:
             author = kwargs['author']
         except KeyError:
@@ -47,7 +47,13 @@ class NewsBlogTestsMixin(object):
 
         fields.update(kwargs)
 
-        return Article.objects.create(**fields)
+        article = Article.objects.create(**fields)
+
+        if content:
+            api.add_plugin(article.content, 'TextPlugin',
+                           self.language, body=content)
+
+        return article
 
     def setUp(self):
         self.template = get_cms_setting('TEMPLATES')[0][0]
@@ -207,11 +213,21 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TestCase):
 
 
 class TestVersioning(NewsBlogTestsMixin, TransactionTestCase):
-    def create_revision(self, article, **kwargs):
+    def create_revision(self, article, content=None, language=None, **kwargs):
         with transaction.atomic():
             with reversion.create_revision():
                 for k, v in six.iteritems(kwargs):
                     setattr(article, k, v)
+                if content:
+                    plugins = article.content.get_plugins()
+                    plugin = plugins[0].get_plugin_instance()[0]
+                    plugin.body = content
+                    plugin.save()
+                # TODO: Cover both cases (plugin modification/recreation)
+                # if content:
+                #     article.content.get_plugins().delete()
+                #     api.add_plugin(article.content, 'TextPlugin',
+                #                    self.language, body=content)
                 article.save()
 
     def revert_to(self, article, revision):
@@ -221,25 +237,36 @@ class TestVersioning(NewsBlogTestsMixin, TransactionTestCase):
         title1 = rand_str(prefix='title1_')
         title2 = rand_str(prefix='title2_')
 
-        article = self.create_article()
+        content0 = rand_str(prefix='content0_')
+        content1 = rand_str(prefix='content1_')
+        content2 = rand_str(prefix='content2_')
+
+        article = self.create_article(content=content0)
 
         # Revision 1
-        self.create_revision(article, title=title1)
+        self.create_revision(article, title=title1, content=content1)
 
         response = self.client.get(article.get_absolute_url())
         self.assertContains(response, title1)
+        self.assertContains(response, content1)
+        self.assertNotContains(response, content0)
 
         # Revision 2
-        self.create_revision(article, title=title2)
+        self.create_revision(article, title=title2, content=content2)
 
         response = self.client.get(article.get_absolute_url())
         self.assertContains(response, title2)
+        self.assertContains(response, content2)
+        self.assertNotContains(response, content1)
 
         # Revert to revision 1
         self.revert_to(article, 1)
 
         response = self.client.get(article.get_absolute_url())
         self.assertContains(response, title1)
+        self.assertContains(response, content1)
+        self.assertNotContains(response, content0)
+        self.assertNotContains(response, content2)
 
     def test_revert_translated_revision(self):
         title1_en = rand_str(prefix='title1_en_')
