@@ -249,6 +249,7 @@ class TestVersioning(NewsBlogTestsMixin, TransactionTestCase):
         response = self.client.get(article.get_absolute_url())
         self.assertContains(response, title1)
         self.assertContains(response, content1)
+        self.assertNotContains(response, content0)
 
         # Revision 2
         self.create_revision(article, title=title2, content=content2)
@@ -256,6 +257,7 @@ class TestVersioning(NewsBlogTestsMixin, TransactionTestCase):
         response = self.client.get(article.get_absolute_url())
         self.assertContains(response, title2)
         self.assertContains(response, content2)
+        self.assertNotContains(response, content1)
 
         # Revert to revision 1
         self.revert_to(article, 1)
@@ -263,6 +265,8 @@ class TestVersioning(NewsBlogTestsMixin, TransactionTestCase):
         response = self.client.get(article.get_absolute_url())
         self.assertContains(response, title1)
         self.assertContains(response, content1)
+        self.assertNotContains(response, content0)
+        self.assertNotContains(response, content2)
 
     def test_revert_translated_revision(self):
         title1_en = rand_str(prefix='title1_en_')
