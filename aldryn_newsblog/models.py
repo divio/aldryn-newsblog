@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from functools import partial
 
 from django.core.urlresolvers import reverse
@@ -38,8 +39,8 @@ class MockTag(models.Model):
         return self.name
 
 
-# TODO: The followng classes and registration function shall be extracted in a
-# common addon module (as soon as we have one).
+# TODO: The following classes and registration function shall be extracted in a
+# common add-on module (as soon as we have one).
 
 class TranslatableVersionAdapterMixin(object):
     revision_manager = None
@@ -57,14 +58,14 @@ class TranslatableVersionAdapterMixin(object):
 
         # And make sure that when we revert them, we update the translations
         # cache (this is normally done in the translation `save_base` method,
-        # but it is not caled when reverting changes).
+        # but it is not called when reverting changes).
         post_save.connect(self._update_cache, sender=root_model)
 
     def _update_cache(self, sender, instance, raw, **kwargs):
-        """Update the translations chache when restoring from a revision."""
+        """Update the translations cache when restoring from a revision."""
         if raw:
-            # Raw is set to true (only) when restoring from fixtures or,
-            # django-reversion
+            # Raw is set to true (only) when restoring from fixtures or
+            # with django-reversion (serialized data).
             cache._cache_translation(instance)
 
 
@@ -74,7 +75,7 @@ class PlaceholderVersionAdapterMixin(object):
     def __init__(self, model):
         super(PlaceholderVersionAdapterMixin, self).__init__(model)
 
-        # Add the to the models to follow.
+        # Add cms placeholders the to the models to follow.
         placeholders = getattr(model._meta, 'placeholder_field_names', None)
         if self.follow_placeholders and placeholders:
             self.follow = list(self.follow) + placeholders
@@ -118,6 +119,7 @@ version_controlled_content = partial(
     revision_manager=reversion.default_revision_manager)
 
 
+@python_2_unicode_compatible
 @version_controlled_content
 class Article(TranslatableModel):
     translations = TranslatedFields(
@@ -149,14 +151,15 @@ class Article(TranslatableModel):
             'aldryn_newsblog:article-detail', kwargs={'slug': self.slug})
 
 
+@python_2_unicode_compatible
 class LatestEntriesPlugin(CMSPlugin):
 
     latest_entries = models.IntegerField(
         default=5,
-        help_text=_('The number of latests entries to be displayed.')
+        help_text=_('The number of latest entries to be displayed.')
     )
 
-    def __unicode__(self):
+    def __str__(self):
         return str(self.latest_entries).decode('utf8')
 
     # TODO: make sure not to forget this if we add m2m/fk fields for _this_plugin_ later
