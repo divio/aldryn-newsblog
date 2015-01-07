@@ -223,6 +223,11 @@ class TestVersioning(NewsBlogTestsMixin, TransactionTestCase):
                     plugin = plugins[0].get_plugin_instance()[0]
                     plugin.body = content
                     plugin.save()
+                # TODO: Cover both cases (plugin modification/recreation)
+                # if content:
+                #     article.content.get_plugins().delete()
+                #     api.add_plugin(article.content, 'TextPlugin',
+                #                    self.language, body=content)
                 article.save()
 
     def revert_to(self, article, revision):

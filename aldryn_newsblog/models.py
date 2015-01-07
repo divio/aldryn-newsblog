@@ -24,11 +24,13 @@ class TranslatableVersionAdapter(VersionAdapter):
     def __init__(self, model):
         super(TranslatableVersionAdapter, self).__init__(model)
 
-        # Register the translation model to be tracked as well
+        # Register the translation model to be tracked as well, by following
+        # all placeholder fields, if any.
         root_model = model._parler_meta.root_model
-        self.revision_manager.register(root_model)
+        self.revision_manager.register(
+            root_model, follow=root_model._meta.placeholder_field_names)
 
-        # Also add the translations to the models to follow
+        # Also add the translations to the models to follow.
         self.follow = list(self.follow) + [model._parler_meta.root_rel_name]
 
         # And make sure that when we revert them, we update the translations
@@ -45,6 +47,34 @@ class TranslatableVersionAdapter(VersionAdapter):
 register_translatable = partial(reversion.register,
                                 adapter_cls=TranslatableVersionAdapter,
                                 revision_manager=reversion)
+
+
+# HACK MODE ON
+
+from cms.models.placeholdermodel import Placeholder
+
+# We have to unregister manually because the django-cms reversion hack does
+# not call reversion.register but offers its own (probably incomplete)
+# implementation and causes reversion.unregister to fail with a KeyError
+
+# reversion.unregister(Placeholder)
+del(reversion.revision._registered_models[
+    reversion.revision._registration_key_for_model(Placeholder)])
+
+# Then we have to register again by following the cmsplugin_set. Why was this
+# explicitly commented out in [1]?
+#
+# [1]:
+# https://github.com/divio/django-cms/blob/3.0.7/cms/models/placeholdermodel.py#L264
+#
+reversion.register(Placeholder, follow=['cmsplugin_set'])
+
+# Each plugin for which we want to handle history has to be registered with
+# django-reversion as well
+from djangocms_text_ckeditor.models import Text
+reversion.register(Text)
+
+# HACK MODE OFF
 
 
 @register_translatable
