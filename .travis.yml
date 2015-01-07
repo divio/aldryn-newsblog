@@ -28,6 +28,7 @@ cache:
   directories:
     - $HOME/.pip-cache/
     - $HOME/virtualenv/python*/lib/python*/site-packages
+    - $HOME/virtualenv/python*/bin
 
 install:
   - pip install -r test_requirements.txt flake8 -e . --download-cache $HOME/.pip-cache
