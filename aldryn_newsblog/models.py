@@ -34,8 +34,9 @@ class TranslatableVersionAdapter(VersionAdapter):
         self.follow = list(self.follow) + [model._parler_meta.root_rel_name]
 
         # ...and the placeholders
-        if self.follow_placeholders:
-            self.follow += model._meta.placeholder_field_names
+        placeholders = getattr(model._meta, 'placeholder_field_names', None)
+        if self.follow_placeholders and placeholders:
+            self.follow += placeholders
             post_save.connect(self._add_plugins_to_revision, sender=model)
 
         # And make sure that when we revert them, we update the translations
