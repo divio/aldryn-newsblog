@@ -146,6 +146,12 @@ class Article(TranslatableModel):
     tags = models.ManyToManyField(MockTag, blank=True)
     publishing_date = models.DateTimeField()
 
+    class Meta:
+        ordering = ['-publishing_date']
+
+    def __str__(self):
+        return self.title
+
     def get_absolute_url(self):
         return reverse(
             'aldryn_newsblog:article-detail', kwargs={'slug': self.slug})
