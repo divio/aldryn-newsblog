@@ -1,3 +1,5 @@
+![Travis CI](https://magnum.travis-ci.com/aldryn/aldryn-newsblog.svg?token=YAkYhx2EXB7DyqW6ssQZ)
+
 aldryn-newsblog
 ===============
 
