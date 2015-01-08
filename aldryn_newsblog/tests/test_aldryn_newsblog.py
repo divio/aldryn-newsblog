@@ -113,7 +113,6 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TestCase):
 
     def test_articles_by_category(self):
         author = self.create_person()
-        category1, category2 = rand_str(), rand_str()
         for category in (self.category1, self.category2):
             articles = []
             for _ in range(10):
