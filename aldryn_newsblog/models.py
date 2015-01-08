@@ -150,9 +150,10 @@ class LatestEntriesPlugin(CMSPlugin):
     def __unicode__(self):
         return str(self.latest_entries).decode('utf8')
 
-    def copy_relations(self, old_instance):
-        self.categories = old_instance.categories.all()
-        self.tags = old_instance.tags.all()
+    # TODO: make sure not to forget this if we add m2m/fk fields for _this_plugin_ later
+    # def copy_relations(self, old_instance):
+    #     self.categories = old_instance.categories.all()
+    #     self.tags = old_instance.tags.all()
 
     def get_articles(self):
         articles = Article.objects.filter_by_language(self.language)
