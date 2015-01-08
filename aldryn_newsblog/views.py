@@ -52,7 +52,7 @@ class CategoryArticleList(ArticleList):
     @property
     def queryset(self):
         return super(CategoryArticleList, self).queryset.filter(
-            category=self.category)
+            categories__name=self.category)
 
     def get(self, request, category):
         self.category = category
