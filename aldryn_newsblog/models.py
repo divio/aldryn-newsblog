@@ -145,7 +145,7 @@ class LatestEntriesPlugin(CMSPlugin):
         return str(self.latest_entries).decode('utf8')
 
     def copy_relations(self, old_instance):
-        self.categories = old_instance.tags.all()
+        self.categories = old_instance.categories.all()
         self.tags = old_instance.tags.all()
 
     def get_articles(self):
