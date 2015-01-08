@@ -2,6 +2,7 @@ from functools import partial
 
 from django.core.urlresolvers import reverse
 from django.db import models
+from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
@@ -21,12 +22,20 @@ class NewsBlogConfig(AppHookConfig):
     pass
 
 
+@python_2_unicode_compatible
 class MockCategory(models.Model):
     name = models.CharField(_('Name'), max_length=123)
 
+    def __str__(self):
+        return self.name
 
+
+@python_2_unicode_compatible
 class MockTag(models.Model):
     name = models.CharField(_('Name'), max_length=123)
+
+    def __str__(self):
+        return self.name
 
 
 # TODO: The followng classes and registration function shall be extracted in a
@@ -131,8 +140,8 @@ class Article(TranslatableModel):
     author = models.ForeignKey(Person)
     owner = models.ForeignKey(User)
     namespace = models.ForeignKey(NewsBlogConfig)
-    categories = models.ManyToManyField(MockCategory)
-    tags = models.ManyToManyField(MockTag)
+    categories = models.ManyToManyField(MockCategory, blank=True)
+    tags = models.ManyToManyField(MockTag, blank=True)
     publishing_date = models.DateTimeField()
 
     def get_absolute_url(self):
