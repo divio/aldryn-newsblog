@@ -15,6 +15,14 @@ from parler.models import TranslatableModel, TranslatedFields
 from parler import cache
 
 
+class MockCategory(models.Model):
+    name = models.CharField(_('Name'), max_length=123)
+
+
+class MockTag(models.Model):
+    name = models.CharField(_('Name'), max_length=123)
+
+
 # TODO: The followng classes and registration function shall be extracted in a
 # common addon module (as soon as we have one).
 
@@ -117,7 +125,8 @@ class Article(TranslatableModel):
     author = models.ForeignKey(Person)
     owner = models.ForeignKey(User)
     namespace = models.CharField(max_length=123, blank=True, default='')
-    category = models.CharField(max_length=123, blank=True, default='')
+    categories = models.ManyToManyField(MockCategory)
+    tags = models.ManyToManyField(MockTag)
     publishing_date = models.DateTimeField()
 
     def get_absolute_url(self):

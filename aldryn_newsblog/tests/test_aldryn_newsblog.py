@@ -16,7 +16,7 @@ from django.utils.translation import override
 from aldryn_people.models import Person
 import reversion
 
-from aldryn_newsblog.models import Article
+from aldryn_newsblog.models import Article, MockCategory, MockTag
 
 
 def rand_str(prefix='', length=23, chars=string.ascii_letters):
@@ -63,6 +63,8 @@ class NewsBlogTestsMixin(object):
             apphook='NewsBlogApp', apphook_namespace='NewsBlog')
         self.page.publish('en')
         self.placeholder = self.page.placeholders.all()[0]
+        self.category1 = MockCategory.objects.create(name=rand_str())
+        self.category2 = MockCategory.objects.create(name=rand_str())
 
         for language, _ in settings.LANGUAGES[1:]:
             api.create_title(language, 'page', self.page)
@@ -112,16 +114,19 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TestCase):
     def test_articles_by_category(self):
         author = self.create_person()
         category1, category2 = rand_str(), rand_str()
-        for category in (category1, category2):
-            articles = [
-                Article.objects.create(
+        for category in (self.category1, self.category2):
+            articles = []
+            for _ in range(10):
+                article = Article.objects.create(
                     title=rand_str(), slug=rand_str(), namespace='NewsBlog',
-                    author=author, owner=author.user, category=category,
+                    author=author, owner=author.user,
                     publishing_date=datetime.now())
-                for _ in range(10)]
+                article.categories.add(category)
+                articles.append(article)
+
             response = self.client.get(reverse(
                 'aldryn_newsblog:article-list-by-category',
-                kwargs={'category': category}))
+                kwargs={'category': category.name}))
             for article in articles:
                 self.assertContains(response, article.title)
 
