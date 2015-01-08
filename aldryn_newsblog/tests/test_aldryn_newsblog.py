@@ -16,7 +16,8 @@ from django.utils.translation import override
 from aldryn_people.models import Person
 import reversion
 
-from aldryn_newsblog.models import Article, MockCategory, MockTag
+from aldryn_newsblog.models import (
+    Article, NewsBlogConfig, MockCategory, MockTag)
 
 
 def rand_str(prefix='', length=23, chars=string.ascii_letters):
@@ -41,7 +42,7 @@ class NewsBlogTestsMixin(object):
             'slug': rand_str(),
             'author': author,
             'owner': author.user,
-            'namespace': 'NewsBlog',
+            'namespace': NewsBlogConfig.objects.create(),
             'publishing_date': datetime.now()
         }
 
@@ -58,9 +59,11 @@ class NewsBlogTestsMixin(object):
     def setUp(self):
         self.template = get_cms_setting('TEMPLATES')[0][0]
         self.language = settings.LANGUAGES[0][0]
+        self.ns_newsblog = NewsBlogConfig.objects.create(namespace='NBNS')
         self.page = api.create_page(
             'page', self.template, self.language, published=True,
-            apphook='NewsBlogApp', apphook_namespace='NewsBlog')
+            apphook='NewsBlogApp',
+            apphook_namespace=self.ns_newsblog.namespace)
         self.page.publish('en')
         self.placeholder = self.page.placeholders.all()[0]
         self.category1 = MockCategory.objects.create(name=rand_str())
@@ -78,7 +81,7 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TestCase):
         author = self.create_person()
         article = Article.objects.create(
             title=title, slug=rand_str(), author=author, owner=author.user,
-            namespace='NewsBlog', publishing_date=datetime.now())
+            namespace=self.ns_newsblog, publishing_date=datetime.now())
         response = self.client.get(article.get_absolute_url())
         self.assertContains(response, title)
 
@@ -88,7 +91,7 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TestCase):
         author = self.create_person()
         article = Article.objects.create(
             title=title, slug=slug, author=author, owner=author.user,
-            namespace='NewsBlog', publishing_date=datetime.now())
+            namespace=self.ns_newsblog, publishing_date=datetime.now())
         article_url = article.get_absolute_url()
         response = self.client.get(article_url)
         self.assertContains(response, title)
@@ -101,7 +104,8 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TestCase):
         for author in (author1, author2):
             articles = [
                 Article.objects.create(
-                    title=rand_str(), slug=rand_str(), namespace='NewsBlog',
+                    title=rand_str(), slug=rand_str(),
+                    namespace=self.ns_newsblog,
                     author=author, owner=author.user,
                     publishing_date=datetime.now())
                 for _ in range(10)]
@@ -117,7 +121,8 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TestCase):
             articles = []
             for _ in range(10):
                 article = Article.objects.create(
-                    title=rand_str(), slug=rand_str(), namespace='NewsBlog',
+                    title=rand_str(), slug=rand_str(),
+                    namespace=self.ns_newsblog,
                     author=author, owner=author.user,
                     publishing_date=datetime.now())
                 article.categories.add(category)
@@ -133,14 +138,14 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TestCase):
         author = self.create_person()
         in_articles = [
             Article.objects.create(
-                title=rand_str(), slug=rand_str(), namespace='NewsBlog',
+                title=rand_str(), slug=rand_str(), namespace=self.ns_newsblog,
                 author=author, owner=author.user,
                 publishing_date=datetime(1914, 7, 28,
                                          randint(0, 23), randint(0, 59)))
             for _ in range(10)]
         out_articles = [
             Article.objects.create(
-                title=rand_str(), slug=rand_str(), namespace='NewsBlog',
+                title=rand_str(), slug=rand_str(), namespace=self.ns_newsblog,
                 author=author, owner=author.user,
                 publishing_date=datetime(1939, 9, 1,
                                          randint(0, 23), randint(0, 59)))
@@ -157,14 +162,14 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TestCase):
         author = self.create_person()
         in_articles = [
             Article.objects.create(
-                title=rand_str(), slug=rand_str(), namespace='NewsBlog',
+                title=rand_str(), slug=rand_str(), namespace=self.ns_newsblog,
                 author=author, owner=author.user,
                 publishing_date=datetime(1914, 7, randint(1, 31),
                                          randint(0, 23), randint(0, 59)))
             for _ in range(10)]
         out_articles = [
             Article.objects.create(
-                title=rand_str(), slug=rand_str(), namespace='NewsBlog',
+                title=rand_str(), slug=rand_str(), namespace=self.ns_newsblog,
                 author=author, owner=author.user,
                 publishing_date=datetime(1939, 9, 1,
                                          randint(0, 23), randint(0, 59)))
@@ -181,14 +186,14 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TestCase):
         author = self.create_person()
         in_articles = [
             Article.objects.create(
-                title=rand_str(), slug=rand_str(), namespace='NewsBlog',
+                title=rand_str(), slug=rand_str(), namespace=self.ns_newsblog,
                 author=author, owner=author.user,
                 publishing_date=datetime(1914, randint(1, 12), randint(1, 28),
                                          randint(0, 23), randint(0, 59)))
             for _ in range(10)]
         out_articles = [
             Article.objects.create(
-                title=rand_str(), slug=rand_str(), namespace='NewsBlog',
+                title=rand_str(), slug=rand_str(), namespace=self.ns_newsblog,
                 author=author, owner=author.user,
                 publishing_date=datetime(1939, randint(1, 12), randint(1, 28),
                                          randint(0, 23), randint(0, 59)))
@@ -206,7 +211,7 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TestCase):
         author = self.create_person()
         article = Article.objects.create(
             title=title, slug=rand_str(), author=author, owner=author.user,
-            namespace='NewsBlog', publishing_date=datetime.now())
+            namespace=self.ns_newsblog, publishing_date=datetime.now())
         api.add_plugin(article.content, 'TextPlugin', self.language)
         plugin = article.content.get_plugins()[0].get_plugin_instance()[0]
         plugin.body = content

@@ -3,7 +3,7 @@ django>=1.6,<1.7
 South
 dj-database-url
 django-classy-tags
-django-cms
+-e git+http://github.com/yakky/django-cms/@feature/appspaced_apphooks#egg=django-cms
 django-mptt
 django-sekizai
 djangocms-admin-style
@@ -20,3 +20,4 @@ aldryn-common
 django-appdata
 aldryn-people
 django-reversion>=1.8.2,<1.9
+-e git+http://github.com/aldryn/aldryn-apphooks-config.git#egg=aldryn-apphooks-config
