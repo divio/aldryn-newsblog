@@ -1,12 +1,15 @@
 from django.contrib import admin
 
 from aldryn_apphooks_config.admin import BaseAppHookConfig
+from cms.admin.placeholderadmin import PlaceholderAdmin, FrontendEditableAdmin
 from parler.admin import TranslatableAdmin
 
 from .models import Article, MockCategory, MockTag, NewsBlogConfig
 
 
-class ArticleAdmin(TranslatableAdmin):
+class ArticleAdmin(TranslatableAdmin, PlaceholderAdmin, FrontendEditableAdmin):
+
+    # TODO: make possible to edit placeholder
 
     def add_view(self, request, *args, **kwargs):
         data = request.GET.copy()
