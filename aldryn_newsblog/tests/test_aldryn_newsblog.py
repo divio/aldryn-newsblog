@@ -17,7 +17,7 @@ from aldryn_people.models import Person
 import reversion
 
 from aldryn_newsblog.models import (
-    Article, NewsBlogConfig, MockCategory, MockTag)
+    Article, NewsBlogConfig, MockCategory)
 
 
 def rand_str(prefix='', length=23, chars=string.ascii_letters):
