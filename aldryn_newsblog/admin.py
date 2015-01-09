@@ -1,6 +1,7 @@
 from django.contrib import admin
 
 from aldryn_apphooks_config.admin import BaseAppHookConfig
+from aldryn_people.models import Person
 from cms.admin.placeholderadmin import PlaceholderAdmin, FrontendEditableAdmin
 from parler.admin import TranslatableAdmin
 
@@ -13,8 +14,12 @@ class ArticleAdmin(TranslatableAdmin, PlaceholderAdmin, FrontendEditableAdmin):
 
     def add_view(self, request, *args, **kwargs):
         data = request.GET.copy()
-        data['author'] = request.user.id  # default author is logged-in user
-        request.GET = data
+        try:
+            person = Person.objects.get(user=request.user)
+            data['author'] = person.pk
+            request.GET = data
+        except Person.DoesNotExist:
+            pass
         return super(ArticleAdmin, self).add_view(request, *args, **kwargs)
 
 
