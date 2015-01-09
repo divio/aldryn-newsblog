@@ -10,6 +10,9 @@ REQUIREMENTS = [
     'aldryn-people',
     'django-reversion>=1.8.2,<1.9',
     'django>=1.6,<1.7',
+    'aldryn-apphooks-config',
+    'django-reversion>=1.8.2,<1.9',
+    'six',
 ]
 
 CLASSIFIERS = [
@@ -38,5 +41,11 @@ setup(
     install_requires=REQUIREMENTS,
     classifiers=CLASSIFIERS,
     include_package_data=True,
-    zip_safe=False
+    zip_safe=False,
+    dependency_links=[
+        ('git+http://github.com/yakky/django-cms/@feature/appspaced_apphooks'
+         '#egg=django-cms'),
+        ('git+http://github.com/aldryn/aldryn-apphooks-config'
+         '#egg=aldryn-apphooks-config'),
+    ],
 )
