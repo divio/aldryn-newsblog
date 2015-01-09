@@ -1,8 +1,7 @@
 from datetime import datetime
 
 from dateutil.relativedelta import relativedelta
-from django.core.urlresolvers import resolve
-from django.views.generic import View, ListView
+from django.views.generic import ListView
 from django.views.generic.detail import DetailView
 from django.http import HttpResponse
 from aldryn_apphooks_config.mixins import AppConfigMixin

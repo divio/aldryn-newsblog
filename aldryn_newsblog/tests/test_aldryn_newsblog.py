@@ -17,7 +17,7 @@ from aldryn_people.models import Person
 import reversion
 
 from aldryn_newsblog.models import (
-    Article, NewsBlogConfig, MockCategory, MockTag)
+    Article, NewsBlogConfig, MockCategory)
 
 
 def rand_str(prefix='', length=23, chars=string.ascii_letters):
@@ -64,7 +64,7 @@ class NewsBlogTestsMixin(object):
             'page', self.template, self.language, published=True,
             apphook='NewsBlogApp',
             apphook_namespace=self.ns_newsblog.namespace)
-        self.page.publish('en')
+        self.page.publish(self.language)
         self.placeholder = self.page.placeholders.all()[0]
         self.category1 = MockCategory.objects.create(name=rand_str())
         self.category2 = MockCategory.objects.create(name=rand_str())
