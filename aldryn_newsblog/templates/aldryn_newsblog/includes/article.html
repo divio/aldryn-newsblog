@@ -1,4 +1,4 @@
-{% load i18n thumbnail cms_tags %} {# aldryn_blog_tags #}
+{% load i18n cms_tags %} {# aldryn_blog_tags thumbnail #}
 {% load url from future %}
 
 <article>
@@ -44,14 +44,14 @@
         {% if article.key_visual_id %}
             <p>
                 {% if not detail_view %}<a href="{{ article.get_absolute_url }}">{% endif %}
-                    <img src="{% thumbnail article.key_visual 800x300 crop subject_location=article.key_visual.subject_location %}" alt="{{ article.key_visual.alt }}" class="img-responsive" />
+                    <img src="{#% thumbnail article.key_visual 800x300 crop subject_location=article.key_visual.subject_location %#}" alt="{{ article.key_visual.alt }}" class="img-responsive" />
                 {% if not detail_view %}</a>{% endif %}
             </p>
             <hr />
         {% endif %}
     {% endblock %}
 
-    {% block blog_content %}
+    {% block blog_placeholder %}
         <div class="lead">{#% render_model post "lead_in" "lead_in" "" safe %#}</div>
         {% if detail_view %}
             {% render_placeholder article.content language placeholder_language %}
