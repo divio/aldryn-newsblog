@@ -51,18 +51,16 @@
         {% endif %}
     {% endblock %}
 
-    {% comment %}
     {% block blog_content %}
-        <div class="lead">{% render_model post "lead_in" "lead_in" "" safe %}</div>
+        <div class="lead">{#% render_model post "lead_in" "lead_in" "" safe %#}</div>
         {% if detail_view %}
             {% render_placeholder article.content language placeholder_language %}
         {% endif %}
     {% endblock %}
-    {% endcomment %}
 
     {% if detail_view %}
         <ul class="pager">
-            <li class="previous"><a href="{% url 'aldryn_newsblog:latest-posts' %}"><span aria-hidden="true">&larr;</span> {% trans "Back" %}</a></li>
+            <li class="previous"><a href="#TODO"><span aria-hidden="true">&larr;</span> {% trans "Back" %}</a></li>
         </ul>
     {% else %}
         <p class="text-right"><a href="{{ article.get_absolute_url }}">{% trans "read more" %}</a></p>

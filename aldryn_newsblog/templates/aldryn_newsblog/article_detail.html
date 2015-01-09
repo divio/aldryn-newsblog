@@ -1,7 +1,8 @@
+{% extends "aldryn_newsblog/base.html" %}
 {% load cms_tags %}
 
-<h1>{{ article.title }}</h1>
-
-<div>
-{% render_placeholder article.content %}
-</div>
+{% block blog_content %}
+    <div class="aldryn-newsblog-detail">
+        {% include "aldryn_newsblog/includes/article.html" with detail_view="true" %}
+    </div>
+{% endblock %}
