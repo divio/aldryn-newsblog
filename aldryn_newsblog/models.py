@@ -16,8 +16,9 @@ import reversion
 from reversion.revisions import VersionAdapter
 from parler.models import TranslatableModel, TranslatedFields
 from parler import cache
-
 from aldryn_apphooks_config.models import AppHookConfig
+from aldryn_categories.fields import CategoryManyToManyField
+from taggit.managers import TaggableManager
 
 
 class NewsBlogConfig(AppHookConfig):
@@ -127,6 +128,8 @@ class Article(TranslatableModel):
     author = models.ForeignKey(Person)
     owner = models.ForeignKey(User)
     namespace = models.ForeignKey(NewsBlogConfig)
+    categories = CategoryManyToManyField('aldryn_categories.Category', blank=True)
+    tags = TaggableManager()
     publishing_date = models.DateTimeField()
 
     class Meta:
