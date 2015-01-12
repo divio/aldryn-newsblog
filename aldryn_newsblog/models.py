@@ -24,22 +24,6 @@ class NewsBlogConfig(AppHookConfig):
     pass
 
 
-@python_2_unicode_compatible
-class MockCategory(models.Model):
-    name = models.CharField(_('Name'), max_length=123)
-
-    def __str__(self):
-        return self.name
-
-
-@python_2_unicode_compatible
-class MockTag(models.Model):
-    name = models.CharField(_('Name'), max_length=123)
-
-    def __str__(self):
-        return self.name
-
-
 # TODO: The following classes and registration function shall be extracted in a
 # common add-on module (as soon as we have one).
 
@@ -143,8 +127,6 @@ class Article(TranslatableModel):
     author = models.ForeignKey(Person)
     owner = models.ForeignKey(User)
     namespace = models.ForeignKey(NewsBlogConfig)
-    categories = models.ManyToManyField(MockCategory, blank=True)
-    tags = models.ManyToManyField(MockTag, blank=True)
     publishing_date = models.DateTimeField()
 
     class Meta:
