@@ -1,22 +1,27 @@
+# -*- coding: utf-8 -*-
+
 import unittest
 import random
+import six
 import string
 from datetime import datetime
 from random import randint
 
-import six
-from cms import api
-from cms.utils import get_cms_setting
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.test import TestCase, TransactionTestCase
 from django.core.urlresolvers import reverse
 from django.db import transaction
+from django.test import TestCase, TransactionTestCase
 from django.utils.translation import override
-from aldryn_people.models import Person
+
+from cms import api
+from cms.utils import get_cms_setting
+from parler.utils.context import switch_language
 
 from aldryn_categories.models import Category
 from aldryn_categories.tests import CategoryTestCaseMixin
+
+from aldryn_people.models import Person
 
 import reversion
 
@@ -69,11 +74,13 @@ class NewsBlogTestsMixin(CategoryTestCaseMixin):
             apphook_namespace=self.ns_newsblog.namespace)
         self.page.publish(self.language)
         self.placeholder = self.page.placeholders.all()[0]
-        self.category_root = Category.add_root(name=rand_str())
-        self.category1 = self.category_root.add_child(name=rand_str())
-        self.category2 = self.category_root.add_child(name=rand_str())
-        # We should reload this through the ORM
-        self.category1 = self.reload(self.category1)
+
+        with override(self.language[0]):
+            self.category_root = Category.add_root(name=rand_str())
+            self.category1 = self.category_root.add_child(name=rand_str())
+            self.category2 = self.category_root.add_child(name=rand_str())
+            # We should reload this through the ORM
+            self.category1 = self.reload(self.category1)
 
         for language, _ in settings.LANGUAGES[1:]:
             api.create_title(language, 'page', self.page)
@@ -115,9 +122,10 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TestCase):
                 article.categories.add(category)
                 articles.append(article)
 
-            response = self.client.get(reverse(
-                'aldryn_newsblog:article-list-by-category',
-                kwargs={'category': category.name}))
+            with switch_language(category, self.language[0]):
+                url = reverse('aldryn_newsblog:article-list-by-category',
+                        kwargs={'category': category.name})
+            response = self.client.get(url)
             for article in articles:
                 self.assertContains(response, article.title)
 
