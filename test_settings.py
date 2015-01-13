@@ -6,6 +6,8 @@ HELPER_SETTINGS = {
     ),
     'INSTALLED_APPS': [
         'reversion',
+        'taggit',
+        'aldryn_categories',
         'aldryn_newsblog',
         'aldryn_people',
         'filer',

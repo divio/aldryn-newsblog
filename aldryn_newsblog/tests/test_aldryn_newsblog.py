@@ -14,17 +14,20 @@ from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.utils.translation import override
 from aldryn_people.models import Person
+
+from aldryn_categories.models import Category
+from aldryn_categories.tests import CategoryTestCaseMixin
+
 import reversion
 
-from aldryn_newsblog.models import (
-    Article, NewsBlogConfig, MockCategory)
+from aldryn_newsblog.models import Article, NewsBlogConfig
 
 
 def rand_str(prefix='', length=23, chars=string.ascii_letters):
     return prefix + ''.join(random.choice(chars) for _ in range(length))
 
 
-class NewsBlogTestsMixin(object):
+class NewsBlogTestsMixin(CategoryTestCaseMixin):
     def create_person(self):
         user = User.objects.create(
             username=rand_str(), first_name=rand_str(), last_name=rand_str())
@@ -66,8 +69,11 @@ class NewsBlogTestsMixin(object):
             apphook_namespace=self.ns_newsblog.namespace)
         self.page.publish(self.language)
         self.placeholder = self.page.placeholders.all()[0]
-        self.category1 = MockCategory.objects.create(name=rand_str())
-        self.category2 = MockCategory.objects.create(name=rand_str())
+        self.category_root = Category.add_root(name=rand_str())
+        self.category1 = self.category_root.add_child(name=rand_str())
+        self.category2 = self.category_root.add_child(name=rand_str())
+        # We should reload this through the ORM
+        self.category1 = self.reload(self.category1)
 
         for language, _ in settings.LANGUAGES[1:]:
             api.create_title(language, 'page', self.page)
