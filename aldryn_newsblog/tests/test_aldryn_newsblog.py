@@ -42,7 +42,7 @@ class NewsBlogTestsMixin(object):
             'slug': rand_str(),
             'author': author,
             'owner': author.user,
-            'namespace': NewsBlogConfig.objects.create(),
+            'namespace': self.ns_newsblog,
             'publishing_date': datetime.now()
         }
 
@@ -219,6 +219,12 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TestCase):
         response = self.client.get(article.get_absolute_url())
         self.assertContains(response, title)
         self.assertContains(response, content)
+
+    def test_wrong_namespace(self):
+        namespace = NewsBlogConfig.objects.create(namespace='another')
+        article = self.create_article(namespace=namespace)
+        response = self.client.get(article.get_absolute_url())
+        self.assertEqual(response.status_code, 404)
 
 
 class TestVersioning(NewsBlogTestsMixin, TransactionTestCase):

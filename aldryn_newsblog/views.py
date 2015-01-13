@@ -11,7 +11,7 @@ from .models import Article
 
 class ArticleDetail(AppConfigMixin, DetailView):
     def get_queryset(self):
-        return Article.objects
+        return Article.objects.filter(namespace__namespace=self.namespace)
 
 
 class ArticleList(AppConfigMixin, ListView):
