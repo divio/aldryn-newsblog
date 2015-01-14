@@ -42,7 +42,7 @@ class NewsBlogTestsMixin(object):
             'slug': rand_str(),
             'author': author,
             'owner': author.user,
-            'namespace': NewsBlogConfig.objects.create(),
+            'namespace': self.ns_newsblog,
             'publishing_date': datetime.now()
         }
 
@@ -77,25 +77,16 @@ class NewsBlogTestsMixin(object):
 class TestAldrynNewsBlog(NewsBlogTestsMixin, TestCase):
 
     def test_create_post(self):
-        title = rand_str()
-        author = self.create_person()
-        article = Article.objects.create(
-            title=title, slug=rand_str(), author=author, owner=author.user,
-            namespace=self.ns_newsblog, publishing_date=datetime.now())
+        article = self.create_article()
         response = self.client.get(article.get_absolute_url())
-        self.assertContains(response, title)
+        self.assertContains(response, article.title)
 
     def test_delete_post(self):
-        title = rand_str()
-        slug = rand_str()
-        author = self.create_person()
-        article = Article.objects.create(
-            title=title, slug=slug, author=author, owner=author.user,
-            namespace=self.ns_newsblog, publishing_date=datetime.now())
+        article = self.create_article()
         article_url = article.get_absolute_url()
         response = self.client.get(article_url)
-        self.assertContains(response, title)
-        Article.objects.get(slug=slug).delete()
+        self.assertContains(response, article.title)
+        Article.objects.get(slug=article.slug).delete()
         response = self.client.get(article_url)
         self.assertEqual(response.status_code, 404)
 
@@ -103,12 +94,7 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TestCase):
         author1, author2 = self.create_person(), self.create_person()
         for author in (author1, author2):
             articles = [
-                Article.objects.create(
-                    title=rand_str(), slug=rand_str(),
-                    namespace=self.ns_newsblog,
-                    author=author, owner=author.user,
-                    publishing_date=datetime.now())
-                for _ in range(10)]
+                self.create_article(author=author) for _ in range(10)]
             response = self.client.get(reverse(
                 'aldryn_newsblog:article-list-by-author',
                 kwargs={'author': author.slug}))
@@ -116,15 +102,10 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TestCase):
                 self.assertContains(response, article.title)
 
     def test_articles_by_category(self):
-        author = self.create_person()
         for category in (self.category1, self.category2):
             articles = []
             for _ in range(10):
-                article = Article.objects.create(
-                    title=rand_str(), slug=rand_str(),
-                    namespace=self.ns_newsblog,
-                    author=author, owner=author.user,
-                    publishing_date=datetime.now())
+                article = self.create_article()
                 article.categories.add(category)
                 articles.append(article)
 
@@ -135,20 +116,15 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TestCase):
                 self.assertContains(response, article.title)
 
     def test_articles_by_date(self):
-        author = self.create_person()
         in_articles = [
-            Article.objects.create(
-                title=rand_str(), slug=rand_str(), namespace=self.ns_newsblog,
-                author=author, owner=author.user,
-                publishing_date=datetime(1914, 7, 28,
-                                         randint(0, 23), randint(0, 59)))
+            self.create_article(
+                publishing_date=datetime(
+                    1914, 7, 28, randint(0, 23), randint(0, 59)))
             for _ in range(10)]
         out_articles = [
-            Article.objects.create(
-                title=rand_str(), slug=rand_str(), namespace=self.ns_newsblog,
-                author=author, owner=author.user,
-                publishing_date=datetime(1939, 9, 1,
-                                         randint(0, 23), randint(0, 59)))
+            self.create_article(
+                publishing_date=datetime(
+                    1939, 9, 1, randint(0, 23), randint(0, 59)))
             for _ in range(10)]
         response = self.client.get(reverse(
             'aldryn_newsblog:article-list-by-day',
@@ -159,20 +135,15 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TestCase):
             self.assertContains(response, article.title)
 
     def test_articles_by_month(self):
-        author = self.create_person()
         in_articles = [
-            Article.objects.create(
-                title=rand_str(), slug=rand_str(), namespace=self.ns_newsblog,
-                author=author, owner=author.user,
-                publishing_date=datetime(1914, 7, randint(1, 31),
-                                         randint(0, 23), randint(0, 59)))
+            self.create_article(
+                publishing_date=datetime(
+                    1914, 7, randint(1, 31), randint(0, 23), randint(0, 59)))
             for _ in range(10)]
         out_articles = [
-            Article.objects.create(
-                title=rand_str(), slug=rand_str(), namespace=self.ns_newsblog,
-                author=author, owner=author.user,
-                publishing_date=datetime(1939, 9, 1,
-                                         randint(0, 23), randint(0, 59)))
+            self.create_article(
+                publishing_date=datetime(
+                    1939, 9, 1, randint(0, 23), randint(0, 59)))
             for _ in range(10)]
         response = self.client.get(reverse(
             'aldryn_newsblog:article-list-by-month',
@@ -183,20 +154,17 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TestCase):
             self.assertContains(response, article.title)
 
     def test_articles_by_year(self):
-        author = self.create_person()
         in_articles = [
-            Article.objects.create(
-                title=rand_str(), slug=rand_str(), namespace=self.ns_newsblog,
-                author=author, owner=author.user,
-                publishing_date=datetime(1914, randint(1, 12), randint(1, 28),
-                                         randint(0, 23), randint(0, 59)))
+            self.create_article(
+                publishing_date=datetime(
+                    1914, randint(1, 12), randint(1, 28),
+                    randint(0, 23), randint(0, 59)))
             for _ in range(10)]
         out_articles = [
-            Article.objects.create(
-                title=rand_str(), slug=rand_str(), namespace=self.ns_newsblog,
-                author=author, owner=author.user,
-                publishing_date=datetime(1939, randint(1, 12), randint(1, 28),
-                                         randint(0, 23), randint(0, 59)))
+            self.create_article(
+                publishing_date=datetime(
+                    1939, randint(1, 12), randint(1, 28),
+                    randint(0, 23), randint(0, 59)))
             for _ in range(10)]
         response = self.client.get(reverse(
             'aldryn_newsblog:article-list-by-year', kwargs={'year': '1914'}))
@@ -206,19 +174,21 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TestCase):
             self.assertContains(response, article.title)
 
     def test_has_content(self):
-        title = rand_str()
-        content = rand_str()
-        author = self.create_person()
-        article = Article.objects.create(
-            title=title, slug=rand_str(), author=author, owner=author.user,
-            namespace=self.ns_newsblog, publishing_date=datetime.now())
+        article = self.create_article()
         api.add_plugin(article.content, 'TextPlugin', self.language)
         plugin = article.content.get_plugins()[0].get_plugin_instance()[0]
+        content = rand_str()
         plugin.body = content
         plugin.save()
         response = self.client.get(article.get_absolute_url())
-        self.assertContains(response, title)
+        self.assertContains(response, article.title)
         self.assertContains(response, content)
+
+    def test_wrong_namespace(self):
+        namespace = NewsBlogConfig.objects.create(namespace='another')
+        article = self.create_article(namespace=namespace)
+        response = self.client.get(article.get_absolute_url())
+        self.assertEqual(response.status_code, 404)
 
 
 class TestVersioning(NewsBlogTestsMixin, TransactionTestCase):
