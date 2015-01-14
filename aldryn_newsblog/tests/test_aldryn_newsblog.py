@@ -90,6 +90,33 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TestCase):
         response = self.client.get(article_url)
         self.assertEqual(response.status_code, 404)
 
+    def test_articles_list(self):
+        articles = [self.create_article() for _ in range(10)]
+        response = self.client.get(
+            reverse('aldryn_newsblog:article-list'))
+        for article in articles:
+            self.assertContains(response, article.title)
+
+    def test_articles_list_pagination(self):
+        paginate_by = settings.ALDRYN_NEWSBLOG_PAGINATE_BY
+        articles = [
+            self.create_article(publishing_date=datetime(
+                2000 - i, 1, 1, 1, 1)) for i in range(paginate_by + 5)]
+
+        response = self.client.get(
+            reverse('aldryn_newsblog:article-list'))
+        for article in articles[:paginate_by]:
+            self.assertContains(response, article.title)
+        for article in articles[paginate_by:]:
+            self.assertNotContains(response, article.title)
+
+        response = self.client.get(
+            reverse('aldryn_newsblog:article-list') + '?page=2')
+        for article in articles[:paginate_by]:
+            self.assertNotContains(response, article.title)
+        for article in articles[paginate_by:]:
+            self.assertContains(response, article.title)
+
     def test_articles_by_author(self):
         author1, author2 = self.create_person(), self.create_person()
         for author in (author1, author2):

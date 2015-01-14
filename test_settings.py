@@ -11,4 +11,6 @@ HELPER_SETTINGS = {
         'filer',
         'djangocms_text_ckeditor',
     ],
+    # app-specific
+    'ALDRYN_NEWSBLOG_PAGINATE_BY': 10,
 }
