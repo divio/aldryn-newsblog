@@ -1,4 +1,4 @@
-![Travis CI](https://magnum.travis-ci.com/aldryn/aldryn-newsblog.svg?token=YAkYhx2EXB7DyqW6ssQZ)
+[![Build Status](https://magnum.travis-ci.com/aldryn/aldryn-newsblog.svg?token=YAkYhx2EXB7DyqW6ssQZ&branch=master)](https://magnum.travis-ci.com/aldryn/aldryn-newsblog)
 
 aldryn-newsblog
 ===============
