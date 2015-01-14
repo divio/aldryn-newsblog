@@ -41,7 +41,7 @@ class CategoryArticleList(ArticleList):
     @property
     def queryset(self):
         return super(CategoryArticleList, self).queryset.filter(
-            categories__translations__name=self.category
+            categories__translations__slug=self.category
         )
 
     def get(self, request, category):
