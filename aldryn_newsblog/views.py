@@ -19,10 +19,6 @@ class ArticleList(AppConfigMixin, ListView):
     def queryset(self):
         return Article.objects.filter(namespace__namespace=self.namespace)
 
-    def get(self, request):
-        return HttpResponse('\n'.join(
-            article.title for article in self.queryset))
-
 
 class AuthorArticleList(ArticleList):
     """A list of articles written by a specific author."""
