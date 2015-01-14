@@ -3,6 +3,7 @@ HELPER_SETTINGS = {
     'LANGUAGES': (
         ('en', 'English'),
         ('de', 'German'),
+        ('fr', 'French'),
     ),
     'INSTALLED_APPS': [
         'reversion',
