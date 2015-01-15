@@ -1,23 +1,26 @@
-djangocms-helper
-django>=1.6,<1.7
-South
+-e git+http://github.com/aldryn/aldryn-apphooks-config.git#egg=aldryn-apphooks-config
+-e git+http://github.com/aldryn/aldryn-categories.git#egg=aldryn-categories
+aldryn-common
+aldryn-people
 dj-database-url
+django-appdata
 django-classy-tags
 -e git+http://github.com/yakky/django-cms/@feature/appspaced_apphooks#egg=django-cms
+django-filer
 django-mptt
+django-parler
+django-reversion>=1.8.2,<1.9
 django-sekizai
+django-taggit
+django-treebeard>=2.0
+django>=1.6,<1.7
 djangocms-admin-style
+djangocms-helper
+djangocms_text_ckeditor
 docopt
+flake8
 html5lib
 pyflakes
-six
-django-parler
 selenium
-djangocms_text_ckeditor
-flake8
-django-filer
-aldryn-common
-django-appdata
-aldryn-people
-django-reversion>=1.8.2,<1.9
--e git+http://github.com/aldryn/aldryn-apphooks-config.git#egg=aldryn-apphooks-config
+six
+South

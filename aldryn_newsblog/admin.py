@@ -5,7 +5,7 @@ from aldryn_people.models import Person
 from cms.admin.placeholderadmin import PlaceholderAdmin, FrontendEditableAdmin
 from parler.admin import TranslatableAdmin
 
-from .models import Article, MockCategory, MockTag, NewsBlogConfig
+from .models import Article, NewsBlogConfig
 
 
 class ArticleAdmin(TranslatableAdmin, PlaceholderAdmin, FrontendEditableAdmin):
@@ -23,20 +23,10 @@ class ArticleAdmin(TranslatableAdmin, PlaceholderAdmin, FrontendEditableAdmin):
         return super(ArticleAdmin, self).add_view(request, *args, **kwargs)
 
 
-class MockCategoryAdmin(admin.ModelAdmin):
-    pass
-
-
-class MockTagAdmin(admin.ModelAdmin):
-    pass
-
-
 class NewsBlogConfigAdmin(BaseAppHookConfig):
     def get_config_fields(self):
         return []
 
 
 admin.site.register(Article, ArticleAdmin)
-admin.site.register(MockTag, MockCategoryAdmin)
-admin.site.register(MockCategory, MockTagAdmin)
 admin.site.register(NewsBlogConfig, NewsBlogConfigAdmin)

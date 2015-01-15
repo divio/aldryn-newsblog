@@ -3,9 +3,12 @@ HELPER_SETTINGS = {
     'LANGUAGES': (
         ('en', 'English'),
         ('de', 'German'),
+        ('fr', 'French'),
     ),
     'INSTALLED_APPS': [
         'reversion',
+        'taggit',
+        'aldryn_categories',
         'aldryn_newsblog',
         'aldryn_people',
         'filer',

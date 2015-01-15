@@ -1,30 +1,38 @@
+# -*- coding: utf-8 -*-
+
 import unittest
 import random
+import six
 import string
 from datetime import datetime
 from random import randint
 
-import six
-from cms import api
-from cms.utils import get_cms_setting
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.test import TestCase, TransactionTestCase
 from django.core.urlresolvers import reverse
 from django.db import transaction
-from django.utils.translation import override
+from django.test import TestCase, TransactionTestCase
+from django.utils.translation import activate, override
+
+from cms import api
+from cms.utils import get_cms_setting
+from parler.utils.context import switch_language
+
+from aldryn_categories.models import Category
+from aldryn_categories.tests import CategoryTestCaseMixin
+
 from aldryn_people.models import Person
+
 import reversion
 
-from aldryn_newsblog.models import (
-    Article, NewsBlogConfig, MockCategory)
+from aldryn_newsblog.models import Article, NewsBlogConfig
 
 
 def rand_str(prefix='', length=23, chars=string.ascii_letters):
     return prefix + ''.join(random.choice(chars) for _ in range(length))
 
 
-class NewsBlogTestsMixin(object):
+class NewsBlogTestsMixin(CategoryTestCaseMixin):
     def create_person(self):
         user = User.objects.create(
             username=rand_str(), first_name=rand_str(), last_name=rand_str())
@@ -56,6 +64,34 @@ class NewsBlogTestsMixin(object):
 
         return article
 
+    def setup_categories(self):
+        """Sets-up i18n categories (self.category_root, self.category1 and
+        self.category2) for use in tests"""
+        if not self.language:
+            self.language = settings.LANGUAGES[0][0]
+
+        categories = []
+        # Set the default language, create the objects
+        with override(self.language):
+            code = "{0}-".format(self.language)
+            self.category_root = Category.add_root(name=rand_str(prefix=code, length=8))
+            categories.append(self.category_root)
+            self.category1 = self.category_root.add_child(name=rand_str(prefix=code, length=8))
+            categories.append(self.category1)
+            self.category2 = self.category_root.add_child(name=rand_str(prefix=code, length=8))
+            categories.append(self.category2)
+
+        # We should reload category_root, since we modified its children.
+        self.category_root = self.reload(self.category_root)
+
+        # Setup the other language(s) translations for the categories
+        for language, _ in settings.LANGUAGES[1:]:
+            for category in categories:
+                with switch_language(category, language):
+                    code = "{0}-".format(language)
+                    category.name = rand_str(prefix=code, length=8)
+                    category.save()
+
     def setUp(self):
         self.template = get_cms_setting('TEMPLATES')[0][0]
         self.language = settings.LANGUAGES[0][0]
@@ -66,8 +102,8 @@ class NewsBlogTestsMixin(object):
             apphook_namespace=self.ns_newsblog.namespace)
         self.page.publish(self.language)
         self.placeholder = self.page.placeholders.all()[0]
-        self.category1 = MockCategory.objects.create(name=rand_str())
-        self.category2 = MockCategory.objects.create(name=rand_str())
+
+        self.setup_categories()
 
         for language, _ in settings.LANGUAGES[1:]:
             api.create_title(language, 'page', self.page)
@@ -129,18 +165,37 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TestCase):
                 self.assertContains(response, article.title)
 
     def test_articles_by_category(self):
+        """Tests that we can find articles by their categories, in ANY of the
+        languages they are translated to"""
+        author = self.create_person()
         for category in (self.category1, self.category2):
             articles = []
+            code = "{0}-".format(self.language)
             for _ in range(10):
-                article = self.create_article()
+                article = Article.objects.create(
+                    title=rand_str(), slug=rand_str(prefix=code),
+                    namespace=self.ns_newsblog,
+                    author=author, owner=author.user,
+                    publishing_date=datetime.now())
+                article.save()
+                # Make sure there are translations in place for the articles.
+                for language, _ in settings.LANGUAGES[1:]:
+                    with switch_language(article, language):
+                        code = "{0}-".format(language)
+                        article.title = rand_str(prefix=code)
+                        article.save()
+
                 article.categories.add(category)
                 articles.append(article)
 
-            response = self.client.get(reverse(
-                'aldryn_newsblog:article-list-by-category',
-                kwargs={'category': category.name}))
-            for article in articles:
-                self.assertContains(response, article.title)
+            for language, _ in settings.LANGUAGES:
+                with switch_language(category, language):
+                    url = reverse('aldryn_newsblog:article-list-by-category',
+                            kwargs={'category': category.slug})
+                response = self.client.get(url)
+                for article in articles:
+                    with switch_language(article, language):
+                        self.assertContains(response, article.title)
 
     def test_articles_by_date(self):
         in_articles = [
@@ -201,14 +256,21 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TestCase):
             self.assertContains(response, article.title)
 
     def test_has_content(self):
-        article = self.create_article()
+        # Just make sure we have a known language
+        activate(self.language)
+        title = rand_str()
+        content = rand_str()
+        author = self.create_person()
+        article = Article.objects.create(
+            title=title, slug=rand_str(), author=author, owner=author.user,
+            namespace=self.ns_newsblog, publishing_date=datetime.now())
+        article.save()
         api.add_plugin(article.content, 'TextPlugin', self.language)
         plugin = article.content.get_plugins()[0].get_plugin_instance()[0]
-        content = rand_str()
         plugin.body = content
         plugin.save()
         response = self.client.get(article.get_absolute_url())
-        self.assertContains(response, article.title)
+        self.assertContains(response, title)
         self.assertContains(response, content)
 
     def test_wrong_namespace(self):
