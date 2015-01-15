@@ -1,9 +1,10 @@
 from datetime import datetime
-
 from dateutil.relativedelta import relativedelta
+
+from django.conf import settings
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView
-from django.http import HttpResponse
+
 from aldryn_apphooks_config.mixins import AppConfigMixin
 
 from .models import Article
@@ -15,6 +16,9 @@ class ArticleDetail(AppConfigMixin, DetailView):
 
 
 class ArticleList(AppConfigMixin, ListView):
+    """A complete list of articles."""
+    paginate_by = getattr(settings, 'ALDRYN_NEWSBLOG_PAGINATE_BY', 10)
+
     @property
     def queryset(self):
         return Article.objects.filter(namespace__namespace=self.namespace)

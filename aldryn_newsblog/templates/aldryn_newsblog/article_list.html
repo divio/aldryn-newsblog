@@ -1,3 +1,14 @@
-{% for article in article_list %}
-    {{ article.title }}
-{% endfor %}
+{% extends "aldryn_newsblog/base.html" %}
+{% load cms_tags i18n %}
+
+{% block blog_content %}
+    <ul>
+        {% for article in article_list %}
+            <li>{{ article.title }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+
+{% block blog_footer %}
+    {% include "aldryn_newsblog/pagination.html" %}
+{% endblock %}
