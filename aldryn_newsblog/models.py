@@ -81,7 +81,7 @@ class LatestEntriesPlugin(CMSPlugin):
     #     self.categories = old_instance.categories.all()
     #     self.tags = old_instance.tags.all()
 
-    def __unicode__(self):
+    def __str__(self):
         return u'Latest entries: {0}'.format(self.latest_entries)
 
     def get_articles(self):

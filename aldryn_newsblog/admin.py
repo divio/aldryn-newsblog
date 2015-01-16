@@ -1,10 +1,14 @@
 from django.core.exceptions import PermissionDenied
-from django.contrib import admin
+from django.core.urlresolvers import reverse
+from django.contrib import admin, messages
 from django.contrib.admin.util import unquote
 from django.db import transaction
 from django.shortcuts import get_object_or_404, render_to_response
 from django.utils.encoding import force_text
 from django.template import RequestContext
+from django.http import HttpResponseRedirect
+from django.utils.translation import ugettext as _
+from django.contrib.admin.templatetags.admin_urls import add_preserved_filters
 
 from cms.admin.placeholderadmin import PlaceholderAdminMixin
 from cms.admin.placeholderadmin import FrontendEditableAdmin
@@ -78,6 +82,26 @@ class ArticleAdmin(reversion.VersionAdmin,
 
         if request.method == "POST":
             revision.revert()
+            opts = self.model._meta
+            pk_value = obj._get_pk_val()
+            preserved_filters = self.get_preserved_filters(request)
+
+            msg_dict = {
+                'name': force_text(opts.verbose_name),
+                'obj': force_text(obj)
+            }
+            msg = _('The %(name)s "%(obj)s" was successfully reverted. '
+                    'You may edit it again below.') % msg_dict
+            self.message_user(request, msg, messages.SUCCESS)
+            redirect_url = reverse('admin:%s_%s_change' %
+                                   (opts.app_label, opts.model_name),
+                                   args=(pk_value,),
+                                   current_app=self.admin_site.name)
+            redirect_url = add_preserved_filters({
+                'preserved_filters': preserved_filters,
+                'opts': opts,
+            }, redirect_url)
+            return HttpResponseRedirect(redirect_url)
         else:
             context = {
                 'object': obj,
