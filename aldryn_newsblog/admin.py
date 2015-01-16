@@ -1,15 +1,17 @@
 from django.contrib import admin
+from cms.admin.placeholderadmin import FrontendEditableAdmin
+from parler.admin import TranslatableAdmin
 
 from aldryn_apphooks_config.admin import BaseAppHookConfig
 from aldryn_people.models import Person
-from cms.admin.placeholderadmin import PlaceholderAdmin, FrontendEditableAdmin
-from parler.admin import TranslatableAdmin
 
-from .models import Article, NewsBlogConfig
+from .versioning.admin import VersionedPlaceholderAdminMixin
+from . import models
 
 
-class ArticleAdmin(TranslatableAdmin, PlaceholderAdmin, FrontendEditableAdmin):
-
+class ArticleAdmin(VersionedPlaceholderAdminMixin,
+                   TranslatableAdmin,
+                   FrontendEditableAdmin):
     # TODO: make possible to edit placeholder
 
     def add_view(self, request, *args, **kwargs):
@@ -22,11 +24,11 @@ class ArticleAdmin(TranslatableAdmin, PlaceholderAdmin, FrontendEditableAdmin):
             pass
         return super(ArticleAdmin, self).add_view(request, *args, **kwargs)
 
+admin.site.register(models.Article, ArticleAdmin)
+
 
 class NewsBlogConfigAdmin(BaseAppHookConfig):
     def get_config_fields(self):
         return []
 
-
-admin.site.register(Article, ArticleAdmin)
-admin.site.register(NewsBlogConfig, NewsBlogConfigAdmin)
+admin.site.register(models.NewsBlogConfig, NewsBlogConfigAdmin)

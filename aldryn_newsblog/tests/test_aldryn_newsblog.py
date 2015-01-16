@@ -26,6 +26,7 @@ from aldryn_people.models import Person
 import reversion
 
 from aldryn_newsblog.models import Article, NewsBlogConfig
+from aldryn_newsblog.versioning import create_revision_with_placeholders
 
 
 def rand_str(prefix='', length=23, chars=string.ascii_letters):
@@ -74,11 +75,14 @@ class NewsBlogTestsMixin(CategoryTestCaseMixin):
         # Set the default language, create the objects
         with override(self.language):
             code = "{0}-".format(self.language)
-            self.category_root = Category.add_root(name=rand_str(prefix=code, length=8))
+            self.category_root = Category.add_root(
+                name=rand_str(prefix=code, length=8))
             categories.append(self.category_root)
-            self.category1 = self.category_root.add_child(name=rand_str(prefix=code, length=8))
+            self.category1 = self.category_root.add_child(
+                name=rand_str(prefix=code, length=8))
             categories.append(self.category1)
-            self.category2 = self.category_root.add_child(name=rand_str(prefix=code, length=8))
+            self.category2 = self.category_root.add_child(
+                name=rand_str(prefix=code, length=8))
             categories.append(self.category2)
 
         # We should reload category_root, since we modified its children.
@@ -191,7 +195,7 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TestCase):
             for language, _ in settings.LANGUAGES:
                 with switch_language(category, language):
                     url = reverse('aldryn_newsblog:article-list-by-category',
-                            kwargs={'category': category.slug})
+                                  kwargs={'category': category.slug})
                 response = self.client.get(url)
                 for article in articles:
                     with switch_language(article, language):
@@ -399,6 +403,42 @@ class TestVersioning(NewsBlogTestsMixin, TransactionTestCase):
         with override('de'):
             response = self.client.get(article.get_absolute_url())
             self.assertContains(response, title1_de)
+
+    def test_edit_plugin_directly(self):
+        content0 = rand_str(prefix='content0_')
+        content1 = rand_str(prefix='content1_')
+        content2 = rand_str(prefix='content2_')
+
+        article = self.create_article(content=content0)
+
+        # Revision 1
+        self.create_revision(article, content=content1)
+
+        self.assertEqual(
+            len(reversion.get_for_object(article)), 1)
+
+        # Revision 2
+        with transaction.atomic():
+            with reversion.create_revision():
+                plugins = article.content.get_plugins()
+                plugin = plugins[0].get_plugin_instance()[0]
+                plugin.body = content2
+                plugin.save()
+                create_revision_with_placeholders(article)
+
+        self.assertEqual(
+            len(reversion.get_for_object(article)), 2)
+
+        response = self.client.get(article.get_absolute_url())
+        self.assertContains(response, content2)
+        self.assertNotContains(response, content1)
+
+        # Revert to revision 1
+        self.revert_to(article, 1)
+
+        response = self.client.get(article.get_absolute_url())
+        self.assertContains(response, content1)
+        self.assertNotContains(response, content2)
 
 
 if __name__ == '__main__':
