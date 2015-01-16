@@ -28,8 +28,16 @@ class VersionedPlaceholderAdminMixin(reversion.VersionAdmin,
                     request, plugin_id)
 
     def _create_revision(self, plugin, user=None, comment=None):
+        # _get_attached_objects returns the models which define the
+        # PlaceholderField to which this placeholder is linked.
+        # Theoretically it is possible to have a placeholder attached to
+        # multiple models (as two PlaceholderFields could point to the same
+        # instance), but the only way to do this is by coding it.
+        # As we don't support this use case yet, better to fail loudly than
+        # to compromise the integrity of the data by applying the versioning
+        # to the wrong model.
         objs = plugin.placeholder._get_attached_objects()
-        assert len(objs) == 1
+        assert len(objs) == 1, 'Placeholder attached to multiple objects'
         obj = objs[0]
         if user:
             reversion.set_user(user)
