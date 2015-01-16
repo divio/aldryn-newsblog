@@ -7,6 +7,11 @@ from django.db import models
 
 class Migration(SchemaMigration):
 
+    depends_on = (
+        # we need at least the initial aldryn_people migration at this point
+        ('aldryn_people', '0001_initial'),
+    )
+
     def forwards(self, orm):
         # Adding model 'NewsBlogConfig'
         db.create_table(u'aldryn_newsblog_newsblogconfig', (
