@@ -5,7 +5,7 @@ from parler.admin import TranslatableAdmin
 from aldryn_apphooks_config.admin import BaseAppHookConfig
 from aldryn_people.models import Person
 
-from .versioning import VersionedPlaceholderAdminMixin
+from .versioning.admin import VersionedPlaceholderAdminMixin
 from . import models
 
 
