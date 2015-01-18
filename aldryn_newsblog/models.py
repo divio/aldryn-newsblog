@@ -48,7 +48,7 @@ class Article(TranslatableModel):
     namespace = models.ForeignKey(NewsBlogConfig)
     categories = CategoryManyToManyField('aldryn_categories.Category',
                                          blank=True)
-    tags = TaggableManager()
+    tags = TaggableManager(blank=True)
     publishing_date = models.DateTimeField()
 
     class Meta:
