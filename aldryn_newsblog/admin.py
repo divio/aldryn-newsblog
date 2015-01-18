@@ -12,7 +12,7 @@ from . import models
 class ArticleAdmin(VersionedPlaceholderAdminMixin,
                    TranslatableAdmin,
                    FrontendEditableAdmin):
-    # TODO: make possible to edit placeholder
+    list_display = ('title', 'namespace', 'slug')
 
     def add_view(self, request, *args, **kwargs):
         data = request.GET.copy()
