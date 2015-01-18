@@ -277,11 +277,17 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TestCase):
         self.assertContains(response, title)
         self.assertContains(response, content)
 
-    def test_wrong_namespace(self):
+    def test_unattached_namespace(self):
+        # create a new namespace that has no corresponding blog app page
         namespace = NewsBlogConfig.objects.create(namespace='another')
-        article = self.create_article(namespace=namespace)
-        response = self.client.get(article.get_absolute_url())
+        articles = [self.create_article(namespace=namespace)
+                    for _ in range(10)]
+        response = self.client.get(articles[0].get_absolute_url())
         self.assertEqual(response.status_code, 404)
+        response = self.client.get(
+            reverse('aldryn_newsblog:article-list'))
+        for article in articles:
+            self.assertNotContains(response, article.title)
 
 
 class TestVersioning(NewsBlogTestsMixin, TransactionTestCase):

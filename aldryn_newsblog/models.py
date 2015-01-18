@@ -65,8 +65,7 @@ class Article(TranslatableModel):
     def get_absolute_url(self):
         return reverse('aldryn_newsblog:article-detail',
                        kwargs={'slug': self.slug},
-                       current_app=self.namespace.namespace
-                       )
+                       current_app=self.namespace.namespace)
 
 
 @python_2_unicode_compatible
