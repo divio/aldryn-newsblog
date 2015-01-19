@@ -27,6 +27,13 @@ class NewsBlogConfig(AppHookConfig):
 class Article(TranslatableModel):
     translations = TranslatedFields(
         title = models.CharField(_('Title'), max_length=234),
+
+        meta_title=models.CharField(
+            max_length=255, verbose_name=_('meta title'), blank=True),
+        meta_description=models.TextField(
+            verbose_name=_('meta description'), blank=True),
+        meta_keywords=models.TextField(
+            verbose_name=_('meta keywords'), blank=True)
     )
 
     content = PlaceholderField('aldryn_newsblog_article_content',
