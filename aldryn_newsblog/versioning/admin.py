@@ -17,8 +17,8 @@ from reversion.models import Version
 from . import create_revision_with_placeholders
 
 
-class VersionedPlaceholderAdminMixin(reversion.VersionAdmin,
-                                     PlaceholderAdminMixin):
+class VersionedPlaceholderAdminMixin(PlaceholderAdminMixin,
+                                     reversion.VersionAdmin):
     revision_confirmation_template = 'reversion/confirm_reversion.html'
 
     def edit_plugin(self, request, plugin_id):
