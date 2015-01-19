@@ -109,8 +109,8 @@ class NewsBlogTestsMixin(CategoryTestCaseMixin):
 
         self.setup_categories()
 
-        self.tag1 = rand_str()
-        self.tag2 = rand_str()
+        self.tag_name1 = rand_str()
+        self.tag_name2 = rand_str()
 
         for language, _ in settings.LANGUAGES[1:]:
             api.create_title(language, 'page', self.page)
@@ -208,7 +208,7 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TestCase):
         """Tests that we can find articles by their tags, in ANY of the
         languages they are translated to"""
         author = self.create_person()
-        for tag in (self.tag1, self.tag2):
+        for tag_name in (self.tag_name1, self.tag_name2):
             articles = []
             for _ in range(10):
                 article = Article.objects.create(
@@ -217,11 +217,11 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TestCase):
                     author=author, owner=author.user,
                     publishing_date=datetime.now())
                 article.save()
-                article.tags.add(tag)
+                article.tags.add(tag_name)
                 articles.append(article)
 
             url = reverse('aldryn_newsblog:article-list-by-tag',
-                          kwargs={'tag': tag})
+                          kwargs={'tag': tag_name})
             response = self.client.get(url)
             for article in articles:
                 self.assertContains(response, article.title)
