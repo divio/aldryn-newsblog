@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
 
 from django.conf import settings
@@ -77,6 +77,15 @@ class DateRangeArticleList(ArticleList):
     def get(self, request, **kwargs):
         self.date_from, self.date_to = self._daterange_from_kwargs(kwargs)
         return super(DateRangeArticleList, self).get(request)
+
+    def get_context_data(self, **kwargs):
+        kwargs['day'] = int(self.kwargs.get('day')) if 'day' in self.kwargs else None
+        kwargs['month'] = int(self.kwargs.get('month')) if 'month' in self.kwargs else None
+        kwargs['year'] = int(self.kwargs.get('year')) if 'year' in self.kwargs else None
+        if kwargs['year']:
+            kwargs['archive_date'] = date(
+                kwargs['year'], kwargs['month'] or 1, kwargs['day'] or 1)
+        return super(DateRangeArticleList, self).get_context_data(**kwargs)
 
 
 class YearArticleList(DateRangeArticleList):
