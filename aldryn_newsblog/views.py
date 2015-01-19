@@ -79,9 +79,12 @@ class DateRangeArticleList(ArticleList):
         return super(DateRangeArticleList, self).get(request)
 
     def get_context_data(self, **kwargs):
-        kwargs['day'] = int(self.kwargs.get('day')) if 'day' in self.kwargs else None
-        kwargs['month'] = int(self.kwargs.get('month')) if 'month' in self.kwargs else None
-        kwargs['year'] = int(self.kwargs.get('year')) if 'year' in self.kwargs else None
+        kwargs['day'] = (
+            int(self.kwargs.get('day')) if 'day' in self.kwargs else None)
+        kwargs['month'] = (
+            int(self.kwargs.get('month')) if 'month' in self.kwargs else None)
+        kwargs['year'] = (
+            int(self.kwargs.get('year')) if 'year' in self.kwargs else None)
         if kwargs['year']:
             kwargs['archive_date'] = date(
                 kwargs['year'], kwargs['month'] or 1, kwargs['day'] or 1)
