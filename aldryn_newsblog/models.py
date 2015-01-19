@@ -14,6 +14,7 @@ from parler.models import TranslatableModel, TranslatedFields
 from aldryn_apphooks_config.models import AppHookConfig
 from aldryn_categories.fields import CategoryManyToManyField
 from taggit.managers import TaggableManager
+from djangocms_text_ckeditor.fields import HTMLField
 
 from .versioning import version_controlled_content
 
@@ -27,6 +28,11 @@ class NewsBlogConfig(AppHookConfig):
 class Article(TranslatableModel):
     translations = TranslatedFields(
         title = models.CharField(_('Title'), max_length=234),
+
+        lead_in = HTMLField(
+            verbose_name=_('Lead-in'),
+            help_text=_('Will be displayed in lists, and at the start of the '
+                        'detail page (in bold)')),
 
         meta_title=models.CharField(
             max_length=255, verbose_name=_('meta title'),
