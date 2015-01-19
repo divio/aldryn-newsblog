@@ -29,11 +29,12 @@ class Article(TranslatableModel):
         title = models.CharField(_('Title'), max_length=234),
 
         meta_title=models.CharField(
-            max_length=255, verbose_name=_('meta title'), blank=True),
+            max_length=255, verbose_name=_('meta title'),
+            blank=True, default=''),
         meta_description=models.TextField(
-            verbose_name=_('meta description'), blank=True),
+            verbose_name=_('meta description'), blank=True, default=''),
         meta_keywords=models.TextField(
-            verbose_name=_('meta keywords'), blank=True)
+            verbose_name=_('meta keywords'), blank=True, default='')
     )
 
     content = PlaceholderField('aldryn_newsblog_article_content',
