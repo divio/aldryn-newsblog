@@ -1,5 +1,5 @@
 from django.contrib import admin
-from cms.admin.placeholderadmin import FrontendEditableAdmin
+from cms.admin.placeholderadmin import FrontendEditableAdminMixin
 from parler.admin import TranslatableAdmin
 
 from aldryn_apphooks_config.admin import BaseAppHookConfig
@@ -11,7 +11,8 @@ from . import models
 
 class ArticleAdmin(VersionedPlaceholderAdminMixin,
                    TranslatableAdmin,
-                   FrontendEditableAdmin):
+                   FrontendEditableAdminMixin,
+                   admin.ModelAdmin):
     list_display = ('title', 'namespace', 'slug')
 
     def add_view(self, request, *args, **kwargs):
