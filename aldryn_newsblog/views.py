@@ -49,6 +49,19 @@ class CategoryArticleList(ArticleList):
         return super(CategoryArticleList, self).get(request)
 
 
+class TagArticleList(ArticleList):
+    """A list of articles filtered by tags."""
+    @property
+    def queryset(self):
+        return super(TagArticleList, self).queryset.filter(
+            tags__name__in=[self.tag]
+        )
+
+    def get(self, request, tag):
+        self.tag = tag
+        return super(TagArticleList, self).get(request)
+
+
 class DateRangeArticleList(ArticleList):
     """A list of articles for a specific date range"""
     @property
