@@ -109,7 +109,8 @@ class NewsBlogTestsMixin(CategoryTestCaseMixin):
 
         self.setup_categories()
 
-        self.tag1, self.tag2 = rand_str(), rand_str()
+        self.tag1 = rand_str()
+        self.tag2 = rand_str()
 
         for language, _ in settings.LANGUAGES[1:]:
             api.create_title(language, 'page', self.page)
