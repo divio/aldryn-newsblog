@@ -314,6 +314,17 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TestCase):
         for article in articles:
             self.assertNotContains(response, article.title)
 
+    def test_auto_slugifies(self):
+        activate(self.language)
+        title = 'This is a title'
+        content = rand_str()
+        author = self.create_person()
+        article = Article.objects.create(
+            title=title, author=author, owner=author.user,
+            namespace=self.ns_newsblog, publishing_date=datetime.now())
+        article.save()
+        self.assertEquals(article.slug, 'this-is-a-title')
+
 
 class TestVersioning(NewsBlogTestsMixin, TransactionTestCase):
     def create_revision(self, article, content=None, language=None, **kwargs):

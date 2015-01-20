@@ -15,6 +15,7 @@ from aldryn_apphooks_config.models import AppHookConfig
 from aldryn_categories.fields import CategoryManyToManyField
 from taggit.managers import TaggableManager
 from djangocms_text_ckeditor.fields import HTMLField
+from django.template.defaultfilters import slugify
 
 from .versioning import version_controlled_content
 
@@ -80,6 +81,12 @@ class Article(TranslatableModel):
         return reverse('aldryn_newsblog:article-detail',
                        kwargs={'slug': self.slug},
                        current_app=self.namespace.namespace)
+
+    def save(self, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        return super(Article, self).save(**kwargs)
+
 
 
 @python_2_unicode_compatible
