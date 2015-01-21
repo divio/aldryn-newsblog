@@ -58,7 +58,7 @@ class Article(TranslatableModel):
             'Clean it to have it re-created.'),
     )
 
-    author = models.ForeignKey(Person, null=True)
+    author = models.ForeignKey(Person, null=True, blank=True)
     owner = models.ForeignKey(User)
     namespace = models.ForeignKey(NewsBlogConfig)
     categories = CategoryManyToManyField('aldryn_categories.Category',
