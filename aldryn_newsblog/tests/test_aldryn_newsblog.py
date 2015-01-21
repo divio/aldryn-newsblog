@@ -325,6 +325,17 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TestCase):
         article.save()
         self.assertEquals(article.slug, 'this-is-a-title')
 
+    def test_auto_author(self):
+        title = rand_str()
+        content = rand_str()
+        author = self.create_person()
+        article = Article.objects.create(
+            title=rand_str(), owner=author.user,
+            namespace=self.ns_newsblog, publishing_date=datetime.now())
+        article.save()
+        self.assertEquals(article.author.user, article.owner)
+
+
 
 class TestVersioning(NewsBlogTestsMixin, TransactionTestCase):
     def create_revision(self, article, content=None, language=None, **kwargs):

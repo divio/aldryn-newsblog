@@ -58,7 +58,7 @@ class Article(TranslatableModel):
             'Clean it to have it re-created.'),
     )
 
-    author = models.ForeignKey(Person)
+    author = models.ForeignKey(Person, null=True)
     owner = models.ForeignKey(User)
     namespace = models.ForeignKey(NewsBlogConfig)
     categories = CategoryManyToManyField('aldryn_categories.Category',
@@ -72,11 +72,6 @@ class Article(TranslatableModel):
     def __str__(self):
         return self.safe_translation_getter('title', any_language=True)
 
-    def save(self, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.title)
-        return super(Article, self).save(**kwargs)
-
     def get_absolute_url(self):
         return reverse('aldryn_newsblog:article-detail',
                        kwargs={'slug': self.slug},
@@ -85,6 +80,8 @@ class Article(TranslatableModel):
     def save(self, **kwargs):
         if not self.slug:
             self.slug = slugify(self.title)
+        if self.author is None:
+            self.author, _ = Person.objects.get_or_create(user=self.owner)
         return super(Article, self).save(**kwargs)
 
 
