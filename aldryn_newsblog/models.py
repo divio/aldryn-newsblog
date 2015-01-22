@@ -81,9 +81,13 @@ class Article(TranslatableModel):
         if not self.slug:
             self.slug = slugify(self.title)
         if self.author is None:
-            self.author, _ = Person.objects.get_or_create(user=self.owner)
+            self.author, _ = Person.objects.get_or_create(
+                user=self.owner,
+                defaults={
+                    'name': u' '.join((self.owner.first_name,
+                                       self.owner.last_name))
+                })
         return super(Article, self).save(**kwargs)
-
 
 
 @python_2_unicode_compatible
