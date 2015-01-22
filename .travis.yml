@@ -6,7 +6,7 @@ language: python
 sudo: false
 
 env:
-  - CMD=./test
+  - CMD="python setup.py test"
 
 python:
   - 2.7
