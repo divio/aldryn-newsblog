@@ -320,7 +320,6 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TestCase):
     def test_auto_slugifies(self):
         activate(self.language)
         title = 'This is a title'
-        content = rand_str()
         author = self.create_person()
         article = Article.objects.create(
             title=title, author=author, owner=author.user,
@@ -328,9 +327,7 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TestCase):
         article.save()
         self.assertEquals(article.slug, 'this-is-a-title')
 
-    def test_auto_author(self):
-        title = rand_str()
-        content = rand_str()
+    def test_auto_existing_author(self):
         author = self.create_person()
         article = Article.objects.create(
             title=rand_str(), owner=author.user,
