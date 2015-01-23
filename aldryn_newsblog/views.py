@@ -2,8 +2,11 @@ from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
 
 from django.conf import settings
+from django.utils import translation
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView
+
+from parler.views import TranslatableSlugMixin, ViewUrlMixin
 
 from aldryn_apphooks_config.mixins import AppConfigMixin
 
@@ -11,17 +14,28 @@ from .models import Article
 
 
 class ArticleDetail(AppConfigMixin, DetailView):
+    model = Article
+
     def get_queryset(self):
-        return Article.objects.filter(namespace__namespace=self.namespace)
+        return Article.objects.active_translations(
+            translation.get_language()
+        ).filter(
+            namespace__namespace=self.namespace
+        )
 
 
-class ArticleList(AppConfigMixin, ListView):
+class ArticleList(ViewUrlMixin, AppConfigMixin, ListView):
     """A complete list of articles."""
+    model = Article
     paginate_by = getattr(settings, 'ALDRYN_NEWSBLOG_PAGINATE_BY', 10)
 
     @property
     def queryset(self):
-        return Article.objects.filter(namespace__namespace=self.namespace)
+        return Article.objects.active_translations(
+            translation.get_language()
+        ).filter(
+            namespace__namespace=self.namespace
+        )
 
 
 class AuthorArticleList(ArticleList):
