@@ -15,7 +15,6 @@ from aldryn_apphooks_config.models import AppHookConfig
 from aldryn_categories.fields import CategoryManyToManyField
 from taggit.managers import TaggableManager
 from djangocms_text_ckeditor.fields import HTMLField
-from django.template.defaultfilters import slugify
 
 from .versioning import version_controlled_content
 

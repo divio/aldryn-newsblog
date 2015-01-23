@@ -29,8 +29,8 @@ from aldryn_newsblog.models import Article, NewsBlogConfig
 from aldryn_newsblog.versioning import create_revision_with_placeholders
 
 
-def rand_str(prefix='', length=23, chars=string.ascii_letters):
-    return prefix + ''.join(random.choice(chars) for _ in range(length))
+def rand_str(prefix=u'', length=23, chars=string.ascii_letters):
+    return prefix + u''.join(random.choice(chars) for _ in range(length))
 
 
 class NewsBlogTestsMixin(CategoryTestCaseMixin):
@@ -319,7 +319,7 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TestCase):
 
     def test_auto_slugifies(self):
         activate(self.language)
-        title = 'This is a title'
+        title = u'This is a title'
         author = self.create_person()
         article = Article.objects.create(
             title=title, author=author, owner=author.user,
@@ -342,7 +342,7 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TestCase):
             namespace=self.ns_newsblog, publishing_date=datetime.now())
         article.save()
         self.assertEquals(article.author.name,
-                          ' '.join((user.first_name, user.last_name)))
+                          u' '.join((user.first_name, user.last_name)))
 
 
 class TestVersioning(NewsBlogTestsMixin, TransactionTestCase):
