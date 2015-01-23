@@ -34,11 +34,14 @@ def rand_str(prefix='', length=23, chars=string.ascii_letters):
 
 
 class NewsBlogTestsMixin(CategoryTestCaseMixin):
+
+    @staticmethod
+    def create_user():
+        return User.objects.create(username=rand_str(), first_name=rand_str(),
+                                   last_name=rand_str())
+
     def create_person(self):
-        user = User.objects.create(
-            username=rand_str(), first_name=rand_str(), last_name=rand_str())
-        person = Person.objects.create(user=user, slug=rand_str())
-        return person
+        return Person.objects.create(user=self.create_user(), slug=rand_str())
 
     def create_article(self, content=None, **kwargs):
         try:
@@ -335,6 +338,14 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TestCase):
         article.save()
         self.assertEquals(article.author.user, article.owner)
 
+    def test_auto_new_author(self):
+        user = self.create_user()
+        article = Article.objects.create(
+            title=rand_str(), owner=user,
+            namespace=self.ns_newsblog, publishing_date=datetime.now())
+        article.save()
+        self.assertEquals(article.author.name,
+                          ' '.join((user.first_name, user.last_name)))
 
 
 class TestVersioning(NewsBlogTestsMixin, TransactionTestCase):
