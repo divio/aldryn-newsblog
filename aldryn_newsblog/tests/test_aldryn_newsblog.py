@@ -29,16 +29,19 @@ from aldryn_newsblog.models import Article, NewsBlogConfig
 from aldryn_newsblog.versioning import create_revision_with_placeholders
 
 
-def rand_str(prefix='', length=23, chars=string.ascii_letters):
-    return prefix + ''.join(random.choice(chars) for _ in range(length))
+def rand_str(prefix=u'', length=23, chars=string.ascii_letters):
+    return prefix + u''.join(random.choice(chars) for _ in range(length))
 
 
 class NewsBlogTestsMixin(CategoryTestCaseMixin):
+
+    @staticmethod
+    def create_user():
+        return User.objects.create(username=rand_str(), first_name=rand_str(),
+                                   last_name=rand_str())
+
     def create_person(self):
-        user = User.objects.create(
-            username=rand_str(), first_name=rand_str(), last_name=rand_str())
-        person = Person.objects.create(user=user, slug=rand_str())
-        return person
+        return Person.objects.create(user=self.create_user(), slug=rand_str())
 
     def create_article(self, content=None, **kwargs):
         try:
@@ -316,8 +319,7 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TestCase):
 
     def test_auto_slugifies(self):
         activate(self.language)
-        title = 'This is a title'
-        content = rand_str()
+        title = u'This is a title'
         author = self.create_person()
         article = Article.objects.create(
             title=title, author=author, owner=author.user,
@@ -325,9 +327,7 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TestCase):
         article.save()
         self.assertEquals(article.slug, 'this-is-a-title')
 
-    def test_auto_author(self):
-        title = rand_str()
-        content = rand_str()
+    def test_auto_existing_author(self):
         author = self.create_person()
         article = Article.objects.create(
             title=rand_str(), owner=author.user,
@@ -335,6 +335,14 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TestCase):
         article.save()
         self.assertEquals(article.author.user, article.owner)
 
+    def test_auto_new_author(self):
+        user = self.create_user()
+        article = Article.objects.create(
+            title=rand_str(), owner=user,
+            namespace=self.ns_newsblog, publishing_date=datetime.now())
+        article.save()
+        self.assertEquals(article.author.name,
+                          u' '.join((user.first_name, user.last_name)))
 
 
 class TestVersioning(NewsBlogTestsMixin, TransactionTestCase):

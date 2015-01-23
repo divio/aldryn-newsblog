@@ -15,7 +15,6 @@ from aldryn_apphooks_config.models import AppHookConfig
 from aldryn_categories.fields import CategoryManyToManyField
 from taggit.managers import TaggableManager
 from djangocms_text_ckeditor.fields import HTMLField
-from django.template.defaultfilters import slugify
 
 from .versioning import version_controlled_content
 
@@ -81,9 +80,13 @@ class Article(TranslatableModel):
         if not self.slug:
             self.slug = slugify(self.title)
         if self.author is None:
-            self.author, _ = Person.objects.get_or_create(user=self.owner)
+            self.author = Person.objects.get_or_create(
+                user=self.owner,
+                defaults={
+                    'name': u' '.join((self.owner.first_name,
+                                       self.owner.last_name))
+                })[0]
         return super(Article, self).save(**kwargs)
-
 
 
 @python_2_unicode_compatible
