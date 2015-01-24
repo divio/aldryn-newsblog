@@ -27,9 +27,9 @@ class NewsBlogConfig(AppHookConfig):
 @version_controlled_content
 class Article(TranslatableModel):
     translations = TranslatedFields(
-        title = models.CharField(_('Title'), max_length=234),
+        title=models.CharField(_('Title'), max_length=234),
 
-        lead_in = HTMLField(
+        lead_in=HTMLField(
             verbose_name=_('Lead-in'), default='',
             help_text=_('Will be displayed in lists, and at the start of the '
                         'detail page (in bold)')),
