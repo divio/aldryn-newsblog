@@ -8,7 +8,7 @@ from django.core.urlresolvers import reverse
 from django.db import connection, IntegrityError, models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.text import slugify as default_slugify
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import get_language, ugettext_lazy as _
 from django.contrib.auth.models import User
 
 from cms.models.fields import PlaceholderField
@@ -157,6 +157,7 @@ class LatestEntriesPlugin(CMSPlugin):
         default=5,
         help_text=_('The number of latest entries to be displayed.')
     )
+    namespace = models.ForeignKey(NewsBlogConfig, null=True)
 
     #
     # NOTE: make sure not to forget this if we add m2m/fk fields for
@@ -171,5 +172,6 @@ class LatestEntriesPlugin(CMSPlugin):
         return u'Latest entries: {0}'.format(self.latest_entries)
 
     def get_articles(self):
-        articles = Article.objects.active_translations()
+        articles = Article.objects.active_translations(get_language()).filter(
+            namespace=self.namespace)
         return articles[:self.latest_entries]
