@@ -11,7 +11,6 @@ from cms.models.fields import PlaceholderField
 from cms.models.pluginmodel import CMSPlugin
 from aldryn_people.models import Person
 from parler.models import TranslatableModel, TranslatedFields
-from parler.utils.context import switch_language
 from aldryn_apphooks_config.models import AppHookConfig
 from aldryn_categories.fields import CategoryManyToManyField
 from taggit.managers import TaggableManager
@@ -72,10 +71,10 @@ class Article(TranslatableModel):
         return self.safe_translation_getter('title', any_language=True)
 
     def get_absolute_url(self):
-        with switch_language(self):
-            return reverse('aldryn_newsblog:article-detail',
-                           kwargs={'slug': self.slug},
-                           current_app=self.namespace.namespace)
+        return reverse('aldryn_newsblog:article-detail',
+                       kwargs={'slug': self.safe_translation_getter(
+                           'slug', any_language=True)},
+                       current_app=self.namespace.namespace)
 
     def save(self, **kwargs):
         if not self.slug:
