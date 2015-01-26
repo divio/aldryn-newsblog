@@ -37,8 +37,7 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'namespace': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['aldryn_newsblog.NewsBlogConfig']"}),
             'owner': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"}),
-            'publishing_date': ('django.db.models.fields.DateTimeField', [], {}),
-            'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '255', 'blank': 'True'})
+            'publishing_date': ('django.db.models.fields.DateTimeField', [], {})
         },
         u'aldryn_newsblog.articletranslation': {
             'Meta': {'unique_together': "[(u'language_code', u'master')]", 'object_name': 'ArticleTranslation', 'db_table': "u'aldryn_newsblog_article_translation'"},
@@ -49,6 +48,7 @@ class Migration(SchemaMigration):
             'meta_description': ('django.db.models.fields.TextField', [], {'default': "u''", 'blank': 'True'}),
             'meta_keywords': ('django.db.models.fields.TextField', [], {'default': "u''", 'blank': 'True'}),
             'meta_title': ('django.db.models.fields.CharField', [], {'default': "u''", 'max_length': '255', 'blank': 'True'}),
+            'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '255', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '234'})
         },
         u'aldryn_newsblog.latestentriesplugin': {
