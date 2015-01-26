@@ -5,6 +5,7 @@ from django.conf import settings
 from django.utils import translation
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView
+from parler.views import TranslatableSlugMixin
 
 from parler.views import TranslatableSlugMixin, ViewUrlMixin
 
@@ -13,8 +14,9 @@ from aldryn_apphooks_config.mixins import AppConfigMixin
 from .models import Article
 
 
-class ArticleDetail(AppConfigMixin, DetailView):
+class ArticleDetail(TranslatableSlugMixin, AppConfigMixin, DetailView):
     model = Article
+    slug_field = 'slug'
 
     def get_queryset(self):
         return Article.objects.active_translations(

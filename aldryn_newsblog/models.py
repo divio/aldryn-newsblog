@@ -11,6 +11,7 @@ from cms.models.fields import PlaceholderField
 from cms.models.pluginmodel import CMSPlugin
 from aldryn_people.models import Person
 from parler.models import TranslatableModel, TranslatedFields
+from parler.utils.context import switch_language
 from aldryn_apphooks_config.models import AppHookConfig
 from aldryn_categories.fields import CategoryManyToManyField
 from taggit.managers import TaggableManager
@@ -28,6 +29,15 @@ class NewsBlogConfig(AppHookConfig):
 class Article(TranslatableModel):
     translations = TranslatedFields(
         title=models.CharField(_('Title'), max_length=234),
+        slug=models.SlugField(
+            verbose_name=_('Slug'),
+            max_length=255,
+            unique=True,
+            blank=True,
+            help_text=_(
+                'Used in the URL. If changed, the URL will change. '
+                'Clean it to have it re-created.'),
+        ),
 
         lead_in=HTMLField(
             verbose_name=_('Lead-in'), default='',
@@ -47,16 +57,6 @@ class Article(TranslatableModel):
                                related_name='aldryn_newsblog_articles',
                                unique=True)
 
-    slug = models.SlugField(
-        verbose_name=_('Slug'),
-        max_length=255,
-        unique=True,
-        blank=True,
-        help_text=_(
-            'Used in the URL. If changed, the URL will change. '
-            'Clean it to have it re-created.'),
-    )
-
     author = models.ForeignKey(Person, null=True, blank=True)
     owner = models.ForeignKey(User)
     namespace = models.ForeignKey(NewsBlogConfig)
@@ -72,9 +72,10 @@ class Article(TranslatableModel):
         return self.safe_translation_getter('title', any_language=True)
 
     def get_absolute_url(self):
-        return reverse('aldryn_newsblog:article-detail',
-                       kwargs={'slug': self.slug},
-                       current_app=self.namespace.namespace)
+        with switch_language(self):
+            return reverse('aldryn_newsblog:article-detail',
+                           kwargs={'slug': self.slug},
+                           current_app=self.namespace.namespace)
 
     def save(self, **kwargs):
         if not self.slug:
