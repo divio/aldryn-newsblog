@@ -140,10 +140,11 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TestCase):
 
     def test_delete_post(self):
         article = self.create_article()
+        article_pk = article.pk
         article_url = article.get_absolute_url()
         response = self.client.get(article_url)
         self.assertContains(response, article.title)
-        Article.objects.get(slug=article.slug).delete()
+        Article.objects.get(pk=article_pk).delete()
         response = self.client.get(article_url)
         self.assertEqual(response.status_code, 404)
 
@@ -524,10 +525,11 @@ class TestVersioning(NewsBlogTestsMixin, TransactionTestCase):
         article.set_current_language('de')
         self.create_revision(article, title=title1_de)
 
-        response = self.client.get(article.get_absolute_url())
-        self.assertContains(response, title1_en)
+        with switch_language(article, 'en'):
+            response = self.client.get(article.get_absolute_url())
+            self.assertContains(response, title1_en)
 
-        with override('de'):
+        with switch_language(article, 'de'):
             response = self.client.get(article.get_absolute_url())
             self.assertContains(response, title1_de)
 
@@ -538,7 +540,7 @@ class TestVersioning(NewsBlogTestsMixin, TransactionTestCase):
         response = self.client.get(article.get_absolute_url())
         self.assertContains(response, title2_en)
 
-        with override('de'):
+        with switch_language(article, 'de'):
             response = self.client.get(article.get_absolute_url())
             self.assertContains(response, title1_de)
 
@@ -546,30 +548,33 @@ class TestVersioning(NewsBlogTestsMixin, TransactionTestCase):
         article.set_current_language('de')
         self.create_revision(article, title=title2_de)
 
-        response = self.client.get(article.get_absolute_url())
-        self.assertContains(response, title2_en)
+        with switch_language(article, 'en'):
+            response = self.client.get(article.get_absolute_url())
+            self.assertContains(response, title2_en)
 
-        with override('de'):
+        with switch_language(article, 'de'):
             response = self.client.get(article.get_absolute_url())
             self.assertContains(response, title2_de)
 
         # Revert to revision 2a (EN=2, DE=1)
         self.revert_to(article, 1)
 
-        response = self.client.get(article.get_absolute_url())
-        self.assertContains(response, title2_en)
+        with switch_language(article, 'en'):
+            response = self.client.get(article.get_absolute_url())
+            self.assertContains(response, title2_en)
 
-        with override('de'):
+        with switch_language(article, 'de'):
             response = self.client.get(article.get_absolute_url())
             self.assertContains(response, title1_de)
 
         # Revert to revision 1 (EN=1, DE=1)
         self.revert_to(article, 2)
 
-        response = self.client.get(article.get_absolute_url())
-        self.assertContains(response, title1_en)
+        with switch_language(article, 'en'):
+            response = self.client.get(article.get_absolute_url())
+            self.assertContains(response, title1_en)
 
-        with override('de'):
+        with switch_language(article, 'de'):
             response = self.client.get(article.get_absolute_url())
             self.assertContains(response, title1_de)
 
