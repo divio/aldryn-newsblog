@@ -13,11 +13,6 @@ class Migration(SchemaMigration):
                       self.gf('django.db.models.fields.SlugField')(default='', unique=True, max_length=255, blank=True),
                       keep_default=False)
 
-        # Force slug translation
-        ArticleTranslation = orm['aldryn_newsblog.ArticleTranslation']
-        for obj in ArticleTranslation.objects.all():
-            obj.save()
-
         # Deleting field 'Article.slug'
         db.delete_column(u'aldryn_newsblog_article', 'slug')
 
