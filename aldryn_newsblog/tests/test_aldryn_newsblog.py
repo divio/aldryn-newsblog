@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 
+import os
 import random
 import reversion
 import six
 import string
-import os
 import unittest
 
-from datetime import datetime
+from datetime import datetime, date
 from easy_thumbnails.files import get_thumbnailer
+from operator import itemgetter
 from random import randint
 
 from django.conf import settings
@@ -341,6 +342,22 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
             response = self.client.get(url)
             for article in articles:
                 self.assertContains(response, article.title)
+
+    def test_articles_count_by_month(self):
+        months = [
+            {'date': date(1914, 7, 3), 'count': 1},
+            {'date': date(1914, 8, 3), 'count': 3},
+            {'date': date(1945, 9, 3), 'count': 5},
+        ]
+        for month in months:
+            for _ in range(month['count']):
+                self.create_article(publishing_date=month['date'])
+        self.assertEquals(
+            sorted(
+                Article.objects.get_months(
+                    namespace=self.ns_newsblog.namespace),
+                key=itemgetter('count')),
+            months)
 
     def test_articles_by_date(self):
         in_articles = [

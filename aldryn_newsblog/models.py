@@ -22,6 +22,7 @@ from taggit.managers import TaggableManager
 from djangocms_text_ckeditor.fields import HTMLField
 
 from .versioning import version_controlled_content
+from .managers import RelatedManager
 
 
 if settings.LANGUAGES:
@@ -76,11 +77,13 @@ class Article(TranslatableModel):
     owner = models.ForeignKey(User, verbose_name=_('owner'))
     namespace = models.ForeignKey(NewsBlogConfig, verbose_name=_('namespace'))
     categories = CategoryManyToManyField('aldryn_categories.Category',
-        blank=True, verbose_name=_('categories'))
-    tags = TaggableManager(blank=True)
+                                         verbose_name=_('categories'),
+                                         blank=True)
     publishing_date = models.DateTimeField(_('publishing data'))
-
     featured_image = FilerImageField(null=True, blank=True)
+
+    tags = TaggableManager(blank=True)
+    objects = RelatedManager()
 
     class Meta:
         ordering = ['-publishing_date']
