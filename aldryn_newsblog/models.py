@@ -65,8 +65,7 @@ class Article(TranslatableModel):
     tags = TaggableManager(blank=True)
     publishing_date = models.DateTimeField()
 
-    featured_image = FilerImageField(null=True, blank=True,
-                                     related_name='articles')
+    featured_image = FilerImageField(null=True, blank=True)
 
     class Meta:
         ordering = ['-publishing_date']
