@@ -470,6 +470,7 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
         page = api.create_page(
             'test page', self.template, self.language, published=True)
         page.publish(self.language)
+        placeholder = page.placeholders.all()[0]
 
         api.add_plugin(placeholder, 'LatestEntriesPlugin', self.language, namespace=self.ns_newsblog)
         plugin = placeholder.get_plugins()[0].get_plugin_instance()[0]
