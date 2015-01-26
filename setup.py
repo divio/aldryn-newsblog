@@ -3,7 +3,7 @@ from aldryn_newsblog import __version__
 
 REQUIREMENTS = [
     'django-parler',
-    'django-filer',
+    'django-filer>=0.9.9',
     'aldryn-common',
     'django-appdata',
     'django-cms>=3.0.90a1',

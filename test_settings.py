@@ -10,6 +10,7 @@ HELPER_SETTINGS = {
     ),
     'INSTALLED_APPS': [
         'reversion',
+        'mptt',
         'taggit',
         'aldryn_categories',
         'aldryn_newsblog',
@@ -17,6 +18,7 @@ HELPER_SETTINGS = {
         'filer',
         'djangocms_text_ckeditor',
         'parler',
+        'easy_thumbnails'
     ],
     # app-specific
     'ALDRYN_NEWSBLOG_PAGINATE_BY': 10,
@@ -29,7 +31,15 @@ HELPER_SETTINGS = {
         'default': {
             'hide_untranslated': False,
         }
-    }
+    },
+    'THUMBNAIL_HIGH_RESOLUTION': True,
+    'THUMBNAIL_PROCESSORS': (
+        'easy_thumbnails.processors.colorspace',
+        'easy_thumbnails.processors.autocrop',
+        #'easy_thumbnails.processors.scale_and_crop',
+        'filer.thumbnail_processors.scale_and_crop_with_subject_location',
+        'easy_thumbnails.processors.filters',
+    )
 }
 
 
