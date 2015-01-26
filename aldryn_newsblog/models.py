@@ -35,7 +35,7 @@ class Article(TranslatableModel):
             blank=True,
             help_text=_(
                 'Used in the URL. If changed, the URL will change. '
-                'Clean it to have it re-created.'),
+                'Clear it to have it re-created automatically.'),
         ),
 
         lead_in=HTMLField(
