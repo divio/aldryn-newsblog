@@ -466,6 +466,22 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
         self.assertEquals(article.author.name,
                           u' '.join((user.first_name, user.last_name)))
 
+    def test_latest_entries_plugin(self):
+        page = api.create_page(
+            'test page', self.template, self.language, published=True)
+        page.publish(self.language)
+
+        api.add_plugin(placeholder, 'LatestEntriesPlugin', self.language, namespace=self.ns_newsblog)
+        plugin = placeholder.get_plugins()[0].get_plugin_instance()[0]
+        plugin.save()
+
+        articles = [self.create_article() for _ in range(10)]
+
+        # WIP: fails on get() call here
+        response = self.client.get(page.get_absolute_url())
+        for article in articles:
+            self.assertContains(response, article.title)
+
 
 class TestVersioning(NewsBlogTestsMixin, TransactionTestCase):
     def create_revision(self, article, content=None, language=None, **kwargs):
