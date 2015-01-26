@@ -28,6 +28,15 @@ class NewsBlogConfig(AppHookConfig):
 class Article(TranslatableModel):
     translations = TranslatedFields(
         title=models.CharField(_('Title'), max_length=234),
+        slug=models.SlugField(
+            verbose_name=_('Slug'),
+            max_length=255,
+            unique=True,
+            blank=True,
+            help_text=_(
+                'Used in the URL. If changed, the URL will change. '
+                'Clear it to have it re-created automatically.'),
+        ),
 
         lead_in=HTMLField(
             verbose_name=_('Lead-in'), default='',
@@ -47,16 +56,6 @@ class Article(TranslatableModel):
                                related_name='aldryn_newsblog_articles',
                                unique=True)
 
-    slug = models.SlugField(
-        verbose_name=_('Slug'),
-        max_length=255,
-        unique=True,
-        blank=True,
-        help_text=_(
-            'Used in the URL. If changed, the URL will change. '
-            'Clean it to have it re-created.'),
-    )
-
     author = models.ForeignKey(Person, null=True, blank=True)
     owner = models.ForeignKey(User)
     namespace = models.ForeignKey(NewsBlogConfig)
@@ -73,7 +72,8 @@ class Article(TranslatableModel):
 
     def get_absolute_url(self):
         return reverse('aldryn_newsblog:article-detail',
-                       kwargs={'slug': self.slug},
+                       kwargs={'slug': self.safe_translation_getter(
+                           'slug', any_language=True)},
                        current_app=self.namespace.namespace)
 
     def save(self, **kwargs):
