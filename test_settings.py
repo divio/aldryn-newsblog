@@ -20,6 +20,16 @@ HELPER_SETTINGS = {
     ],
     # app-specific
     'ALDRYN_NEWSBLOG_PAGINATE_BY': 10,
+    'PARLER_LANGUAGES': {
+        1: (
+            {'code': 'de',},
+            {'code': 'fr',},
+            {'code': 'en',},
+        ),
+        'default': {
+            'hide_untranslated': False,
+        }
+    }
 }
 
 

@@ -2,6 +2,7 @@
 
 import unittest
 import random
+from django.http import Http404
 import six
 import string
 from datetime import datetime
@@ -16,7 +17,10 @@ from django.utils.translation import activate, override
 
 from cms import api
 from cms.utils import get_cms_setting
+from parler.tests.utils import override_parler_settings
+from parler.utils.conf import add_default_language_settings
 from parler.utils.context import switch_language
+
 
 from aldryn_categories.models import Category
 from aldryn_categories.tests import CategoryTestCaseMixin
@@ -204,8 +208,88 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TestCase):
                                   kwargs={'category': category.slug})
                 response = self.client.get(url)
                 for article in articles:
-                    with switch_language(article, language):
+                    if language in article.get_available_languages():
+                        article.set_current_language(language)
                         self.assertContains(response, article.title)
+                    else:
+                        article.set_current_language(language)
+                        self.assertNotContains(response, article.title)
+
+    def test_article_detail_not_translated_fallback(self):
+        """
+        If the fallback is configured, article is available in any (configured) language
+        """
+        author = self.create_person()
+        code = "{0}-".format(self.language)
+        article = Article.objects.create(
+            title=rand_str(), slug=rand_str(prefix=code),
+            namespace=self.ns_newsblog,
+            author=author, owner=author.user,
+            publishing_date=datetime.now())
+        article.save()
+        article.categories.add(self.category1)
+
+        # current language - it still exists
+        article = Article.objects.get(pk=article.pk)
+        language = settings.LANGUAGES[0][0]
+        with switch_language(self.category1, language):
+            url = reverse('aldryn_newsblog:article-detail',
+                          kwargs={'slug': article.slug})
+            response = self.client.get(url)
+            self.assertContains(response, article.title)
+
+        # non existing language - it still exists
+        language = settings.LANGUAGES[1][0]
+        with switch_language(self.category1, language):
+            url = reverse('aldryn_newsblog:article-detail',
+                          kwargs={'slug': article.slug})
+            response = self.client.get(url)
+            self.assertContains(response, article.title)
+
+    def test_article_detail_not_translated_no_fallback(self):
+        """
+        If the fallback is disabled, article is available only in the
+        language in which is translated
+        """
+        author = self.create_person()
+        code = "{0}-".format(self.language)
+        article = Article.objects.create(
+            title=rand_str(), slug=rand_str(prefix=code),
+            namespace=self.ns_newsblog,
+            author=author, owner=author.user,
+            publishing_date=datetime.now())
+        article.save()
+        article.categories.add(self.category1)
+
+        PARLER_LANGUAGES = {
+            1: (
+                {'code': 'de'},
+                {'code': 'fr'},
+                {'code': 'en'},
+            ),
+            'default': {
+                'hide_untranslated': True,
+            }
+        }
+        LANGUAGES = add_default_language_settings(PARLER_LANGUAGES)
+        with override_parler_settings(PARLER_LANGUAGES=LANGUAGES):
+
+            # current language - it still exists
+            article = Article.objects.get(pk=article.pk)
+            language = settings.LANGUAGES[0][0]
+            with switch_language(self.category1, language):
+                url = reverse('aldryn_newsblog:article-detail',
+                              kwargs={'slug': article.slug})
+                response = self.client.get(url)
+                self.assertContains(response, article.title)
+
+            # non existing language - it still exists
+            language = settings.LANGUAGES[1][0]
+            with switch_language(self.category1, language):
+                url = reverse('aldryn_newsblog:article-detail',
+                              kwargs={'slug': article.slug})
+                response = self.client.get(url)
+                self.assertEqual(response.status_code, 404)
 
     def test_articles_by_tag(self):
         """Tests that we can find articles by their tags, in ANY of the
