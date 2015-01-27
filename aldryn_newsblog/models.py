@@ -32,31 +32,29 @@ class Article(TranslatableModel):
         slug=models.SlugField(
             verbose_name=_('Slug'),
             max_length=255,
-            unique=True,
+            db_index=True,
             blank=True,
             help_text=_(
                 'Used in the URL. If changed, the URL will change. '
                 'Clear it to have it re-created automatically.'),
         ),
-
         lead_in=HTMLField(
             verbose_name=_('Lead-in'), default='',
             help_text=_('Will be displayed in lists, and at the start of the '
                         'detail page (in bold)')),
-
         meta_title=models.CharField(
             max_length=255, verbose_name=_('meta title'),
             blank=True, default=''),
         meta_description=models.TextField(
             verbose_name=_('meta description'), blank=True, default=''),
         meta_keywords=models.TextField(
-            verbose_name=_('meta keywords'), blank=True, default='')
+            verbose_name=_('meta keywords'), blank=True, default=''),
+        meta={'unique_together': (('language_code', 'slug'),)},
     )
 
     content = PlaceholderField('aldryn_newsblog_article_content',
                                related_name='aldryn_newsblog_articles',
                                unique=True)
-
     author = models.ForeignKey(Person, null=True, blank=True)
     owner = models.ForeignKey(User)
     namespace = models.ForeignKey(NewsBlogConfig)
