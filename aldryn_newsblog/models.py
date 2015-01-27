@@ -1,9 +1,11 @@
 from __future__ import unicode_literals
 
+from django.conf import settings
+from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse
-from django.db import models
+from django.db import IntegrityError, models
 from django.utils.encoding import python_2_unicode_compatible
-from django.utils.text import slugify
+from django.utils.text import slugify as default_slugify
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 
@@ -22,6 +24,13 @@ from .versioning import version_controlled_content
 
 class NewsBlogConfig(AppHookConfig):
     pass
+if settings.LANGUAGES:
+    LANGUAGE_CODES = [language[0] for language in settings.LANGUAGES]
+elif settings.LANGUAGE:
+    LANGUAGE_CODES = [settings.LANGUAGE]
+else:
+    raise ImproperlyConfigured(
+        'Neither LANGUAGES nor LANGUAGE was found in settings.')
 
 
 @python_2_unicode_compatible
@@ -80,6 +89,14 @@ class Article(TranslatableModel):
     def save(self, **kwargs):
         if not self.slug:
             self.slug = slugify(self.title)
+    def slugify(self, category, i=None):
+        slug = default_slugify(category)
+        if i is not None:
+            slug += "_%d" % i
+        return slug
+
+    def save(self, *args, **kwargs):
+        # Ensure there is an owner.
         if self.author is None:
             self.author = Person.objects.get_or_create(
                 user=self.owner,
@@ -87,7 +104,39 @@ class Article(TranslatableModel):
                     'name': u' '.join((self.owner.first_name,
                                        self.owner.last_name))
                 })[0]
-        return super(Article, self).save(**kwargs)
+
+        # Ensure there is a unique slug.
+        if not self.slug:
+            self.slug = self.slugify(self.name)
+            try:
+                return super(Article, self).save(*args, **kwargs)
+            except IntegrityError:
+                pass
+
+            for lang in LANGUAGE_CODES:
+                #
+                # We'd much rather just do something like:
+                #     Article.objects.translated(lang,
+                #         slug__startswith=self.slug)
+                # But sadly, this isn't supported by Parler/Django, see:
+                #     http://django-parler.readthedocs.org/en/latest/api/\
+                #         parler.managers.html#the-translatablequeryset-class
+                #
+                slugs = []
+                all_slugs = Article.objects.language(lang).exclude(
+                    id=self.id).values_list('translations__slug', flat=True)
+                for slug in all_slugs:
+                    if slug and slug.startswith(self.slug):
+                        slugs.append(slug)
+                i = 1
+                while True:
+                    slug = self.slugify(self.name, i)
+                    if slug not in slugs:
+                        self.slug = slug
+                        return super(Article, self).save(*args, **kwargs)
+                    i += 1
+        else:
+            return super(Article, self).save(*args, **kwargs)
 
 
 @python_2_unicode_compatible
