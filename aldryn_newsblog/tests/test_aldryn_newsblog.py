@@ -114,12 +114,14 @@ class NewsBlogTestsMixin(CategoryTestCaseMixin):
     def setUp(self):
         self.template = get_cms_setting('TEMPLATES')[0][0]
         self.language = settings.LANGUAGES[0][0]
+        self.root_page = api.create_page(
+            'root page', self.template, self.language, published=True)
         self.ns_newsblog = NewsBlogConfig.objects.create(namespace='NBNS')
         self.page = api.create_page(
             'page', self.template, self.language, published=True,
+            parent=self.root_page,
             apphook='NewsBlogApp',
             apphook_namespace=self.ns_newsblog.namespace)
-        self.page.publish(self.language)
         self.placeholder = self.page.placeholders.all()[0]
 
         self.setup_categories()
@@ -127,9 +129,10 @@ class NewsBlogTestsMixin(CategoryTestCaseMixin):
         self.tag_name1 = rand_str()
         self.tag_name2 = rand_str()
 
-        for language, _ in settings.LANGUAGES[1:]:
-            api.create_title(language, 'page', self.page)
-            self.page.publish(language)
+        for page in self.root_page, self.page:
+            for language, _ in settings.LANGUAGES[1:]:
+                api.create_title(language, page.get_slug(), page)
+                page.publish(language)
 
 
 class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
