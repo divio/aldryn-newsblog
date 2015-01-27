@@ -1,6 +1,9 @@
-from collections import Counter
-import datetime
+try:
+    from collections import Counter
+except ImportError:
+    from backport_collections import Counter
 
+import datetime
 
 from parler.managers import TranslatableManager
 
