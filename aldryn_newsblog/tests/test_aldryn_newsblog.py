@@ -471,20 +471,23 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
 
     def test_latest_entries_plugin(self):
         page = api.create_page(
-            'test page', self.template, self.language, published=True)
-        page.publish(self.language)
+            'plugin page', self.template, self.language,
+            parent=self.root_page, published=True)
         placeholder = page.placeholders.all()[0]
-
-        api.add_plugin(placeholder, 'LatestEntriesPlugin', self.language, namespace=self.ns_newsblog)
+        api.add_plugin(placeholder, 'LatestEntriesPlugin', self.language,
+                       namespace=self.ns_newsblog, latest_entries=7)
         plugin = placeholder.get_plugins()[0].get_plugin_instance()[0]
         plugin.save()
-
-        articles = [self.create_article() for _ in range(10)]
-
-        # WIP: fails on get() call here
+        page.publish(self.language)
+        articles = [self.create_article() for _ in range(7)]
+        another_ns = NewsBlogConfig.objects.create(namespace='another')
+        another_articles = [self.create_article(namespace=another_ns)
+                            for _ in range(3)]
         response = self.client.get(page.get_absolute_url())
         for article in articles:
             self.assertContains(response, article.title)
+        for article in another_articles:
+            self.assertNotContains(response, article.title)
 
 
 class TestVersioning(NewsBlogTestsMixin, TransactionTestCase):
