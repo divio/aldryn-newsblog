@@ -21,7 +21,7 @@ class Migration(SchemaMigration):
 
         # Adding field 'Article.slug'
         db.add_column(u'aldryn_newsblog_article', 'slug',
-                      self.gf('django.db.models.fields.SlugField')(default='', max_length=255, unique=True, blank=True),
+                      self.gf('django.db.models.fields.SlugField')(default='', max_length=255, blank=True),
                       keep_default=False)
 
 

@@ -3,6 +3,7 @@ from south.utils import datetime_utils as datetime
 from south.db import db
 from south.v2 import DataMigration
 from django.db import models
+from django.conf import settings
 
 class Migration(DataMigration):
 
@@ -12,12 +13,32 @@ class Migration(DataMigration):
         # Use orm.ModelName to refer to models in this application,
         # and orm['appname.ModelName'] for models in other applications.
 
+        # Set translated slug for all languages based on original slug
         for article_trans in orm.ArticleTranslation.objects.all():
             article_trans.slug = orm.Article.objects.get(pk=article_trans.master_id).slug
             article_trans.save()
 
     def backwards(self, orm):
         "Write your backwards methods here."
+        raise NotImplementedError(
+            "I am unable te reliably restore original slugs. "
+            "Please, read the code, comment out this line and rerun migration.")
+
+        # Naive way to get default language, as it might have changed since the
+        # migration was run forward (feel free to adjust it by hand):
+        original_language = settings.LANGUAGE_CODE
+
+        # Try to set original slug back
+        for article in orm.Article.objects.all():
+            original_language_slug = orm.ArticleTranslation.objects.get(
+                master_id=article.pk, language_code=original_language).slug
+            article.slug = original_language_slug
+            article.save()
+
+        # Remove all slugs from translation table
+        for article_trans in orm.ArticleTranslation.objects.all():
+            article_trans.slug = ''
+            article_trans.save()
 
     models = {
         u'aldryn_categories.category': {

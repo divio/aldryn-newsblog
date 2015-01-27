@@ -13,10 +13,13 @@ class Migration(SchemaMigration):
                       self.gf('django.db.models.fields.SlugField')(default='', max_length=255, blank=True),
                       keep_default=False)
 
+        db.delete_unique(u'aldryn_newsblog_article', ['slug'])
 
     def backwards(self, orm):
         # Deleting field 'ArticleTranslation.slug'
         db.delete_column(u'aldryn_newsblog_article_translation', 'slug')
+
+        db.create_unique(u'aldryn_newsblog_article', ['slug'])
 
 
     models = {
@@ -37,7 +40,7 @@ class Migration(SchemaMigration):
             'namespace': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['aldryn_newsblog.NewsBlogConfig']"}),
             'owner': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"}),
             'publishing_date': ('django.db.models.fields.DateTimeField', [], {}),
-            'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '255', 'blank': 'True'})
+            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '255', 'blank': 'True'})
         },
         u'aldryn_newsblog.articletranslation': {
             'Meta': {'unique_together': "[(u'language_code', u'master')]", 'object_name': 'ArticleTranslation', 'db_table': "u'aldryn_newsblog_article_translation'"},
