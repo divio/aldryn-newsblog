@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import random
-from easy_thumbnails.files import get_thumbnailer
 import reversion
 import six
 import string
@@ -9,6 +8,7 @@ import os
 import unittest
 
 from datetime import datetime
+from easy_thumbnails.files import get_thumbnailer
 from random import randint
 
 from django.conf import settings
