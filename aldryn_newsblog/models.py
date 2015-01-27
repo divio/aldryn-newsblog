@@ -24,8 +24,6 @@ from djangocms_text_ckeditor.fields import HTMLField
 from .versioning import version_controlled_content
 
 
-class NewsBlogConfig(AppHookConfig):
-    pass
 if settings.LANGUAGES:
     LANGUAGE_CODES = [language[0] for language in settings.LANGUAGES]
 elif settings.LANGUAGE:
@@ -33,6 +31,13 @@ elif settings.LANGUAGE:
 else:
     raise ImproperlyConfigured(
         'Neither LANGUAGES nor LANGUAGE was found in settings.')
+
+
+class NewsBlogConfig(TranslatableModel, AppHookConfig):
+    """Adds some translatable, per-app-instance fields."""
+    translations = TranslatedFields(
+        app_title=models.CharField(_('application title'), max_length=234),
+    )
 
 
 @python_2_unicode_compatible
