@@ -10,7 +10,7 @@ class Migration(SchemaMigration):
     def forwards(self, orm):
         # Adding field 'Article.featured_image'
         db.add_column(u'aldryn_newsblog_article', 'featured_image',
-                      self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name=u'articles', null=True, to=orm['filer.Image']),
+                      self.gf('django.db.models.fields.related.ForeignKey')(to=orm['filer.Image'], null=True, blank=True),
                       keep_default=False)
 
 
@@ -33,14 +33,14 @@ class Migration(SchemaMigration):
             'author': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['aldryn_people.Person']", 'null': 'True', 'blank': 'True'}),
             'categories': ('aldryn_categories.fields.CategoryManyToManyField', [], {'to': u"orm['aldryn_categories.Category']", 'symmetrical': 'False', 'blank': 'True'}),
             'content': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "u'aldryn_newsblog_articles'", 'unique': 'True', 'null': 'True', 'to': "orm['cms.Placeholder']"}),
-            'featured_image': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "u'articles'", 'null': 'True', 'to': "orm['filer.Image']"}),
+            'featured_image': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['filer.Image']", 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'namespace': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['aldryn_newsblog.NewsBlogConfig']"}),
             'owner': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"}),
             'publishing_date': ('django.db.models.fields.DateTimeField', [], {})
         },
         u'aldryn_newsblog.articletranslation': {
-            'Meta': {'unique_together': "[(u'language_code', u'master')]", 'object_name': 'ArticleTranslation', 'db_table': "u'aldryn_newsblog_article_translation'"},
+            'Meta': {'unique_together': "[(u'language_code', u'slug'), (u'language_code', u'master')]", 'object_name': 'ArticleTranslation', 'db_table': "u'aldryn_newsblog_article_translation'"},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'language_code': ('django.db.models.fields.CharField', [], {'max_length': '15', 'db_index': 'True'}),
             'lead_in': ('djangocms_text_ckeditor.fields.HTMLField', [], {'default': "u''"}),
@@ -48,7 +48,7 @@ class Migration(SchemaMigration):
             'meta_description': ('django.db.models.fields.TextField', [], {'default': "u''", 'blank': 'True'}),
             'meta_keywords': ('django.db.models.fields.TextField', [], {'default': "u''", 'blank': 'True'}),
             'meta_title': ('django.db.models.fields.CharField', [], {'default': "u''", 'max_length': '255', 'blank': 'True'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '255', 'blank': 'True'}),
+            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '255', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '234'})
         },
         u'aldryn_newsblog.latestentriesplugin': {
