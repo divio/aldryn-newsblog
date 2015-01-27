@@ -2,6 +2,7 @@ from setuptools import setup, find_packages
 from aldryn_newsblog import __version__
 
 REQUIREMENTS = [
+    'backport_collections==0.1',
     'django-parler',
     'django-filer>=0.9.9,<0.10',
     'aldryn-common',
