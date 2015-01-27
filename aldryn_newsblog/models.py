@@ -84,14 +84,10 @@ class Article(TranslatableModel):
         return self.safe_translation_getter('title', any_language=True)
 
     def get_absolute_url(self):
-        return reverse('aldryn_newsblog:article-detail',
-                       kwargs={'slug': self.safe_translation_getter(
-                           'slug', any_language=True)},
-                       current_app=self.namespace.namespace)
+        return reverse('aldryn_newsblog:article-detail', kwargs={
+            'slug': self.safe_translation_getter('slug', any_language=True)
+        }, current_app=self.namespace.namespace)
 
-    def save(self, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.title)
     def slugify(self, category, i=None):
         slug = default_slugify(category)
         if i is not None:
