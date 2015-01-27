@@ -1,15 +1,19 @@
 # -*- coding: utf-8 -*-
 
-import unittest
 import random
-from django.http import Http404
+from easy_thumbnails.files import get_thumbnailer
+import reversion
 import six
 import string
+import os
+import unittest
+
 from datetime import datetime
 from random import randint
 
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.core.files import File as DjangoFile
 from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.test import TestCase, TransactionTestCase
@@ -17,6 +21,7 @@ from django.utils.translation import activate, override
 
 from cms import api
 from cms.utils import get_cms_setting
+from filer.models.imagemodels import Image
 from parler.tests.utils import override_parler_settings
 from parler.utils.conf import add_default_language_settings
 from parler.utils.context import switch_language
@@ -27,11 +32,13 @@ from aldryn_categories.tests import CategoryTestCaseMixin
 
 from aldryn_people.models import Person
 
-import reversion
 
 from aldryn_newsblog.models import Article, NewsBlogConfig
 from aldryn_newsblog.versioning import create_revision_with_placeholders
 
+from . import TESTS_STATIC_ROOT
+
+FEATURED_IMAGE_PATH = os.path.join(TESTS_STATIC_ROOT, 'featured_image.jpg')
 
 def rand_str(prefix=u'', length=23, chars=string.ascii_letters):
     return prefix + u''.join(random.choice(chars) for _ in range(length))
@@ -291,6 +298,23 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TestCase):
                               kwargs={'slug': article.slug})
                 response = self.client.get(url)
                 self.assertEqual(response.status_code, 404)
+
+    def test_article_detail_show_featured_image(self):
+        author = self.create_person()
+        with open(FEATURED_IMAGE_PATH, 'rb') as f:
+            file_obj = DjangoFile(f, name='featured_image.jpg')
+            image = Image.objects.create(owner=author.user,
+                                         original_filename='featured_image.jpg',
+                                         file=file_obj,
+                                         subject_location='fooobar')
+        article = self.create_article(author=author, featured_image=image)
+        response = self.client.get(article.get_absolute_url())
+        image_url = get_thumbnailer(article.featured_image).get_thumbnail({
+            'size': (800, 300),
+            'crop': True,
+            'subject_location': article.featured_image.subject_location
+        }).url
+        self.assertContains(response, image_url)
 
     def test_articles_by_tag(self):
         """Tests that we can find articles by their tags, in ANY of the

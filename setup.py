@@ -3,7 +3,7 @@ from aldryn_newsblog import __version__
 
 REQUIREMENTS = [
     'django-parler',
-    'django-filer',
+    'django-filer>=0.9.9,<0.10',
     'aldryn-common',
     'django-appdata',
     'django-cms>=3.0.90a1',
@@ -15,6 +15,7 @@ REQUIREMENTS = [
     'django-taggit',
     'aldryn-categories',
     'six',
+    'pytz'
 ]
 
 CLASSIFIERS = [

@@ -4,7 +4,7 @@
 {% block blog_content %}
     <ul>
         {% for article in article_list %}
-            <li>{{ article.title }}</li>
+            <li><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></li>
         {% endfor %}
     </ul>
 {% endblock %}

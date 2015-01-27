@@ -10,6 +10,7 @@ from django.contrib.auth.models import User
 from cms.models.fields import PlaceholderField
 from cms.models.pluginmodel import CMSPlugin
 from aldryn_people.models import Person
+from filer.fields.image import FilerImageField
 from parler.models import TranslatableModel, TranslatedFields
 from aldryn_apphooks_config.models import AppHookConfig
 from aldryn_categories.fields import CategoryManyToManyField
@@ -61,6 +62,8 @@ class Article(TranslatableModel):
                                          blank=True)
     tags = TaggableManager(blank=True)
     publishing_date = models.DateTimeField()
+
+    featured_image = FilerImageField(null=True, blank=True)
 
     class Meta:
         ordering = ['-publishing_date']
