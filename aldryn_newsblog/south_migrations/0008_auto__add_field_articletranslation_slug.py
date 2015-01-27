@@ -10,21 +10,16 @@ class Migration(SchemaMigration):
     def forwards(self, orm):
         # Adding field 'ArticleTranslation.slug'
         db.add_column(u'aldryn_newsblog_article_translation', 'slug',
-                      self.gf('django.db.models.fields.SlugField')(default='', unique=True, max_length=255, blank=True),
+                      self.gf('django.db.models.fields.SlugField')(default='', max_length=255, blank=True),
                       keep_default=False)
 
-        # Deleting field 'Article.slug'
-        db.delete_column(u'aldryn_newsblog_article', 'slug')
-
+        db.delete_unique(u'aldryn_newsblog_article', ['slug'])
 
     def backwards(self, orm):
         # Deleting field 'ArticleTranslation.slug'
         db.delete_column(u'aldryn_newsblog_article_translation', 'slug')
 
-        # Adding field 'Article.slug'
-        db.add_column(u'aldryn_newsblog_article', 'slug',
-                      self.gf('django.db.models.fields.SlugField')(default='', max_length=255, unique=True, blank=True),
-                      keep_default=False)
+        db.create_unique(u'aldryn_newsblog_article', ['slug'])
 
 
     models = {
@@ -44,7 +39,8 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'namespace': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['aldryn_newsblog.NewsBlogConfig']"}),
             'owner': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"}),
-            'publishing_date': ('django.db.models.fields.DateTimeField', [], {})
+            'publishing_date': ('django.db.models.fields.DateTimeField', [], {}),
+            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '255', 'blank': 'True'})
         },
         u'aldryn_newsblog.articletranslation': {
             'Meta': {'unique_together': "[(u'language_code', u'master')]", 'object_name': 'ArticleTranslation', 'db_table': "u'aldryn_newsblog_article_translation'"},
@@ -55,7 +51,7 @@ class Migration(SchemaMigration):
             'meta_description': ('django.db.models.fields.TextField', [], {'default': "u''", 'blank': 'True'}),
             'meta_keywords': ('django.db.models.fields.TextField', [], {'default': "u''", 'blank': 'True'}),
             'meta_title': ('django.db.models.fields.CharField', [], {'default': "u''", 'max_length': '255', 'blank': 'True'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '255', 'blank': 'True'}),
+            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '255', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '234'})
         },
         u'aldryn_newsblog.latestentriesplugin': {
@@ -185,7 +181,7 @@ class Migration(SchemaMigration):
             'uploaded_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'})
         },
         'filer.image': {
-            'Meta': {'object_name': 'Image'},
+            'Meta': {'object_name': 'Image', '_ormbases': [u'filer.File']},
             '_height': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             '_width': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'author': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
