@@ -1,4 +1,4 @@
-aldryn-apphooks-config
+-e git+http://github.com/aldryn/aldryn-apphooks-config#egg=aldryn-apphooks-config
 aldryn-categories
 aldryn-common
 aldryn-people
