@@ -157,7 +157,7 @@ class LatestEntriesPlugin(CMSPlugin):
         default=5,
         help_text=_('The number of latest entries to be displayed.')
     )
-    namespace = models.ForeignKey(NewsBlogConfig, null=True)
+    namespace = models.ForeignKey(NewsBlogConfig)
 
     #
     # NOTE: make sure not to forget this if we add m2m/fk fields for
