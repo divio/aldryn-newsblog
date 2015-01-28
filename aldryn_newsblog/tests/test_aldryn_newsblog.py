@@ -40,6 +40,7 @@ from . import TESTS_STATIC_ROOT
 
 FEATURED_IMAGE_PATH = os.path.join(TESTS_STATIC_ROOT, 'featured_image.jpg')
 
+
 def rand_str(prefix=u'', length=23, chars=string.ascii_letters):
     return prefix + u''.join(random.choice(chars) for _ in range(length))
 
@@ -131,7 +132,7 @@ class NewsBlogTestsMixin(CategoryTestCaseMixin):
             self.page.publish(language)
 
 
-class TestAldrynNewsBlog(NewsBlogTestsMixin, TestCase):
+class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
 
     def test_create_post(self):
         article = self.create_article()
@@ -435,6 +436,18 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TestCase):
             namespace=self.ns_newsblog, publishing_date=datetime.now())
         article.save()
         self.assertEquals(article.slug, 'this-is-a-title')
+        # Now, let's try another with the same title
+        article.id = None
+        # Note, it cannot be the exact same title, else we'll fail the unique
+        # constraint on the field.
+        article.title = title.lower()
+        article.save()
+        # Note that this should be "incremented" slug here.
+        self.assertEquals(article.slug, 'this-is-a-title_1')
+        article.id = None
+        article.title = title.upper()
+        article.save()
+        self.assertEquals(article.slug, 'this-is-a-title_2')
 
     def test_auto_existing_author(self):
         author = self.create_person()
