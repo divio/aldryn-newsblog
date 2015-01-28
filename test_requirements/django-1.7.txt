@@ -1,5 +1,5 @@
 django>=1.7,<1.8
 # The required version of appdata for Django 1.7 isn't in PyPI yet.
--e git://github.com:ella/django-appdata.git#egg=django-appdata
+-e git+http://github.com:ella/django-appdata#egg=django-appdata
 
 -r base.txt
