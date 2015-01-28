@@ -5,7 +5,6 @@ from django.conf import settings
 from django.utils import translation
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView
-from parler.views import TranslatableSlugMixin
 
 from parler.views import TranslatableSlugMixin, ViewUrlMixin
 
