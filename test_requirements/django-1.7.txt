@@ -1,4 +1,10 @@
-django>=1.7,<1.8
+#
+# NOTE: Django 1.7.4, released within 1 day of this writing, specifically does
+# not work. Ticket opened at:
+#     https://github.com/gregmuellegger/django-sortedm2m/issues/43
+#
+django==1.7.3
+
 # The required version of appdata for Django 1.7 isn't in PyPI yet.
 -e git+http://github.com/ella/django-appdata#egg=django-appdata
 
