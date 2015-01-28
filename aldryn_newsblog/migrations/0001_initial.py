@@ -14,7 +14,7 @@ import taggit.managers
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('aldryn_people', '0002_auto_20150128_0307'),
+        ('aldryn_people', '0002_auto_20150127_2337'),
         ('taggit', '0001_initial'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ('cms', '0003_auto_20140926_2347'),
