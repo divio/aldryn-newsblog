@@ -1,5 +1,0 @@
-django>=1.4,<1.5
-django-appdata
-South
-
--r base.txt
