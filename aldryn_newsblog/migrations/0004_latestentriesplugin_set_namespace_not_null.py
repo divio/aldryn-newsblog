@@ -7,7 +7,7 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('aldryn_newsblog', '0003_auto_20150128_1925'),
+        ('aldryn_newsblog', '0003_latestentriesplugin_set_default_namespace'),
     ]
 
     operations = [
