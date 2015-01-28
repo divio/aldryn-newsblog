@@ -73,7 +73,7 @@ class Article(TranslatableModel):
                                related_name='aldryn_newsblog_articles',
                                unique=True)
     author = models.ForeignKey(Person, null=True, blank=True,
-        verbose_name=_('author'))
+                               verbose_name=_('author'))
     owner = models.ForeignKey(User, verbose_name=_('owner'))
     namespace = models.ForeignKey(NewsBlogConfig, verbose_name=_('namespace'))
     categories = CategoryManyToManyField('aldryn_categories.Category',

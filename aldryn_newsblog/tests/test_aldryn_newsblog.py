@@ -17,7 +17,7 @@ from django.contrib.auth.models import User
 from django.core.files import File as DjangoFile
 from django.core.urlresolvers import reverse
 from django.db import transaction
-from django.test import TestCase, TransactionTestCase
+from django.test import TransactionTestCase
 from django.utils.translation import activate, override
 
 from cms import api
