@@ -1,6 +1,6 @@
 -e git+http://github.com/aldryn/aldryn-apphooks-config#egg=aldryn-apphooks-config
 coverage==3.7.1
-aldryn-categories
+-e git+http://github.com/aldryn/aldryn-categories#egg=aldryn-categories
 aldryn-common
 -e git+http://github.com/aldryn/aldryn-people#egg=aldryn-people
 dj-database-url
