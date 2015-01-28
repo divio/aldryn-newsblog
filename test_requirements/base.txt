@@ -1,9 +1,8 @@
--e git+http://github.com/aldryn/aldryn-apphooks-config.git#egg=aldryn-apphooks-config
--e git+http://github.com/aldryn/aldryn-categories.git#egg=aldryn-categories
+aldryn-apphooks-config
+aldryn-categories
 aldryn-common
 aldryn-people
 dj-database-url
-django-appdata
 django-classy-tags
 -e git+http://github.com/yakky/django-cms@future/integration#egg=django-cms
 django-filer
@@ -13,7 +12,6 @@ django-reversion>=1.8.2,<1.9
 django-sekizai
 django-taggit
 django-treebeard>=2.0
-django>=1.6,<1.7
 djangocms-admin-style
 djangocms-helper>=0.7
 djangocms_text_ckeditor
@@ -23,4 +21,3 @@ html5lib
 pyflakes
 selenium
 six
-South

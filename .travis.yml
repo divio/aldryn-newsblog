@@ -5,34 +5,39 @@ language: python
 # Use container based infrastructure
 sudo: false
 
-env:
-  - CMD="python setup.py test"
-
 python:
-  - 2.7
   - 2.6
-  - 3.4
+  - 2.7
   - 3.3
+  - 3.4
+
+env:
+  matrix:
+  - DJANGO=1.4 CMD=./test
+  - DJANGO=1.5 CMD=./test
+  - DJANGO=1.6 CMD=./test
+  - DJANGO=1.7 CMD=./test
 
 matrix:
   allow_failures:
     - python: 3.3
     - python: 3.4
     - env: CMD="flake8 aldryn_newsblog"
+  exclude:
+    - python: 2.6
+      env: DJANGO=1.7 CMS=./test
   fast_finish: true
   include:
     - python: 2.7
-      env: CMD="flake8 aldryn_newsblog"
+      env: DJANGO=1.7 CMD="flake8 aldryn_newsblog"
 
 cache:
   directories:
     - $HOME/.wheelhouse
 
 install:
-  - pip wheel --wheel-dir $HOME/.wheelhouse -r test_requirements.txt
-  - pip install --use-wheel --no-index --find-links=$HOME/.wheelhouse -r test_requirements.txt
+  - pip install -q -r "test_requirements/django-$DJANGO.txt"
 
-script: $CMD
+script: coverage run test_settings.py
 
-# TODO: Add coverage reporting
-# after_success: coveralls
+after_success: coveralls

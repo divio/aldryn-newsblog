@@ -1,12 +1,10 @@
-# Uncomment once this is published to PyPI
-# .. image:: https://badge.fury.io/py/aldryn_newsblog.svg
-#     :target: http://badge.fury.io/py/aldryn_newsblog
+.. image:: https://badge.fury.io/py/aldryn_newsblog.svg
+    :target: http://badge.fury.io/py/aldryn_newsblog
 .. image:: https://magnum.travis-ci.com/aldryn/aldryn-newsblog.svg?token=YAkYhx2EXB7DyqW6ssQZ&branch=master
     :target: https://magnum.travis-ci.com/aldryn/aldryn-newsblog
 .. image:: https://img.shields.io/coveralls/aldryn/aldryn-newsblog.svg
     :target: https://coveralls.io/r/aldryn/aldryn-newsblog
 
-===============
 Aldryn Newsblog
 ===============
 
@@ -56,25 +54,51 @@ Manual Installation
         …
     ]
 
-3) Run migrations: `python manage.py migrate aldryn_newsblog`.
+   Please see notes regarding `Django CMS Requirements`_ and `Django Appdata`_
+   below, however.
+
+3) Run migrations: ``python manage.py migrate aldryn_newsblog``.
 
    NOTE: aldryn_newsblog supports both South and Django 1.7 migrations. If using
    Django 1.7, you may need to add the following to your settings: ::
 
-       MIGRATION_MODULES = [
-           …
-           'aldryn_newsblog': 'aldryn_newsblog.south_migrations',
-           …
-       ]
+    MIGRATION_MODULES = [
+       …
+       'aldryn_newsblog': 'aldryn_newsblog.south_migrations',
+       # The following are for some of the depenencies.
+       'djangocms_text_ckeditor': 'djangocms_text_ckeditor.migrations_django',
+       'filer': 'filer.migrations_django',
+       …
+    ]
 
 4) (Re-)Start your application server.
 
 
-NOTES
-=====
+Notes
+-----
+
+Django CMS Requirements
+~~~~~~~~~~~~~~~~~~~~~~~
+
+At time of this writing, released versions of `django CMS`__ do not have the
+required support for aldryn_apphook_config. This should be available in a near-
+future release (v3.1.0 or earlier).
+
+__ https://github.com/divio/django-cms
+
+In the meantime, `this special branch`__ based on 3.0.9 does have the required
+support.
+
+__ https://github.com/yakky/django-cms/archive/feature/appspaced_apphooks.zip
+
+
+Django Appdata
+~~~~~~~~~~~~~~
 
 At the time of this writing, the very latest version of django-appdata, a
-requirement of aldryn-app-config is required under Django 1.7 django-appdata_ or
-later.
+requirement of aldryn-app-config is not yet available in PyPI but is required
+under Django 1.7. Consider installing `the most recent version`__ with: ::
 
-.. django-appdata: https://github.com/ella/django-appdata/archive/master.zip
+    pip install https://github.com/ella/django-appdata/archive/master.zip
+
+__ https://github.com/ella/django-appdata/archive/master.zip
