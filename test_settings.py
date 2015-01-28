@@ -9,28 +9,32 @@ HELPER_SETTINGS = {
         ('fr', 'French'),
     ),
     'INSTALLED_APPS': [
-        'reversion',
-        'mptt',
-        'taggit',
         'aldryn_categories',
         'aldryn_newsblog',
         'aldryn_people',
-        'filer',
         'djangocms_text_ckeditor',
+        'easy_thumbnails',
+        'filer',
+        'mptt',
         'parler',
-        'easy_thumbnails'
+        'reversion',
+        'taggit',
     ],
     # app-specific
     'ALDRYN_NEWSBLOG_PAGINATE_BY': 10,
     'PARLER_LANGUAGES': {
         1: (
-            {'code': 'de',},
-            {'code': 'fr',},
-            {'code': 'en',},
+            {'code': 'de', },
+            {'code': 'fr', },
+            {'code': 'en', },
         ),
         'default': {
             'hide_untranslated': False,
         }
+    },
+    'MIGRATION_MODULES': {
+        'djangocms_text_ckeditor': 'djangocms_text_ckeditor.migrations_django',
+        'filer': 'filer.migrations_django',
     },
     'THUMBNAIL_HIGH_RESOLUTION': True,
     'THUMBNAIL_PROCESSORS': (

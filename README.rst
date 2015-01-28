@@ -1,0 +1,80 @@
+# Uncomment once this is published to PyPI
+# .. image:: https://badge.fury.io/py/aldryn_newsblog.svg
+#     :target: http://badge.fury.io/py/aldryn_newsblog
+.. image:: https://magnum.travis-ci.com/aldryn/aldryn-newsblog.svg?token=YAkYhx2EXB7DyqW6ssQZ&branch=master
+    :target: https://magnum.travis-ci.com/aldryn/aldryn-newsblog
+.. image:: https://img.shields.io/coveralls/aldryn/aldryn-newsblog.svg
+    :target: https://coveralls.io/r/aldryn/aldryn-newsblog
+
+===============
+Aldryn Newsblog
+===============
+
+
+Description
+~~~~~~~~~~~
+
+A combined news/weblog application for Aldryn and django CMS.
+
+Aldryn NewsBlog is intended to serve as a model of good practice for development
+of django CMS and Aldryn applications.
+
+
+Installation & Usage
+--------------------
+
+
+Aldryn Platform Users
+~~~~~~~~~~~~~~~~~~~~~
+
+1) Choose a site you want to install the add-on to from the dashboard.
+
+2) Go to **Apps** > **Install App**
+
+3) Click **Install** next to the **NewsBlog** app.
+
+4) Redeploy the site.
+
+
+Manual Installation
+~~~~~~~~~~~~~~~~~~~
+
+1) Run `pip install aldryn-newsblog`.
+
+2) Add below apps to ``INSTALLED_APPS``: ::
+
+    INSTALLED_APPS = [
+        …
+        'aldryn_categories',
+        'aldryn_people',
+        'djangocms_text_ckeditor',
+        'easy_thumbnails',
+        'filer',
+        'parler',
+        'reversion',
+        'taggit',
+        …
+    ]
+
+3) Run migrations: `python manage.py migrate aldryn_newsblog`.
+
+   NOTE: aldryn_newsblog supports both South and Django 1.7 migrations. If using
+   Django 1.7, you may need to add the following to your settings: ::
+
+       MIGRATION_MODULES = [
+           …
+           'aldryn_newsblog': 'aldryn_newsblog.south_migrations',
+           …
+       ]
+
+4) (Re-)Start your application server.
+
+
+NOTES
+=====
+
+At the time of this writing, the very latest version of django-appdata, a
+requirement of aldryn-app-config is required under Django 1.7 django-appdata_ or
+later.
+
+.. django-appdata: https://github.com/ella/django-appdata/archive/master.zip
