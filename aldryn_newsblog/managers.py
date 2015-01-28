@@ -10,10 +10,9 @@ from parler.managers import TranslatableManager
 
 class RelatedManager(TranslatableManager):
 
-    # TODO: uncomment this when we'll have image field
-    # def get_query_set(self):
-    #     qs = super(RelatedManager, self).get_query_set()
-    #     return qs.select_related('image_fk')
+    def get_query_set(self):
+        qs = super(RelatedManager, self).get_query_set()
+        return qs.select_related('featured_image')
 
     def get_months(self, namespace):
         """
