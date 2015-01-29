@@ -4,14 +4,14 @@
 {% comment %}
 {% block extend_breadcrumb %}
     {{ block.super }}
-    {% block blog_breadcrumb %}{% endblock blog_breadcrumb %}
+    {% block newsblog_breadcrumb %}{% endblock %}
 {% endblock extend_breadcrumb %}
 {% endcomment %}
 
 {% block content %}
     <div class="aldryn aldryn-newsblog">
-        {% block blog_title %}<h2>{{ app_config.app_title }}</h2>{% endblock %}
-        {% block blog_content %}{% endblock %}
-        {% block blog_footer %}{% endblock %}
+        {% block newsblog_title %}<h2>{{ app_config.app_title }}</h2>{% endblock %}
+        {% block newsblog_content %}{% endblock %}
+        {% block newsblog_footer %}{% endblock %}
     </div>
 {% endblock %}
