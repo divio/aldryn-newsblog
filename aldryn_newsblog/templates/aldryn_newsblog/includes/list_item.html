@@ -1,0 +1,10 @@
+{% load i18n cms_tags %}
+
+<article>
+    <h2><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></h2>
+    <div class="lead">
+        {% render_model article "lead_in" "lead_in" "" "safe|truncatewords:'20'" %}
+    </div>
+
+    {% include "aldryn_newsblog/includes/meta_row.html" %}
+</article>
