@@ -16,11 +16,11 @@ from cms.models.pluginmodel import CMSPlugin
 from aldryn_people.models import Person
 from filer.fields.image import FilerImageField
 from parler.models import TranslatableModel, TranslatedFields
-from aldryn_apphooks_config.models import AppHookConfig
 from aldryn_categories.fields import CategoryManyToManyField
 from taggit.managers import TaggableManager
 from djangocms_text_ckeditor.fields import HTMLField
 
+from .cms_appconfig import NewsBlogConfig
 from .versioning import version_controlled_content
 from .managers import RelatedManager
 
@@ -32,13 +32,6 @@ elif settings.LANGUAGE:
 else:
     raise ImproperlyConfigured(
         'Neither LANGUAGES nor LANGUAGE was found in settings.')
-
-
-class NewsBlogConfig(TranslatableModel, AppHookConfig):
-    """Adds some translatable, per-app-instance fields."""
-    translations = TranslatedFields(
-        app_title=models.CharField(_('application title'), max_length=234),
-    )
 
 
 @python_2_unicode_compatible
