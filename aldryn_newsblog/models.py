@@ -162,14 +162,8 @@ class LatestEntriesPlugin(CMSPlugin):
     )
     namespace = models.ForeignKey(NewsBlogConfig)
 
-    #
-    # NOTE: make sure not to forget this if we add m2m/fk fields for
-    # _this_plugin_ later:
-    #
-    # def copy_relations(self, old_instance):
-    #     self.categories = old_instance.categories.all()
-    #     self.tags = old_instance.tags.all()
-    #
+    def copy_relations(self, old_instance):
+        self.namespace = old_instance.namespace
 
     def __str__(self):
         return u'Latest entries: {0}'.format(self.latest_entries)
