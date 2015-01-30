@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from setuptools import setup, find_packages
 from aldryn_newsblog import __version__
 
@@ -6,10 +7,10 @@ REQUIREMENTS = [
     'django-filer>=0.9.9,<0.10',
     'aldryn-common',
     'django-appdata',
-    'django-cms>=3.0.90a1',
+    'django-cms>=3.0.9',  # See README!
     'aldryn-people',
     'django-reversion>=1.8.2,<1.9',
-    'django>=1.6,<1.7',
+    'django>=1.6,<1.8',
     'aldryn-apphooks-config>=0.1.0',
     'django-reversion>=1.8.2,<1.9',
     'django-taggit',
