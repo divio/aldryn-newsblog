@@ -28,8 +28,8 @@ class ArticleAdmin(VersionedPlaceholderAdminMixin,
 admin.site.register(models.Article, ArticleAdmin)
 
 
-class NewsBlogConfigAdmin(BaseAppHookConfig):
+class NewsBlogConfigAdmin(TranslatableAdmin, BaseAppHookConfig):
     def get_config_fields(self):
-        return []
+        return ('app_title', )
 
 admin.site.register(models.NewsBlogConfig, NewsBlogConfigAdmin)
