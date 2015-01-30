@@ -77,6 +77,15 @@ Manual Installation
 Notes
 -----
 
+Django 1.7
+~~~~~~~~~~
+
+At time of this writing, due to circumstances beyond our control, we are unable
+to support both django-taggit and django-sortedm2m in the same Django 1.7
+environment. As both of these projects are dependences, this application is not
+yet compatible with Django 1.7. We expect this to be resolved soon.
+
+
 Django CMS Requirements
 ~~~~~~~~~~~~~~~~~~~~~~~
 
