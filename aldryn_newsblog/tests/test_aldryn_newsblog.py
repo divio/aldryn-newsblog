@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 
+import os
 import random
-from easy_thumbnails.files import get_thumbnailer
 import reversion
 import six
 import string
-import os
 import unittest
 
-from datetime import datetime
+from datetime import datetime, date
+from easy_thumbnails.files import get_thumbnailer
+from operator import itemgetter
 from random import randint
 
 from django.conf import settings
@@ -16,7 +17,7 @@ from django.contrib.auth.models import User
 from django.core.files import File as DjangoFile
 from django.core.urlresolvers import reverse
 from django.db import transaction
-from django.test import TestCase, TransactionTestCase
+from django.test import TransactionTestCase
 from django.utils.translation import activate, override
 
 from cms import api
@@ -114,12 +115,14 @@ class NewsBlogTestsMixin(CategoryTestCaseMixin):
     def setUp(self):
         self.template = get_cms_setting('TEMPLATES')[0][0]
         self.language = settings.LANGUAGES[0][0]
+        self.root_page = api.create_page(
+            'root page', self.template, self.language, published=True)
         self.ns_newsblog = NewsBlogConfig.objects.create(namespace='NBNS')
         self.page = api.create_page(
             'page', self.template, self.language, published=True,
+            parent=self.root_page,
             apphook='NewsBlogApp',
             apphook_namespace=self.ns_newsblog.namespace)
-        self.page.publish(self.language)
         self.placeholder = self.page.placeholders.all()[0]
 
         self.setup_categories()
@@ -127,9 +130,10 @@ class NewsBlogTestsMixin(CategoryTestCaseMixin):
         self.tag_name1 = rand_str()
         self.tag_name2 = rand_str()
 
-        for language, _ in settings.LANGUAGES[1:]:
-            api.create_title(language, 'page', self.page)
-            self.page.publish(language)
+        for page in self.root_page, self.page:
+            for language, _ in settings.LANGUAGES[1:]:
+                api.create_title(language, page.get_slug(), page)
+                page.publish(language)
 
 
 class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
@@ -339,6 +343,22 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
             for article in articles:
                 self.assertContains(response, article.title)
 
+    def test_articles_count_by_month(self):
+        months = [
+            {'date': date(1914, 7, 3), 'count': 1},
+            {'date': date(1914, 8, 3), 'count': 3},
+            {'date': date(1945, 9, 3), 'count': 5},
+        ]
+        for month in months:
+            for _ in range(month['count']):
+                self.create_article(publishing_date=month['date'])
+        self.assertEquals(
+            sorted(
+                Article.objects.get_months(
+                    namespace=self.ns_newsblog.namespace),
+                key=itemgetter('count')),
+            months)
+
     def test_articles_by_date(self):
         in_articles = [
             self.create_article(
@@ -465,6 +485,26 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
         article.save()
         self.assertEquals(article.author.name,
                           u' '.join((user.first_name, user.last_name)))
+
+    def test_latest_entries_plugin(self):
+        page = api.create_page(
+            'plugin page', self.template, self.language,
+            parent=self.root_page, published=True)
+        placeholder = page.placeholders.all()[0]
+        api.add_plugin(placeholder, 'LatestEntriesPlugin', self.language,
+                       namespace=self.ns_newsblog, latest_entries=7)
+        plugin = placeholder.get_plugins()[0].get_plugin_instance()[0]
+        plugin.save()
+        page.publish(self.language)
+        articles = [self.create_article() for _ in range(7)]
+        another_ns = NewsBlogConfig.objects.create(namespace='another')
+        another_articles = [self.create_article(namespace=another_ns)
+                            for _ in range(3)]
+        response = self.client.get(page.get_absolute_url())
+        for article in articles:
+            self.assertContains(response, article.title)
+        for article in another_articles:
+            self.assertNotContains(response, article.title)
 
 
 class TestVersioning(NewsBlogTestsMixin, TransactionTestCase):

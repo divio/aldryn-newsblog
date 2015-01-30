@@ -25,6 +25,7 @@ dist
 .settings
 /*.egg-info/
 /*.egg/
+*.egg
 develop-eggs
 downloads
 eggs

@@ -8,7 +8,7 @@ from django.core.urlresolvers import reverse
 from django.db import connection, IntegrityError, models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.text import slugify as default_slugify
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import get_language, ugettext_lazy as _
 from django.contrib.auth.models import User
 
 from cms.models.fields import PlaceholderField
@@ -22,6 +22,7 @@ from taggit.managers import TaggableManager
 from djangocms_text_ckeditor.fields import HTMLField
 
 from .versioning import version_controlled_content
+from .managers import RelatedManager
 
 
 if settings.LANGUAGES:
@@ -72,15 +73,17 @@ class Article(TranslatableModel):
                                related_name='aldryn_newsblog_articles',
                                unique=True)
     author = models.ForeignKey(Person, null=True, blank=True,
-        verbose_name=_('author'))
+                               verbose_name=_('author'))
     owner = models.ForeignKey(User, verbose_name=_('owner'))
     namespace = models.ForeignKey(NewsBlogConfig, verbose_name=_('namespace'))
     categories = CategoryManyToManyField('aldryn_categories.Category',
-        blank=True, verbose_name=_('categories'))
-    tags = TaggableManager(blank=True)
+                                         verbose_name=_('categories'),
+                                         blank=True)
     publishing_date = models.DateTimeField(_('publishing data'))
-
     featured_image = FilerImageField(null=True, blank=True)
+
+    tags = TaggableManager(blank=True)
+    objects = RelatedManager()
 
     class Meta:
         ordering = ['-publishing_date']
@@ -157,19 +160,15 @@ class LatestEntriesPlugin(CMSPlugin):
         default=5,
         help_text=_('The number of latest entries to be displayed.')
     )
+    namespace = models.ForeignKey(NewsBlogConfig)
 
-    #
-    # NOTE: make sure not to forget this if we add m2m/fk fields for
-    # _this_plugin_ later:
-    #
-    # def copy_relations(self, old_instance):
-    #     self.categories = old_instance.categories.all()
-    #     self.tags = old_instance.tags.all()
-    #
+    def copy_relations(self, old_instance):
+        self.namespace = old_instance.namespace
 
     def __str__(self):
         return u'Latest entries: {0}'.format(self.latest_entries)
 
     def get_articles(self):
-        articles = Article.objects.active_translations()
+        articles = Article.objects.active_translations(get_language()).filter(
+            namespace=self.namespace)
         return articles[:self.latest_entries]
