@@ -1,4 +1,4 @@
-|PyPI| |Build Status| |Coverage Status|
+|PyPI Version| |Build Status| |Coverage Status|
 
 Aldryn Newsblog
 ===============
@@ -107,7 +107,7 @@ under Django 1.7. Consider installing `the most recent version`__ with: ::
 
 __ https://github.com/ella/django-appdata/archive/master.zip
 
-.. |PyPI| image:: http://img.shields.io/pypi/v/aldryn-newsblog.svg
+.. |PyPI Version| image:: http://img.shields.io/pypi/v/aldryn-newsblog.svg
    :target: https://pypi.python.org/pypi/aldryn-newsblog
 .. |Build Status| image:: http://img.shields.io/travis/aldryn/aldryn-newsblog/master.svg
    :target: https://travis-ci.org/aldryn/aldryn-newsblog
