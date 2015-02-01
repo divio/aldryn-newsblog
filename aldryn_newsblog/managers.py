@@ -40,11 +40,15 @@ class RelatedManager(TranslatableManager):
         return months
 
     def get_authors(self, namespace):
-        """Get authors with posts count for given namespace string."""
+        """
+        Get authors with articles count for given namespace string.
+
+        Results are ordered by count.
+        """
 
         # This methods relies on the facts that:
         # - each Article has author assigned on save()
         # - Article.namespace.namespace is effectively unique for Article models
         return Person.objects.filter(
             article__namespace__namespace=namespace).annotate(
-                num_entries=Count('article'))
+                num_entries=Count('article')).order_by('-num_entries')
