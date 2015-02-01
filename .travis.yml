@@ -35,6 +35,7 @@ cache:
     - $HOME/.wheelhouse
 
 install:
+  - pip install coveralls
   - pip install -r "test_requirements/django-$DJANGO.txt"
 
 script: coverage run test_settings.py
