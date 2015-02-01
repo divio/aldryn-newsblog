@@ -54,14 +54,14 @@ class RelatedManager(TranslatableManager):
             article__namespace__namespace=namespace).annotate(
                 num_entries=models.Count('article')).order_by('-num_entries')
 
-    def get_tags(self, namespace=None):
+    def get_tags(self, namespace):
         """
         Get tags with articles count for given namespace string.
 
         Results are ordered by count.
         """
 
-        entries = self.get_query_set()
+        entries = self.filter(namespace__namespace=namespace)
         if not entries:
             return []
         kwargs = TaggedItem.bulk_lookup_kwargs(entries)
