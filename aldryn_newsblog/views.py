@@ -7,8 +7,11 @@ from django.views.generic import ListView
 from django.views.generic.detail import DetailView
 
 from parler.views import TranslatableSlugMixin, ViewUrlMixin
+from taggit.models import Tag
 
 from aldryn_apphooks_config.mixins import AppConfigMixin
+from aldryn_categories.models import Category
+from aldryn_people.models import Person
 
 from .models import Article
 
@@ -46,10 +49,10 @@ class AuthorArticleList(ArticleList):
         # Note: each Article.author is Person instance with guaranteed
         # presence of unique slug field, which allows to use it in URLs
         return super(AuthorArticleList, self).queryset.filter(
-            author__slug=self.author)
+            author=self.author)
 
     def get(self, request, author):
-        self.author = author
+        self.author = Person.objects.get(slug=author)
         return super(AuthorArticleList, self).get(request)
 
     def get_context_data(self, **kwargs):
@@ -62,11 +65,10 @@ class CategoryArticleList(ArticleList):
     @property
     def queryset(self):
         return super(CategoryArticleList, self).queryset.filter(
-            categories__translations__slug=self.category
-        )
+            categories=self.category)
 
     def get(self, request, category):
-        self.category = category
+        self.category = Category.objects.get(translations__slug=category)
         return super(CategoryArticleList, self).get(request)
 
     def get_context_data(self, **kwargs):
@@ -79,11 +81,10 @@ class TagArticleList(ArticleList):
     @property
     def queryset(self):
         return super(TagArticleList, self).queryset.filter(
-            tags__name__in=[self.tag]
-        )
+            tags=self.tag)
 
     def get(self, request, tag):
-        self.tag = tag
+        self.tag = Tag.objects.get(slug=tag)
         return super(TagArticleList, self).get(request)
 
     def get_context_data(self, **kwargs):
