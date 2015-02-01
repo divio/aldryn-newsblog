@@ -3,10 +3,11 @@ try:
 except ImportError:
     from backport_collections import Counter
 import datetime
-from django.db.models import Count
+from django.db import models
 
 from aldryn_people.models import Person
 from parler.managers import TranslatableManager
+from taggit.models import Tag, TaggedItem
 
 
 class RelatedManager(TranslatableManager):
@@ -52,3 +53,28 @@ class RelatedManager(TranslatableManager):
         return Person.objects.filter(
             article__namespace__namespace=namespace).annotate(
                 num_entries=models.Count('article')).order_by('-num_entries')
+
+    def get_tags(self, namespace=None):
+        """
+        Get tags with articles count for given namespace string.
+
+        Results are ordered by count.
+        """
+
+        entries = self.get_query_set()
+        if not entries:
+            return []
+        kwargs = TaggedItem.bulk_lookup_kwargs(entries)
+
+        # aggregate and sort
+        counted_tags = dict(TaggedItem.objects
+                                      .filter(**kwargs)
+                                      .values('tag')
+                                      .annotate(tag_count=models.Count('tag'))
+                                      .values_list('tag', 'tag_count'))
+
+        # and finally get the results
+        tags = Tag.objects.filter(pk__in=counted_tags.keys())
+        for tag in tags:
+            tag.num_entries = counted_tags[tag.pk]
+        return sorted(tags, key=lambda x: -x.num_entries)
