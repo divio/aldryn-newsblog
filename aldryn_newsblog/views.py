@@ -52,6 +52,10 @@ class AuthorArticleList(ArticleList):
         self.author = author
         return super(AuthorArticleList, self).get(request)
 
+    def get_context_data(self, **kwargs):
+        kwargs['newsblog_author'] = self.author
+        return super(AuthorArticleList, self).get_context_data(**kwargs)
+
 
 class CategoryArticleList(ArticleList):
     """A list of articles filtered by categories."""
@@ -65,6 +69,10 @@ class CategoryArticleList(ArticleList):
         self.category = category
         return super(CategoryArticleList, self).get(request)
 
+    def get_context_data(self, **kwargs):
+        kwargs['newsblog_category'] = self.category
+        return super(CategoryArticleList, self).get_context_data(**kwargs)
+
 
 class TagArticleList(ArticleList):
     """A list of articles filtered by tags."""
@@ -77,6 +85,10 @@ class TagArticleList(ArticleList):
     def get(self, request, tag):
         self.tag = tag
         return super(TagArticleList, self).get(request)
+
+    def get_context_data(self, **kwargs):
+        kwargs['newsblog_tag'] = self.tag
+        return super(TagArticleList, self).get_context_data(**kwargs)
 
 
 class DateRangeArticleList(ArticleList):
@@ -96,15 +108,17 @@ class DateRangeArticleList(ArticleList):
         return super(DateRangeArticleList, self).get(request)
 
     def get_context_data(self, **kwargs):
-        kwargs['day'] = (
+        kwargs['newsblog_day'] = (
             int(self.kwargs.get('day')) if 'day' in self.kwargs else None)
-        kwargs['month'] = (
+        kwargs['newsblog_month'] = (
             int(self.kwargs.get('month')) if 'month' in self.kwargs else None)
-        kwargs['year'] = (
+        kwargs['newsblog_year'] = (
             int(self.kwargs.get('year')) if 'year' in self.kwargs else None)
-        if kwargs['year']:
-            kwargs['archive_date'] = date(
-                kwargs['year'], kwargs['month'] or 1, kwargs['day'] or 1)
+        if kwargs['newsblog_year']:
+            kwargs['newsblog_archive_date'] = date(
+                kwargs['newsblog_year'],
+                kwargs['newsblog_month'] or 1,
+                kwargs['newsblog_day'] or 1)
         return super(DateRangeArticleList, self).get_context_data(**kwargs)
 
 
