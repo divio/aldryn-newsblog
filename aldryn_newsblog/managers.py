@@ -2,9 +2,10 @@ try:
     from collections import Counter
 except ImportError:
     from backport_collections import Counter
-
 import datetime
+from django.db.models import Count
 
+from aldryn_people.models import Person
 from parler.managers import TranslatableManager
 
 
@@ -37,3 +38,13 @@ class RelatedManager(TranslatableManager):
              'count': date_counter[(year, month)]}
             for year, month in dates]
         return months
+
+    def get_authors(self, namespace):
+        """Get authors with posts count for given namespace string."""
+
+        # This methods relies on the facts that:
+        # - each Article has author assigned on save()
+        # - Article.namespace.namespace is effectively unique for Article models
+        return Person.objects.filter(
+            article__namespace__namespace=namespace).annotate(
+                num_entries=Count('article'))
