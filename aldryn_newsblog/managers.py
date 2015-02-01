@@ -35,7 +35,7 @@ class RelatedManager(TranslatableManager):
             # Use day=3 to make sure timezone won't affect this hacks'
             # month value. There are UTC+14 and UTC-12 timezones.
             {'date': datetime.date(year=year, month=month, day=3),
-             'count': date_counter[(year, month)]}
+             'num_entries': date_counter[(year, month)]}
             for year, month in dates]
         return months
 
@@ -51,4 +51,4 @@ class RelatedManager(TranslatableManager):
         # - Article.namespace.namespace is effectively unique for Article models
         return Person.objects.filter(
             article__namespace__namespace=namespace).annotate(
-                num_entries=Count('article')).order_by('-num_entries')
+                num_entries=models.Count('article')).order_by('-num_entries')

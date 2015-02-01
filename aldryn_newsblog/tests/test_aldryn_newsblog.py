@@ -357,18 +357,18 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
 
     def test_articles_count_by_month(self):
         months = [
-            {'date': date(1914, 7, 3), 'count': 1},
-            {'date': date(1914, 8, 3), 'count': 3},
-            {'date': date(1945, 9, 3), 'count': 5},
+            {'date': date(1914, 7, 3), 'num_entries': 1},
+            {'date': date(1914, 8, 3), 'num_entries': 3},
+            {'date': date(1945, 9, 3), 'num_entries': 5},
         ]
         for month in months:
-            for _ in range(month['count']):
+            for _ in range(month['num_entries']):
                 self.create_article(publishing_date=month['date'])
         self.assertEquals(
             sorted(
                 Article.objects.get_months(
                     namespace=self.ns_newsblog.namespace),
-                key=itemgetter('count')),
+                key=itemgetter('num_entries')),
             months)
 
     def test_articles_by_date(self):
