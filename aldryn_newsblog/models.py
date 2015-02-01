@@ -154,7 +154,7 @@ class Article(TranslatableModel):
 
 
 class NewsBlogCMSPlugin(CMSPlugin):
-    """AppHookConfig aware abstract plugin class for Aldryn Newsblog"""
+    """AppHookConfig aware abstract CMSPlugin class for Aldryn Newsblog"""
 
     namespace = models.ForeignKey(NewsBlogConfig)
 

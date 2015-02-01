@@ -43,6 +43,8 @@ class AuthorArticleList(ArticleList):
     """A list of articles written by a specific author."""
     @property
     def queryset(self):
+        # Note: each Article.author is Person instance with guaranteed
+        # presence of unique slug field, which allows to use it in URLs
         return super(AuthorArticleList, self).queryset.filter(
             author__slug=self.author)
 

@@ -21,8 +21,9 @@ class RelatedManager(TranslatableManager):
         This means how much posts there are in each month. Results are ordered
         by date.
         """
-        # done in a naive way as Django is having tough time while aggregating
-        # on date fields
+
+        # This is done in a naive way as Django is having tough time while
+        # aggregating on date fields
         entries = self.filter(namespace__namespace=namespace)
         dates = entries.values_list('publishing_date', flat=True)
         dates = [(x.year, x.month) for x in dates]
