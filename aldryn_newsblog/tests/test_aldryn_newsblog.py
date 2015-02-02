@@ -375,6 +375,26 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
                 key=itemgetter('num_entries')),
             months)
 
+    def test_articles_count_by_author(self):
+        authors = []
+        for num_entries in [1, 3, 5]:
+            person = self.create_person()
+            person.num_entries = num_entries
+            authors.append((person, num_entries))
+
+        for i, data in enumerate(authors):
+            for _ in range(data[1]):
+                self.create_article(author=data[0])
+            # replace author with it's pk, as we need it to easily compare
+            authors[i] = (data[0].pk, data[1])
+
+        self.assertEquals(
+            sorted(
+                Article.objects.get_authors(
+                    namespace=self.ns_newsblog.namespace).values_list(
+                        'pk', 'num_entries'),
+                key=itemgetter(1)),
+            authors)
 
     def test_articles_count_by_tags(self):
         untagged_articles = []
