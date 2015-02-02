@@ -81,6 +81,20 @@ class NewsBlogTestsMixin(CategoryTestCaseMixin):
 
         return article
 
+    def create_tagged_articles(self, num_articles=3, tags=('tag1', 'tag2')):
+        """Create num_articles Articles for each tag"""
+        articles = {}
+        for tag_name in tags:
+            tagged_articles = []
+            for _ in range(num_articles):
+                article = self.create_article()
+                article.save()
+                article.tags.add(tag_name)
+                tagged_articles.append(article)
+            tag_slug = tagged_articles[0].tags.slugs()[0]
+            articles[tag_slug] = tagged_articles
+        return articles
+
     def setup_categories(self):
         """Sets-up i18n categories (self.category_root, self.category1 and
         self.category2) for use in tests"""
@@ -324,24 +338,14 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
 
         This uses ANY of the languages articles are translated to.
         """
-        tag_name1 = rand_str()
-        tag_name2 = rand_str()
 
         untagged_articles = []
-        for _ in range(10):
+        for _ in range(5):
             article = self.create_article()
             untagged_articles.append(article)
 
-        articles = {}
-        for tag_name in (tag_name1, tag_name2):
-            tagged_articles = []
-            for _ in range(3):
-                article = self.create_article()
-                article.save()
-                article.tags.add(tag_name)
-                tagged_articles.append(article)
-            tag_slug = tagged_articles[0].tags.slugs()[0]
-            articles[tag_slug] = tagged_articles
+        articles = self.create_tagged_articles(
+            3, tags=(rand_str(), rand_str()))
 
         # tags are created in previous loop on demand, we need their slugs
         tag_slug1, tag_slug2 = articles.keys()
