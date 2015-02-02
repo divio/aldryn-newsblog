@@ -18,10 +18,12 @@ class RelatedManager(TranslatableManager):
 
     def get_months(self, namespace):
         """
-        Get months with posts count for given namespace string.
+        Get months and years with posts count for given namespace string.
 
-        This means how much posts there are in each month. Results are ordered
-        by date.
+        This means how much posts there are in each month.
+        Returns list of dictionaries of the following format:
+        [{'date': date(YEAR, MONTH, ARBITRARY_DAY), 'num_entries': NUM_ENTRIES}, ...]
+        ordered by date.
         """
 
         # This is done in a naive way as Django is having tough time while
@@ -44,7 +46,7 @@ class RelatedManager(TranslatableManager):
         """
         Get authors with articles count for given namespace string.
 
-        Results are ordered by count.
+        Returns Person queryset annotated with and ordered by 'num_entries'.
         """
 
         # This methods relies on the facts that:
@@ -58,7 +60,7 @@ class RelatedManager(TranslatableManager):
         """
         Get tags with articles count for given namespace string.
 
-        Results are ordered by count.
+        Returns list of Tag objects with ordered by custom 'num_entries' attribute.
         """
 
         entries = self.filter(namespace__namespace=namespace)
