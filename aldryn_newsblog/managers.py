@@ -3,6 +3,8 @@ try:
 except ImportError:
     from backport_collections import Counter
 import datetime
+from operator import attrgetter
+
 from django.db import models
 
 from aldryn_people.models import Person
@@ -78,4 +80,4 @@ class RelatedManager(TranslatableManager):
         tags = Tag.objects.filter(pk__in=counted_tags.keys())
         for tag in tags:
             tag.num_entries = counted_tags[tag.pk]
-        return sorted(tags, key=lambda x: -x.num_entries)
+        return sorted(tags, key=attrgetter('num_entries'), reverse=True)
