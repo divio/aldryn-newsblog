@@ -28,6 +28,7 @@ class RelatedManager(TranslatableManager):
         ordered by date.
         """
 
+        # TODO: check if this limitation still exists in Django 1.6+
         # This is done in a naive way as Django is having tough time while
         # aggregating on date fields
         entries = self.filter(namespace__namespace=namespace)
