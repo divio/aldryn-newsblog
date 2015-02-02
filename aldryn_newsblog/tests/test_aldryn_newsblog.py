@@ -375,6 +375,30 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
                 key=itemgetter('num_entries')),
             months)
 
+
+    def test_articles_count_by_tags(self):
+        untagged_articles = []
+        for _ in range(5):
+            article = self.create_article()
+            untagged_articles.append(article)
+        # Tag objects are created on attaching tag name to Article,
+        # so this looks not very DRY
+        tag_names = ('tag foo', 'tag bar', 'tag buzz')
+        tag_slug1 = self.create_tagged_articles(
+            1, tags=(tag_names[0],)).keys()[0]
+        tag_slug2 = self.create_tagged_articles(
+            3, tags=(tag_names[1],)).keys()[0]
+        tag_slug3 = self.create_tagged_articles(
+            5, tags=(tag_names[2],)).keys()[0]
+        tags_expected = [
+            (tag_slug3, 5),
+            (tag_slug2, 3),
+            (tag_slug1, 1),
+        ]
+        tags = Article.objects.get_tags(namespace=self.ns_newsblog.namespace)
+        tags = map(lambda x: (x.slug, x.num_entries), tags)
+        self.assertEquals(tags, tags_expected)
+
     def test_articles_by_date(self):
         in_articles = [
             self.create_article(
