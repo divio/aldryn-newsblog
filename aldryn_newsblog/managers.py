@@ -49,9 +49,8 @@ class RelatedManager(TranslatableManager):
         Returns Person queryset annotated with and ordered by 'num_entries'.
         """
 
-        # This methods relies on the facts that:
-        # - each Article has author assigned on save()
-        # - Article.namespace.namespace is effectively unique for Article models
+        # This methods relies on the fact that Article.namespace.namespace
+        # is effectively unique for Article models
         return Person.objects.filter(
             article__namespace__namespace=namespace).annotate(
                 num_entries=models.Count('article')).order_by('-num_entries')
