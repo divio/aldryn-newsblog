@@ -81,6 +81,8 @@ class Article(TranslatableModel):
                                          verbose_name=_('categories'),
                                          blank=True)
     publishing_date = models.DateTimeField(_('publishing date'))
+    is_published = models.BooleanField(_('is published'), default=True,
+                                       db_index=True)
     featured_image = FilerImageField(null=True, blank=True)
 
     tags = TaggableManager(blank=True)

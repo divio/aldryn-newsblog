@@ -15,7 +15,8 @@ from taggit.models import Tag, TaggedItem
 class RelatedManager(TranslatableManager):
 
     def get_query_set(self):
-        qs = super(RelatedManager, self).get_query_set()
+        qs = super(RelatedManager, self).get_query_set().filter(
+            is_published=True)
         return qs.select_related('featured_image')
 
     def get_months(self, namespace):
