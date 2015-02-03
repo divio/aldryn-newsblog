@@ -80,7 +80,7 @@ class Article(TranslatableModel):
     categories = CategoryManyToManyField('aldryn_categories.Category',
                                          verbose_name=_('categories'),
                                          blank=True)
-    publishing_date = models.DateTimeField(_('publishing data'))
+    publishing_date = models.DateTimeField(_('publishing date'))
     featured_image = FilerImageField(null=True, blank=True)
 
     tags = TaggableManager(blank=True)
