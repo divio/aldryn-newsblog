@@ -77,7 +77,13 @@ Manual Installation
    Please see notes regarding `Django CMS Requirements`_ and `Django Appdata`_
    below, however.
 
-3) Run migrations: ``python manage.py migrate aldryn_newsblog``.
+3) Configure ``aldryn-boilerplates`` (https://pypi.python.org/pypi/aldryn-boilerplates/).
+
+   To use the old templates, set ``ALDRYN_BOILERPLATE_NAME='legacy'``.
+   To use https://github.com/aldryn/aldryn-boilerplate-standard (recommended, will be renamed to
+   ``aldryn-boilerplate-bootstrap3``) set ``ALDRYN_BOILERPLATE_NAME='bootstrap3'``.
+
+4) Run migrations: ``python manage.py migrate aldryn_newsblog``.
 
    NOTE: aldryn_newsblog supports both South and Django 1.7 migrations. If using
    Django 1.7, you may need to add the following to your settings: ::
