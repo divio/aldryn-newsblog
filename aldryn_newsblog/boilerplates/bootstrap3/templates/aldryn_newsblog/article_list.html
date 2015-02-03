@@ -1,10 +1,9 @@
 {% extends "aldryn_newsblog/base.html" %}
-{% load cms_tags i18n %}
 
 {% block newsblog_content %}
     <div class="aldryn-newsblog-list">
         {% for article in article_list %}
-            {% include "aldryn_newsblog/includes/list_item.html" %}
+            {% include "aldryn_newsblog/includes/article.html" %}
         {% endfor %}
     </div>
 {% endblock %}
