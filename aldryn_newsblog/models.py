@@ -75,7 +75,8 @@ class Article(TranslatableModel):
     author = models.ForeignKey(Person, null=True, blank=True,
                                verbose_name=_('author'))
     owner = models.ForeignKey(User, verbose_name=_('owner'))
-    namespace = models.ForeignKey(NewsBlogConfig, verbose_name=_('namespace'))
+    app_config = models.ForeignKey(NewsBlogConfig,
+                                   verbose_name=_('app_config'))
     categories = CategoryManyToManyField('aldryn_categories.Category',
                                          verbose_name=_('categories'),
                                          blank=True)
@@ -94,7 +95,7 @@ class Article(TranslatableModel):
     def get_absolute_url(self):
         return reverse('aldryn_newsblog:article-detail', kwargs={
             'slug': self.safe_translation_getter('slug', any_language=True)
-        }, current_app=self.namespace.namespace)
+        }, current_app=self.app_config.namespace)
 
     def slugify(self, source_text, i=None):
         slug = default_slugify(source_text)
@@ -156,10 +157,10 @@ class Article(TranslatableModel):
 class NewsBlogCMSPlugin(CMSPlugin):
     """AppHookConfig aware abstract CMSPlugin class for Aldryn Newsblog"""
 
-    namespace = models.ForeignKey(NewsBlogConfig)
+    app_config = models.ForeignKey(NewsBlogConfig)
 
     def copy_relations(self, old_instance):
-        self.namespace = old_instance.namespace
+        self.app_config = old_instance.app_config
 
     class Meta:
         abstract = True
@@ -178,5 +179,5 @@ class LatestEntriesPlugin(NewsBlogCMSPlugin):
 
     def get_articles(self):
         articles = Article.objects.active_translations(get_language()).filter(
-            namespace=self.namespace)
+            app_config=self.app_config)
         return articles[:self.latest_entries]

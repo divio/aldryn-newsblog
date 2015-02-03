@@ -67,7 +67,7 @@ class NewsBlogTestsMixin(CategoryTestCaseMixin):
             'slug': rand_str(),
             'author': author,
             'owner': author.user,
-            'namespace': self.ns_newsblog,
+            'app_config': self.app_config,
             'publishing_date': datetime.now()
         }
 
@@ -131,12 +131,12 @@ class NewsBlogTestsMixin(CategoryTestCaseMixin):
         self.language = settings.LANGUAGES[0][0]
         self.root_page = api.create_page(
             'root page', self.template, self.language, published=True)
-        self.ns_newsblog = NewsBlogConfig.objects.create(namespace='NBNS')
+        self.app_config = NewsBlogConfig.objects.create(namespace='NBNS')
         self.page = api.create_page(
             'page', self.template, self.language, published=True,
             parent=self.root_page,
             apphook='NewsBlogApp',
-            apphook_namespace=self.ns_newsblog.namespace)
+            apphook_namespace=self.app_config.namespace)
         self.placeholder = self.page.placeholders.all()[0]
 
         self.setup_categories()
@@ -212,7 +212,7 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
             for _ in range(10):
                 article = Article.objects.create(
                     title=rand_str(), slug=rand_str(prefix=code),
-                    namespace=self.ns_newsblog,
+                    app_config=self.app_config,
                     author=author, owner=author.user,
                     publishing_date=datetime.now())
                 article.save()
@@ -247,7 +247,7 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
         code = "{0}-".format(self.language)
         article = Article.objects.create(
             title=rand_str(), slug=rand_str(prefix=code),
-            namespace=self.ns_newsblog,
+            app_config=self.app_config,
             author=author, owner=author.user,
             publishing_date=datetime.now())
         article.save()
@@ -279,7 +279,7 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
         code = "{0}-".format(self.language)
         article = Article.objects.create(
             title=rand_str(), slug=rand_str(prefix=code),
-            namespace=self.ns_newsblog,
+            app_config=self.app_config,
             author=author, owner=author.user,
             publishing_date=datetime.now())
         article.save()
@@ -371,7 +371,7 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
         self.assertEquals(
             sorted(
                 Article.objects.get_months(
-                    namespace=self.ns_newsblog.namespace),
+                    namespace=self.app_config.namespace),
                 key=itemgetter('num_entries')),
             months)
 
@@ -391,7 +391,7 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
         self.assertEquals(
             sorted(
                 Article.objects.get_authors(
-                    namespace=self.ns_newsblog.namespace).values_list(
+                    namespace=self.app_config.namespace).values_list(
                         'pk', 'num_entries'),
                 key=itemgetter(1)),
             authors)
@@ -415,7 +415,7 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
             (tag_slug2, 3),
             (tag_slug1, 1),
         ]
-        tags = Article.objects.get_tags(namespace=self.ns_newsblog.namespace)
+        tags = Article.objects.get_tags(namespace=self.app_config.namespace)
         tags = map(lambda x: (x.slug, x.num_entries), tags)
         self.assertEquals(tags, tags_expected)
 
@@ -485,7 +485,7 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
         author = self.create_person()
         article = Article.objects.create(
             title=title, slug=rand_str(), author=author, owner=author.user,
-            namespace=self.ns_newsblog, publishing_date=datetime.now())
+            app_config=self.app_config, publishing_date=datetime.now())
         article.save()
         api.add_plugin(article.content, 'TextPlugin', self.language)
         plugin = article.content.get_plugins()[0].get_plugin_instance()[0]
@@ -497,8 +497,8 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
 
     def test_unattached_namespace(self):
         # create a new namespace that has no corresponding blog app page
-        namespace = NewsBlogConfig.objects.create(namespace='another')
-        articles = [self.create_article(namespace=namespace)
+        app_config = NewsBlogConfig.objects.create(namespace='another')
+        articles = [self.create_article(app_config=app_config)
                     for _ in range(10)]
         response = self.client.get(articles[0].get_absolute_url())
         self.assertEqual(response.status_code, 404)
@@ -513,7 +513,7 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
         author = self.create_person()
         article = Article.objects.create(
             title=title, author=author, owner=author.user,
-            namespace=self.ns_newsblog, publishing_date=datetime.now())
+            app_config=self.app_config, publishing_date=datetime.now())
         article.save()
         self.assertEquals(article.slug, 'this-is-a-title')
         # Now, let's try another with the same title
@@ -533,7 +533,7 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
         author = self.create_person()
         article = Article.objects.create(
             title=rand_str(), owner=author.user,
-            namespace=self.ns_newsblog, publishing_date=datetime.now())
+            app_config=self.app_config, publishing_date=datetime.now())
         article.save()
         self.assertEquals(article.author.user, article.owner)
 
@@ -541,7 +541,7 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
         user = self.create_user()
         article = Article.objects.create(
             title=rand_str(), owner=user,
-            namespace=self.ns_newsblog, publishing_date=datetime.now())
+            app_config=self.app_config, publishing_date=datetime.now())
         article.save()
         self.assertEquals(article.author.name,
                           u' '.join((user.first_name, user.last_name)))
@@ -552,13 +552,13 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
             parent=self.root_page, published=True)
         placeholder = page.placeholders.all()[0]
         api.add_plugin(placeholder, 'LatestEntriesPlugin', self.language,
-                       namespace=self.ns_newsblog, latest_entries=7)
+                       app_config=self.app_config, latest_entries=7)
         plugin = placeholder.get_plugins()[0].get_plugin_instance()[0]
         plugin.save()
         page.publish(self.language)
         articles = [self.create_article() for _ in range(7)]
-        another_ns = NewsBlogConfig.objects.create(namespace='another')
-        another_articles = [self.create_article(namespace=another_ns)
+        another_app_config = NewsBlogConfig.objects.create(namespace='another')
+        another_articles = [self.create_article(app_config=another_app_config)
                             for _ in range(3)]
         response = self.client.get(page.get_absolute_url())
         for article in articles:

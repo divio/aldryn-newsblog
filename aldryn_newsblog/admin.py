@@ -13,7 +13,7 @@ class ArticleAdmin(VersionedPlaceholderAdminMixin,
                    TranslatableAdmin,
                    FrontendEditableAdminMixin,
                    admin.ModelAdmin):
-    list_display = ('title', 'namespace', 'slug')
+    list_display = ('title', 'app_config', 'slug')
 
     def add_view(self, request, *args, **kwargs):
         data = request.GET.copy()
