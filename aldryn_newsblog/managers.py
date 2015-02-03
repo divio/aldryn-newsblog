@@ -31,7 +31,7 @@ class RelatedManager(TranslatableManager):
         # TODO: check if this limitation still exists in Django 1.6+
         # This is done in a naive way as Django is having tough time while
         # aggregating on date fields
-        entries = self.filter(namespace__namespace=namespace)
+        entries = self.filter(app_config__namespace=namespace)
         dates = entries.values_list('publishing_date', flat=True)
         dates = [(x.year, x.month) for x in dates]
         date_counter = Counter(dates)
@@ -52,10 +52,10 @@ class RelatedManager(TranslatableManager):
         Returns Person queryset annotated with and ordered by 'num_entries'.
         """
 
-        # This methods relies on the fact that Article.namespace.namespace
+        # This methods relies on the fact that Article.app_config.namespace
         # is effectively unique for Article models
         return Person.objects.filter(
-            article__namespace__namespace=namespace).annotate(
+            article__app_config__namespace=namespace).annotate(
                 num_entries=models.Count('article')).order_by('-num_entries')
 
     def get_tags(self, namespace):
@@ -65,7 +65,7 @@ class RelatedManager(TranslatableManager):
         Returns list of Tag objects with ordered by custom 'num_entries' attribute.
         """
 
-        entries = self.filter(namespace__namespace=namespace)
+        entries = self.filter(app_config__namespace=namespace)
         if not entries:
             return []
         kwargs = TaggedItem.bulk_lookup_kwargs(entries)

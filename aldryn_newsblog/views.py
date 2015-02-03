@@ -24,7 +24,7 @@ class ArticleDetail(TranslatableSlugMixin, AppConfigMixin, DetailView):
         return Article.objects.active_translations(
             translation.get_language()
         ).filter(
-            namespace__namespace=self.namespace
+            app_config__namespace=self.namespace
         )
 
 
@@ -38,7 +38,7 @@ class ArticleList(ViewUrlMixin, AppConfigMixin, ListView):
         return Article.objects.active_translations(
             translation.get_language()
         ).filter(
-            namespace__namespace=self.namespace
+            app_config__namespace=self.namespace
         )
 
 
