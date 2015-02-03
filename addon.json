@@ -1,0 +1,16 @@
+{
+    "name": "NewsBlog",
+    "description": "Adds news and blogging abilities to django CMS",
+    "url": "https://github.com/aldryn/aldryn-newsblog",
+    "package-name": "aldryn-newsblog",
+    "installed-apps": [
+
+    ],
+    "author": {
+        "name": "Divio AG",
+        "url": "https://www.divio.ch"
+    },
+    "license": {
+        "name": "BSD"
+    }
+}
