@@ -1,9 +1,4 @@
-.. image:: https://badge.fury.io/py/aldryn_newsblog.svg
-    :target: http://badge.fury.io/py/aldryn_newsblog
-.. image:: https://magnum.travis-ci.com/aldryn/aldryn-newsblog.svg?token=YAkYhx2EXB7DyqW6ssQZ&branch=master
-    :target: https://magnum.travis-ci.com/aldryn/aldryn-newsblog
-.. image:: https://img.shields.io/coveralls/aldryn/aldryn-newsblog.svg
-    :target: https://coveralls.io/r/aldryn/aldryn-newsblog
+|PyPI Version| |Build Status| |Coverage Status|
 
 Aldryn Newsblog
 ===============
@@ -77,6 +72,15 @@ Manual Installation
 Notes
 -----
 
+Django 1.7
+~~~~~~~~~~
+
+At time of this writing, due to circumstances beyond our control, we are unable
+to support both django-taggit and django-sortedm2m in the same Django 1.7
+environment. As both of these projects are dependences, this application is not
+yet compatible with Django 1.7. We expect this to be resolved very soon.
+
+
 Django CMS Requirements
 ~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -102,3 +106,10 @@ under Django 1.7. Consider installing `the most recent version`__ with: ::
     pip install https://github.com/ella/django-appdata/archive/master.zip
 
 __ https://github.com/ella/django-appdata/archive/master.zip
+
+.. |PyPI Version| image:: http://img.shields.io/pypi/v/aldryn-newsblog.svg
+   :target: https://pypi.python.org/pypi/aldryn-newsblog
+.. |Build Status| image:: http://img.shields.io/travis/aldryn/aldryn-newsblog/master.svg
+   :target: https://travis-ci.org/aldryn/aldryn-newsblog
+.. |Coverage Status| image:: http://img.shields.io/coveralls/aldryn/aldryn-newsblog/master.svg
+   :target: https://coveralls.io/r/aldryn/aldryn-newsblog?branch=master

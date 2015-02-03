@@ -7,8 +7,11 @@ from django.views.generic import ListView
 from django.views.generic.detail import DetailView
 
 from parler.views import TranslatableSlugMixin, ViewUrlMixin
+from taggit.models import Tag
 
 from aldryn_apphooks_config.mixins import AppConfigMixin
+from aldryn_categories.models import Category
+from aldryn_people.models import Person
 
 from .models import Article
 
@@ -43,12 +46,18 @@ class AuthorArticleList(ArticleList):
     """A list of articles written by a specific author."""
     @property
     def queryset(self):
+        # Note: each Article.author is Person instance with guaranteed
+        # presence of unique slug field, which allows to use it in URLs
         return super(AuthorArticleList, self).queryset.filter(
-            author__slug=self.author)
+            author=self.author)
 
     def get(self, request, author):
-        self.author = author
+        self.author = Person.objects.get(slug=author)
         return super(AuthorArticleList, self).get(request)
+
+    def get_context_data(self, **kwargs):
+        kwargs['newsblog_author'] = self.author
+        return super(AuthorArticleList, self).get_context_data(**kwargs)
 
 
 class CategoryArticleList(ArticleList):
@@ -56,12 +65,15 @@ class CategoryArticleList(ArticleList):
     @property
     def queryset(self):
         return super(CategoryArticleList, self).queryset.filter(
-            categories__translations__slug=self.category
-        )
+            categories=self.category)
 
     def get(self, request, category):
-        self.category = category
+        self.category = Category.objects.get(translations__slug=category)
         return super(CategoryArticleList, self).get(request)
+
+    def get_context_data(self, **kwargs):
+        kwargs['newsblog_category'] = self.category
+        return super(CategoryArticleList, self).get_context_data(**kwargs)
 
 
 class TagArticleList(ArticleList):
@@ -69,12 +81,15 @@ class TagArticleList(ArticleList):
     @property
     def queryset(self):
         return super(TagArticleList, self).queryset.filter(
-            tags__name__in=[self.tag]
-        )
+            tags=self.tag)
 
     def get(self, request, tag):
-        self.tag = tag
+        self.tag = Tag.objects.get(slug=tag)
         return super(TagArticleList, self).get(request)
+
+    def get_context_data(self, **kwargs):
+        kwargs['newsblog_tag'] = self.tag
+        return super(TagArticleList, self).get_context_data(**kwargs)
 
 
 class DateRangeArticleList(ArticleList):
@@ -94,15 +109,17 @@ class DateRangeArticleList(ArticleList):
         return super(DateRangeArticleList, self).get(request)
 
     def get_context_data(self, **kwargs):
-        kwargs['day'] = (
+        kwargs['newsblog_day'] = (
             int(self.kwargs.get('day')) if 'day' in self.kwargs else None)
-        kwargs['month'] = (
+        kwargs['newsblog_month'] = (
             int(self.kwargs.get('month')) if 'month' in self.kwargs else None)
-        kwargs['year'] = (
+        kwargs['newsblog_year'] = (
             int(self.kwargs.get('year')) if 'year' in self.kwargs else None)
-        if kwargs['year']:
-            kwargs['archive_date'] = date(
-                kwargs['year'], kwargs['month'] or 1, kwargs['day'] or 1)
+        if kwargs['newsblog_year']:
+            kwargs['newsblog_archive_date'] = date(
+                kwargs['newsblog_year'],
+                kwargs['newsblog_month'] or 1,
+                kwargs['newsblog_day'] or 1)
         return super(DateRangeArticleList, self).get_context_data(**kwargs)
 
 

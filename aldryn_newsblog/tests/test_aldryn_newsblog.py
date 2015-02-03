@@ -81,6 +81,20 @@ class NewsBlogTestsMixin(CategoryTestCaseMixin):
 
         return article
 
+    def create_tagged_articles(self, num_articles=3, tags=('tag1', 'tag2')):
+        """Create num_articles Articles for each tag"""
+        articles = {}
+        for tag_name in tags:
+            tagged_articles = []
+            for _ in range(num_articles):
+                article = self.create_article()
+                article.save()
+                article.tags.add(tag_name)
+                tagged_articles.append(article)
+            tag_slug = tagged_articles[0].tags.slugs()[0]
+            articles[tag_slug] = tagged_articles
+        return articles
+
     def setup_categories(self):
         """Sets-up i18n categories (self.category_root, self.category1 and
         self.category2) for use in tests"""
@@ -126,9 +140,6 @@ class NewsBlogTestsMixin(CategoryTestCaseMixin):
         self.placeholder = self.page.placeholders.all()[0]
 
         self.setup_categories()
-
-        self.tag_name1 = rand_str()
-        self.tag_name2 = rand_str()
 
         for page in self.root_page, self.page:
             for language, _ in settings.LANGUAGES[1:]:
@@ -322,42 +333,91 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
         self.assertContains(response, image_url)
 
     def test_articles_by_tag(self):
-        """Tests that we can find articles by their tags, in ANY of the
-        languages they are translated to"""
-        author = self.create_person()
-        for tag_name in (self.tag_name1, self.tag_name2):
-            articles = []
-            for _ in range(10):
-                article = Article.objects.create(
-                    title=rand_str(), slug=rand_str(),
-                    namespace=self.ns_newsblog,
-                    author=author, owner=author.user,
-                    publishing_date=datetime.now())
-                article.save()
-                article.tags.add(tag_name)
-                articles.append(article)
+        """
+        Tests that TagArticleList view properly filters articles by their tags.
 
-            url = reverse('aldryn_newsblog:article-list-by-tag',
-                          kwargs={'tag': tag_name})
-            response = self.client.get(url)
-            for article in articles:
-                self.assertContains(response, article.title)
+        This uses ANY of the languages articles are translated to.
+        """
+
+        untagged_articles = []
+        for _ in range(5):
+            article = self.create_article()
+            untagged_articles.append(article)
+
+        articles = self.create_tagged_articles(
+            3, tags=(rand_str(), rand_str()))
+
+        # tags are created in previous loop on demand, we need their slugs
+        tag_slug1, tag_slug2 = articles.keys()
+        url = reverse('aldryn_newsblog:article-list-by-tag',
+                      kwargs={'tag': tag_slug2})
+        response = self.client.get(url)
+        for article in articles[tag_slug2]:
+            self.assertContains(response, article.title)
+        for article in articles[tag_slug1]:
+            self.assertNotContains(response, article.title)
+        for article in untagged_articles:
+            self.assertNotContains(response, article.title)
 
     def test_articles_count_by_month(self):
         months = [
-            {'date': date(1914, 7, 3), 'count': 1},
-            {'date': date(1914, 8, 3), 'count': 3},
-            {'date': date(1945, 9, 3), 'count': 5},
+            {'date': date(1914, 7, 3), 'num_entries': 1},
+            {'date': date(1914, 8, 3), 'num_entries': 3},
+            {'date': date(1945, 9, 3), 'num_entries': 5},
         ]
         for month in months:
-            for _ in range(month['count']):
+            for _ in range(month['num_entries']):
                 self.create_article(publishing_date=month['date'])
         self.assertEquals(
             sorted(
                 Article.objects.get_months(
                     namespace=self.ns_newsblog.namespace),
-                key=itemgetter('count')),
+                key=itemgetter('num_entries')),
             months)
+
+    def test_articles_count_by_author(self):
+        authors = []
+        for num_entries in [1, 3, 5]:
+            person = self.create_person()
+            person.num_entries = num_entries
+            authors.append((person, num_entries))
+
+        for i, data in enumerate(authors):
+            for _ in range(data[1]):
+                self.create_article(author=data[0])
+            # replace author with it's pk, as we need it to easily compare
+            authors[i] = (data[0].pk, data[1])
+
+        self.assertEquals(
+            sorted(
+                Article.objects.get_authors(
+                    namespace=self.ns_newsblog.namespace).values_list(
+                        'pk', 'num_entries'),
+                key=itemgetter(1)),
+            authors)
+
+    def test_articles_count_by_tags(self):
+        untagged_articles = []
+        for _ in range(5):
+            article = self.create_article()
+            untagged_articles.append(article)
+        # Tag objects are created on attaching tag name to Article,
+        # so this looks not very DRY
+        tag_names = ('tag foo', 'tag bar', 'tag buzz')
+        tag_slug1 = self.create_tagged_articles(
+            1, tags=(tag_names[0],)).keys()[0]
+        tag_slug2 = self.create_tagged_articles(
+            3, tags=(tag_names[1],)).keys()[0]
+        tag_slug3 = self.create_tagged_articles(
+            5, tags=(tag_names[2],)).keys()[0]
+        tags_expected = [
+            (tag_slug3, 5),
+            (tag_slug2, 3),
+            (tag_slug1, 1),
+        ]
+        tags = Article.objects.get_tags(namespace=self.ns_newsblog.namespace)
+        tags = map(lambda x: (x.slug, x.num_entries), tags)
+        self.assertEquals(tags, tags_expected)
 
     def test_articles_by_date(self):
         in_articles = [

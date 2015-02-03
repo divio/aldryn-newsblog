@@ -153,23 +153,25 @@ class Article(TranslatableModel):
                 i += 1
 
 
+class NewsBlogCMSPlugin(CMSPlugin):
+    """AppHookConfig aware abstract CMSPlugin class for Aldryn Newsblog"""
+
+    namespace = models.ForeignKey(NewsBlogConfig)
+
+    def copy_relations(self, old_instance):
+        self.namespace = old_instance.namespace
+
+    class Meta:
+        abstract = True
+
+
 @python_2_unicode_compatible
-class LatestEntriesPlugin(CMSPlugin):
+class LatestEntriesPlugin(NewsBlogCMSPlugin):
 
     latest_entries = models.IntegerField(
         default=5,
         help_text=_('The number of latest entries to be displayed.')
     )
-    namespace = models.ForeignKey(NewsBlogConfig)
-
-    #
-    # NOTE: make sure not to forget this if we add m2m/fk fields for
-    # _this_plugin_ later:
-    #
-    # def copy_relations(self, old_instance):
-    #     self.categories = old_instance.categories.all()
-    #     self.tags = old_instance.tags.all()
-    #
 
     def __str__(self):
         return u'Latest entries: {0}'.format(self.latest_entries)

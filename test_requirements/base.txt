@@ -2,7 +2,7 @@
 coverage==3.7.1
 -e git+http://github.com/aldryn/aldryn-categories#egg=aldryn-categories
 aldryn-common
--e git+http://github.com/aldryn/aldryn-people#egg=aldryn-people
+aldryn-people>=0.4.6
 backport_collections==0.1
 dj-database-url
 django-classy-tags
