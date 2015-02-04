@@ -68,7 +68,8 @@ class NewsBlogTestsMixin(CategoryTestCaseMixin):
             'author': author,
             'owner': author.user,
             'app_config': self.app_config,
-            'publishing_date': datetime.now()
+            'publishing_date': datetime.now(),
+            'is_published': True,
         }
 
         fields.update(kwargs)
@@ -149,12 +150,12 @@ class NewsBlogTestsMixin(CategoryTestCaseMixin):
 
 class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
 
-    def test_create_post(self):
+    def test_create_article(self):
         article = self.create_article()
         response = self.client.get(article.get_absolute_url())
         self.assertContains(response, article.title)
 
-    def test_delete_post(self):
+    def test_delete_article(self):
         article = self.create_article()
         article_pk = article.pk
         article_url = article.get_absolute_url()
@@ -164,12 +165,21 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
         response = self.client.get(article_url)
         self.assertEqual(response.status_code, 404)
 
+    def test_article_not_published(self):
+        article = self.create_article(is_published=False)
+        response = self.client.get(article.get_absolute_url())
+        self.assertEqual(response.status_code, 404)
+
     def test_articles_list(self):
         articles = [self.create_article() for _ in range(10)]
+        unpublished_article = articles[0]
+        unpublished_article.is_published = False
+        unpublished_article.save()
         response = self.client.get(
             reverse('aldryn_newsblog:article-list'))
-        for article in articles:
+        for article in articles[1:]:
             self.assertContains(response, article.title)
+        self.assertNotContains(response, unpublished_article.title)
 
     def test_articles_list_pagination(self):
         paginate_by = settings.ALDRYN_NEWSBLOG_PAGINATE_BY
