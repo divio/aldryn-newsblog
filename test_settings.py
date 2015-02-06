@@ -32,6 +32,15 @@ HELPER_SETTINGS = {
             'hide_untranslated': False,
         }
     },
+    'HAYSTACK_CONNECTIONS': {
+        'default': {
+            'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
+            'URL': 'http://my-solr-server/solr/my-site-en/',
+            'TIMEOUT': 60 * 5,
+            'INCLUDE_SPELLING': True,
+            'BATCH_SIZE': 100,
+        },
+    },
     'MIGRATION_MODULES': {
         'djangocms_text_ckeditor': 'djangocms_text_ckeditor.migrations_django',
         'filer': 'filer.migrations_django',

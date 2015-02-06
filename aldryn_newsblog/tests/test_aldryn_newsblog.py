@@ -18,14 +18,15 @@ from django.core.files import File as DjangoFile
 from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.test import TransactionTestCase
-from django.utils.translation import activate, override
+from django.utils.translation import activate, override, get_language
+from aldryn_newsblog.search_indexes import ArticleIndex
 
 from cms import api
 from cms.utils import get_cms_setting
 from filer.models.imagemodels import Image
 from parler.tests.utils import override_parler_settings
 from parler.utils.conf import add_default_language_settings
-from parler.utils.context import switch_language
+from parler.utils.context import switch_language, smart_override
 
 
 from aldryn_categories.models import Category
@@ -33,6 +34,7 @@ from aldryn_categories.tests import CategoryTestCaseMixin
 
 from aldryn_people.models import Person
 
+from aldryn_search.helpers import get_request
 
 from aldryn_newsblog.models import Article, NewsBlogConfig
 from aldryn_newsblog.versioning import create_revision_with_placeholders
@@ -138,6 +140,7 @@ class NewsBlogTestsMixin(CategoryTestCaseMixin):
             apphook='NewsBlogApp',
             apphook_namespace=self.app_config.namespace)
         self.placeholder = self.page.placeholders.all()[0]
+        self.request = get_request('en')
 
         self.setup_categories()
 
@@ -215,7 +218,6 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
                     app_config=self.app_config,
                     author=author, owner=author.user,
                     publishing_date=datetime.now())
-                article.save()
                 # Make sure there are translations in place for the articles.
                 for language, _ in settings.LANGUAGES[1:]:
                     with switch_language(article, language):
@@ -565,6 +567,68 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
             self.assertContains(response, article.title)
         for article in another_articles:
             self.assertNotContains(response, article.title)
+
+    def test_index_simple(self):
+        self.index = ArticleIndex()
+        content0 = rand_str(prefix='content0_')
+        self.setup_categories()
+
+        article = self.create_article(content=content0, lead_in='lead in text',
+                                      title='a title')
+        article.categories.add()
+        for tag_name in ('tag 1', 'tag2'):
+            article.tags.add(tag_name)
+        for category in (self.category1, self.category2):
+            article.categories.add(category)
+
+        self.assertEqual(self.index.get_title(article), 'a title')
+        self.assertEqual(self.index.get_description(article), 'lead in text')
+        self.assertTrue('lead in text' in self.index.get_search_data(article, 'en', self.request))
+        self.assertTrue(content0 in self.index.get_search_data(article, 'en', self.request))
+        self.assertTrue('tag 1' in self.index.get_search_data(article, 'en', self.request))
+        self.assertTrue(self.category1.name in self.index.get_search_data(article, 'en', self.request))
+
+    def test_index_multilingual(self):
+        self.index = ArticleIndex()
+        content0 = rand_str(prefix='content0_')
+        self.setup_categories()
+
+        article_1 = self.create_article(content=content0, lead_in=u'lead in text',
+                                        title=u'a title')
+        article_2 = self.create_article(content=content0, lead_in=u'lead in text',
+                                        title=u'second title')
+        for article in (article_1, article_2):
+            for tag_name in ('tag 1', 'tag2'):
+                article.tags.add(tag_name)
+            for category in (self.category1, self.category2):
+                article.categories.add(category)
+        with switch_language(article_2, 'de'):
+            article_2.title = u'de title'
+            article_2.lead_in = u'de lead in'
+            article_2.save()
+
+        PARLER_LANGUAGES = {
+            1: (
+                {'code': 'de', },
+                {'code': 'fr', },
+                {'code': 'en', },
+            ),
+            'default': {
+                'hide_untranslated': True,
+            }
+        }
+        LANGUAGES = add_default_language_settings(PARLER_LANGUAGES)
+        with override_parler_settings(PARLER_LANGUAGES=LANGUAGES):
+            with smart_override('de'):
+                language = get_language()
+                # english-only article is excluded
+                qs = self.index.get_index_queryset(language)
+                self.assertEqual(qs.count(), 1)
+                self.assertEqual(qs.translated(language, title__icontains='title').count(), 1)
+                # the language is correctly setup
+                for article_de in qs:
+                    self.assertEqual(self.index.get_title(article_de), 'de title')
+                    self.assertEqual(self.index.get_description(article_de), 'de lead in')
 
 
 class TestVersioning(NewsBlogTestsMixin, TransactionTestCase):
