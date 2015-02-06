@@ -21,8 +21,14 @@ class ArticleIndex(get_index_base()):
     def get_description(self, obj):
         return obj.safe_translation_getter('lead_in')
 
-    def get_index_kwargs(self, language):
-        return {'translations__language_code': language}
+    def index_queryset(self, using=None):
+        self._get_backend(using)
+        language = self.get_current_language(using)
+        filter_kwargs = self.get_index_kwargs(language)
+        qs = self.get_index_queryset(language)
+        if filter_kwargs:
+            return qs.translated(language, **filter_kwargs)
+        return qs
 
     def get_index_queryset(self, language):
         return self.get_model().objects.active_translations(
