@@ -622,7 +622,7 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
             with smart_override('de'):
                 language = get_language()
                 # english-only article is excluded
-                qs = self.index.get_index_queryset(language)
+                qs = self.index.index_queryset(language)
                 self.assertEqual(qs.count(), 1)
                 self.assertEqual(qs.translated(language, title__icontains='title').count(), 1)
                 # the language is correctly setup

@@ -34,11 +34,10 @@ HELPER_SETTINGS = {
     },
     'HAYSTACK_CONNECTIONS': {
         'default': {
-            'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
-            'URL': 'http://my-solr-server/solr/my-site-en/',
-            'TIMEOUT': 60 * 5,
-            'INCLUDE_SPELLING': True,
-            'BATCH_SIZE': 100,
+            'ENGINE': 'haystack.backends.simple_backend.SimpleEngine',
+        },
+        'de': {
+            'ENGINE': 'haystack.backends.simple_backend.SimpleEngine',
         },
     },
     'MIGRATION_MODULES': {
