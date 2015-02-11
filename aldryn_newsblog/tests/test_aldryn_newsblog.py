@@ -61,12 +61,16 @@ class NewsBlogTestsMixin(CategoryTestCaseMixin):
             author = kwargs['author']
         except KeyError:
             author = self.create_person()
+        try:
+            owner = kwargs['owner']
+        except KeyError:
+            owner = author.user
 
         fields = {
             'title': rand_str(),
             'slug': rand_str(),
             'author': author,
-            'owner': author.user,
+            'owner': owner,
             'app_config': self.app_config,
             'publishing_date': datetime.now(),
             'is_published': True,
@@ -546,6 +550,11 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
             app_config=self.app_config, publishing_date=datetime.now())
         article.save()
         self.assertEquals(article.author.user, article.owner)
+        with self.settings(ALDRYN_NEWSBLOG_CREATE_AUTHOR=False):
+            article = Article.objects.create(
+                title=rand_str(), owner=author.user,
+                app_config=self.app_config, publishing_date=datetime.now())
+        self.assertEquals(article.author, None)
 
     def test_auto_new_author(self):
         user = self.create_user()
