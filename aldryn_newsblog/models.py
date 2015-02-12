@@ -101,15 +101,14 @@ class Article(TranslatableModel):
     def save(self, *args, **kwargs):
         create_author = getattr(
             settings, 'ALDRYN_NEWSBLOG_CREATE_AUTHOR', True)
-        if create_author:
-            # Ensure there is an owner.
-            if self.author is None:
-                self.author = Person.objects.get_or_create(
-                    user=self.owner,
-                    defaults={
-                        'name': u' '.join((self.owner.first_name,
-                                           self.owner.last_name))
-                    })[0]
+        # Ensure there is an owner.
+        if create_author and self.author is None:
+            self.author = Person.objects.get_or_create(
+                user=self.owner,
+                defaults={
+                    'name': u' '.join((self.owner.first_name,
+                                       self.owner.last_name))
+                })[0]
 
         # Start with a naïve approach, if none provided.
         if not self.slug:
