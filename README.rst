@@ -73,8 +73,6 @@ Available settings
 
  * ``ALDRYN_NEWSBLOG_CREATE_AUTHOR`` - if set to ``False``, no author (Person
    object) would be implicitly created. Default value: ``True``.
- * ``ALDRYN_NEWSBLOG_PAGINATE_BY`` - the number of objects to show per page.
-   Default value: ``10``.
 
 Notes
 -----

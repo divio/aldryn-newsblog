@@ -61,16 +61,12 @@ class NewsBlogTestsMixin(CategoryTestCaseMixin):
             author = kwargs['author']
         except KeyError:
             author = self.create_person()
-        try:
-            owner = kwargs['owner']
-        except KeyError:
-            owner = author.user
 
         fields = {
             'title': rand_str(),
             'slug': rand_str(),
             'author': author,
-            'owner': owner,
+            'owner': author.user,
             'app_config': self.app_config,
             'publishing_date': datetime.now(),
             'is_published': True,
