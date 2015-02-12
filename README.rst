@@ -68,6 +68,11 @@ Manual Installation
 
 4) (Re-)Start your application server.
 
+Available settings
+------------------
+
+ * ``ALDRYN_NEWSBLOG_CREATE_AUTHOR`` - if set to ``False``, no author (Person
+   object) would be implicitly created. Default value: ``True``.
 
 Notes
 -----
