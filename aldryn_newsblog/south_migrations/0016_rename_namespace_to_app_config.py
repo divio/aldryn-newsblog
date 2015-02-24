@@ -2,28 +2,33 @@
 from south.utils import datetime_utils as datetime
 from south.db import db
 from south.v2 import SchemaMigration
-from django.db import models
+from django.db import models, connection
 
 
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-
-        db.drop_foreign_key('aldryn_newsblog_latestentriesplugin', 'namespace_id')
+        # SQLite3 NOTE: Altering FK constraints are broken this backend, but,
+        # its OK to just rename the columns here, because constraints are
+        # disabled anyway.
+        if connection.vendor != 'sqlite':
+            db.drop_foreign_key('aldryn_newsblog_latestentriesplugin', 'namespace_id')
         db.rename_column('aldryn_newsblog_latestentriesplugin', 'namespace_id', 'app_config_id')
-        db.alter_column('aldryn_newsblog_latestentriesplugin', 'app_config_id',
-                        models.ForeignKey(orm['aldryn_newsblog.NewsBlogConfig']))
+        if connection.vendor != 'sqlite':
+            db.alter_column('aldryn_newsblog_latestentriesplugin', 'app_config_id',
+                            models.ForeignKey(orm['aldryn_newsblog.NewsBlogConfig']))
 
-        db.drop_foreign_key('aldryn_newsblog_article', 'namespace_id')
+        if connection.vendor != 'sqlite':
+            db.drop_foreign_key('aldryn_newsblog_article', 'namespace_id')
         db.rename_column('aldryn_newsblog_article', 'namespace_id', 'app_config_id')
-        db.alter_column('aldryn_newsblog_article', 'app_config_id',
-                        models.ForeignKey(orm['aldryn_newsblog.NewsBlogConfig']))
+        if connection.vendor != 'sqlite':
+            db.alter_column('aldryn_newsblog_article', 'app_config_id',
+                            models.ForeignKey(orm['aldryn_newsblog.NewsBlogConfig']))
 
     def backwards(self, orm):
-
+        "Write your backwards methods here."
         # User chose to not deal with backwards NULL issues for 'LatestEntriesPlugin.namespace'
         raise RuntimeError("Cannot reverse this migration. 'LatestEntriesPlugin.namespace' and its values cannot be restored.")
-
 
     models = {
         u'aldryn_categories.category': {

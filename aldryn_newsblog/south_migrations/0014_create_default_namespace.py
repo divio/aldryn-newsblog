@@ -2,15 +2,15 @@
 from south.utils import datetime_utils as datetime
 from south.db import db
 from south.v2 import DataMigration
-from django.db import models
+from django.db import models, connection
+from django.db.transaction import set_autocommit
+
 
 class Migration(DataMigration):
 
     def forwards(self, orm):
-        "Write your forwards methods here."
-        # Note: Don't use "from appname.models import ModelName"..
-        # Use orm.ModelName to refer to models in this application,
-        # and orm['appname.ModelName'] for models in other applications.
+        if connection.vendor == 'sqlite':
+            set_autocommit(True)
 
         ns, created = orm.NewsBlogConfig.objects.get_or_create(
             namespace='latest_entries_plugin_default_namespace')
