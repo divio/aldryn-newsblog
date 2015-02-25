@@ -11,17 +11,17 @@ from django.utils.text import slugify as default_slugify
 from django.utils.translation import get_language, ugettext_lazy as _
 from django.contrib.auth.models import User
 
+from aldryn_categories.fields import CategoryManyToManyField
+from aldryn_people.models import Person
+from aldryn_reversion.core import version_controlled_content
 from cms.models.fields import PlaceholderField
 from cms.models.pluginmodel import CMSPlugin
-from aldryn_people.models import Person
+from djangocms_text_ckeditor.fields import HTMLField
 from filer.fields.image import FilerImageField
 from parler.models import TranslatableModel, TranslatedFields
-from aldryn_categories.fields import CategoryManyToManyField
 from taggit.managers import TaggableManager
-from djangocms_text_ckeditor.fields import HTMLField
 
 from .cms_appconfig import NewsBlogConfig
-from .versioning import version_controlled_content
 from .managers import RelatedManager
 
 
