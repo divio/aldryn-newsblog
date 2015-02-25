@@ -16,6 +16,7 @@ REQUIREMENTS = [
     'django-reversion>=1.8.2,<1.9',
     'django-taggit',
     'aldryn-categories',
+    'aldryn-reversion',
     'six',
     'pytz'
 ]

@@ -12,6 +12,7 @@ HELPER_SETTINGS = {
         'aldryn_categories',
         'aldryn_newsblog',
         'aldryn_people',
+        'aldryn_reversion',
         'djangocms_text_ckeditor',
         'easy_thumbnails',
         'filer',

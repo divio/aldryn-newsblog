@@ -37,7 +37,7 @@ from aldryn_people.models import Person
 from aldryn_search.helpers import get_request
 
 from aldryn_newsblog.models import Article, NewsBlogConfig
-from aldryn_newsblog.versioning import create_revision_with_placeholders
+from aldryn_reversion.core import create_revision_with_placeholders
 
 from . import TESTS_STATIC_ROOT
 
