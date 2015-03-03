@@ -7,7 +7,6 @@ from operator import attrgetter
 
 from django.db import models
 
-from aldryn_apphooks_config.managers import AppHookConfigManager
 from aldryn_people.models import Person
 from parler.managers import TranslatableManager, TranslatableQuerySet
 from taggit.models import Tag, TaggedItem
@@ -19,7 +18,7 @@ class ArticleQuerySet(TranslatableQuerySet):
         return self.filter(is_published=True)
 
 
-class RelatedManager(TranslatableManager, AppHookConfigManager):
+class RelatedManager(TranslatableManager):
 
     def get_query_set(self):
         qs = ArticleQuerySet(self.model, using=self.db)
