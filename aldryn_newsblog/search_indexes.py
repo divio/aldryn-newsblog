@@ -31,7 +31,7 @@ class ArticleIndex(get_index_base()):
         return qs
 
     def get_index_queryset(self, language):
-        return self.get_model().published.active_translations(
+        return self.get_model().objects.published().active_translations(
             language_code=language)
 
     def get_model(self):

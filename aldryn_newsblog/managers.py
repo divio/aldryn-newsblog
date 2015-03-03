@@ -7,16 +7,26 @@ from operator import attrgetter
 
 from django.db import models
 
+from aldryn_apphooks_config.managers import AppHookConfigManager
 from aldryn_people.models import Person
-from parler.managers import TranslatableManager
+from parler.managers import TranslatableManager, TranslatableQuerySet
 from taggit.models import Tag, TaggedItem
 
 
-class RelatedManager(TranslatableManager):
+class ArticleQuerySet(TranslatableQuerySet):
+
+    def published(self):
+        return self.filter(is_published=True)
+
+
+class RelatedManager(TranslatableManager, AppHookConfigManager):
 
     def get_query_set(self):
-        qs = super(RelatedManager, self).get_query_set()
+        qs = ArticleQuerySet(self.model, using=self.db)
         return qs.select_related('featured_image')
+
+    def published(self):
+        return self.get_query_set().published()
 
     def get_months(self, namespace):
         """
@@ -82,10 +92,3 @@ class RelatedManager(TranslatableManager):
         for tag in tags:
             tag.num_entries = counted_tags[tag.pk]
         return sorted(tags, key=attrgetter('num_entries'), reverse=True)
-
-
-class PublishedRelatedManager(RelatedManager):
-    def get_query_set(self):
-        qs = super(PublishedRelatedManager, self).get_query_set().filter(
-            is_published=True)
-        return qs
