@@ -15,8 +15,7 @@ from taggit.models import Tag, TaggedItem
 class RelatedManager(TranslatableManager):
 
     def get_query_set(self):
-        qs = super(RelatedManager, self).get_query_set().filter(
-            is_published=True)
+        qs = super(RelatedManager, self).get_query_set()
         return qs.select_related('featured_image')
 
     def get_months(self, namespace):
@@ -83,3 +82,10 @@ class RelatedManager(TranslatableManager):
         for tag in tags:
             tag.num_entries = counted_tags[tag.pk]
         return sorted(tags, key=attrgetter('num_entries'), reverse=True)
+
+
+class PublishedRelatedManager(RelatedManager):
+    def get_query_set(self):
+        qs = super(PublishedRelatedManager, self).get_query_set().filter(
+            is_published=True)
+        return qs

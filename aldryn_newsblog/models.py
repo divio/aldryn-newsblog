@@ -22,7 +22,7 @@ from parler.models import TranslatableModel, TranslatedFields
 from taggit.managers import TaggableManager
 
 from .cms_appconfig import NewsBlogConfig
-from .managers import RelatedManager
+from .managers import RelatedManager, PublishedRelatedManager
 
 
 if settings.LANGUAGES:
@@ -80,6 +80,7 @@ class Article(TranslatableModel):
 
     tags = TaggableManager(blank=True)
     objects = RelatedManager()
+    published = PublishedRelatedManager()
 
     class Meta:
         ordering = ['-publishing_date']
@@ -175,6 +176,6 @@ class LatestEntriesPlugin(NewsBlogCMSPlugin):
         return u'Latest entries: {0}'.format(self.latest_entries)
 
     def get_articles(self):
-        articles = Article.objects.active_translations(get_language()).filter(
-            app_config=self.app_config)
+        articles = Article.published.active_translations(
+            get_language()).filter(app_config=self.app_config)
         return articles[:self.latest_entries]
