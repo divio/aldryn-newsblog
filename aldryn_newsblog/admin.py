@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.utils.translation import ugettext_lazy as _
 from cms.admin.placeholderadmin import FrontendEditableAdminMixin
 from parler.admin import TranslatableAdmin
 
@@ -9,11 +10,24 @@ from aldryn_reversion.admin import VersionedPlaceholderAdminMixin
 from . import models
 
 
+def make_published(modeladmin, request, queryset):
+    queryset.update(is_published=True)
+make_published.short_description = _(
+    "Mark selected articles as published")
+
+
+def make_unpublished(modeladmin, request, queryset):
+    queryset.update(is_published=False)
+make_unpublished.short_description = _(
+    "Mark selected articles as not published")
+
+
 class ArticleAdmin(VersionedPlaceholderAdminMixin,
                    TranslatableAdmin,
                    FrontendEditableAdminMixin,
                    admin.ModelAdmin):
-    list_display = ('title', 'app_config', 'slug')
+    list_display = ('title', 'app_config', 'slug', 'is_published')
+    actions = (make_published, make_unpublished)
 
     def add_view(self, request, *args, **kwargs):
         data = request.GET.copy()
