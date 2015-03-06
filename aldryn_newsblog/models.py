@@ -69,7 +69,7 @@ class Article(TranslatableModel):
                                verbose_name=_('author'))
     owner = models.ForeignKey(User, verbose_name=_('owner'))
     app_config = models.ForeignKey(NewsBlogConfig,
-                                   verbose_name=_('app_config'))
+                                   verbose_name=_('app. config'))
     categories = CategoryManyToManyField('aldryn_categories.Category',
                                          verbose_name=_('categories'),
                                          blank=True)
