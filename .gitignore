@@ -43,3 +43,5 @@ man/
 share/
 .editorconfig
 cms/static/cms/compass_app_log.txt
+*.sublime-project
+*.sublime-workspace
