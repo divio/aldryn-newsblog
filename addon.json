@@ -4,16 +4,11 @@
 	"url": "https://github.com/aldryn/aldryn-newsblog",
 	"package-name": "aldryn-newsblog",
 	"installed-apps": [
-		"extended_choices",
-		"django_tablib",
-		"appconf",
-		"standard_form",
-		"djangocms_text_ckeditor",
-		"filer",
+		"aldryn_categories",
+		"aldryn_people",
+		"aldryn_reversion",
 		"aldryn_common",
-		"easy_thumbnails",
-		"hvad",
-		"sortedm2m",
+		"taggit",
 		"aldryn_newsblog"
 	],
 	"author": {
