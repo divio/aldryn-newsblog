@@ -2,6 +2,7 @@
 
 from __future__ import unicode_literals
 
+from django.conf import settings
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 from cms.admin.placeholderadmin import (
@@ -13,7 +14,8 @@ from parler.admin import TranslatableAdmin
 from aldryn_apphooks_config.admin import BaseAppHookConfig
 from aldryn_people.models import Person
 from aldryn_reversion.admin import VersionedPlaceholderAdminMixin
-from . import models
+
+from . import models, cms_appconfig
 
 
 def make_published(modeladmin, request, queryset):
@@ -102,6 +104,14 @@ class ArticleAdmin(VersionedPlaceholderAdminMixin,
         }),
     )
 
+    def get_form(self, request, obj=None, **kwargs):
+        config_option = cms_appconfig.NewsBlogConfig.get_config_data(
+            request, 'default_published', obj, 'app_config')
+
+        form = super(ArticleAdmin, self).get_form(request, obj, **kwargs)
+        form.base_fields['is_published'].initial = config_option
+        return form
+
     def add_view(self, request, *args, **kwargs):
         data = request.GET.copy()
         try:
@@ -123,7 +133,6 @@ class NewsBlogConfigAdmin(TranslatableAdmin,
                           PlaceholderAdminMixin,
                           BaseAppHookConfig):
     def get_config_fields(self):
-        return ('app_title', 'paginate_by', 'create_authors', 'search_indexed', )
-
+        return ('app_title', 'paginate_by', 'create_authors', 'search_indexed', 'config.default_published', )
 
 admin.site.register(models.NewsBlogConfig, NewsBlogConfigAdmin)

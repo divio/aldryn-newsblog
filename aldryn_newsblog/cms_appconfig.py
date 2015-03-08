@@ -2,6 +2,8 @@
 
 from __future__ import unicode_literals
 
+from django import forms
+from django.conf import settings
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -81,5 +83,6 @@ class NewsBlogConfig(TranslatableModel, AppHookConfig):
 
 
 class NewsBlogConfigForm(AppDataForm):
-    pass
+    default_published = forms.BooleanField(label=_(u'Post published by default'), required=False,
+                                           initial=getattr(settings, 'ALDRYN_NEWSBLOG_DEFAULT_PUBLISHED', True))
 setup_config(NewsBlogConfigForm, NewsBlogConfig)
