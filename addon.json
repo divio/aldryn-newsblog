@@ -1,0 +1,26 @@
+{
+	"name": "News and Blog",
+	"description": "A News and Blogging app for aldryn",
+	"url": "https://github.com/aldryn/aldryn-newsblog",
+	"package-name": "aldryn-newsblog",
+	"installed-apps": [
+		"extended_choices",
+		"django_tablib",
+		"appconf",
+		"standard_form",
+		"djangocms_text_ckeditor",
+		"filer",
+		"aldryn_common",
+		"easy_thumbnails",
+		"hvad",
+		"sortedm2m",
+		"aldryn_newsblog"
+	],
+	"author": {
+		"name": "Divio AG",
+		"url": "divio.ch"
+	},
+	"license": {
+		"name": "BSD"
+	}
+}
