@@ -46,6 +46,24 @@ class ArticleAdmin(VersionedPlaceholderAdminMixin,
         make_featured, make_not_featured,
         make_published, make_unpublished,
     )
+    fieldsets = (
+        (None, {
+            'fields': ('title', 'lead_in', )
+        }),
+        ('Details', {
+            'classes': ('collapse',),
+            'fields': ('tags', 'categories', 'featured_image',
+                       'publishing_date', 'is_published',)
+        }),
+        ('Meta options', {
+            'classes': ('collapse',),
+            'fields': ('meta_title', 'meta_description', 'meta_keywords')
+        }),
+        ('Advanced options', {
+            'classes': ('collapse',),
+            'fields': ('author', 'owner', 'app_config')
+        }),
+    )
 
     def add_view(self, request, *args, **kwargs):
         data = request.GET.copy()
@@ -55,6 +73,9 @@ class ArticleAdmin(VersionedPlaceholderAdminMixin,
             request.GET = data
         except Person.DoesNotExist:
             pass
+
+        data['owner'] = request.user.id
+
         return super(ArticleAdmin, self).add_view(request, *args, **kwargs)
 
 admin.site.register(models.Article, ArticleAdmin)
