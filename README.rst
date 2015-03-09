@@ -18,6 +18,11 @@ of django CMS and Aldryn applications.
 Installation & Usage
 --------------------
 
+django CMS Requirements
+~~~~~~~~~~~~~~~~~~~~~~~
+
+This project requires django CMS 3.0.12.
+
 
 Aldryn Platform Users
 ~~~~~~~~~~~~~~~~~~~~~
@@ -103,21 +108,6 @@ At time of this writing, due to circumstances beyond our control, we are unable
 to support both django-taggit and django-sortedm2m in the same Django 1.7
 environment. As both of these projects are dependences, this application is not
 yet compatible with Django 1.7. We expect this to be resolved very soon.
-
-
-Django CMS Requirements
-~~~~~~~~~~~~~~~~~~~~~~~
-
-At time of this writing, released versions of `django CMS`__ do not have the
-required support for aldryn_apphook_config. This should be available in a near-
-future release (v3.1.0 or earlier).
-
-__ https://github.com/divio/django-cms
-
-In the meantime, `this special branch`__ based on 3.0.9 does have the required
-support.
-
-__ https://github.com/yakky/django-cms/archive/feature/appspaced_apphooks.zip
 
 
 Django Appdata
