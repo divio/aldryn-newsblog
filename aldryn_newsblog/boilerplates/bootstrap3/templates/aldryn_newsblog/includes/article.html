@@ -43,15 +43,15 @@
             </div>
         {% endif %}
 
+        {% include "aldryn_newsblog/includes/author.html" %}
+
         {% if article.tags %}
-            <div class="tags">
+            <p class="tags">
                 {% for tag in article.tags.all %}
                     <a href="#TODO">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
                 {% endfor %}
-            </div>
+            </p>
         {% endif %}
-
-        {% include "aldryn_newsblog/includes/author.html" %}
 
         {% if detail_view %}
             <div class="lead">
@@ -62,7 +62,9 @@
 
     {% block newsblog_content %}
         {% if detail_view %}
-            {% render_placeholder article.content language placeholder_language %}
+            <div class="content">
+                {% render_placeholder article.content language placeholder_language %}
+            </div>
         {% endif %}
     {% endblock %}
 </article>
