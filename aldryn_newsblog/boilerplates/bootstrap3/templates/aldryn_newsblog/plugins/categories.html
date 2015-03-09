@@ -1,0 +1,11 @@
+{% load i18n %}
+
+ <div class="aldryn aldryn-newsblog aldryn-newsblog-categories">
+    <ul class="list-unstyled text-uppercase">
+        {# TODO set correct active states #}
+        <li{% if no_category_is_active %} class="active"{% endif %}><a href="#">{% trans "All" %}</a></li>
+        {% for category in categories %}
+            <li{% if category.active %} class="active"{% endif %}><a href="{{ category.get_absolute_url }}">{{ category.name }}</a></li>
+        {% endfor %}
+    </ul>
+</div>
