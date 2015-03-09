@@ -52,6 +52,7 @@ Manual Installation
     INSTALLED_APPS = [
         …
         'aldryn_categories',
+        'aldryn_newsblog',
         'aldryn_people',
         'aldryn_reversion',
         'djangocms_text_ckeditor',
@@ -80,7 +81,29 @@ Manual Installation
        …
     ]
 
-4) (Re-)Start your application server.
+4) Add Required Easy Thumbnail setting
+
+   aldryn-newsblog requires the use of the optional "subject location" processor
+   from Django Filer for Easy Thumbnails. This requires setting the
+   THUMBNAIL_PROCESSORS tuple in your project's settings and explicitly omitting
+   the default processor ``scale_and_crop`` and including the optional
+   ``scale_and_crop_with_subject_location`` processor. For example: ::
+
+    THUMBNAIL_PROCESSORS = (
+        'easy_thumbnails.processors.colorspace',
+        'easy_thumbnails.processors.autocrop',
+        # 'easy_thumbnails.processors.scale_and_crop',
+        'filer.thumbnail_processors.scale_and_crop_with_subject_location',
+        'easy_thumbnails.processors.filters',
+        # 'entercoms.apps.strategies.processors.reflect',
+    )
+
+   For more information on this optional processor, see the `documentation for Django Filer`__.
+
+__ http://django-filer.readthedocs.org/en/latest/installation.html#subject-location-aware-cropping
+
+5) (Re-)Start your application server.
+
 
 ------------------
 Available settings
@@ -95,6 +118,16 @@ Available settings
 -----
 Notes
 -----
+
+Known Issues
+~~~~~~~~~~~~
+
+Due to the way existing versions of Django work, after creating a new app-hook,
+django CMS requires that the server is restarted. This is a long-standing issue.
+For more information, see the `documentation for django CMS`__.
+
+__ https://django-cms.readthedocs.org/en/support-3.0.x/how_to/apphooks.html#apphooks
+
 
 Django 1.7
 ~~~~~~~~~~
