@@ -117,17 +117,9 @@ class Article(TranslatableModel):
             self.slug = default_slugify(self.title)
 
         # Ensure we aren't colliding with an existing slug *for this language*.
-        try:
-            if connection.vendor in ('sqlite', ):
-                # NOTE: This if statement should not be necessary, but testing
-                # is showing that SQLite is not respecting the unique_together
-                # constraint!
-                if Article.objects.translated(
-                        slug=self.slug).exclude(id=self.id).count():
-                    raise IntegrityError
+        if Article.objects.translated(
+                slug=self.slug).exclude(id=self.id).count() == 0:
             return super(Article, self).save(*args, **kwargs)
-        except IntegrityError:
-            pass
 
         for lang in LANGUAGE_CODES:
             #
