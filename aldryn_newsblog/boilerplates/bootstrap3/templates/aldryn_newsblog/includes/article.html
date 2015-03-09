@@ -1,9 +1,7 @@
 {% load i18n cms_tags thumbnail %}
 {% load url from future %}
 
-{# TODO: we need to implement "featured" article #}
-
-<article>
+<article{% if article.is_featured %} class="aldryn-newsblog-featured"{% endif %}>
     {% block blog_visual %}
         {% if article.featured_image_id %}
             <p class="visual">
@@ -18,6 +16,16 @@
         {% endif %}
     {% endblock %}
 
+    {% block newsblog_categories %}
+        {% if article.categories %}
+            <p class="category">
+                {% for category in article.categories.all %}
+                    <a href="#TODO">{{ category.name }}</a>{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </p>
+        {% endif %}
+    {% endblock newsblog_categories %}
+
     {% block newsblock_title %}
         <h2>
             {% if not detail_view %}
@@ -27,16 +35,6 @@
             {% endif %}
         </h2>
     {% endblock newsblock_title %}
-
-    {% block newsblog_categories %}
-        {% if article.categories %}
-            <h3>
-                {% for category in article.categories.all %}
-                    <a href="#TODO">{{ category.name }}</a>{% if not forloop.last %}, {% endif %}
-                {% endfor %}
-            </h3>
-        {% endif %}
-    {% endblock newsblog_categories %}
 
     {% block newsblog_meta %}
         {% if not detail_view %}
