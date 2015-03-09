@@ -12,6 +12,7 @@ HELPER_SETTINGS = {
         'aldryn_categories',
         'aldryn_newsblog',
         'aldryn_people',
+        'aldryn_reversion',
         'djangocms_text_ckeditor',
         'easy_thumbnails',
         'filer',
@@ -31,6 +32,14 @@ HELPER_SETTINGS = {
         'default': {
             'hide_untranslated': False,
         }
+    },
+    'HAYSTACK_CONNECTIONS': {
+        'default': {
+            'ENGINE': 'haystack.backends.simple_backend.SimpleEngine',
+        },
+        'de': {
+            'ENGINE': 'haystack.backends.simple_backend.SimpleEngine',
+        },
     },
     'MIGRATION_MODULES': {
         'djangocms_text_ckeditor': 'djangocms_text_ckeditor.migrations_django',

@@ -1,27 +1,23 @@
 # -*- coding: utf-8 -*-
 from south.utils import datetime_utils as datetime
 from south.db import db
-from south.v2 import DataMigration
-from django.db import models, connection
-from django.db.transaction import set_autocommit
+from south.v2 import SchemaMigration
+from django.db import models
 
 
-class Migration(DataMigration):
+class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        if connection.vendor == 'sqlite':
-            set_autocommit(True)
+        # Adding field 'Article.is_featured'
+        db.add_column(u'aldryn_newsblog_article', 'is_featured',
+                      self.gf('django.db.models.fields.BooleanField')(default=False, db_index=True),
+                      keep_default=False)
 
-        ns, created = orm.NewsBlogConfig.objects.get_or_create(
-            namespace='latest_entries_plugin_default_namespace')
-
-        for plugin in orm.LatestEntriesPlugin.objects.all():
-            if plugin.namespace is None:
-                plugin.namespace = ns
-                plugin.save()
 
     def backwards(self, orm):
-        "Write your backwards methods here."
+        # Deleting field 'Article.is_featured'
+        db.delete_column(u'aldryn_newsblog_article', 'is_featured')
+
 
     models = {
         u'aldryn_categories.category': {
@@ -34,12 +30,14 @@ class Migration(DataMigration):
         },
         u'aldryn_newsblog.article': {
             'Meta': {'ordering': "[u'-publishing_date']", 'object_name': 'Article'},
+            'app_config': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['aldryn_newsblog.NewsBlogConfig']"}),
             'author': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['aldryn_people.Person']", 'null': 'True', 'blank': 'True'}),
             'categories': ('aldryn_categories.fields.CategoryManyToManyField', [], {'to': u"orm['aldryn_categories.Category']", 'symmetrical': 'False', 'blank': 'True'}),
             'content': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "u'aldryn_newsblog_articles'", 'unique': 'True', 'null': 'True', 'to': "orm['cms.Placeholder']"}),
             'featured_image': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['filer.Image']", 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'namespace': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['aldryn_newsblog.NewsBlogConfig']"}),
+            'is_featured': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'db_index': 'True'}),
+            'is_published': ('django.db.models.fields.BooleanField', [], {'default': 'True', 'db_index': 'True'}),
             'owner': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"}),
             'publishing_date': ('django.db.models.fields.DateTimeField', [], {})
         },
@@ -56,10 +54,10 @@ class Migration(DataMigration):
             'title': ('django.db.models.fields.CharField', [], {'max_length': '234'})
         },
         u'aldryn_newsblog.latestentriesplugin': {
-            'Meta': {'object_name': 'LatestEntriesPlugin', '_ormbases': ['cms.CMSPlugin']},
+            'Meta': {'object_name': 'LatestEntriesPlugin'},
+            'app_config': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['aldryn_newsblog.NewsBlogConfig']"}),
             u'cmsplugin_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['cms.CMSPlugin']", 'unique': 'True', 'primary_key': 'True'}),
-            'latest_entries': ('django.db.models.fields.IntegerField', [], {'default': '5'}),
-            'namespace': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['aldryn_newsblog.NewsBlogConfig']", 'null': 'True'})
+            'latest_entries': ('django.db.models.fields.IntegerField', [], {'default': '5'})
         },
         u'aldryn_newsblog.newsblogconfig': {
             'Meta': {'object_name': 'NewsBlogConfig'},
@@ -79,7 +77,7 @@ class Migration(DataMigration):
             'Meta': {'object_name': 'Group'},
             'address': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'city': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
-            'email': ('django.db.models.fields.EmailField', [], {'default': "''", 'max_length': '75', 'blank': 'True'}),
+            'email': ('django.db.models.fields.EmailField', [], {'default': "u''", 'max_length': '75', 'blank': 'True'}),
             'fax': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'phone': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
@@ -88,7 +86,7 @@ class Migration(DataMigration):
         },
         u'aldryn_people.person': {
             'Meta': {'object_name': 'Person'},
-            'email': ('django.db.models.fields.EmailField', [], {'default': "''", 'max_length': '75', 'blank': 'True'}),
+            'email': ('django.db.models.fields.EmailField', [], {'default': "u''", 'max_length': '75', 'blank': 'True'}),
             'fax': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'group': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['aldryn_people.Group']", 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -190,7 +188,7 @@ class Migration(DataMigration):
             'uploaded_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'})
         },
         'filer.image': {
-            'Meta': {'object_name': 'Image', '_ormbases': [u'filer.File']},
+            'Meta': {'object_name': 'Image'},
             '_height': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             '_width': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'author': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
@@ -205,4 +203,3 @@ class Migration(DataMigration):
     }
 
     complete_apps = ['aldryn_newsblog']
-    symmetrical = True

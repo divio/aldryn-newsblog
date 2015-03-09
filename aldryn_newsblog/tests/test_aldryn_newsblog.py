@@ -18,14 +18,15 @@ from django.core.files import File as DjangoFile
 from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.test import TransactionTestCase
-from django.utils.translation import activate, override
+from django.utils.translation import activate, override, get_language
+from aldryn_newsblog.search_indexes import ArticleIndex
 
 from cms import api
 from cms.utils import get_cms_setting
 from filer.models.imagemodels import Image
 from parler.tests.utils import override_parler_settings
 from parler.utils.conf import add_default_language_settings
-from parler.utils.context import switch_language
+from parler.utils.context import switch_language, smart_override
 
 
 from aldryn_categories.models import Category
@@ -33,9 +34,10 @@ from aldryn_categories.tests import CategoryTestCaseMixin
 
 from aldryn_people.models import Person
 
+from aldryn_search.helpers import get_request
 
 from aldryn_newsblog.models import Article, NewsBlogConfig
-from aldryn_newsblog.versioning import create_revision_with_placeholders
+from aldryn_reversion.core import create_revision_with_placeholders
 
 from . import TESTS_STATIC_ROOT
 
@@ -61,14 +63,19 @@ class NewsBlogTestsMixin(CategoryTestCaseMixin):
             author = kwargs['author']
         except KeyError:
             author = self.create_person()
+        try:
+            owner = kwargs['owner']
+        except KeyError:
+            owner = author.user
 
         fields = {
             'title': rand_str(),
             'slug': rand_str(),
             'author': author,
-            'owner': author.user,
-            'namespace': self.ns_newsblog,
-            'publishing_date': datetime.now()
+            'owner': owner,
+            'app_config': self.app_config,
+            'publishing_date': datetime.now(),
+            'is_published': True,
         }
 
         fields.update(kwargs)
@@ -131,13 +138,14 @@ class NewsBlogTestsMixin(CategoryTestCaseMixin):
         self.language = settings.LANGUAGES[0][0]
         self.root_page = api.create_page(
             'root page', self.template, self.language, published=True)
-        self.ns_newsblog = NewsBlogConfig.objects.create(namespace='NBNS')
+        self.app_config = NewsBlogConfig.objects.create(namespace='NBNS')
         self.page = api.create_page(
             'page', self.template, self.language, published=True,
             parent=self.root_page,
             apphook='NewsBlogApp',
-            apphook_namespace=self.ns_newsblog.namespace)
+            apphook_namespace=self.app_config.namespace)
         self.placeholder = self.page.placeholders.all()[0]
+        self.request = get_request('en')
 
         self.setup_categories()
 
@@ -149,12 +157,12 @@ class NewsBlogTestsMixin(CategoryTestCaseMixin):
 
 class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
 
-    def test_create_post(self):
+    def test_create_article(self):
         article = self.create_article()
         response = self.client.get(article.get_absolute_url())
         self.assertContains(response, article.title)
 
-    def test_delete_post(self):
+    def test_delete_article(self):
         article = self.create_article()
         article_pk = article.pk
         article_url = article.get_absolute_url()
@@ -164,12 +172,30 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
         response = self.client.get(article_url)
         self.assertEqual(response.status_code, 404)
 
+    def test_published_articles_filtering(self):
+        for i in range(5):
+            self.create_article()
+        unpublised_article = Article.objects.first()
+        unpublised_article.is_published = False
+        unpublised_article.save()
+        self.assertEqual(Article.objects.published().count(), 4)
+        self.assertNotIn(unpublised_article, Article.objects.published())
+
+    def test_view_article_not_published(self):
+        article = self.create_article(is_published=False)
+        response = self.client.get(article.get_absolute_url())
+        self.assertEqual(response.status_code, 404)
+
     def test_articles_list(self):
         articles = [self.create_article() for _ in range(10)]
+        unpublished_article = articles[0]
+        unpublished_article.is_published = False
+        unpublished_article.save()
         response = self.client.get(
             reverse('aldryn_newsblog:article-list'))
-        for article in articles:
+        for article in articles[1:]:
             self.assertContains(response, article.title)
+        self.assertNotContains(response, unpublished_article.title)
 
     def test_articles_list_pagination(self):
         paginate_by = settings.ALDRYN_NEWSBLOG_PAGINATE_BY
@@ -212,10 +238,9 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
             for _ in range(10):
                 article = Article.objects.create(
                     title=rand_str(), slug=rand_str(prefix=code),
-                    namespace=self.ns_newsblog,
+                    app_config=self.app_config,
                     author=author, owner=author.user,
                     publishing_date=datetime.now())
-                article.save()
                 # Make sure there are translations in place for the articles.
                 for language, _ in settings.LANGUAGES[1:]:
                     with switch_language(article, language):
@@ -247,7 +272,7 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
         code = "{0}-".format(self.language)
         article = Article.objects.create(
             title=rand_str(), slug=rand_str(prefix=code),
-            namespace=self.ns_newsblog,
+            app_config=self.app_config,
             author=author, owner=author.user,
             publishing_date=datetime.now())
         article.save()
@@ -279,7 +304,7 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
         code = "{0}-".format(self.language)
         article = Article.objects.create(
             title=rand_str(), slug=rand_str(prefix=code),
-            namespace=self.ns_newsblog,
+            app_config=self.app_config,
             author=author, owner=author.user,
             publishing_date=datetime.now())
         article.save()
@@ -371,7 +396,7 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
         self.assertEquals(
             sorted(
                 Article.objects.get_months(
-                    namespace=self.ns_newsblog.namespace),
+                    namespace=self.app_config.namespace),
                 key=itemgetter('num_entries')),
             months)
 
@@ -391,7 +416,7 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
         self.assertEquals(
             sorted(
                 Article.objects.get_authors(
-                    namespace=self.ns_newsblog.namespace).values_list(
+                    namespace=self.app_config.namespace).values_list(
                         'pk', 'num_entries'),
                 key=itemgetter(1)),
             authors)
@@ -415,7 +440,7 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
             (tag_slug2, 3),
             (tag_slug1, 1),
         ]
-        tags = Article.objects.get_tags(namespace=self.ns_newsblog.namespace)
+        tags = Article.objects.get_tags(namespace=self.app_config.namespace)
         tags = map(lambda x: (x.slug, x.num_entries), tags)
         self.assertEquals(tags, tags_expected)
 
@@ -485,7 +510,7 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
         author = self.create_person()
         article = Article.objects.create(
             title=title, slug=rand_str(), author=author, owner=author.user,
-            namespace=self.ns_newsblog, publishing_date=datetime.now())
+            app_config=self.app_config, publishing_date=datetime.now())
         article.save()
         api.add_plugin(article.content, 'TextPlugin', self.language)
         plugin = article.content.get_plugins()[0].get_plugin_instance()[0]
@@ -497,8 +522,8 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
 
     def test_unattached_namespace(self):
         # create a new namespace that has no corresponding blog app page
-        namespace = NewsBlogConfig.objects.create(namespace='another')
-        articles = [self.create_article(namespace=namespace)
+        app_config = NewsBlogConfig.objects.create(namespace='another')
+        articles = [self.create_article(app_config=app_config)
                     for _ in range(10)]
         response = self.client.get(articles[0].get_absolute_url())
         self.assertEqual(response.status_code, 404)
@@ -513,7 +538,7 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
         author = self.create_person()
         article = Article.objects.create(
             title=title, author=author, owner=author.user,
-            namespace=self.ns_newsblog, publishing_date=datetime.now())
+            app_config=self.app_config, publishing_date=datetime.now())
         article.save()
         self.assertEquals(article.slug, 'this-is-a-title')
         # Now, let's try another with the same title
@@ -533,15 +558,20 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
         author = self.create_person()
         article = Article.objects.create(
             title=rand_str(), owner=author.user,
-            namespace=self.ns_newsblog, publishing_date=datetime.now())
+            app_config=self.app_config, publishing_date=datetime.now())
         article.save()
         self.assertEquals(article.author.user, article.owner)
+        with self.settings(ALDRYN_NEWSBLOG_CREATE_AUTHOR=False):
+            article = Article.objects.create(
+                title=rand_str(), owner=author.user,
+                app_config=self.app_config, publishing_date=datetime.now())
+        self.assertEquals(article.author, None)
 
     def test_auto_new_author(self):
         user = self.create_user()
         article = Article.objects.create(
             title=rand_str(), owner=user,
-            namespace=self.ns_newsblog, publishing_date=datetime.now())
+            app_config=self.app_config, publishing_date=datetime.now())
         article.save()
         self.assertEquals(article.author.name,
                           u' '.join((user.first_name, user.last_name)))
@@ -552,19 +582,81 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
             parent=self.root_page, published=True)
         placeholder = page.placeholders.all()[0]
         api.add_plugin(placeholder, 'LatestEntriesPlugin', self.language,
-                       namespace=self.ns_newsblog, latest_entries=7)
+                       app_config=self.app_config, latest_entries=7)
         plugin = placeholder.get_plugins()[0].get_plugin_instance()[0]
         plugin.save()
         page.publish(self.language)
         articles = [self.create_article() for _ in range(7)]
-        another_ns = NewsBlogConfig.objects.create(namespace='another')
-        another_articles = [self.create_article(namespace=another_ns)
+        another_app_config = NewsBlogConfig.objects.create(namespace='another')
+        another_articles = [self.create_article(app_config=another_app_config)
                             for _ in range(3)]
         response = self.client.get(page.get_absolute_url())
         for article in articles:
             self.assertContains(response, article.title)
         for article in another_articles:
             self.assertNotContains(response, article.title)
+
+    def test_index_simple(self):
+        self.index = ArticleIndex()
+        content0 = rand_str(prefix='content0_')
+        self.setup_categories()
+
+        article = self.create_article(content=content0, lead_in='lead in text',
+                                      title='a title')
+        article.categories.add()
+        for tag_name in ('tag 1', 'tag2'):
+            article.tags.add(tag_name)
+        for category in (self.category1, self.category2):
+            article.categories.add(category)
+
+        self.assertEqual(self.index.get_title(article), 'a title')
+        self.assertEqual(self.index.get_description(article), 'lead in text')
+        self.assertTrue('lead in text' in self.index.get_search_data(article, 'en', self.request))
+        self.assertTrue(content0 in self.index.get_search_data(article, 'en', self.request))
+        self.assertTrue('tag 1' in self.index.get_search_data(article, 'en', self.request))
+        self.assertTrue(self.category1.name in self.index.get_search_data(article, 'en', self.request))
+
+    def test_index_multilingual(self):
+        self.index = ArticleIndex()
+        content0 = rand_str(prefix='content0_')
+        self.setup_categories()
+
+        article_1 = self.create_article(content=content0, lead_in=u'lead in text',
+                                        title=u'a title')
+        article_2 = self.create_article(content=content0, lead_in=u'lead in text',
+                                        title=u'second title')
+        for article in (article_1, article_2):
+            for tag_name in ('tag 1', 'tag2'):
+                article.tags.add(tag_name)
+            for category in (self.category1, self.category2):
+                article.categories.add(category)
+        with switch_language(article_2, 'de'):
+            article_2.title = u'de title'
+            article_2.lead_in = u'de lead in'
+            article_2.save()
+
+        PARLER_LANGUAGES = {
+            1: (
+                {'code': 'de', },
+                {'code': 'fr', },
+                {'code': 'en', },
+            ),
+            'default': {
+                'hide_untranslated': True,
+            }
+        }
+        LANGUAGES = add_default_language_settings(PARLER_LANGUAGES)
+        with override_parler_settings(PARLER_LANGUAGES=LANGUAGES):
+            with smart_override('de'):
+                language = get_language()
+                # english-only article is excluded
+                qs = self.index.index_queryset(language)
+                self.assertEqual(qs.count(), 1)
+                self.assertEqual(qs.translated(language, title__icontains='title').count(), 1)
+                # the language is correctly setup
+                for article_de in qs:
+                    self.assertEqual(self.index.get_title(article_de), 'de title')
+                    self.assertEqual(self.index.get_description(article_de), 'de lead in')
 
 
 class TestVersioning(NewsBlogTestsMixin, TransactionTestCase):

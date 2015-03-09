@@ -11,17 +11,17 @@ from django.utils.text import slugify as default_slugify
 from django.utils.translation import get_language, ugettext_lazy as _
 from django.contrib.auth.models import User
 
+from aldryn_categories.fields import CategoryManyToManyField
+from aldryn_people.models import Person
+from aldryn_reversion.core import version_controlled_content
 from cms.models.fields import PlaceholderField
 from cms.models.pluginmodel import CMSPlugin
-from aldryn_people.models import Person
+from djangocms_text_ckeditor.fields import HTMLField
 from filer.fields.image import FilerImageField
 from parler.models import TranslatableModel, TranslatedFields
-from aldryn_apphooks_config.models import AppHookConfig
-from aldryn_categories.fields import CategoryManyToManyField
 from taggit.managers import TaggableManager
-from djangocms_text_ckeditor.fields import HTMLField
 
-from .versioning import version_controlled_content
+from .cms_appconfig import NewsBlogConfig
 from .managers import RelatedManager
 
 
@@ -32,13 +32,6 @@ elif settings.LANGUAGE:
 else:
     raise ImproperlyConfigured(
         'Neither LANGUAGES nor LANGUAGE was found in settings.')
-
-
-class NewsBlogConfig(TranslatableModel, AppHookConfig):
-    """Adds some translatable, per-app-instance fields."""
-    translations = TranslatedFields(
-        app_title=models.CharField(_('application title'), max_length=234),
-    )
 
 
 @python_2_unicode_compatible
@@ -75,11 +68,16 @@ class Article(TranslatableModel):
     author = models.ForeignKey(Person, null=True, blank=True,
                                verbose_name=_('author'))
     owner = models.ForeignKey(User, verbose_name=_('owner'))
-    namespace = models.ForeignKey(NewsBlogConfig, verbose_name=_('namespace'))
+    app_config = models.ForeignKey(NewsBlogConfig,
+                                   verbose_name=_('app. config'))
     categories = CategoryManyToManyField('aldryn_categories.Category',
                                          verbose_name=_('categories'),
                                          blank=True)
-    publishing_date = models.DateTimeField(_('publishing data'))
+    publishing_date = models.DateTimeField(_('publishing date'))
+    is_published = models.BooleanField(_('is published'), default=True,
+                                       db_index=True)
+    is_featured = models.BooleanField(_('is featured'), default=False,
+                                      db_index=True)
     featured_image = FilerImageField(null=True, blank=True)
 
     tags = TaggableManager(blank=True)
@@ -94,7 +92,7 @@ class Article(TranslatableModel):
     def get_absolute_url(self):
         return reverse('aldryn_newsblog:article-detail', kwargs={
             'slug': self.safe_translation_getter('slug', any_language=True)
-        }, current_app=self.namespace.namespace)
+        }, current_app=self.app_config.namespace)
 
     def slugify(self, source_text, i=None):
         slug = default_slugify(source_text)
@@ -103,8 +101,10 @@ class Article(TranslatableModel):
         return slug
 
     def save(self, *args, **kwargs):
+        create_author = getattr(
+            settings, 'ALDRYN_NEWSBLOG_CREATE_AUTHOR', True)
         # Ensure there is an owner.
-        if self.author is None:
+        if create_author and self.author is None:
             self.author = Person.objects.get_or_create(
                 user=self.owner,
                 defaults={
@@ -156,10 +156,10 @@ class Article(TranslatableModel):
 class NewsBlogCMSPlugin(CMSPlugin):
     """AppHookConfig aware abstract CMSPlugin class for Aldryn Newsblog"""
 
-    namespace = models.ForeignKey(NewsBlogConfig)
+    app_config = models.ForeignKey(NewsBlogConfig)
 
     def copy_relations(self, old_instance):
-        self.namespace = old_instance.namespace
+        self.app_config = old_instance.app_config
 
     class Meta:
         abstract = True
@@ -177,6 +177,6 @@ class LatestEntriesPlugin(NewsBlogCMSPlugin):
         return u'Latest entries: {0}'.format(self.latest_entries)
 
     def get_articles(self):
-        articles = Article.objects.active_translations(get_language()).filter(
-            namespace=self.namespace)
+        articles = Article.objects.published().active_translations(
+            get_language()).filter(app_config=self.app_config)
         return articles[:self.latest_entries]

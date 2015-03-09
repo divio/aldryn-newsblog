@@ -1,5 +1,6 @@
 |PyPI Version| |Build Status| |Coverage Status|
 
+===============
 Aldryn Newsblog
 ===============
 
@@ -13,6 +14,7 @@ Aldryn NewsBlog is intended to serve as a model of good practice for development
 of django CMS and Aldryn applications.
 
 
+--------------------
 Installation & Usage
 --------------------
 
@@ -32,7 +34,18 @@ Aldryn Platform Users
 Manual Installation
 ~~~~~~~~~~~~~~~~~~~
 
-1) Run `pip install aldryn-newsblog`.
+1) Run `pip install aldryn-newsblog`. Also note that a number of other packages
+   may need to be installed if they are not already: ::
+
+      aldryn-categories
+      aldryn-people
+      aldryn-reversion
+      djangocms-text-ckeditor
+      easy_thumbnails
+      django-filer
+      django-parler
+      django-reversion
+      taggit
 
 2) Add below apps to ``INSTALLED_APPS``: ::
 
@@ -40,6 +53,7 @@ Manual Installation
         …
         'aldryn_categories',
         'aldryn_people',
+        'aldryn_reversion',
         'djangocms_text_ckeditor',
         'easy_thumbnails',
         'filer',
@@ -74,7 +88,17 @@ Manual Installation
 
 5) (Re-)Start your application server.
 
+------------------
+Available settings
+------------------
 
+ * ``ALDRYN_NEWSBLOG_CREATE_AUTHOR`` - if set to ``False``, no author (Person
+   object) would be implicitly created. Default value: ``True``.
+ * ``ALDRYN_NEWSBLOG_PAGINATE_BY`` - the number of objects to show per page.
+   Default value: ``10``.
+
+
+-----
 Notes
 -----
 

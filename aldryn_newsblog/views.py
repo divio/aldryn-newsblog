@@ -21,10 +21,10 @@ class ArticleDetail(TranslatableSlugMixin, AppConfigMixin, DetailView):
     slug_field = 'slug'
 
     def get_queryset(self):
-        return Article.objects.active_translations(
+        return Article.objects.published().active_translations(
             translation.get_language()
         ).filter(
-            namespace__namespace=self.namespace
+            app_config__namespace=self.namespace
         )
 
 
@@ -35,10 +35,10 @@ class ArticleList(ViewUrlMixin, AppConfigMixin, ListView):
 
     @property
     def queryset(self):
-        return Article.objects.active_translations(
+        return Article.objects.published().active_translations(
             translation.get_language()
         ).filter(
-            namespace__namespace=self.namespace
+            app_config__namespace=self.namespace
         )
 
 
