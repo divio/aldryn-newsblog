@@ -15,7 +15,7 @@ from random import randint
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.files import File as DjangoFile
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, NoReverseMatch
 from django.db import transaction
 from django.test import TransactionTestCase
 from django.utils.translation import activate, override, get_language
@@ -525,8 +525,8 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
         app_config = NewsBlogConfig.objects.create(namespace='another')
         articles = [self.create_article(app_config=app_config)
                     for _ in range(10)]
-        response = self.client.get(articles[0].get_absolute_url())
-        self.assertEqual(response.status_code, 404)
+        with self.assertRaises(NoReverseMatch):
+            response = self.client.get(articles[0].get_absolute_url())
         response = self.client.get(
             reverse('aldryn_newsblog:article-list'))
         for article in articles:

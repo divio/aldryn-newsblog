@@ -2,6 +2,7 @@ from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
 
 from django.conf import settings
+from django.core.urlresolvers import reverse
 from django.utils import translation
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView
@@ -19,6 +20,14 @@ from .models import Article
 class ArticleDetail(TranslatableSlugMixin, AppConfigMixin, DetailView):
     model = Article
     slug_field = 'slug'
+
+    def get_context_data(self, **kwargs):
+        context = super(ArticleDetail, self).get_context_data(**kwargs)
+        context['article_list_url'] = reverse('{config}:article-list'.format(
+            config=self.config.namespace))
+        context['article_list_by_author_url'] = reverse('{config}:article-list-by-author'.format(
+            config=self.config.namespace), args=[self.object.author.slug, ])
+        return context
 
     def get_queryset(self):
         return Article.objects.published().active_translations(
