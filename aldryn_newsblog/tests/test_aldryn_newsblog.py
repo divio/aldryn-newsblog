@@ -667,6 +667,26 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
                     self.assertEqual(self.index.get_description(article_de), 'de lead in')
 
 
+class AdminTest(NewsBlogTestsMixin, TransactionTestCase):
+
+    def test_admin_owner_default(self):
+        from django.contrib import admin
+        admin.autodiscover()
+
+        user = self.create_user()
+        user.is_superuser = True
+        user.save()
+
+        Person.objects.create(user=user, name= u' '.join((user.first_name, user.last_name)))
+
+        admin_inst = admin.site._registry[Article]
+        self.request.user = user
+        self.request.META['HTTP_HOST'] = 'example.com'
+        response = admin_inst.add_view(self.request)
+        self.assertContains(response, '<option value="1" selected="selected">%s</option>' % user.username)
+        self.assertContains(response, '<option value="1" selected="selected">%s</option>' % user.get_full_name())
+
+
 class TestVersioning(NewsBlogTestsMixin, TransactionTestCase):
     def create_revision(self, article, content=None, language=None, **kwargs):
         with transaction.atomic():
