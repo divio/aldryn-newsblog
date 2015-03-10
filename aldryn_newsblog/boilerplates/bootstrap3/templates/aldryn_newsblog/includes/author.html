@@ -5,7 +5,7 @@
         <img src="#TODO" alt="{{ article.author }}">
     </div>
     <div class="meta">
-        <p class="author"><a href="#TODO">{{ article.author }}</a></p>
+        <p class="author"><a href="{{ article_list_by_author_url }}">{{ article.author }}</a></p>
         {% if author_view %}
             <p class="job">{{ article.job }}</p>
             <p class="badge">{{ article.author.counter }}</p>
