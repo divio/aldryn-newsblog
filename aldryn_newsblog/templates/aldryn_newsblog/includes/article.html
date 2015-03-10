@@ -15,7 +15,7 @@
     {% block blog_meta %}
         <div class="aldryn-blog-meta">
             <span class="icon icon-pencil"></span>
-            {% trans "by" %} <a href="#TODO">{{ article.author }}</a>
+            {% trans "by" %} <a href="{{ article_list_by_author_url }}">{{ article.author }}</a>
             &nbsp;
             {% with article.categories.all as categories %}
                 {% if categories %}
@@ -60,7 +60,7 @@
 
     {% if detail_view %}
         <ul class="pager">
-            <li class="previous"><a href="#TODO"><span aria-hidden="true">&larr;</span> {% trans "Back" %}</a></li>
+            <li class="previous"><a href="{{ article_list_url }}"><span aria-hidden="true">&larr;</span> {% trans "Back" %}</a></li>
         </ul>
     {% else %}
         <p class="text-right"><a href="{{ article.get_absolute_url }}">{% trans "read more" %}</a></p>
