@@ -198,7 +198,7 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
         self.assertNotContains(response, unpublished_article.title)
 
     def test_articles_list_pagination(self):
-        paginate_by = settings.ALDRYN_NEWSBLOG_PAGINATE_BY
+        paginate_by = 3
         articles = [
             self.create_article(publishing_date=datetime(
                 2000 - i, 1, 1, 1, 1)) for i in range(paginate_by + 5)]

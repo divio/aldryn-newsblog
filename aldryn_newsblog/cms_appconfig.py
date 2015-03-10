@@ -15,6 +15,13 @@ class NewsBlogConfig(TranslatableModel, AppHookConfig):
         app_title=models.CharField(_('application title'), max_length=234),
     )
 
+    paginate_by = models.PositiveIntegerField(
+        _('Paginate size'),
+        blank=False,
+        default=5,
+        help_text=_('When paginating list views, how many articles per page?')
+    )
+
 
 class NewsBlogConfigForm(AppDataForm):
     pass
