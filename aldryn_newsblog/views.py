@@ -17,7 +17,16 @@ from aldryn_people.models import Person
 from .models import Article
 
 
-class ArticleDetail(TranslatableSlugMixin, AppConfigMixin, DetailView):
+class AppConfigViewMixin(AppConfigMixin):
+
+    def get_context_data(self, **kwargs):
+        """Adds the config to the context"""
+        context = super(AppConfigViewMixin, self).get_context_data(**kwargs)
+        context['app_config'] = self.config
+        return context
+
+
+class ArticleDetail(TranslatableSlugMixin, AppConfigViewMixin, DetailView):
     model = Article
     slug_field = 'slug'
 
@@ -37,7 +46,7 @@ class ArticleDetail(TranslatableSlugMixin, AppConfigMixin, DetailView):
         )
 
 
-class ArticleList(ViewUrlMixin, AppConfigMixin, ListView):
+class ArticleList(ViewUrlMixin, AppConfigViewMixin, ListView):
     """A complete list of articles."""
     model = Article
     paginate_by = getattr(settings, 'ALDRYN_NEWSBLOG_PAGINATE_BY', 10)
