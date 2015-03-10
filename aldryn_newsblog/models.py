@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import unicode_literals
+import datetime
 
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
@@ -73,7 +74,7 @@ class Article(TranslatableModel):
     categories = CategoryManyToManyField('aldryn_categories.Category',
                                          verbose_name=_('categories'),
                                          blank=True)
-    publishing_date = models.DateTimeField(_('publishing date'))
+    publishing_date = models.DateTimeField(_('publishing date'), default=datetime.datetime.now)
     is_published = models.BooleanField(_('is published'), default=True,
                                        db_index=True)
     is_featured = models.BooleanField(_('is featured'), default=False,
@@ -90,9 +91,13 @@ class Article(TranslatableModel):
         return self.safe_translation_getter('title', any_language=True)
 
     def get_absolute_url(self):
-        return reverse('aldryn_newsblog:article-detail', kwargs={
-            'slug': self.safe_translation_getter('slug', any_language=True)
-        }, current_app=self.app_config.namespace)
+        return reverse(
+            '{namespace}:article-detail'.format(
+                namespace=self.app_config.namespace
+            ), kwargs={
+                'slug': self.safe_translation_getter('slug', any_language=True)
+            }
+        )
 
     def slugify(self, source_text, i=None):
         slug = default_slugify(source_text)
@@ -117,17 +122,9 @@ class Article(TranslatableModel):
             self.slug = default_slugify(self.title)
 
         # Ensure we aren't colliding with an existing slug *for this language*.
-        try:
-            if connection.vendor in ('sqlite', ):
-                # NOTE: This if statement should not be necessary, but testing
-                # is showing that SQLite is not respecting the unique_together
-                # constraint!
-                if Article.objects.translated(
-                        slug=self.slug).exclude(id=self.id).count():
-                    raise IntegrityError
+        if Article.objects.translated(
+                slug=self.slug).exclude(id=self.id).count() == 0:
             return super(Article, self).save(*args, **kwargs)
-        except IntegrityError:
-            pass
 
         for lang in LANGUAGE_CODES:
             #
