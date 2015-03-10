@@ -1,14 +1,17 @@
 # -*- coding: utf-8 -*-
 
-import urllib
+from __future__ import unicode_literals
 
-from django.core.urlresolvers import reverse
+from django.core.exceptions import ImproperlyConfigured
 from django.utils.translation import ugettext_lazy as _
+
 from cms.toolbar_base import CMSToolbar
 from cms.toolbar_pool import toolbar_pool
+from cms.utils.urlutils import admin_reverse
 
 from aldryn_apphooks_config.utils import get_app_instance
 from .models import Article
+from .cms_appconfig import NewsBlogConfig
 
 
 @toolbar_pool.register
@@ -16,34 +19,54 @@ class NewsBlogToolbar(CMSToolbar):
     watch_models = (Article, )
     supported_apps = ('aldryn_newsblog',)
 
+    def __get_newsblog_config(self):
+        try:
+            __, config = get_app_instance(self.request)
+            if not isinstance(config, NewsBlogConfig):
+                # This is not the app_hook you are looking for.
+                return None
+        except ImproperlyConfigured:
+            # There is no app_hook at all.
+            return None
+
+        return config
+
     def populate(self):
-        if not (self.is_current_app and self.request.user.has_perm(
-                'aldryn_newsblog.add_article')):
+        config = self.__get_newsblog_config()
+        if not config:
+            # Do nothing if there is no NewsBlog app_config to work with
             return
 
-        menu = self.toolbar.get_or_create_menu('newsblog-app', _('News Blog'))
-        menu.add_modal_item(_('Add Article'),
-                            self.__build_article_admin_url(
-                                'admin:aldryn_newsblog_article_add'))
+        user = getattr(self.request, 'user', None)
 
-        article = getattr(self.request, 'article', None)
-        if article and self.request.user.has_perm(
-                'aldryn_newsblog.change_article'):
-            menu.add_modal_item(_('Edit Article'),
-                                reverse('admin:aldryn_newsblog_article_change',
-                                        args=(article.pk,)),
-                                active=True
+        menu = self.toolbar.get_or_create_menu('newsblog-app', config.app_title)
+
+        if self.request.user.has_perm('aldryn_newsblog.change_article'):
+            menu.add_sideframe_item(
+                _('Article list'),
+                url="{base}?app_config__id__exact={config}".format(
+                    base=admin_reverse('aldryn_newsblog_article_changelist'),
+                    config=config.pk,
+                ),
             )
 
-    def __build_article_admin_url(self, *args, **kwargs):
-        get = kwargs.pop('get', {})
-        if not get:
-            try:
-                app_config_id = get_app_instance(self.request)[1].pk
-                get = {'app_config': app_config_id}
-            except AttributeError:
-                pass
-        url = reverse(*args, **kwargs)
-        if get:
-            url += '?' + urllib.urlencode(get)
-        return url
+        if self.request.user.has_perm('aldryn_newsblog.add_article'):
+            menu.add_modal_item(
+                _('Add new article'),
+                url="{base}?app_config={config}&owner={owner}".format(
+                    base=admin_reverse('aldryn_newsblog_article_add'),
+                    config=config.pk,
+                    owner=user.pk,
+                ),
+            )
+
+        view_name = self.request.resolver_match.view_name
+        if (view_name == '{0}:article-detail'.format(config.namespace) and
+                self.request.user.has_perm('aldryn_newsblog.change_article')):
+
+                slug = self.request.resolver_match.kwargs['slug']
+                articles = Article.objects.translated(slug=slug)
+                if articles.count() == 1:
+                    menu.add_modal_item(_('Edit article'), admin_reverse(
+                        'aldryn_newsblog_article_change', args=(
+                            articles[0].pk,)), active=True,)
