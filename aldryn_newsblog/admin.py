@@ -74,7 +74,7 @@ class ArticleAdmin(VersionedPlaceholderAdminMixin,
         except Person.DoesNotExist:
             pass
 
-        data['owner'] = request.user.id
+        data['owner'] = request.user.pk
 
         return super(ArticleAdmin, self).add_view(request, *args, **kwargs)
 
