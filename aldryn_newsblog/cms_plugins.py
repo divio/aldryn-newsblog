@@ -41,7 +41,6 @@ class AuthorsPlugin(NewsBlogPlugin):
     render_template = 'aldryn_newsblog/plugins/authors.html'
     name = _('Blog Authors')
     model = models.AuthorsPlugin
-    filter_horizontal = ['authors']
 
     def render(self, context, instance, placeholder):
         context['instance'] = instance

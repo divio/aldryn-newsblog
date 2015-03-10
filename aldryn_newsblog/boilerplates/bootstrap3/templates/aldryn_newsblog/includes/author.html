@@ -2,13 +2,13 @@
 
 <div class="aldryn-newsblog-meta">
     <div class="image pull-left">
-        <img src="#TODO" alt="{{ article.author }}">
+        <img src="{{ author.visual }}" alt="{{ article.author }}">
     </div>
-    <div class="meta">
-        <p class="author"><a href="{{ article_list_by_author_url }}">{{ article.author }}</a></p>
+    <div class="meta"> meh "{{ author.slug }}"
+        <p class="author"><a href="{% url 'aldryn_newsblog:article-list-by-author' author.slug %}">{{ author.name }}</a></p>
         {% if author_view %}
-            <p class="job">{{ article.job }}</p>
-            <p class="badge">{{ article.author.counter }}</p>
+            <p class="job">{{ author.job }}</p>
+            <p class="badge">{{ author.counter }}</p>
         {% else %}
             <p class="date">{{ article.publishing_date|date }}</p>
         {% endif %}

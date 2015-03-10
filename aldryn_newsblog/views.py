@@ -99,7 +99,9 @@ class CategoryArticleList(ArticleList):
 
     def get_context_data(self, **kwargs):
         kwargs['newsblog_category'] = self.category
-        return super(CategoryArticleList, self).get_context_data(**kwargs)
+        ctx = super(CategoryArticleList, self).get_context_data(**kwargs)
+        ctx['newsblog_category'] = self.category
+        return ctx
 
 
 class TagArticleList(ArticleList):
