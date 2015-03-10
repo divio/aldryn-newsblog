@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import unicode_literals
+import datetime
 
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
@@ -73,7 +74,7 @@ class Article(TranslatableModel):
     categories = CategoryManyToManyField('aldryn_categories.Category',
                                          verbose_name=_('categories'),
                                          blank=True)
-    publishing_date = models.DateTimeField(_('publishing date'))
+    publishing_date = models.DateTimeField(_('publishing date'), default=datetime.datetime.now)
     is_published = models.BooleanField(_('is published'), default=True,
                                        db_index=True)
     is_featured = models.BooleanField(_('is featured'), default=False,
