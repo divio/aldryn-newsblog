@@ -11,32 +11,24 @@ from . import models
 
 def make_published(modeladmin, request, queryset):
     queryset.update(is_published=True)
-
-
 make_published.short_description = _(
     "Mark selected articles as published")
 
 
 def make_unpublished(modeladmin, request, queryset):
     queryset.update(is_published=False)
-
-
 make_unpublished.short_description = _(
     "Mark selected articles as not published")
 
 
 def make_featured(modeladmin, request, queryset):
     queryset.update(is_featured=True)
-
-
 make_featured.short_description = _(
     "Mark selected articles as featured")
 
 
 def make_not_featured(modeladmin, request, queryset):
     queryset.update(is_featured=False)
-
-
 make_not_featured.short_description = _(
     "Mark selected articles as not featured")
 
