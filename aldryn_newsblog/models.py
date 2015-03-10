@@ -6,25 +6,24 @@ import datetime
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse
-from django.db import connection, IntegrityError, models
+from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.text import slugify as default_slugify
 from django.utils.translation import get_language, ugettext_lazy as _
 from django.contrib.auth.models import User
-
-from aldryn_categories.fields import CategoryManyToManyField
-from aldryn_people.models import Person
-from aldryn_reversion.core import version_controlled_content
 from cms.models.fields import PlaceholderField
 from cms.models.pluginmodel import CMSPlugin
 from djangocms_text_ckeditor.fields import HTMLField
 from filer.fields.image import FilerImageField
+
+from aldryn_categories.fields import CategoryManyToManyField
+from aldryn_categories.models import Category
+from aldryn_people.models import Person
+from aldryn_reversion.core import version_controlled_content
 from parler.models import TranslatableModel, TranslatedFields
 from taggit.managers import TaggableManager
-
 from .cms_appconfig import NewsBlogConfig
 from .managers import RelatedManager
-
 
 if settings.LANGUAGES:
     LANGUAGE_CODES = [language[0] for language in settings.LANGUAGES]
@@ -76,7 +75,8 @@ class Article(TranslatableModel):
     categories = CategoryManyToManyField('aldryn_categories.Category',
                                          verbose_name=_('categories'),
                                          blank=True)
-    publishing_date = models.DateTimeField(_('publishing date'), default=datetime.datetime.now)
+    publishing_date = models.DateTimeField(_('publishing date'),
+                                           default=datetime.datetime.now)
     is_published = models.BooleanField(_('is published'), default=True,
                                        db_index=True)
     is_featured = models.BooleanField(_('is featured'), default=False,
@@ -129,11 +129,11 @@ class Article(TranslatableModel):
         for lang in LANGUAGE_CODES:
             #
             # We'd much rather just do something like:
-            #     Article.objects.translated(lang,
-            #         slug__startswith=self.slug)
+            # Article.objects.translated(lang,
+            # slug__startswith=self.slug)
             # But sadly, this isn't supported by Parler/Django, see:
-            #     http://django-parler.readthedocs.org/en/latest/api/\
-            #         parler.managers.html#the-translatablequeryset-class
+            # http://django-parler.readthedocs.org/en/latest/api/\
+            # parler.managers.html#the-translatablequeryset-class
             #
             slugs = []
             all_slugs = Article.objects.language(lang).exclude(
@@ -163,8 +163,37 @@ class NewsBlogCMSPlugin(CMSPlugin):
 
 
 @python_2_unicode_compatible
-class LatestEntriesPlugin(NewsBlogCMSPlugin):
+class AuthorsPlugin(NewsBlogCMSPlugin):
+    def __str__(self):
+        return u'Blog authors'
 
+    def get_authors(self):
+        author_list = Article.objects.published().filter(
+            app_config=self.app_config).values_list('author',
+                                                    flat=True).distinct()
+        author_list = list(author_list)
+        qs = Person.objects.filter(id__in=author_list)
+        return qs
+
+
+@python_2_unicode_compatible
+class CategoriesPlugin(NewsBlogCMSPlugin):
+    def __str__(self):
+        return u'Blog categories'
+
+    def get_categories(self):
+        category_list = Article.objects.published().filter(
+            app_config=self.app_config).values_list('categories',
+                                                    flat=True).distinct()
+        category_list = list(category_list)
+        qs = Category.objects.filter(id__in=category_list).annotate(
+            count=models.Count('article')).order_by('-count')
+        return qs
+        # return generate_slugs(get_blog_authors(self.app_config))
+
+
+@python_2_unicode_compatible
+class LatestEntriesPlugin(NewsBlogCMSPlugin):
     latest_entries = models.IntegerField(
         default=5,
         help_text=_('The number of latest entries to be displayed.')
@@ -177,3 +206,4 @@ class LatestEntriesPlugin(NewsBlogCMSPlugin):
         articles = Article.objects.published().active_translations(
             get_language()).filter(app_config=self.app_config)
         return articles[:self.latest_entries]
+
