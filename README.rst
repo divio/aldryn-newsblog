@@ -52,6 +52,11 @@ Manual Installation
       django-reversion
       taggit
 
+   IMPORTANT: As of this writing, you must install the latest, development
+   version of django-appdata. ::
+
+      pip install git+https://github.com/ella/django-appdata.git#egg=django_appdata
+
 2) Add below apps to ``INSTALLED_APPS``: ::
 
     INSTALLED_APPS = [
@@ -147,12 +152,10 @@ Django Appdata
 ~~~~~~~~~~~~~~
 
 At the time of this writing, the very latest version of django-appdata, a
-requirement of aldryn-app-config is not yet available in PyPI but is required
-under Django 1.7. Consider installing `the most recent version`__ with: ::
+requirement of aldryn-app-config is not yet available in PyPI but is required.
+Consider installing the most recent version with: ::
 
-    pip install https://github.com/ella/django-appdata/archive/master.zip
-
-__ https://github.com/ella/django-appdata/archive/master.zip
+    pip install git+https://github.com/ella/django-appdata.git#egg=django_appdata
 
 .. |PyPI Version| image:: http://img.shields.io/pypi/v/aldryn-newsblog.svg
    :target: https://pypi.python.org/pypi/aldryn-newsblog
