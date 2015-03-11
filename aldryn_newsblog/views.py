@@ -51,10 +51,13 @@ class ArticleList(ViewUrlMixin, AppConfigViewMixin, ListView):
     model = Article
 
     def get_paginate_by(self, queryset):
-        if hasattr(self, 'paginate_by'):
+        if self.paginate_by and self.paginate_by is not None:
             return self.paginate_by
         else:
-            return self.app_config.paginate_by
+            try:
+                return self.app_config.paginate_by
+            except AttributeError:
+                return 10  # sensible failsafe
 
     @property
     def queryset(self):

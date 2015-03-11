@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.conf import settings
 from django.utils.encoding import force_text
 
 from aldryn_search.helpers import get_plugin_index_data
@@ -11,7 +10,7 @@ from .models import Article
 
 
 class ArticleIndex(get_index_base()):
-    haystack_use_for_indexing = getattr(settings, "ALDRYN_NEWSBLOG_SEARCH", True)
+    haystack_use_for_indexing = True
 
     index_title = True
 
@@ -32,7 +31,7 @@ class ArticleIndex(get_index_base()):
 
     def get_index_queryset(self, language):
         return self.get_model().objects.published().active_translations(
-            language_code=language)
+            language_code=language).filter(app_config__search_indexed=True)
 
     def get_model(self):
         return Article

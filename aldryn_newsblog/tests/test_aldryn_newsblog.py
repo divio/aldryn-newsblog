@@ -138,7 +138,8 @@ class NewsBlogTestsMixin(CategoryTestCaseMixin):
         self.language = settings.LANGUAGES[0][0]
         self.root_page = api.create_page(
             'root page', self.template, self.language, published=True)
-        self.app_config = NewsBlogConfig.objects.create(namespace='NBNS')
+        self.app_config = NewsBlogConfig.objects.create(
+            namespace='NBNS', paginate_by=10)
         self.page = api.create_page(
             'page', self.template, self.language, published=True,
             parent=self.root_page,
@@ -198,20 +199,22 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
         self.assertNotContains(response, unpublished_article.title)
 
     def test_articles_list_pagination(self):
-        paginate_by = 3
-        articles = [
-            self.create_article(publishing_date=datetime(
-                2000 - i, 1, 1, 1, 1)) for i in range(paginate_by + 5)]
+        namespace = self.app_config.namespace
+        paginate_by = self.app_config.paginate_by
+        articles = [self.create_article(
+            app_config=self.app_config,
+            publishing_date=datetime(2000 - i, 1, 1, 1, 1)
+        ) for i in range(paginate_by + 5)]
 
         response = self.client.get(
-            reverse('aldryn_newsblog:article-list'))
+            reverse('{0}:article-list'.format(namespace)))
         for article in articles[:paginate_by]:
             self.assertContains(response, article.title)
         for article in articles[paginate_by:]:
             self.assertNotContains(response, article.title)
 
         response = self.client.get(
-            reverse('aldryn_newsblog:article-list') + '?page=2')
+            reverse('{0}:article-list'.format(namespace)) + '?page=2')
         for article in articles[:paginate_by]:
             self.assertNotContains(response, article.title)
         for article in articles[paginate_by:]:
@@ -561,10 +564,15 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
             app_config=self.app_config, publishing_date=datetime.now())
         article.save()
         self.assertEquals(article.author.user, article.owner)
-        with self.settings(ALDRYN_NEWSBLOG_CREATE_AUTHOR=False):
-            article = Article.objects.create(
-                title=rand_str(), owner=author.user,
-                app_config=self.app_config, publishing_date=datetime.now())
+
+        old = self.app_config.create_authors
+        self.app_config.create_authors = False
+        self.app_config.save()
+        article = Article.objects.create(
+            title=rand_str(), owner=author.user,
+            app_config=self.app_config, publishing_date=datetime.now())
+        self.app_config.create_authors = old
+        self.app_config.save()
         self.assertEquals(article.author, None)
 
     def test_auto_new_author(self):

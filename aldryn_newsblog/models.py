@@ -108,10 +108,8 @@ class Article(TranslatableModel):
         return slug
 
     def save(self, *args, **kwargs):
-        create_author = getattr(
-            settings, 'ALDRYN_NEWSBLOG_CREATE_AUTHOR', True)
         # Ensure there is an owner.
-        if create_author and self.author is None:
+        if self.app_config.create_authors and self.author is None:
             self.author = Person.objects.get_or_create(
                 user=self.owner,
                 defaults={

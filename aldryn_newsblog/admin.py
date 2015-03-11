@@ -81,7 +81,7 @@ admin.site.register(models.Article, ArticleAdmin)
 
 class NewsBlogConfigAdmin(TranslatableAdmin, BaseAppHookConfig):
     def get_config_fields(self):
-        return ('app_title', 'paginate_by', )
+        return ('app_title', 'paginate_by', 'create_authors', 'search_indexed', )
 
 
 admin.site.register(models.NewsBlogConfig, NewsBlogConfigAdmin)
