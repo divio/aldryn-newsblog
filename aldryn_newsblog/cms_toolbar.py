@@ -41,6 +41,15 @@ class NewsBlogToolbar(CMSToolbar):
 
         menu = self.toolbar.get_or_create_menu('newsblog-app', config.app_title)
 
+        if self.request.user.has_perm('aldryn_newsblog.change_newsblogconfig'):
+            menu.add_modal_item(
+                _('Configure application'),
+                url=admin_reverse(
+                    'aldryn_newsblog_newsblogconfig_change',
+                    args=(config.pk, )
+                ),
+            )
+
         if self.request.user.has_perm('aldryn_newsblog.change_article'):
             menu.add_sideframe_item(
                 _('Article list'),
@@ -64,9 +73,9 @@ class NewsBlogToolbar(CMSToolbar):
         if (view_name == '{0}:article-detail'.format(config.namespace) and
                 self.request.user.has_perm('aldryn_newsblog.change_article')):
 
-                slug = self.request.resolver_match.kwargs['slug']
-                articles = Article.objects.translated(slug=slug)
-                if articles.count() == 1:
-                    menu.add_modal_item(_('Edit article'), admin_reverse(
-                        'aldryn_newsblog_article_change', args=(
-                            articles[0].pk,)), active=True,)
+            slug = self.request.resolver_match.kwargs['slug']
+            articles = Article.objects.translated(slug=slug)
+            if articles.count() == 1:
+                menu.add_modal_item(_('Edit article'), admin_reverse(
+                    'aldryn_newsblog_article_change', args=(
+                        articles[0].pk,)), active=True,)
