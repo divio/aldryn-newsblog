@@ -49,7 +49,15 @@ class ArticleDetail(TranslatableSlugMixin, AppConfigViewMixin, DetailView):
 class ArticleList(ViewUrlMixin, AppConfigViewMixin, ListView):
     """A complete list of articles."""
     model = Article
-    paginate_by = getattr(settings, 'ALDRYN_NEWSBLOG_PAGINATE_BY', 10)
+
+    def get_paginate_by(self, queryset):
+        if self.paginate_by and self.paginate_by is not None:
+            return self.paginate_by
+        else:
+            try:
+                return self.app_config.paginate_by
+            except AttributeError:
+                return 10  # sensible failsafe
 
     @property
     def queryset(self):
