@@ -10,7 +10,7 @@
 
 {% block content %}
     <div class="aldryn aldryn-newsblog">
-        {% block newsblog_title %}<h2>{{ app_config.app_title }}</h2>{% endblock %}
+        {% block newsblog_title %}<h2>{{ view.config.app_title }}</h2>{% endblock %}
         {% block newsblog_content %}{% endblock %}
         <div class="aldryn-newsblog-footer">
             {% block newsblog_footer %}{% endblock %}
