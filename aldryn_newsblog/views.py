@@ -1,7 +1,6 @@
 from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
 
-from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.utils import translation
 from django.views.generic import ListView
@@ -17,16 +16,7 @@ from aldryn_people.models import Person
 from .models import Article
 
 
-class AppConfigViewMixin(AppConfigMixin):
-
-    def get_context_data(self, **kwargs):
-        """Adds the config to the context"""
-        context = super(AppConfigViewMixin, self).get_context_data(**kwargs)
-        context['app_config'] = self.config
-        return context
-
-
-class ArticleDetail(TranslatableSlugMixin, AppConfigViewMixin, DetailView):
+class ArticleDetail(TranslatableSlugMixin, AppConfigMixin, DetailView):
     model = Article
     slug_field = 'slug'
 
@@ -70,7 +60,7 @@ class ArticleDetail(TranslatableSlugMixin, AppConfigViewMixin, DetailView):
         )
 
 
-class ArticleList(ViewUrlMixin, AppConfigViewMixin, ListView):
+class ArticleList(ViewUrlMixin, AppConfigMixin, ListView):
     """A complete list of articles."""
     model = Article
 
