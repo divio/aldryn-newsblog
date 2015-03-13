@@ -45,7 +45,7 @@ class ArticleAdmin(VersionedPlaceholderAdminMixin,
     )
     fieldsets = (
         (None, {
-            'fields': ('title', 'featured_image',  )
+            'fields': ('title', 'featured_image', )
         }),
         ('Details', {
             'classes': ('collapse',),

@@ -53,7 +53,7 @@ class Article(TranslatableModel):
             help_text=_('Will be displayed in lists, and at the start of the '
                         'detail page (in bold)'),
             blank=True,
-            ),
+        ),
         meta_title=models.CharField(
             max_length=255, verbose_name=_('meta title'),
             blank=True, default=''),
