@@ -43,7 +43,7 @@
             </div>
         {% endif %}
 
-        {% include "aldryn_newsblog/includes/author.html" %}
+        {% include "aldryn_newsblog/includes/author.html" with author=article.author %}
 
         {% if article.tags %}
             <p class="tags">
