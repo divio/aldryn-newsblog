@@ -1,4 +1,4 @@
-{% load i18n cms_tags thumbnail %}
+{% load i18n cms_tags thumbnail apphooks_config_tags %}
 {% load url from future %}
 
 <article{% if article.is_featured %} class="aldryn-newsblog-featured"{% endif %}>
@@ -20,7 +20,7 @@
         {% if article.categories %}
             <p class="category">
                 {% for category in article.categories.all %}
-                    <a href="#TODO">{{ category.name }}</a>{% if not forloop.last %}, {% endif %}
+                    <a href="{% namespace_url "article-list-by-category" category.slug %}">{{ category.name }}</a>{% if not forloop.last %}, {% endif %}
                 {% endfor %}
             </p>
         {% endif %}
@@ -39,7 +39,7 @@
     {% block newsblog_meta %}
         {% if not detail_view %}
             <div class="lead">
-                {% render_model article "lead_in" "lead_in" "" "safe|truncatewords:'20'" %}
+                {% render_model article "lead_in" "" "" "truncatewords:'20'" %}
             </div>
         {% endif %}
 
@@ -48,14 +48,14 @@
         {% if article.tags %}
             <p class="tags">
                 {% for tag in article.tags.all %}
-                    <a href="#TODO">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
+                    <a href="{% namespace_url "article-list-by-tag" tag.slug %}">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
                 {% endfor %}
             </p>
         {% endif %}
 
         {% if detail_view %}
             <div class="lead">
-                {% render_model article "lead_in" "lead_in" "" "safe" %}
+                {% render_model article "lead_in" %}
             </div>
         {% endif %}
     {% endblock newsblog_meta %}
