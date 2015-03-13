@@ -24,10 +24,11 @@ class ArticleDetail(TranslatableSlugMixin, AppConfigMixin, DetailView):
         context = super(ArticleDetail, self).get_context_data(**kwargs)
         context['article_list_url'] = reverse('{config}:article-list'.format(
             config=self.config.namespace))
-        context['article_list_by_author_url'] = reverse('{config}:article-list-by-author'.format(
-            config=self.config.namespace), args=[self.object.author.slug, ])
         context['prev_article'] = self.get_prev_object(self.queryset, self.object)
         context['next_article'] = self.get_next_object(self.queryset, self.object)
+        if self.object.author:
+            context['article_list_by_author_url'] = reverse('{config}:article-list-by-author'.format(
+                config=self.config.namespace), args=[self.object.author.slug, ])
         return context
 
     def get_prev_object(self, queryset=None, object=None):
