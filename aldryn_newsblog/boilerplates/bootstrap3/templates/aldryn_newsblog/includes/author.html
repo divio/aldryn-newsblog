@@ -1,10 +1,11 @@
-{% load i18n %}
+{% load i18n staticfiles thumbnail %}
 
 <div class="aldryn-newsblog-meta">
     <div class="image pull-left">
-        <img src="{{ author.visual }}" alt="{{ article.author }}">
+        {% thumbnail author.visual "50x50" crop upscale subject_location=author.visual.subject_location as author_image %}
+        <img src="{{ author_image.url }}" alt="{{ author }}">
     </div>
-    <div class="meta"> meh "{{ author.slug }}"
+    <div class="meta">
         <p class="author"><a href="{% url 'aldryn_newsblog:article-list-by-author' author.slug %}">{{ author.name }}</a></p>
         {% if author_view %}
             <p class="job">{{ author.job }}</p>
