@@ -1,0 +1,31 @@
+{% load i18n %}
+
+<ul class="pagination">
+    {% if page_obj.has_previous %}
+        <li>
+            <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}" aria-label="{% trans "Previous" %}">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+    {% endif %}
+
+    {% for num in page_obj.paginator.page_range %}
+        {% if num %}
+            {% if page_obj.number == num %}
+                <li class="active"><span>{{ num }}</span></li>
+            {% else %}
+                <li><a href="{{ request.path }}?page={{ num }}">{{ num }}</a></li>
+            {% endif %}
+        {% else %}
+            <li><span><a href="{{ request.path }}?page={{ num|add:"5" }}">...</a></span></li>
+        {% endif %}
+    {% endfor %}
+
+    {% if page_obj.has_next %}
+        <li>
+            <a href="{{ request.path }}?page={{ page_obj.next_page_number }}" aria-label="{% trans "Next" %}">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    {% endif %}
+</ul>

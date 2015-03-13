@@ -1,0 +1,16 @@
+{% extends "aldryn_newsblog/base.html" %}
+{% load i18n %}
+
+{% block newsblog_content %}
+    <div class="aldryn-newsblog-list">
+        {% for article in article_list %}
+            {% include "aldryn_newsblog/includes/article.html" %}
+        {% empty %}
+            <p class="well">{% trans "No items available" %}</p>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block newsblog_footer %}
+    {% include "aldryn_newsblog/includes/pagination.html" %}
+{% endblock %}

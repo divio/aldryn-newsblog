@@ -1,5 +1,9 @@
+{% load i18n %}
+
 <div class="aldryn aldryn-newsblog aldryn-newsblog-entries">
     {% for article in instance.get_articles %}
         {% include "aldryn_newsblog/includes/article.html" %}
+    {% empty %}
+        <p class="well">{% trans "No items available" %}</p>
     {% endfor %}
 </div>

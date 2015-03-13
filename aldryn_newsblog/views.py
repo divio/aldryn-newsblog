@@ -36,7 +36,31 @@ class ArticleDetail(TranslatableSlugMixin, AppConfigViewMixin, DetailView):
             config=self.config.namespace))
         context['article_list_by_author_url'] = reverse('{config}:article-list-by-author'.format(
             config=self.config.namespace), args=[self.object.author.slug, ])
+        context['prev_article'] = self.get_prev_object(self.queryset, self.object)
+        context['next_article'] = self.get_next_object(self.queryset, self.object)
         return context
+
+    def get_prev_object(self, queryset=None, object=None):
+        if queryset is None:
+            queryset = self.get_queryset()
+        if object is None:
+            object = self.get_object(self)
+        prev_objs = queryset.filter(publishing_date__lt=object.publishing_date)
+        if prev_objs.count() > 0:
+            return prev_objs[0]
+        else:
+            return None
+
+    def get_next_object(self, queryset=None, object=None):
+        if queryset is None:
+            queryset = self.get_queryset()
+        if object is None:
+            object = self.get_object(self)
+        next_objs = queryset.filter(publishing_date__gt=object.publishing_date)
+        if next_objs.count() > 0:
+            return next_objs[0]
+        else:
+            return None
 
     def get_queryset(self):
         return Article.objects.published().active_translations(
@@ -99,7 +123,9 @@ class CategoryArticleList(ArticleList):
 
     def get_context_data(self, **kwargs):
         kwargs['newsblog_category'] = self.category
-        return super(CategoryArticleList, self).get_context_data(**kwargs)
+        ctx = super(CategoryArticleList, self).get_context_data(**kwargs)
+        ctx['newsblog_category'] = self.category
+        return ctx
 
 
 class TagArticleList(ArticleList):

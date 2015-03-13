@@ -1,0 +1,19 @@
+{% load i18n staticfiles thumbnail %}
+
+<div class="aldryn-newsblog-meta">
+    {% if author.visual %}
+    <div class="image pull-left" style="margin-right: 8px;">
+        {% thumbnail author.visual "50x50" crop upscale subject_location=author.visual.subject_location as author_image %}
+        <img src="{{ author_image.url }}" height="50" width="50" alt="{{ author }}">
+    </div>
+    {% endif %}
+    <div class="meta">
+        <p class="author"><a href="{% url 'aldryn_newsblog:article-list-by-author' author.slug %}">{{ author.name }}</a></p>
+        {% if author_view %}
+            <p class="job">{{ author.job }}</p>
+            <p class="badge">{{ author.counter }}</p>
+        {% else %}
+            <p class="date">{{ article.publishing_date|date }}</p>
+        {% endif %}
+    </div>
+</div>
