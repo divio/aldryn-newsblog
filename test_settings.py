@@ -9,6 +9,7 @@ HELPER_SETTINGS = {
         ('fr', 'French'),
     ),
     'INSTALLED_APPS': [
+        'aldryn_apphooks_config',
         'aldryn_boilerplates',
         'aldryn_categories',
         'aldryn_newsblog',
