@@ -18,8 +18,11 @@ env:
 
 matrix:
   allow_failures:
+    # Remove this once aldryn-boilerplates is compatible with 2.6
+    - python: 2.6
     - python: 3.3
     - python: 3.4
+    # Remove this once aldryn-boilerplates is compatible with Django 1.7
     - env: DJANGO=1.7 CMD=./test
     - env: DJANGO=1.7 CMD="flake8 aldryn_newsblog"
   exclude:

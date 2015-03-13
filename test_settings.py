@@ -9,6 +9,8 @@ HELPER_SETTINGS = {
         ('fr', 'French'),
     ),
     'INSTALLED_APPS': [
+        'aldryn_apphooks_config',
+        'aldryn_boilerplates',
         'aldryn_categories',
         'aldryn_newsblog',
         'aldryn_people',
@@ -21,8 +23,20 @@ HELPER_SETTINGS = {
         'reversion',
         'taggit',
     ],
+    'STATICFILES_FINDERS': [
+        'django.contrib.staticfiles.finders.FileSystemFinder',
+        # important! place right before django.contrib.staticfiles.finders.AppDirectoriesFinder
+        'aldryn_boilerplates.staticfile_finders.AppDirectoriesFinder',
+        'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    ],
+    'TEMPLATE_LOADERS': [
+        'django.template.loaders.filesystem.Loader',
+        # important! place right before django.template.loaders.app_directories.Loader
+        'aldryn_boilerplates.template_loaders.AppDirectoriesLoader',
+        'django.template.loaders.app_directories.Loader',
+    ],
+    'ALDRYN_BOILERPLATE_NAME': 'bootstrap3',
     # app-specific
-    'ALDRYN_NEWSBLOG_PAGINATE_BY': 10,
     'PARLER_LANGUAGES': {
         1: (
             {'code': 'de', },

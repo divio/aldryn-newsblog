@@ -14,6 +14,7 @@ REQUIREMENTS = [
     'aldryn-apphooks-config>=0.1.0',
     'django-reversion>=1.8.2,<1.9',
     'django-taggit',
+    'aldryn-boilerplates>=0.6',
     'aldryn-categories',
     'aldryn-reversion',
     'six',

@@ -8,15 +8,51 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        # Adding model 'AuthorsPlugin'
+        db.create_table(u'aldryn_newsblog_authorsplugin', (
+            (u'cmsplugin_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['cms.CMSPlugin'], unique=True, primary_key=True)),
+            ('app_config', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['aldryn_newsblog.NewsBlogConfig'])),
+        ))
+        db.send_create_signal(u'aldryn_newsblog', ['AuthorsPlugin'])
+
+        # Adding model 'CategoriesPlugin'
+        db.create_table(u'aldryn_newsblog_categoriesplugin', (
+            (u'cmsplugin_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['cms.CMSPlugin'], unique=True, primary_key=True)),
+            ('app_config', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['aldryn_newsblog.NewsBlogConfig'])),
+        ))
+        db.send_create_signal(u'aldryn_newsblog', ['CategoriesPlugin'])
+
         # Adding field 'NewsBlogConfig.paginate_by'
         db.add_column(u'aldryn_newsblog_newsblogconfig', 'paginate_by',
                       self.gf('django.db.models.fields.PositiveIntegerField')(default=5),
                       keep_default=False)
 
+        # Adding field 'NewsBlogConfig.create_authors'
+        db.add_column(u'aldryn_newsblog_newsblogconfig', 'create_authors',
+                      self.gf('django.db.models.fields.BooleanField')(default=True),
+                      keep_default=False)
+
+        # Adding field 'NewsBlogConfig.search_indexed'
+        db.add_column(u'aldryn_newsblog_newsblogconfig', 'search_indexed',
+                      self.gf('django.db.models.fields.BooleanField')(default=True),
+                      keep_default=False)
+
 
     def backwards(self, orm):
+        # Deleting model 'AuthorsPlugin'
+        db.delete_table(u'aldryn_newsblog_authorsplugin')
+
+        # Deleting model 'CategoriesPlugin'
+        db.delete_table(u'aldryn_newsblog_categoriesplugin')
+
         # Deleting field 'NewsBlogConfig.paginate_by'
         db.delete_column(u'aldryn_newsblog_newsblogconfig', 'paginate_by')
+
+        # Deleting field 'NewsBlogConfig.create_authors'
+        db.delete_column(u'aldryn_newsblog_newsblogconfig', 'create_authors')
+
+        # Deleting field 'NewsBlogConfig.search_indexed'
+        db.delete_column(u'aldryn_newsblog_newsblogconfig', 'search_indexed')
 
 
     models = {
@@ -53,6 +89,16 @@ class Migration(SchemaMigration):
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '255', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '234'})
         },
+        u'aldryn_newsblog.authorsplugin': {
+            'Meta': {'object_name': 'AuthorsPlugin'},
+            'app_config': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['aldryn_newsblog.NewsBlogConfig']"}),
+            u'cmsplugin_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['cms.CMSPlugin']", 'unique': 'True', 'primary_key': 'True'})
+        },
+        u'aldryn_newsblog.categoriesplugin': {
+            'Meta': {'object_name': 'CategoriesPlugin'},
+            'app_config': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['aldryn_newsblog.NewsBlogConfig']"}),
+            u'cmsplugin_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['cms.CMSPlugin']", 'unique': 'True', 'primary_key': 'True'})
+        },
         u'aldryn_newsblog.latestentriesplugin': {
             'Meta': {'object_name': 'LatestEntriesPlugin'},
             'app_config': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['aldryn_newsblog.NewsBlogConfig']"}),
@@ -62,9 +108,11 @@ class Migration(SchemaMigration):
         u'aldryn_newsblog.newsblogconfig': {
             'Meta': {'object_name': 'NewsBlogConfig'},
             'app_data': ('app_data.fields.AppDataField', [], {'default': "'{}'"}),
+            'create_authors': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'namespace': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '100'}),
             'paginate_by': ('django.db.models.fields.PositiveIntegerField', [], {'default': '5'}),
+            'search_indexed': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'type': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
         u'aldryn_newsblog.newsblogconfigtranslation': {

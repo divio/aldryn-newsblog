@@ -1,0 +1,70 @@
+{% load i18n cms_tags thumbnail apphooks_config_tags %}
+{% load url from future %}
+
+<article{% if article.is_featured %} class="aldryn-newsblog-featured"{% endif %}>
+    {% block blog_visual %}
+        {% if article.featured_image_id %}
+            <p class="visual">
+                {% if not detail_view %}
+                    <a href="{{ article.get_absolute_url }}">
+                {% endif %}
+                <img src="{% thumbnail article.featured_image.image 800x300 crop subject_location=article.featured_image.subject_location %}" alt="{{ article.featured_image.alt }}" class="img-responsive">
+                {% if not detail_view %}
+                    </a>
+                {% endif %}
+            </p>
+        {% endif %}
+    {% endblock %}
+
+    {% block newsblog_categories %}
+        {% if article.categories %}
+            <p class="category">
+                {% for category in article.categories.all %}
+                    <a href="{% namespace_url "article-list-by-category" category.slug %}">{{ category.name }}</a>{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </p>
+        {% endif %}
+    {% endblock newsblog_categories %}
+
+    {% block newsblock_title %}
+        <h2>
+            {% if not detail_view %}
+                <a href="{{ article.get_absolute_url }}">{% render_model article "title" %}</a>
+            {% else %}
+                {% render_model article "title" %}
+            {% endif %}
+        </h2>
+    {% endblock newsblock_title %}
+
+    {% block newsblog_meta %}
+        {% if not detail_view %}
+            <div class="lead">
+                {% render_model article "lead_in" "" "" "truncatewords:'20'" %}
+            </div>
+        {% endif %}
+
+        {% include "aldryn_newsblog/includes/author.html" with author=article.author %}
+
+        {% if article.tags %}
+            <p class="tags">
+                {% for tag in article.tags.all %}
+                    <a href="{% namespace_url "article-list-by-tag" tag.slug %}">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </p>
+        {% endif %}
+
+        {% if detail_view %}
+            <div class="lead">
+                {% render_model article "lead_in" %}
+            </div>
+        {% endif %}
+    {% endblock newsblog_meta %}
+
+    {% block newsblog_content %}
+        {% if detail_view %}
+            <div class="content">
+                {% render_placeholder article.content language placeholder_language %}
+            </div>
+        {% endif %}
+    {% endblock %}
+</article>

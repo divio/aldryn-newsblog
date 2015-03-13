@@ -13,13 +13,11 @@ from taggit.models import Tag, TaggedItem
 
 
 class ArticleQuerySet(TranslatableQuerySet):
-
     def published(self):
         return self.filter(is_published=True)
 
 
 class RelatedManager(TranslatableManager):
-
     def get_query_set(self):
         qs = ArticleQuerySet(self.model, using=self.db)
         return qs.select_related('featured_image')
@@ -65,7 +63,7 @@ class RelatedManager(TranslatableManager):
         # is effectively unique for Article models
         return Person.objects.filter(
             article__app_config__namespace=namespace).annotate(
-                num_entries=models.Count('article')).order_by('-num_entries')
+            num_entries=models.Count('article')).order_by('-num_entries')
 
     def get_tags(self, namespace):
         """
@@ -81,10 +79,10 @@ class RelatedManager(TranslatableManager):
 
         # aggregate and sort
         counted_tags = dict(TaggedItem.objects
-                                      .filter(**kwargs)
-                                      .values('tag')
-                                      .annotate(tag_count=models.Count('tag'))
-                                      .values_list('tag', 'tag_count'))
+                            .filter(**kwargs)
+                            .values('tag')
+                            .annotate(tag_count=models.Count('tag'))
+                            .values_list('tag', 'tag_count'))
 
         # and finally get the results
         tags = Tag.objects.filter(pk__in=counted_tags.keys())
