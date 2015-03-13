@@ -42,6 +42,7 @@ Manual Installation
 1) Run `pip install aldryn-newsblog`. Also note that a number of other packages
    may need to be installed if they are not already: ::
 
+      aldryn-apphooks-config
       aldryn-categories
       aldryn-people
       aldryn-reversion
@@ -52,15 +53,11 @@ Manual Installation
       django-reversion
       taggit
 
-   IMPORTANT: As of this writing, you must install the latest, development
-   version of django-appdata. ::
-
-      pip install git+https://github.com/ella/django-appdata.git#egg=django_appdata
-
 2) Add below apps to ``INSTALLED_APPS``: ::
 
     INSTALLED_APPS = [
         …
+        'aldryn_apphooks_config',
         'aldryn_categories',
         'aldryn_newsblog',
         'aldryn_people',
@@ -115,16 +112,6 @@ __ http://django-filer.readthedocs.org/en/latest/installation.html#subject-locat
 5) (Re-)Start your application server.
 
 
-------------------
-Available settings
-------------------
-
- * ``ALDRYN_NEWSBLOG_CREATE_AUTHOR`` - if set to ``False``, no author (Person
-   object) would be implicitly created. Default value: ``True``.
- * ``ALDRYN_NEWSBLOG_PAGINATE_BY`` - the number of objects to show per page.
-   Default value: ``10``.
-
-
 -----
 Notes
 -----
@@ -146,16 +133,6 @@ At time of this writing, due to circumstances beyond our control, we are unable
 to support both django-taggit and django-sortedm2m in the same Django 1.7
 environment. As both of these projects are dependences, this application is not
 yet compatible with Django 1.7. We expect this to be resolved very soon.
-
-
-Django Appdata
-~~~~~~~~~~~~~~
-
-At the time of this writing, the very latest version of django-appdata, a
-requirement of aldryn-app-config is not yet available in PyPI but is required.
-Consider installing the most recent version with: ::
-
-    pip install git+https://github.com/ella/django-appdata.git#egg=django_appdata
 
 .. |PyPI Version| image:: http://img.shields.io/pypi/v/aldryn-newsblog.svg
    :target: https://pypi.python.org/pypi/aldryn-newsblog
