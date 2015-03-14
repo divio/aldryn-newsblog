@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import unicode_literals
+
 import datetime
 
 from django.conf import settings
@@ -22,6 +23,7 @@ from aldryn_people.models import Person
 from aldryn_reversion.core import version_controlled_content
 from parler.models import TranslatableModel, TranslatedFields
 from taggit.managers import TaggableManager
+
 from .cms_appconfig import NewsBlogConfig
 from .managers import RelatedManager
 
@@ -206,4 +208,3 @@ class LatestEntriesPlugin(NewsBlogCMSPlugin):
         articles = Article.objects.published().active_translations(
             get_language()).filter(app_config=self.app_config)
         return articles[:self.latest_entries]
-
