@@ -42,6 +42,19 @@ class BlogCategoriesPlugin(NewsBlogPlugin):
 plugin_pool.register_plugin(BlogCategoriesPlugin)
 
 
+class BlogTagsPlugin(NewsBlogPlugin):
+    render_template = 'aldryn_newsblog/plugins/tags.html'
+    name = _('Tags')
+    model = models.TagsPlugin
+
+    def render(self, context, instance, placeholder):
+        context['tags'] = instance.get_tags()
+        return context
+
+
+plugin_pool.register_plugin(BlogTagsPlugin)
+
+
 class AuthorsPlugin(NewsBlogPlugin):
     render_template = 'aldryn_newsblog/plugins/authors.html'
     name = _('Blog Authors')

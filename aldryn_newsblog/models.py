@@ -22,6 +22,7 @@ from aldryn_categories.models import Category
 from aldryn_people.models import Person
 from aldryn_reversion.core import version_controlled_content
 from parler.models import TranslatableModel, TranslatedFields
+from taggit.models import Tag
 from taggit.managers import TaggableManager
 
 from .cms_appconfig import NewsBlogConfig
@@ -196,6 +197,31 @@ class CategoriesPlugin(NewsBlogCMSPlugin):
         ).annotate(count=models.Count('article')).order_by('-count')
         return qs
         # return generate_slugs(get_blog_authors(self.app_config))
+
+
+@python_2_unicode_compatible
+class TagsPlugin(NewsBlogCMSPlugin):
+    def __str__(self):
+        return u'{0} tags'.format(self.app_config.app_title)
+
+    def get_tags(self):
+        """
+        This is meant to *appear* symmetrical to get_categories() in the
+        CategoriesPlugin, but in fact, it is implemented quite differently and
+        returns a list of manually annotated tag objects instead of a queryset.
+        """
+        tags = {}
+        articles = Article.objects.published().filter(
+            app_config=self.app_config)
+        for article in articles:
+            for tag in article.tags.all():
+                if tag.id in tags:
+                    tags[tag.id].count += 1
+                else:
+                    tag.count = 1
+                    tags[tag.id] = tag
+        # Return most frequently used tags first
+        return sorted(tags.values(), key=lambda x: x.count, reverse=True)
 
 
 @python_2_unicode_compatible

@@ -1,0 +1,10 @@
+{% load i18n %}
+
+ <div class="aldryn aldryn-newsblog aldryn-newsblog-tags">
+    <ul class="list-unstyled text-uppercase">
+        <li{% if not newsblog_tag %} class="active"{% endif %}><a href="{% url 'aldryn_newsblog:article-list' %}">{% trans "All" %}</a></li>
+        {% for tag in tags %}
+            <li{% if newsblog_tag.id == tag.id %} class="active"{% endif %}><a href="{% url 'aldryn_newsblog:article-list-by-tag' tag.slug %}">{{ tag.name }}</a> <span class="badge">{{ tag.count }}</span></li>
+        {% endfor %}
+    </ul>
+</div>
