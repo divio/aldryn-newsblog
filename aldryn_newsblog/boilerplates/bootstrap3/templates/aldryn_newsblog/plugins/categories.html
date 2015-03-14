@@ -4,7 +4,7 @@
     <ul class="list-unstyled text-uppercase">
         <li{% if not newsblog_category %} class="active"{% endif %}><a href="{% url 'aldryn_newsblog:article-list' %}">{% trans "All" %}</a></li>
         {% for category in categories %}
-            <li{% if newsblog_category.id == category.id %} class="active"{% endif %}><a href="{% url 'aldryn_newsblog:article-list-by-category' category.slug %}">{{ category.name }}</a></li>
+            <li{% if newsblog_category.id == category.id %} class="active"{% endif %}><a href="{% url 'aldryn_newsblog:article-list-by-category' category.slug %}">{{ category.name }}</a> <span class="badge">{{ category.count }}</span></li>
         {% endfor %}
     </ul>
 </div>

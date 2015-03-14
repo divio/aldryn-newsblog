@@ -11,7 +11,7 @@
         <p class="author"><a href="{% url 'aldryn_newsblog:article-list-by-author' author.slug %}">{{ author.name }}</a></p>
         {% if author_view %}
             <p class="job">{{ author.job }}</p>
-            <p class="badge">{{ author.counter }}</p>
+            <p class="badge">{{ author.count }}</p>
         {% else %}
             <p class="date">{{ article.publishing_date|date }}</p>
         {% endif %}
