@@ -174,7 +174,9 @@ class AuthorsPlugin(NewsBlogCMSPlugin):
             app_config=self.app_config).values_list('author',
                                                     flat=True).distinct()
         author_list = list(author_list)
-        qs = Person.objects.filter(id__in=author_list)
+        qs = Person.objects.filter(
+            id__in=author_list, article__app_config=self.app_config
+        ).annotate(count=models.Count('article'))
         return qs
 
 
@@ -188,8 +190,10 @@ class CategoriesPlugin(NewsBlogCMSPlugin):
             app_config=self.app_config).values_list('categories',
                                                     flat=True).distinct()
         category_list = list(category_list)
-        qs = Category.objects.filter(id__in=category_list).annotate(
-            count=models.Count('article')).order_by('-count')
+        qs = Category.objects.filter(
+            id__in=category_list,
+            article__app_config=self.app_config,
+        ).annotate(count=models.Count('article')).order_by('-count')
         return qs
         # return generate_slugs(get_blog_authors(self.app_config))
 
