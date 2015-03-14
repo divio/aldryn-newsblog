@@ -1,4 +1,4 @@
-{% load i18n staticfiles thumbnail %}
+{% load i18n staticfiles thumbnail apphooks_config_tags %}
 
 <div class="aldryn-newsblog-meta">
     {% if author.visual %}
@@ -8,7 +8,7 @@
     </div>
     {% endif %}
     <div class="meta">
-        <p class="author"><a href="{{ author.article_list_url }}">{{ author.name }}</a></p>
+        <p class="author"><a href="{% namespace_url "article-list-by-author" author.slug namespace=instance.app_config.namespace %}">{{ author.name }}</a></p>
         {% if author_view %}
             <p class="job">{{ author.job }}</p>
             <p class="badge">{{ author.count }}</p>

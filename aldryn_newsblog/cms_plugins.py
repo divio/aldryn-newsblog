@@ -36,6 +36,7 @@ class BlogCategoriesPlugin(NewsBlogPlugin):
     model = models.CategoriesPlugin
 
     def render(self, context, instance, placeholder):
+        context['instance'] = instance
         context['categories'] = instance.get_categories()
         context['article_list_url'] = reverse(
             '{0}:article-list'.format(instance.app_config.namespace))
@@ -51,6 +52,7 @@ class BlogTagsPlugin(NewsBlogPlugin):
     model = models.TagsPlugin
 
     def render(self, context, instance, placeholder):
+        context['instance'] = instance
         context['tags'] = instance.get_tags()
         context['article_list_url'] = reverse(
             '{0}:article-list'.format(instance.app_config.namespace))

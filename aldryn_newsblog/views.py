@@ -22,16 +22,16 @@ class ArticleDetail(TranslatableSlugMixin, AppConfigMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(ArticleDetail, self).get_context_data(**kwargs)
-        context['article_list_url'] = reverse('{0}:article-list'.format(
-            self.config.namespace))
+        # context['article_list_url'] = reverse('{0}:article-list'.format(
+        #     self.config.namespace))
         context['prev_article'] = self.get_prev_object(self.queryset, self.object)
         context['next_article'] = self.get_next_object(self.queryset, self.object)
-        if self.object.author:
-            self.object.author.article_list_url = reverse(
-                '{0}:article-list-by-author'.format(self.config.namespace),
-                args=[self.object.author.slug, ]
-            )
-        context['article'] = self.object
+        # if self.object.author:
+        #     self.object.author.article_list_url = reverse(
+        #         '{0}:article-list-by-author'.format(self.config.namespace),
+        #         args=[self.object.author.slug, ]
+        #     )
+        # context['article'] = self.object
         return context
 
     def get_prev_object(self, queryset=None, object=None):
@@ -68,19 +68,19 @@ class ArticleList(ViewUrlMixin, AppConfigMixin, ListView):
     """A complete list of articles."""
     model = Article
 
-    def get_context_data(self, **kwargs):
-        """
-        Manually annotate the articles authors so that they have their own,
-        namespace-specific article-list-url
-        """
-        context = super(ArticleList, self).get_context_data(**kwargs)
-        article_list = list(self.object_list)
-        for article in article_list:
-            article.author.article_list_url = reverse(
-                '{0}:article-list-by-author'.format(
-                    self.config.namespace), args=[article.author.slug, ])
-        context['article_list'] = article_list
-        return context
+    # def get_context_data(self, **kwargs):
+    #     """
+    #     Manually annotate the articles authors so that they have their own,
+    #     namespace-specific article-list-url
+    #     """
+    #     context = super(ArticleList, self).get_context_data(**kwargs)
+    #     article_list = list(self.object_list)
+    #     for article in article_list:
+    #         article.author.article_list_url = reverse(
+    #             '{0}:article-list-by-author'.format(
+    #                 self.config.namespace), args=[article.author.slug, ])
+    #     context['article_list'] = article_list
+    #     return context
 
     def get_paginate_by(self, queryset):
         if self.paginate_by and self.paginate_by is not None:

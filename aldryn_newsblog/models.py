@@ -178,12 +178,7 @@ class AuthorsPlugin(NewsBlogCMSPlugin):
         qs = Person.objects.filter(
             id__in=author_list, article__app_config=self.app_config
         ).annotate(count=models.Count('article'))
-        authors = list(qs)
-        for author in authors:
-            author.article_list_url = reverse(
-                '{0}:article-list-by-author'.format(
-                    self.app_config.namespace), args=[author.slug, ])
-        return authors
+        return qs
 
 
 @python_2_unicode_compatible
@@ -200,12 +195,7 @@ class CategoriesPlugin(NewsBlogCMSPlugin):
             id__in=category_list,
             article__app_config=self.app_config,
         ).annotate(count=models.Count('article')).order_by('-count')
-        categories = list(qs)
-        for category in categories:
-            category.article_list_url = reverse(
-                '{0}:article-list-by-category'.format(
-                    self.app_config.namespace), args=[category.slug, ])
-        return categories
+        return qs
 
 
 @python_2_unicode_compatible
@@ -223,9 +213,6 @@ class TagsPlugin(NewsBlogCMSPlugin):
                     tags[tag.id].count += 1
                 else:
                     tag.count = 1
-                    tag.article_list_url = reverse(
-                        '{0}:article-list-by-tag'.format(
-                            self.app_config.namespace), args=[tag.slug, ])
                     tags[tag.id] = tag
         # Return most frequently used tags first
         return sorted(tags.values(), key=lambda x: x.count, reverse=True)
