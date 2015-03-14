@@ -2,6 +2,7 @@
 
 from __future__ import unicode_literals
 
+from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from cms.plugin_base import CMSPluginBase
@@ -36,6 +37,8 @@ class BlogCategoriesPlugin(NewsBlogPlugin):
 
     def render(self, context, instance, placeholder):
         context['categories'] = instance.get_categories()
+        context['article_list_url'] = reverse(
+            '{0}:article-list'.format(instance.app_config.namespace))
         return context
 
 
@@ -49,6 +52,8 @@ class BlogTagsPlugin(NewsBlogPlugin):
 
     def render(self, context, instance, placeholder):
         context['tags'] = instance.get_tags()
+        context['article_list_url'] = reverse(
+            '{0}:article-list'.format(instance.app_config.namespace))
         return context
 
 
@@ -62,6 +67,8 @@ class AuthorsPlugin(NewsBlogPlugin):
 
     def render(self, context, instance, placeholder):
         context['instance'] = instance
+        context['article_list_url'] = reverse(
+            '{0}:article-list'.format(instance.app_config.namespace))
         return context
 
 
