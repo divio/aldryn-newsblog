@@ -8,12 +8,23 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('cms', '0004_auto_20150313_1040'),
-        ('aldryn_newsblog', '0011_tagsplugin'),
+        ('aldryn_newsblog', '0010_auto_20150313_1040'),
     ]
 
     operations = [
         migrations.CreateModel(
             name='ArchivePlugin',
+            fields=[
+                ('cmsplugin_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='cms.CMSPlugin')),
+                ('app_config', models.ForeignKey(to='aldryn_newsblog.NewsBlogConfig')),
+            ],
+            options={
+                'abstract': False,
+            },
+            bases=('cms.cmsplugin',),
+        ),
+        migrations.CreateModel(
+            name='TagsPlugin',
             fields=[
                 ('cmsplugin_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='cms.CMSPlugin')),
                 ('app_config', models.ForeignKey(to='aldryn_newsblog.NewsBlogConfig')),
