@@ -1,12 +1,14 @@
 {% load i18n staticfiles thumbnail apphooks_config_tags %}
 
 <div class="aldryn-newsblog-meta">
-    {% if author.visual %}
     <div class="image pull-left" style="margin-right: 8px;">
+        {% if author.visual %}
         {% thumbnail author.visual "50x50" crop upscale subject_location=author.visual.subject_location as author_image %}
         <img src="{{ author_image.url }}" height="50" width="50" alt="{{ author }}">
+        {% else %}
+        <img src="{% static "aldryn_newsblog/images/no-photo.png" %}" height="50" width="50" alt="{{ author }}">
+        {% endif %}
     </div>
-    {% endif %}
     <div class="meta">
         <p class="author"><a href="{% namespace_url "article-list-by-author" author.slug namespace=instance.app_config.namespace %}">{{ author.name }}</a></p>
         {% if author_view %}
