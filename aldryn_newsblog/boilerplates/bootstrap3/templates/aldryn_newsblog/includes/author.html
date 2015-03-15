@@ -1,12 +1,12 @@
 {% load i18n staticfiles thumbnail apphooks_config_tags %}
 
 <div class="aldryn-newsblog-meta">
-    <div class="image pull-left" style="margin-right: 8px;">
+    <div class="image pull-left">
         {% if author.visual %}
-        {% thumbnail author.visual "50x50" crop upscale subject_location=author.visual.subject_location as author_image %}
-        <img src="{{ author_image.url }}" height="50" width="50" alt="{{ author }}">
+            {% thumbnail author.visual "50x50" crop upscale subject_location=author.visual.subject_location as author_image %}
+            <img src="{{ author_image.url }}" width="50" height="50" alt="{{ author }}">
         {% else %}
-        <img src="{% static "aldryn_newsblog/images/no-photo.png" %}" height="50" width="50" alt="{{ author }}">
+            <img src="{% static "aldryn_newsblog/img/no-photo.png" %}" height="50" width="50" alt="{{ author }}">
         {% endif %}
     </div>
     <div class="meta">

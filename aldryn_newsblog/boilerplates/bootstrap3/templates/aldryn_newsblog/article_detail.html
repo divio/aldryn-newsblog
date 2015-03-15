@@ -10,11 +10,11 @@
 {% block newsblog_footer %}
     <ul class="pager">
         {% if prev_article %}
-        <li class="previous"><a href="{{ prev_article.get_absolute_url }}"><span aria-hidden="true">&larr;</span> {% trans "Previous Article" %}</a></li>
+            <li class="previous"><a href="{{ prev_article.get_absolute_url }}"><span aria-hidden="true">&larr;</span> {% trans "Previous Article" %}</a></li>
         {% endif %}
         <li><a href="{% namespace_url "article-list" %}">{% trans "Back to Overview" %}</a></li>
         {% if next_article %}
-        <li class="next"><a href="{{ next_article.get_absolute_url }}">{% trans "Next Article" %} <span aria-hidden="true">&rarr;</span></a></li>
+            <li class="next"><a href="{{ next_article.get_absolute_url }}">{% trans "Next Article" %} <span aria-hidden="true">&rarr;</span></a></li>
         {% endif %}
     </ul>
 {% endblock %}
