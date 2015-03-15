@@ -15,6 +15,22 @@ class NewsBlogPlugin(CMSPluginBase):
     module = 'NewsBlog'
 
 
+class BlogArchivePlugin(NewsBlogPlugin):
+    render_template = 'aldryn_newsblog/plugins/archive.html'
+    name = _('Archive')
+    cache = False
+    model = models.ArchivePlugin
+
+    def render(self, context, instance, placeholder):
+        context['instance'] = instance
+        context['dates'] = models.Article.objects.get_months(
+            namespace=instance.app_config.namespace)
+        return context
+
+
+plugin_pool.register_plugin(BlogArchivePlugin)
+
+
 class LatestEntriesPlugin(NewsBlogPlugin):
     render_template = 'aldryn_newsblog/plugins/latest_entries.html'
     name = _('Latest Entries')

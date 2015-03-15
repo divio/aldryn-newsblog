@@ -27,9 +27,9 @@ class RelatedManager(TranslatableManager):
 
     def get_months(self, namespace):
         """
-        Get months and years with posts count for given namespace string.
+        Get months and years with articles count for given namespace string.
+        This means how many articles there are in each month.
 
-        This means how much posts there are in each month.
         Returns list of dictionaries of the following format:
         [{'date': date(YEAR, MONTH, ARBITRARY_DAY), 'num_entries': NUM_ENTRIES}, ...]
         ordered by date.

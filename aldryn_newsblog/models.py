@@ -22,7 +22,6 @@ from aldryn_categories.models import Category
 from aldryn_people.models import Person
 from aldryn_reversion.core import version_controlled_content
 from parler.models import TranslatableModel, TranslatedFields
-from taggit.models import Tag
 from taggit.managers import TaggableManager
 
 from .cms_appconfig import NewsBlogConfig
@@ -163,6 +162,12 @@ class NewsBlogCMSPlugin(CMSPlugin):
 
     class Meta:
         abstract = True
+
+
+@python_2_unicode_compatible
+class ArchivePlugin(NewsBlogCMSPlugin):
+    def __str__(self):
+        return u'{0} archive'.format(self.app_config.app_title)
 
 
 @python_2_unicode_compatible
