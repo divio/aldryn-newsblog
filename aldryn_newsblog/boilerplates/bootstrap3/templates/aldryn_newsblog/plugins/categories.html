@@ -1,10 +1,10 @@
-{% load i18n %}
+{% load i18n apphooks_config_tags %}
 
  <div class="aldryn aldryn-newsblog aldryn-newsblog-categories">
     <ul class="list-unstyled text-uppercase">
-        <li{% if not newsblog_category %} class="active"{% endif %}><a href="{% url 'aldryn_newsblog:article-list' %}">{% trans "All" %}</a></li>
+        <li{% if not newsblog_category %} class="active"{% endif %}><a href="{% namespace_url "article-list" namespace=instance.app_config.namespace %}">{% trans "All" %}</a></li>
         {% for category in categories %}
-            <li{% if newsblog_category.id == category.id %} class="active"{% endif %}><a href="{% url 'aldryn_newsblog:article-list-by-category' category.slug %}">{{ category.name }}</a></li>
+            <li{% if newsblog_category.id == category.id %} class="active"{% endif %}><a href="{% namespace_url "article-list-by-category" category.slug namespace=instance.app_config.namespace %}">{{ category.name }}</a> <span class="badge">{{ category.count }}</span></li>
         {% endfor %}
     </ul>
 </div>

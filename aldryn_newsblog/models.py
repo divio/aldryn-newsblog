@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import unicode_literals
+
 import datetime
 
 from django.conf import settings
@@ -22,6 +23,7 @@ from aldryn_people.models import Person
 from aldryn_reversion.core import version_controlled_content
 from parler.models import TranslatableModel, TranslatedFields
 from taggit.managers import TaggableManager
+
 from .cms_appconfig import NewsBlogConfig
 from .managers import RelatedManager
 
@@ -163,33 +165,62 @@ class NewsBlogCMSPlugin(CMSPlugin):
 
 
 @python_2_unicode_compatible
+class ArchivePlugin(NewsBlogCMSPlugin):
+    def __str__(self):
+        return u'{0} archive'.format(self.app_config.app_title)
+
+
+@python_2_unicode_compatible
 class AuthorsPlugin(NewsBlogCMSPlugin):
     def __str__(self):
-        return u'Blog authors'
+        return u'{0} authors'.format(self.app_config.app_title)
 
     def get_authors(self):
         author_list = Article.objects.published().filter(
             app_config=self.app_config).values_list('author',
                                                     flat=True).distinct()
         author_list = list(author_list)
-        qs = Person.objects.filter(id__in=author_list)
+        qs = Person.objects.filter(
+            id__in=author_list, article__app_config=self.app_config
+        ).annotate(count=models.Count('article'))
         return qs
 
 
 @python_2_unicode_compatible
 class CategoriesPlugin(NewsBlogCMSPlugin):
     def __str__(self):
-        return u'Blog categories'
+        return u'{0} categories'.format(self.app_config.app_title)
 
     def get_categories(self):
         category_list = Article.objects.published().filter(
             app_config=self.app_config).values_list('categories',
                                                     flat=True).distinct()
         category_list = list(category_list)
-        qs = Category.objects.filter(id__in=category_list).annotate(
-            count=models.Count('article')).order_by('-count')
+        qs = Category.objects.filter(
+            id__in=category_list,
+            article__app_config=self.app_config,
+        ).annotate(count=models.Count('article')).order_by('-count')
         return qs
-        # return generate_slugs(get_blog_authors(self.app_config))
+
+
+@python_2_unicode_compatible
+class TagsPlugin(NewsBlogCMSPlugin):
+    def __str__(self):
+        return u'{0} tags'.format(self.app_config.app_title)
+
+    def get_tags(self):
+        tags = {}
+        articles = Article.objects.published().filter(
+            app_config=self.app_config)
+        for article in articles:
+            for tag in article.tags.all():
+                if tag.id in tags:
+                    tags[tag.id].count += 1
+                else:
+                    tag.count = 1
+                    tags[tag.id] = tag
+        # Return most frequently used tags first
+        return sorted(tags.values(), key=lambda x: x.count, reverse=True)
 
 
 @python_2_unicode_compatible
@@ -200,10 +231,10 @@ class LatestEntriesPlugin(NewsBlogCMSPlugin):
     )
 
     def __str__(self):
-        return u'Latest entries: {0}'.format(self.latest_entries)
+        return u'{0} latest entries: {1}'.format(
+            self.app_config.app_title, self.latest_entries)
 
     def get_articles(self):
         articles = Article.objects.published().active_translations(
             get_language()).filter(app_config=self.app_config)
         return articles[:self.latest_entries]
-

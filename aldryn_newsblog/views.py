@@ -1,7 +1,6 @@
 from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
 
-from django.core.urlresolvers import reverse
 from django.utils import translation
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView
@@ -22,13 +21,8 @@ class ArticleDetail(TranslatableSlugMixin, AppConfigMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(ArticleDetail, self).get_context_data(**kwargs)
-        context['article_list_url'] = reverse('{config}:article-list'.format(
-            config=self.config.namespace))
         context['prev_article'] = self.get_prev_object(self.queryset, self.object)
         context['next_article'] = self.get_next_object(self.queryset, self.object)
-        if self.object.author:
-            context['article_list_by_author_url'] = reverse('{config}:article-list-by-author'.format(
-                config=self.config.namespace), args=[self.object.author.slug, ])
         return context
 
     def get_prev_object(self, queryset=None, object=None):
