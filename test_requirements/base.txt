@@ -1,5 +1,6 @@
 -e git+http://github.com/aldryn/aldryn-apphooks-config#egg=aldryn-apphooks-config
 coverage==3.7.1
+-e git+https://github.com/aldryn/aldryn-boilerplates.git#egg=aldryn-boilerplates
 -e git+http://github.com/aldryn/aldryn-categories#egg=aldryn-categories
 aldryn-common
 aldryn-people>=0.4.6
