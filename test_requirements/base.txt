@@ -1,5 +1,6 @@
 -e git+http://github.com/aldryn/aldryn-apphooks-config#egg=aldryn-apphooks-config
 coverage==3.7.1
+-e git+https://github.com/aldryn/aldryn-boilerplates.git#egg=aldryn-boilerplates
 -e git+http://github.com/aldryn/aldryn-categories#egg=aldryn-categories
 aldryn-common
 aldryn-people>=0.4.6
@@ -7,8 +8,9 @@ aldryn-reversion
 aldryn-search
 backport_collections==0.1
 dj-database-url
+django-appdata>=0.1.4
 django-classy-tags
--e git+http://github.com/yakky/django-cms@future/integration#egg=django-cms
+django-cms>=3.0.12
 django-filer
 django-mptt
 django-parler
