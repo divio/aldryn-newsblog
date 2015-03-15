@@ -13,7 +13,7 @@
         {# month list #}
         <div class="list-group">
             {% for month in year.list %}
-            <a href="{% namespace_url 'article-list-by-month' year=year.grouper month=month.date|date:"n" namespace=instance.app_config.namespace %}" class="list-group-item{% if year.grouper == current_year and month.date.month == current_month %} active{% endif %}">{{ month.date|date:"F" }} <span class="badge">{{ month.count }}</span></a>
+            <a href="{% namespace_url 'article-list-by-month' year=year.grouper month=month.date|date:"n" namespace=instance.app_config.namespace %}" class="list-group-item{% if year.grouper == current_year and month.date.month == current_month %} active{% endif %}">{{ month.date|date:"F" }} <span class="badge">{{ month.num_entries }}</span></a>
             {% endfor %}
         </div>
     {% empty %}
