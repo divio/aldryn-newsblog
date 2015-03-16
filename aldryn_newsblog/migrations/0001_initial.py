@@ -42,7 +42,7 @@ class Migration(migrations.Migration):
             name='ArticleTranslation',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('language_code', models.CharField(db_index=True, max_length=15, verbose_name='Language', choices=[(b'en', b'English'), (b'de', b'German'), (b'fr', b'French')])),
+                ('language_code', models.CharField(db_index=True, max_length=15, verbose_name='Language')),
                 ('title', models.CharField(max_length=234, verbose_name='title')),
                 ('slug', models.SlugField(help_text='Used in the URL. If changed, the URL will change. Clear it to have it re-created automatically.', max_length=255, verbose_name='slug', blank=True)),
                 ('lead_in', djangocms_text_ckeditor.fields.HTMLField(default='', help_text='Will be displayed in lists, and at the start of the detail page (in bold)', verbose_name='lead-in')),
@@ -86,7 +86,7 @@ class Migration(migrations.Migration):
             name='NewsBlogConfigTranslation',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('language_code', models.CharField(db_index=True, max_length=15, verbose_name='Language', choices=[(b'en', b'English'), (b'de', b'German'), (b'fr', b'French')])),
+                ('language_code', models.CharField(db_index=True, max_length=15, verbose_name='Language')),
                 ('app_title', models.CharField(max_length=234, verbose_name='application title')),
                 ('master', models.ForeignKey(related_name='translations', editable=False, to='aldryn_newsblog.NewsBlogConfig', null=True)),
             ],
