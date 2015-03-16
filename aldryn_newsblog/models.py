@@ -23,6 +23,7 @@ from aldryn_people.models import Person
 from aldryn_reversion.core import version_controlled_content
 from parler.models import TranslatableModel, TranslatedFields
 from taggit.managers import TaggableManager
+from sortedm2m.fields import SortedManyToManyField
 
 from .cms_appconfig import NewsBlogConfig
 from .managers import RelatedManager
@@ -86,6 +87,10 @@ class Article(TranslatableModel):
     featured_image = FilerImageField(null=True, blank=True)
 
     tags = TaggableManager(blank=True)
+
+    related = SortedManyToManyField('self',
+        verbose_name=_('related articles'), blank=True)
+
     objects = RelatedManager()
 
     class Meta:
@@ -152,6 +157,12 @@ class Article(TranslatableModel):
                 i += 1
 
 
+@python_2_unicode_compatible
+class RelatedPlugin(CMSPlugin):
+    def __str__(self):
+        return _('Related articles')
+
+
 class NewsBlogCMSPlugin(CMSPlugin):
     """AppHookConfig aware abstract CMSPlugin class for Aldryn Newsblog"""
 
@@ -167,13 +178,13 @@ class NewsBlogCMSPlugin(CMSPlugin):
 @python_2_unicode_compatible
 class ArchivePlugin(NewsBlogCMSPlugin):
     def __str__(self):
-        return u'{0} archive'.format(self.app_config.get_app_title())
+        return _('{0} archive'.format(self.app_config.get_app_title()))
 
 
 @python_2_unicode_compatible
 class AuthorsPlugin(NewsBlogCMSPlugin):
     def __str__(self):
-        return u'{0} authors'.format(self.app_config.get_app_title())
+        return _('{0} authors'.format(self.app_config.get_app_title()))
 
     def get_authors(self):
         author_list = Article.objects.published().filter(
@@ -189,7 +200,7 @@ class AuthorsPlugin(NewsBlogCMSPlugin):
 @python_2_unicode_compatible
 class CategoriesPlugin(NewsBlogCMSPlugin):
     def __str__(self):
-        return u'{0} categories'.format(self.app_config.get_app_title())
+        return _('{0} categories'.format(self.app_config.get_app_title()))
 
     def get_categories(self):
         category_list = Article.objects.published().filter(
@@ -204,9 +215,26 @@ class CategoriesPlugin(NewsBlogCMSPlugin):
 
 
 @python_2_unicode_compatible
+class LatestEntriesPlugin(NewsBlogCMSPlugin):
+    latest_entries = models.IntegerField(
+        default=5,
+        help_text=_('The number of latest entries to be displayed.')
+    )
+
+    def __str__(self):
+        return _('{0} latest entries: {1}'.format(
+            self.app_config.get_app_title(), self.latest_entries))
+
+    def get_articles(self):
+        articles = Article.objects.published().active_translations(
+            get_language()).filter(app_config=self.app_config)
+        return articles[:self.latest_entries]
+
+
+@python_2_unicode_compatible
 class TagsPlugin(NewsBlogCMSPlugin):
     def __str__(self):
-        return u'{0} tags'.format(self.app_config.get_app_title())
+        return _('{0} tags'.format(self.app_config.get_app_title()))
 
     def get_tags(self):
         tags = {}
@@ -221,20 +249,3 @@ class TagsPlugin(NewsBlogCMSPlugin):
                     tags[tag.id] = tag
         # Return most frequently used tags first
         return sorted(tags.values(), key=lambda x: x.count, reverse=True)
-
-
-@python_2_unicode_compatible
-class LatestEntriesPlugin(NewsBlogCMSPlugin):
-    latest_entries = models.IntegerField(
-        default=5,
-        help_text=_('The number of latest entries to be displayed.')
-    )
-
-    def __str__(self):
-        return u'{0} latest entries: {1}'.format(
-            self.app_config.get_app_title(), self.latest_entries)
-
-    def get_articles(self):
-        articles = Article.objects.published().active_translations(
-            get_language()).filter(app_config=self.app_config)
-        return articles[:self.latest_entries]
