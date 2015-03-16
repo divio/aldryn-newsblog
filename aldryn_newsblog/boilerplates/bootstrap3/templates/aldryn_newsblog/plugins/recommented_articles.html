@@ -4,7 +4,7 @@
     <ul class="list-unstyled">
         {% for article in instance.get_articles %}
             <li>
-                <h3>{{ article.title }}</h3>
+                <h3><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></h3>
                 <p>{% trans "by" %} <a href="#">{{ article.author }}</a> {{ article.publishing_date|date }}</p>
             </li>
         {% empty %}
