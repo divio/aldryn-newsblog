@@ -167,13 +167,13 @@ class NewsBlogCMSPlugin(CMSPlugin):
 @python_2_unicode_compatible
 class ArchivePlugin(NewsBlogCMSPlugin):
     def __str__(self):
-        return u'{0} archive'.format(self.app_config.app_title)
+        return u'{0} archive'.format(self.app_config.get_app_title())
 
 
 @python_2_unicode_compatible
 class AuthorsPlugin(NewsBlogCMSPlugin):
     def __str__(self):
-        return u'{0} authors'.format(self.app_config.app_title)
+        return u'{0} authors'.format(self.app_config.get_app_title())
 
     def get_authors(self):
         author_list = Article.objects.published().filter(
@@ -189,7 +189,7 @@ class AuthorsPlugin(NewsBlogCMSPlugin):
 @python_2_unicode_compatible
 class CategoriesPlugin(NewsBlogCMSPlugin):
     def __str__(self):
-        return u'{0} categories'.format(self.app_config.app_title)
+        return u'{0} categories'.format(self.app_config.get_app_title())
 
     def get_categories(self):
         category_list = Article.objects.published().filter(
@@ -206,7 +206,7 @@ class CategoriesPlugin(NewsBlogCMSPlugin):
 @python_2_unicode_compatible
 class TagsPlugin(NewsBlogCMSPlugin):
     def __str__(self):
-        return u'{0} tags'.format(self.app_config.app_title)
+        return u'{0} tags'.format(self.app_config.get_app_title())
 
     def get_tags(self):
         tags = {}
@@ -232,7 +232,7 @@ class LatestEntriesPlugin(NewsBlogCMSPlugin):
 
     def __str__(self):
         return u'{0} latest entries: {1}'.format(
-            self.app_config.app_title, self.latest_entries)
+            self.app_config.get_app_title(), self.latest_entries)
 
     def get_articles(self):
         articles = Article.objects.published().active_translations(

@@ -39,7 +39,7 @@ class NewsBlogToolbar(CMSToolbar):
 
         user = getattr(self.request, 'user', None)
 
-        menu = self.toolbar.get_or_create_menu('newsblog-app', config.app_title)
+        menu = self.toolbar.get_or_create_menu('newsblog-app', config.get_app_title())
 
         if self.request.user.has_perm('aldryn_newsblog.change_newsblogconfig'):
             menu.add_modal_item(
