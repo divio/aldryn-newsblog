@@ -40,6 +40,9 @@ class NewsBlogConfig(TranslatableModel, AppHookConfig):
         help_text=_('Include articles in search indexes?'),
     )
 
+    def get_app_title(self):
+        return getattr(self, 'app_title', _('untitled'))
+
 
 class NewsBlogConfigForm(AppDataForm):
     pass
