@@ -41,7 +41,7 @@ class NewsBlogConfig(TranslatableModel, AppHookConfig):
     )
 
     def get_app_title(self):
-        return getattr(self, 'app_title', 'untitled')
+        return getattr(self, 'app_title', _('untitled'))
 
 
 class NewsBlogConfigForm(AppDataForm):
