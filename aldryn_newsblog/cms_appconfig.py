@@ -8,6 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 from aldryn_apphooks_config.utils import setup_config
 from aldryn_apphooks_config.models import AppHookConfig
 from app_data import AppDataForm
+from cms.models.fields import PlaceholderField
 from parler.models import TranslatableModel
 from parler.models import TranslatedFields
 
@@ -39,6 +40,8 @@ class NewsBlogConfig(TranslatableModel, AppHookConfig):
         default=True,
         help_text=_('Include articles in search indexes?'),
     )
+
+    list_view_placeholder = PlaceholderField('newsblog_list_view')
 
     def get_app_title(self):
         return getattr(self, 'app_title', _('untitled'))
