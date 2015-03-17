@@ -11,7 +11,7 @@ REQUIREMENTS = [
     'django-cms>=3.0.12',
     'aldryn-people>=0.4.6',
     'django>=1.6,<1.8',
-    'aldryn-apphooks-config>=0.1.3',
+    'aldryn-apphooks-config>=0.1.0',
     'django-reversion>=1.8.2,<1.9',
     'django-taggit',
     'aldryn-boilerplates',
@@ -49,4 +49,8 @@ setup(
     include_package_data=True,
     zip_safe=False,
     test_suite="test_settings.run",
+    dependency_links=[
+        'git+https://github.com/yakky/django-cms@future/integration#egg=django-cms-3.0.90a3',
+        'git+https://github.com/aldryn/aldryn-apphooks-config#egg=aldryn-apphooks-config-0.1.0',
+    ],
 )
