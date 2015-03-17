@@ -4,8 +4,10 @@ from __future__ import unicode_literals
 
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
-from cms.admin.placeholderadmin import FrontendEditableAdminMixin
-
+from cms.admin.placeholderadmin import (
+    FrontendEditableAdminMixin,
+    PlaceholderAdminMixin,
+)
 from parler.forms import TranslatableModelForm
 from parler.admin import TranslatableAdmin
 from aldryn_apphooks_config.admin import BaseAppHookConfig
@@ -108,7 +110,9 @@ class ArticleAdmin(VersionedPlaceholderAdminMixin,
 admin.site.register(models.Article, ArticleAdmin)
 
 
-class NewsBlogConfigAdmin(TranslatableAdmin, BaseAppHookConfig):
+class NewsBlogConfigAdmin(TranslatableAdmin,
+                          PlaceholderAdminMixin,
+                          BaseAppHookConfig):
     def get_config_fields(self):
         return ('app_title', 'paginate_by', 'create_authors', 'search_indexed', )
 
