@@ -4,10 +4,12 @@
     "url": "https://github.com/aldryn/aldryn-newsblog",
     "package-name": "aldryn-newsblog",
     "installed-apps": [
+        "aldryn_boilerplates",
         "aldryn_people",
         "aldryn_reversion",
+        "aldryn_categories",
         "aldryn_common",
-        "aldryn_boilerplates",
+        "sortedm2m",
         "aldryn_categories",
         "taggit",
         "aldryn_newsblog"

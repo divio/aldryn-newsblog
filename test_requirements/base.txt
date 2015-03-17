@@ -16,6 +16,7 @@ django-mptt
 django-parler
 django-reversion>=1.8.2,<1.9
 django-sekizai
+django-sortedm2m
 django-taggit
 django-treebeard>=2.0
 djangocms-admin-style
