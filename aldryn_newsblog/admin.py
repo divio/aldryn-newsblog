@@ -1,7 +1,12 @@
+# -*- coding: utf-8 -*-
+
+from __future__ import unicode_literals
+
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 from cms.admin.placeholderadmin import FrontendEditableAdminMixin
 
+from parler.forms import TranslatableModelForm
 from parler.admin import TranslatableAdmin
 from aldryn_apphooks_config.admin import BaseAppHookConfig
 from aldryn_people.models import Person
@@ -33,10 +38,34 @@ make_not_featured.short_description = _(
     "Mark selected articles as not featured")
 
 
+class ArticleAdminForm(TranslatableModelForm):
+
+    class Meta:
+        model = models.Article
+
+    def __init__(self, *args, **kwargs):
+        super(ArticleAdminForm, self).__init__(*args, **kwargs)
+
+        qs = models.Article.objects
+
+        if hasattr(self.instance, 'app_config'):
+            qs = models.Article.objects.filter(
+                app_config=self.instance.app_config)
+        elif 'initial' in kwargs and 'app_config' in kwargs['initial']:
+            qs = models.Article.objects.filter(
+                app_config=kwargs['initial']['app_config'])
+
+        if self.instance.pk:
+            qs = qs.exclude(pk=self.instance.pk)
+
+        self.fields['related'].queryset = qs
+
+
 class ArticleAdmin(VersionedPlaceholderAdminMixin,
                    TranslatableAdmin,
                    FrontendEditableAdminMixin,
                    admin.ModelAdmin):
+    form = ArticleAdminForm
     list_display = ('title', 'app_config', 'slug', 'is_featured',
                     'is_published')
     actions = (
@@ -50,7 +79,7 @@ class ArticleAdmin(VersionedPlaceholderAdminMixin,
         ('Details', {
             'classes': ('collapse',),
             'fields': ('tags', 'categories', 'lead_in',
-                       'publishing_date', 'is_published',)
+                       'publishing_date', 'is_published', 'related', )
         }),
         ('Meta options', {
             'classes': ('collapse',),

@@ -21,6 +21,7 @@ HELPER_SETTINGS = {
         'mptt',
         'parler',
         'reversion',
+        'sortedm2m',
         'taggit',
     ],
     'STATICFILES_FINDERS': [

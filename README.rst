@@ -122,6 +122,14 @@ __ http://django-filer.readthedocs.org/en/latest/installation.html#subject-locat
 Notes
 -----
 
+Related Articles Plugin
+~~~~~~~~~~~~~~~~~~~~~~~
+
+The Related Articles plugin is only appropriate for use only on the article
+detail view. If the plugin in placed on any other page, it will render and empty
+DIV.
+
+
 Known Issues
 ~~~~~~~~~~~~
 

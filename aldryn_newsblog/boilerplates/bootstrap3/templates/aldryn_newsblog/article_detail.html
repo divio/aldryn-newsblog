@@ -1,10 +1,11 @@
 {% extends "aldryn_newsblog/base.html" %}
-{% load i18n apphooks_config_tags %}
+{% load cms_tags i18n apphooks_config_tags %}
 
 {% block newsblog_content %}
     <div class="aldryn-newsblog-detail">
         {% include "aldryn_newsblog/includes/article.html" with detail_view="true" %}
     </div>
+    {% static_placeholder "detail_view_content" %}
 {% endblock %}
 
 {% block newsblog_footer %}

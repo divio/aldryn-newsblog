@@ -91,3 +91,33 @@ class AuthorsPlugin(NewsBlogPlugin):
 
 
 plugin_pool.register_plugin(AuthorsPlugin)
+
+
+class RelatedPlugin(NewsBlogPlugin):
+    render_template = 'aldryn_newsblog/plugins/related_articles.html'
+    name = _('Related Articles')
+    model = models.RelatedPlugin
+
+    def get_article(self, context):
+        if 'request' in context:
+            request = context['request']
+        if request and request.resolver_match:
+            view_name = request.resolver_match.view_name
+            namespace = request.resolver_match.namespace
+            if view_name == '{0}:article-detail'.format(namespace):
+                article = models.Article.objects.active_translations(
+                    slug=request.resolver_match.kwargs['slug'])
+                if article.count() == 1:
+                    return article[0]
+        return None
+
+    def render(self, context, instance, placeholder):
+        context['instance'] = instance
+        article = self.get_article(context)
+        if article:
+            context['article'] = article
+            context['related'] = article.related.all()
+        return context
+
+
+plugin_pool.register_plugin(RelatedPlugin)
