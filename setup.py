@@ -11,7 +11,7 @@ REQUIREMENTS = [
     'django-cms>=3.0.12',
     'aldryn-people>=0.4.6',
     'django>=1.6,<1.8',
-    'aldryn-apphooks-config>=0.1.3',
+    'aldryn-apphooks-config>=0.1.4',
     'django-reversion>=1.8.2,<1.9',
     'django-taggit',
     'aldryn-boilerplates',
