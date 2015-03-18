@@ -18,7 +18,8 @@ REQUIREMENTS = [
     'aldryn-categories',
     'aldryn-reversion',
     'six',
-    'pytz'
+    'pytz',
+    'django-sortedm2m',
 ]
 
 CLASSIFIERS = [
