@@ -1,14 +1,16 @@
 {% load i18n apphooks_config_tags %}
 
  <div class="aldryn aldryn-newsblog aldryn-newsblog-tags">
-    <ul class="list-unstyled text-uppercase">
+    <ul class="list-unstyled">
         <li{% if not newsblog_tag %} class="active"{% endif %}>
             <a href="{% namespace_url "article-list" namespace=instance.app_config.namespace %}">{% trans "All" %}</a>
         </li>
         {% for tag in tags %}
             <li{% if newsblog_tag.id == tag.id %} class="active"{% endif %}>
-                <a href="{% namespace_url "article-list-by-tag" tag.slug namespace=instance.app_config.namespace %}">{{ tag.name }}</a>
-                <span class="badge">{{ tag.count }}</span>
+                <a href="{% namespace_url "article-list-by-tag" tag.slug namespace=instance.app_config.namespace %}">
+                    {{ tag.name }}
+                    <span class="badge">{{ tag.count }}</span>
+                </a>
             </li>
         {% endfor %}
     </ul>
