@@ -2,17 +2,19 @@
 
 <div class="aldryn-newsblog-meta">
     <div class="image pull-left">
-        {% if author.visual %}
-            {% thumbnail author.visual "50x50" crop upscale subject_location=author.visual.subject_location as author_image %}
-            <img src="{{ author_image.url }}" width="50" height="50" alt="{{ author }}">
-        {% else %}
-            <img src="{% static "aldryn_newsblog/img/no-photo.png" %}" height="50" width="50" alt="{{ author }}">
-        {% endif %}
+        <a href="{% namespace_url "article-list-by-author" author.slug namespace=instance.app_config.namespace %}">
+            {% if author.visual %}
+                {% thumbnail author.visual "50x50" crop upscale subject_location=author.visual.subject_location as author_image %}
+                <img src="{{ author_image.url }}" width="50" height="50" alt="{{ author }}">
+            {% else %}
+                <img src="{% static "aldryn_newsblog/img/no-photo.png" %}" height="50" width="50" alt="{{ author }}">
+            {% endif %}
+        </a>
     </div>
     <div class="meta">
         <p class="author"><a href="{% namespace_url "article-list-by-author" author.slug namespace=instance.app_config.namespace %}">{{ author.name }}</a></p>
         {% if author_view %}
-            <p class="job">{{ author.job }}</p>
+            <p class="job">{{ author.function }}</p>
             <p class="badge">{{ author.count }}</p>
         {% else %}
             <p class="date">{{ article.publishing_date|date }}</p>
