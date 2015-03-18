@@ -1,19 +1,25 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n cms_tags %}
 
-{% comment %}
 {% block extend_breadcrumb %}
     {{ block.super }}
-    {% block newsblog_breadcrumb %}{% endblock %}
+    {% block newsblog_breadcrumb %}{% endblock newsblog_breadcrumb %}
 {% endblock extend_breadcrumb %}
-{% endcomment %}
 
 {% block content %}
-    <div class="aldryn aldryn-newsblog">
-        {% block newsblog_title %}<h2>{{ view.config.get_app_title }}</h2>{% endblock %}
-        {% block newsblog_content %}{% endblock %}
-        <div class="aldryn-newsblog-footer">
-            {% block newsblog_footer %}{% endblock %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-17">
+            {% static_placeholder "top_newsblog" %}
+            <div class="aldryn aldryn-newsblog">
+                {% block newsblog_title %}{% endblock %}
+                {% block newsblog_content %}{% endblock %}
+                {% block newsblog_footer %}{% endblock %}
+            </div>
+        </div>
+        <div class="col-md-7 aldryn-newsblog-sidebar">
+            {% static_placeholder "sidebar_newsblog" %}
         </div>
     </div>
-{% endblock %}
+</div>
+{% endblock content %}
