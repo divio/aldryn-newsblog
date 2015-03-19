@@ -41,7 +41,14 @@ class NewsBlogConfig(TranslatableModel, AppHookConfig):
         help_text=_('Include articles in search indexes?'),
     )
 
-    list_view_placeholder = PlaceholderField('newsblog_list_view')
+    list_view_placeholder = PlaceholderField(
+        'newsblog_list_view',
+        related_name='aldryn_newsblog_list_view_placeholder_set',
+    )
+    detail_view_placeholder = PlaceholderField(
+        'newsblog_detail_view',
+        related_name='aldryn_newsblog_detail_view_placeholder_set',
+    )
 
     def get_app_title(self):
         return getattr(self, 'app_title', _('untitled'))
