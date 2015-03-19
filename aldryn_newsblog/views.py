@@ -1,6 +1,11 @@
+# -*- coding: utf-8 -*-
+
+from __future__ import unicode_literals
+
 from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
 
+from django.db.models import Q
 from django.utils import translation
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView
@@ -75,6 +80,42 @@ class ArticleList(ViewUrlMixin, AppConfigMixin, ListView):
         ).filter(
             app_config__namespace=self.namespace
         )
+
+
+class ArticleSearchResultsList(ArticleList):
+    model = Article
+    http_method_names = ['get', 'post', ]
+    partial_name = 'aldryn_newsblog/includes/search_results.html'
+    template_name = 'aldryn_newsblog/article_list.html'
+
+    def get(self, request, *args, **kwargs):
+        self.query = request.GET.get('q')
+        return super(ArticleSearchResultsList, self).get(request)
+
+    def post(self, request, *args, **kwargs):
+        self.query = request.POST.get('q')
+        return super(ArticleSearchResultsList, self).post(request)
+
+    def get_queryset(self):
+        if self.query:
+            return self.queryset.filter(
+                Q(translations__title__icontains=self.query) |
+                Q(translations__lead_in__icontains=self.query) |
+                Q(translations__search_data__icontains=self.query)
+            ).distinct()
+        else:
+            return self.queryset.none()
+
+    def get_context_data(self, **kwargs):
+        cxt = super(ArticleSearchResultsList, self).get_context_data(**kwargs)
+        cxt['query'] = self.query
+        return cxt
+
+    def get_template_names(self):
+        if self.request.is_ajax:
+            return [self.partial_name, ]
+        else:
+            return [self.template_name, ]
 
 
 class AuthorArticleList(ArticleList):
