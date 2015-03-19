@@ -259,14 +259,14 @@ class TagsPlugin(NewsBlogCMSPlugin):
 
 @python_2_unicode_compatible
 class FeaturedArticlesPlugin(NewsBlogCMSPlugin):
-    entry_count = models.PositiveIntegerField(
+    article_count = models.PositiveIntegerField(
         default=1,
         validators=[django.core.validators.MinValueValidator(1)],
         help_text=_('The maximum number of featured entries display.')
     )
 
     def get_articles(self):
-        if not self.entry_count:  # None or 0
+        if not self.article_count:  # None or 0
             return Article.objects.none()
         articles = Article.objects.published()\
             .active_translations(get_language())\
@@ -274,17 +274,17 @@ class FeaturedArticlesPlugin(NewsBlogCMSPlugin):
                 app_config=self.app_config,
                 is_featured=True,
             )
-        return articles[:self.entry_count]
+        return articles[:self.article_count]
 
     def __str__(self):
+        if not self.pk:
+            return 'featured articles'
+        # return 'featured articles {}'.format(self.article_count)
         prefix = self.app_config.get_app_title()
-        if self.entry_count:
-            if self.entry_count == 1:
-                title = _('featured entry')
-            else:
-                title = _('%(entry_count)s featured entries') % {
-                    'count': self.entry_count,
-                }
+        if self.article_count == 1:
+            title = _('featured article')
         else:
-            title = _('featured entries')
+            title = _('featured articles: %(count)s') % {
+                'count': self.article_count,
+            }
         return '{} {}'.format(prefix, title)
