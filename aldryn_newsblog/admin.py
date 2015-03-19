@@ -76,12 +76,22 @@ class ArticleAdmin(VersionedPlaceholderAdminMixin,
     )
     fieldsets = (
         (None, {
-            'fields': ('title', 'featured_image', )
+            'fields': (
+                'title',
+                'featured_image',
+            )
         }),
         ('Details', {
             'classes': ('collapse',),
-            'fields': ('tags', 'categories', 'lead_in',
-                       'publishing_date', 'is_published', 'related', )
+            'fields': (
+                'is_featured',
+                'tags',
+                'categories',
+                'lead_in',
+                'publishing_date',
+                'is_published',
+                'related',
+            )
         }),
         ('Meta options', {
             'classes': ('collapse',),

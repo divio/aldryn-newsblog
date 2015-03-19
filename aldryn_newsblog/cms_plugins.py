@@ -121,3 +121,17 @@ class RelatedPlugin(NewsBlogPlugin):
 
 
 plugin_pool.register_plugin(RelatedPlugin)
+
+
+class NewsBlogFeaturedArticlesPlugin(NewsBlogPlugin):
+    render_template = 'aldryn_newsblog/plugins/featured_articles.html'
+    name = _('Featured Articles')
+    model = models.FeaturedArticlesPlugin
+
+    def render(self, context, instance, placeholder):
+        context['instance'] = instance
+        # article = self.get_article(context)
+        return context
+
+
+plugin_pool.register_plugin(NewsBlogFeaturedArticlesPlugin)

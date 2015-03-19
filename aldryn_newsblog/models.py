@@ -28,6 +28,8 @@ from sortedm2m.fields import SortedManyToManyField
 from .cms_appconfig import NewsBlogConfig
 from .managers import RelatedManager
 
+import django.core.validators
+
 if settings.LANGUAGES:
     LANGUAGE_CODES = [language[0] for language in settings.LANGUAGES]
 elif settings.LANGUAGE:
@@ -165,6 +167,10 @@ class RelatedPlugin(CMSPlugin):
 
 class NewsBlogCMSPlugin(CMSPlugin):
     """AppHookConfig aware abstract CMSPlugin class for Aldryn Newsblog"""
+    # avoid reverse relation name clashes by not adding a related_name
+    # to the parent plugin
+    cmsplugin_ptr = models.OneToOneField(
+        CMSPlugin, related_name='+', parent_link=True)
 
     app_config = models.ForeignKey(NewsBlogConfig)
 
@@ -218,7 +224,7 @@ class CategoriesPlugin(NewsBlogCMSPlugin):
 class LatestEntriesPlugin(NewsBlogCMSPlugin):
     latest_entries = models.IntegerField(
         default=5,
-        help_text=_('The number of latest entries to be displayed.')
+        help_text=_('The maximum number of latest entries to display.')
     )
 
     def __str__(self):
@@ -249,3 +255,36 @@ class TagsPlugin(NewsBlogCMSPlugin):
                     tags[tag.id] = tag
         # Return most frequently used tags first
         return sorted(tags.values(), key=lambda x: x.count, reverse=True)
+
+
+@python_2_unicode_compatible
+class FeaturedArticlesPlugin(NewsBlogCMSPlugin):
+    entry_count = models.PositiveIntegerField(
+        default=1,
+        validators=[django.core.validators.MinValueValidator(1)],
+        help_text=_('The maximum number of featured entries display.')
+    )
+
+    def get_articles(self):
+        if not self.entry_count:  # None or 0
+            return Article.objects.none()
+        articles = Article.objects.published()\
+            .active_translations(get_language())\
+            .filter(
+                app_config=self.app_config,
+                is_featured=True,
+            )
+        return articles[:self.entry_count]
+
+    def __str__(self):
+        prefix = self.app_config.get_app_title()
+        if self.entry_count:
+            if self.entry_count == 1:
+                title = _('featured entry')
+            else:
+                title = _('%(entry_count)s featured entries') % {
+                    'count': self.entry_count,
+                }
+        else:
+            title = _('featured entries')
+        return '{} {}'.format(prefix, title)
