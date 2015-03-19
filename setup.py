@@ -3,23 +3,24 @@ from setuptools import setup, find_packages
 from aldryn_newsblog import __version__
 
 REQUIREMENTS = [
-    'backport_collections==0.1',
-    'django-parler',
-    'django-filer>=0.9.9,<0.10',
-    'aldryn-common',
-    'django-appdata>=0.1.4',
-    'django-cms>=3.0.12',
-    'aldryn-people>=0.4.6',
-    'django>=1.6,<1.8',
     'aldryn-apphooks-config>=0.1.4',
-    'django-reversion>=1.8.2,<1.9',
-    'django-taggit',
     'aldryn-boilerplates',
     'aldryn-categories',
+    'aldryn-common',
+    'aldryn-people>=0.4.6',
     'aldryn-reversion',
-    'six',
-    'pytz',
+    'backport_collections==0.1',
+    'django-appdata>=0.1.4',
+    'django-cms>=3.0.12',
+    'django-filer>=0.9.9,<0.10',
+    'django-parler',
+    'django-reversion>=1.8.2,<1.9',
     'django-sortedm2m',
+    'django-taggit',
+    'django>=1.6,<1.8',
+    'lxml',
+    'pytz',
+    'six',
 ]
 
 CLASSIFIERS = [
