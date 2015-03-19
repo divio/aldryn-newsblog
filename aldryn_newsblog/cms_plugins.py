@@ -27,7 +27,6 @@ class BlogArchivePlugin(NewsBlogPlugin):
             namespace=instance.app_config.namespace)
         return context
 
-
 plugin_pool.register_plugin(BlogArchivePlugin)
 
 
@@ -99,8 +98,7 @@ class RelatedPlugin(NewsBlogPlugin):
     model = models.RelatedPlugin
 
     def get_article(self, context):
-        if 'request' in context:
-            request = context['request']
+        request = context.get('request', None)
         if request and request.resolver_match:
             view_name = request.resolver_match.view_name
             namespace = request.resolver_match.namespace
