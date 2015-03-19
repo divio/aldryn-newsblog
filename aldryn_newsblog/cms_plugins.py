@@ -100,6 +100,7 @@ plugin_pool.register_plugin(AuthorsPlugin)
 class RelatedPlugin(NewsBlogPlugin):
     render_template = 'aldryn_newsblog/plugins/related_articles.html'
     name = _('Related Articles')
+    cache = False
     model = models.RelatedPlugin
 
     def get_article(self, context):
@@ -129,6 +130,7 @@ plugin_pool.register_plugin(RelatedPlugin)
 class NewsBlogFeaturedArticlesPlugin(NewsBlogPlugin):
     render_template = 'aldryn_newsblog/plugins/featured_articles.html'
     name = _('Featured Articles')
+    cache = False
     model = models.FeaturedArticlesPlugin
 
     def render(self, context, instance, placeholder):
