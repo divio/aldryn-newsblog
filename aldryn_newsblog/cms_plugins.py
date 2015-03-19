@@ -15,6 +15,11 @@ class NewsBlogPlugin(CMSPluginBase):
     module = 'NewsBlog'
 
 
+# TODO: rename plugins to have a full app prefix
+#       (e.g NewsBlogLatestEntriesPlugin)
+#       https://github.com/divio/django-cms/issues/2562
+
+
 class BlogArchivePlugin(NewsBlogPlugin):
     render_template = 'aldryn_newsblog/plugins/archive.html'
     name = _('Archive')
