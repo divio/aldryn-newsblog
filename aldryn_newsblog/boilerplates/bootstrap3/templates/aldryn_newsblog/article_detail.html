@@ -2,6 +2,7 @@
 {% load cms_tags i18n apphooks_config_tags %}
 
 {% block newsblog_content %}
+    {% render_placeholder view.config.detail_view_placeholder %}
     <div class="aldryn-newsblog-detail">
         {% include "aldryn_newsblog/includes/article.html" with detail_view="true" %}
     </div>

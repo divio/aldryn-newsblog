@@ -15,6 +15,11 @@ class NewsBlogPlugin(CMSPluginBase):
     module = 'NewsBlog'
 
 
+# TODO: rename plugins to have a full app prefix
+#       (e.g NewsBlogLatestEntriesPlugin)
+#       https://github.com/divio/django-cms/issues/2562
+
+
 class BlogArchivePlugin(NewsBlogPlugin):
     render_template = 'aldryn_newsblog/plugins/archive.html'
     name = _('Archive')
@@ -26,7 +31,6 @@ class BlogArchivePlugin(NewsBlogPlugin):
         context['dates'] = models.Article.objects.get_months(
             namespace=instance.app_config.namespace)
         return context
-
 
 plugin_pool.register_plugin(BlogArchivePlugin)
 
@@ -99,8 +103,7 @@ class RelatedPlugin(NewsBlogPlugin):
     model = models.RelatedPlugin
 
     def get_article(self, context):
-        if 'request' in context:
-            request = context['request']
+        request = context.get('request', None)
         if request and request.resolver_match:
             view_name = request.resolver_match.view_name
             namespace = request.resolver_match.namespace
@@ -121,3 +124,17 @@ class RelatedPlugin(NewsBlogPlugin):
 
 
 plugin_pool.register_plugin(RelatedPlugin)
+
+
+class NewsBlogFeaturedArticlesPlugin(NewsBlogPlugin):
+    render_template = 'aldryn_newsblog/plugins/featured_articles.html'
+    name = _('Featured Articles')
+    model = models.FeaturedArticlesPlugin
+
+    def render(self, context, instance, placeholder):
+        context['instance'] = instance
+        # article = self.get_article(context)
+        return context
+
+
+plugin_pool.register_plugin(NewsBlogFeaturedArticlesPlugin)
