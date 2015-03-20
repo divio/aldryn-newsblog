@@ -40,7 +40,6 @@ class LatestEntriesPlugin(NewsBlogPlugin):
     name = _('Latest Entries')
     cache = False
     model = models.LatestEntriesPlugin
-    form = forms.LatestEntriesForm
 
     def render(self, context, instance, placeholder):
         context['instance'] = instance
