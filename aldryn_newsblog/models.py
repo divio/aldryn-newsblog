@@ -184,13 +184,13 @@ class NewsBlogCMSPlugin(CMSPlugin):
 @python_2_unicode_compatible
 class ArchivePlugin(NewsBlogCMSPlugin):
     def __str__(self):
-        return _('{0} archive'.format(self.app_config.get_app_title()))
+        return _('%s archive') % (self.app_config.get_app_title(), )
 
 
 @python_2_unicode_compatible
 class AuthorsPlugin(NewsBlogCMSPlugin):
     def __str__(self):
-        return _('{0} authors'.format(self.app_config.get_app_title()))
+        return _('%s authors') % (self.app_config.get_app_title(), )
 
     def get_authors(self):
         author_list = Article.objects.published().filter(
@@ -206,7 +206,7 @@ class AuthorsPlugin(NewsBlogCMSPlugin):
 @python_2_unicode_compatible
 class CategoriesPlugin(NewsBlogCMSPlugin):
     def __str__(self):
-        return _('{0} categories'.format(self.app_config.get_app_title()))
+        return _('{0} categories') % (self.app_config.get_app_title(), )
 
     def get_categories(self):
         category_list = Article.objects.published().filter(
@@ -228,8 +228,8 @@ class LatestEntriesPlugin(NewsBlogCMSPlugin):
     )
 
     def __str__(self):
-        return _('{0} latest entries: {1}'.format(
-            self.app_config.get_app_title(), self.latest_entries))
+        return _('%s latest entries: %s') % (
+            self.app_config.get_app_title(), self.latest_entries, )
 
     def get_articles(self):
         articles = Article.objects.published().active_translations(
@@ -240,7 +240,7 @@ class LatestEntriesPlugin(NewsBlogCMSPlugin):
 @python_2_unicode_compatible
 class TagsPlugin(NewsBlogCMSPlugin):
     def __str__(self):
-        return _('{0} tags'.format(self.app_config.get_app_title()))
+        return _('{0} tags') % (self.app_config.get_app_title(), )
 
     def get_tags(self):
         tags = {}
@@ -268,18 +268,17 @@ class FeaturedArticlesPlugin(NewsBlogCMSPlugin):
     def get_articles(self):
         if not self.article_count:  # None or 0
             return Article.objects.none()
-        articles = Article.objects.published()\
-            .active_translations(get_language())\
-            .filter(
-                app_config=self.app_config,
-                is_featured=True,
-            )
+        articles = Article.objects.published().active_translations(
+            get_language()
+        ).filter(
+            app_config=self.app_config,
+            is_featured=True
+        )
         return articles[:self.article_count]
 
     def __str__(self):
         if not self.pk:
             return 'featured articles'
-        # return 'featured articles {}'.format(self.article_count)
         prefix = self.app_config.get_app_title()
         if self.article_count == 1:
             title = _('featured article')
@@ -287,4 +286,4 @@ class FeaturedArticlesPlugin(NewsBlogCMSPlugin):
             title = _('featured articles: %(count)s') % {
                 'count': self.article_count,
             }
-        return '{} {}'.format(prefix, title)
+        return '{0} {1}'.format(prefix, title)
