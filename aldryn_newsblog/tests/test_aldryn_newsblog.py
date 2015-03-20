@@ -354,7 +354,7 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
         article = self.create_article(author=author, featured_image=image)
         response = self.client.get(article.get_absolute_url())
         image_url = get_thumbnailer(article.featured_image).get_thumbnail({
-            'size': (800, 300),
+            'size': (800, 450),
             'crop': True,
             'subject_location': article.featured_image.subject_location
         }).url
