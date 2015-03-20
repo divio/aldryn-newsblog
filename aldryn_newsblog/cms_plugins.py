@@ -8,23 +8,18 @@ from django.utils.translation import ugettext_lazy as _
 from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
 
-from . import forms, models
+from . import models
 
 
 class NewsBlogPlugin(CMSPluginBase):
     module = 'NewsBlog'
 
 
-# TODO: rename plugins to have a full app prefix
-#       (e.g NewsBlogLatestEntriesPlugin)
-#       https://github.com/divio/django-cms/issues/2562
-
-
-class BlogArchivePlugin(NewsBlogPlugin):
+class NewsBlogArchivePlugin(NewsBlogPlugin):
     render_template = 'aldryn_newsblog/plugins/archive.html'
     name = _('Archive')
     cache = False
-    model = models.ArchivePlugin
+    model = models.NewsBlogArchivePlugin
 
     def render(self, context, instance, placeholder):
         context['instance'] = instance
@@ -32,27 +27,28 @@ class BlogArchivePlugin(NewsBlogPlugin):
             namespace=instance.app_config.namespace)
         return context
 
-plugin_pool.register_plugin(BlogArchivePlugin)
+plugin_pool.register_plugin(NewsBlogArchivePlugin)
 
 
-class LatestEntriesPlugin(NewsBlogPlugin):
-    render_template = 'aldryn_newsblog/plugins/latest_entries.html'
-    name = _('Latest Entries')
-    cache = False
-    model = models.LatestEntriesPlugin
+class NewsBlogAuthorsPlugin(NewsBlogPlugin):
+    render_template = 'aldryn_newsblog/plugins/authors.html'
+    name = _('Authors')
+    model = models.NewsBlogAuthorsPlugin
 
     def render(self, context, instance, placeholder):
         context['instance'] = instance
+        context['article_list_url'] = reverse(
+            '{0}:article-list'.format(instance.app_config.namespace))
         return context
 
 
-plugin_pool.register_plugin(LatestEntriesPlugin)
+plugin_pool.register_plugin(NewsBlogAuthorsPlugin)
 
 
-class BlogCategoriesPlugin(NewsBlogPlugin):
+class NewsBlogCategoriesPlugin(NewsBlogPlugin):
     render_template = 'aldryn_newsblog/plugins/categories.html'
     name = _('Categories')
-    model = models.CategoriesPlugin
+    model = models.NewsBlogCategoriesPlugin
 
     def render(self, context, instance, placeholder):
         context['instance'] = instance
@@ -62,45 +58,43 @@ class BlogCategoriesPlugin(NewsBlogPlugin):
         return context
 
 
-plugin_pool.register_plugin(BlogCategoriesPlugin)
+plugin_pool.register_plugin(NewsBlogCategoriesPlugin)
 
 
-class BlogTagsPlugin(NewsBlogPlugin):
-    render_template = 'aldryn_newsblog/plugins/tags.html'
-    name = _('Tags')
-    model = models.TagsPlugin
-
-    def render(self, context, instance, placeholder):
-        context['instance'] = instance
-        context['tags'] = instance.get_tags()
-        context['article_list_url'] = reverse(
-            '{0}:article-list'.format(instance.app_config.namespace))
-        return context
-
-
-plugin_pool.register_plugin(BlogTagsPlugin)
-
-
-class AuthorsPlugin(NewsBlogPlugin):
-    render_template = 'aldryn_newsblog/plugins/authors.html'
-    name = _('Blog Authors')
-    model = models.AuthorsPlugin
+class NewsBlogFeaturedArticlesPlugin(NewsBlogPlugin):
+    render_template = 'aldryn_newsblog/plugins/featured_articles.html'
+    name = _('Featured Articles')
+    cache = False
+    model = models.NewsBlogFeaturedArticlesPlugin
 
     def render(self, context, instance, placeholder):
         context['instance'] = instance
-        context['article_list_url'] = reverse(
-            '{0}:article-list'.format(instance.app_config.namespace))
+        # article = self.get_article(context)
         return context
 
 
-plugin_pool.register_plugin(AuthorsPlugin)
+plugin_pool.register_plugin(NewsBlogFeaturedArticlesPlugin)
 
 
-class RelatedPlugin(NewsBlogPlugin):
+class NewsBlogLatestArticlesPlugin(NewsBlogPlugin):
+    render_template = 'aldryn_newsblog/plugins/latest_articles.html'
+    name = _('Latest Articles')
+    cache = False
+    model = models.NewsBlogLatestArticlesPlugin
+
+    def render(self, context, instance, placeholder):
+        context['instance'] = instance
+        return context
+
+
+plugin_pool.register_plugin(NewsBlogLatestArticlesPlugin)
+
+
+class NewsBlogRelatedPlugin(NewsBlogPlugin):
     render_template = 'aldryn_newsblog/plugins/related_articles.html'
     name = _('Related Articles')
     cache = False
-    model = models.RelatedPlugin
+    model = models.NewsBlogRelatedPlugin
 
     def get_article(self, context):
         request = context.get('request', None)
@@ -123,19 +117,20 @@ class RelatedPlugin(NewsBlogPlugin):
         return context
 
 
-plugin_pool.register_plugin(RelatedPlugin)
+plugin_pool.register_plugin(NewsBlogRelatedPlugin)
 
 
-class NewsBlogFeaturedArticlesPlugin(NewsBlogPlugin):
-    render_template = 'aldryn_newsblog/plugins/featured_articles.html'
-    name = _('Featured Articles')
-    cache = False
-    model = models.FeaturedArticlesPlugin
+class NewsBlogTagsPlugin(NewsBlogPlugin):
+    render_template = 'aldryn_newsblog/plugins/tags.html'
+    name = _('Tags')
+    model = models.NewsBlogTagsPlugin
 
     def render(self, context, instance, placeholder):
         context['instance'] = instance
-        # article = self.get_article(context)
+        context['tags'] = instance.get_tags()
+        context['article_list_url'] = reverse(
+            '{0}:article-list'.format(instance.app_config.namespace))
         return context
 
 
-plugin_pool.register_plugin(NewsBlogFeaturedArticlesPlugin)
+plugin_pool.register_plugin(NewsBlogTagsPlugin)
