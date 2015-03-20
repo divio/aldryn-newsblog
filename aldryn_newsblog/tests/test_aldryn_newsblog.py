@@ -389,26 +389,26 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
 
     def test_articles_count_by_month(self):
         months = [
-            {'date': date(1914, 7, 3), 'num_entries': 1},
-            {'date': date(1914, 8, 3), 'num_entries': 3},
-            {'date': date(1945, 9, 3), 'num_entries': 5},
+            {'date': date(1914, 7, 3), 'num_articles': 1},
+            {'date': date(1914, 8, 3), 'num_articles': 3},
+            {'date': date(1945, 9, 3), 'num_articles': 5},
         ]
         for month in months:
-            for _ in range(month['num_entries']):
+            for _ in range(month['num_articles']):
                 self.create_article(publishing_date=month['date'])
         self.assertEquals(
             sorted(
                 Article.objects.get_months(
                     namespace=self.app_config.namespace),
-                key=itemgetter('num_entries')),
+                key=itemgetter('num_articles')),
             months)
 
     def test_articles_count_by_author(self):
         authors = []
-        for num_entries in [1, 3, 5]:
+        for num_articles in [1, 3, 5]:
             person = self.create_person()
-            person.num_entries = num_entries
-            authors.append((person, num_entries))
+            person.num_articles = num_articles
+            authors.append((person, num_articles))
 
         for i, data in enumerate(authors):
             for _ in range(data[1]):
@@ -420,7 +420,7 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
             sorted(
                 Article.objects.get_authors(
                     namespace=self.app_config.namespace).values_list(
-                        'pk', 'num_entries'),
+                        'pk', 'num_articles'),
                 key=itemgetter(1)),
             authors)
 
@@ -444,7 +444,7 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
             (tag_slug1, 1),
         ]
         tags = Article.objects.get_tags(namespace=self.app_config.namespace)
-        tags = map(lambda x: (x.slug, x.num_entries), tags)
+        tags = map(lambda x: (x.slug, x.num_articles), tags)
         self.assertEquals(tags, tags_expected)
 
     def test_articles_by_date(self):
@@ -584,13 +584,14 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
         self.assertEquals(article.author.name,
                           u' '.join((user.first_name, user.last_name)))
 
-    def test_latest_entries_plugin(self):
+    def test_latest_articles_plugin(self):
         page = api.create_page(
             'plugin page', self.template, self.language,
             parent=self.root_page, published=True)
         placeholder = page.placeholders.all()[0]
-        api.add_plugin(placeholder, 'LatestEntriesPlugin', self.language,
-                       app_config=self.app_config, latest_entries=7)
+        api.add_plugin(placeholder, 'NewsBlogLatestArticlesPlugin',
+                       self.language, app_config=self.app_config,
+                       latest_articles=7)
         plugin = placeholder.get_plugins()[0].get_plugin_instance()[0]
         plugin.save()
         page.publish(self.language)
