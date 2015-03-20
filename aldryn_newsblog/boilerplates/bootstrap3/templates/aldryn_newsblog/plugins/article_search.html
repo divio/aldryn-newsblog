@@ -1,26 +1,7 @@
 {% load i18n sekizai_tags %}
 
-{% addtoblock "js" %}
-<script>
-(function($){
-    $('.aldryn-newsblog-article-search').find('form').on('submit', function(evt){
-        var $form = $(this);
-
-        evt.preventDefault();
-        $.ajax({
-            type: 'get',
-            url: $form.attr('action'),
-            data: $form.serialize()
-        }).always(function(data){
-            $form.siblings('.search-results').html(data);
-        });
-    });
-}(window.jQuery));
-</script>
-{% endaddtoblock %}
-
 <div class="aldryn aldryn-newsblog aldryn-newsblog-article-search">
-    <form class="form-inline" action="{{ query_url }}" method="POST">
+    <form class="form-inline" action="{{ query_url }}" method="post">
         <div class="form-group">
             <div class="input-group">
                 <span class="input-group-addon"><span class="glyphicon glyphicon-search form-control-feedback" aria-hidden="true"></span></span>
@@ -28,6 +9,26 @@
             </div>
         </div>
     </form>
-    <div class="search-results">
-    </div>
+    <div class="search-results"></div>
 </div>
+
+{% addtoblock "js" %}
+<script>
+(function ($) {
+    $(function () {
+        $('.aldryn-newsblog-article-search').find('form').on('submit', function (e) {
+            var $form = $(this);
+
+            e.preventDefault();
+            $.ajax({
+                type: 'get',
+                url: $form.attr('action'),
+                data: $form.serialize()
+            }).always(function (data) {
+                $form.siblings('.search-results').html(data);
+            });
+        });
+    });
+}(window.jQuery));
+</script>
+{% endaddtoblock %}
