@@ -9,6 +9,10 @@ from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
+try:
+    from django.utils.encoding import force_unicode
+except ImportError:
+    from django.utils.encoding import force_text as force_unicode
 from django.utils.text import slugify as default_slugify
 from django.utils.translation import get_language, ugettext_lazy as _
 from django.contrib.auth.models import User
@@ -27,6 +31,7 @@ from sortedm2m.fields import SortedManyToManyField
 
 from .cms_appconfig import NewsBlogConfig
 from .managers import RelatedManager
+from .utils import strip_tags, get_plugin_index_data, get_request
 
 import django.core.validators
 
@@ -67,6 +72,8 @@ class Article(TranslatableModel):
         meta_keywords=models.TextField(
             verbose_name=_('meta keywords'), blank=True, default=''),
         meta={'unique_together': (('language_code', 'slug', ), )},
+
+        search_data=models.TextField(blank=True, editable=False)
     )
 
     content = PlaceholderField('aldryn_newsblog_article_content',
@@ -115,6 +122,25 @@ class Article(TranslatableModel):
         if i is not None:
             slug += "_%d" % i
         return slug
+
+    def get_search_data(self, language, request=None):
+        """
+        Provides an index for use with Haystack, or, for populating
+        Article.translations.search_data.
+        """
+        if request is None:
+            request = get_request(language=language)
+        description = self.safe_translation_getter('lead_in')
+        text_bits = [strip_tags(description)]
+        for category in self.categories.all():
+            text_bits.append(force_unicode(category.safe_translation_getter('name')))
+        for tag in self.tags.all():
+            text_bits.append(force_unicode(tag.name))
+        if self.content:
+            for base_plugin in self.content.cmsplugin_set.filter(language=language):
+                plugin_text_content = ' '.join(get_plugin_index_data(base_plugin, request))
+                text_bits.append(plugin_text_content)
+        return ' '.join(text_bits)
 
     def save(self, *args, **kwargs):
         # Ensure there is an owner.
@@ -181,6 +207,16 @@ class NewsBlogArchivePlugin(NewsBlogCMSPlugin):
         return _('%s archive') % (self.app_config.get_app_title(), )
 
 
+class NewsBlogArticleSearchPlugin(NewsBlogCMSPlugin):
+    max_articles = models.PositiveIntegerField(_('max articles'), default=10,
+        validators=[django.core.validators.MinValueValidator(1)],
+        help_text=_('The maximum number of found articles display.')
+    )
+
+    def __str__(self):
+        return _('%s archive') % (self.app_config.get_app_title(), )
+
+
 @python_2_unicode_compatible
 class NewsBlogAuthorsPlugin(NewsBlogCMSPlugin):
     def __str__(self):
@@ -200,7 +236,7 @@ class NewsBlogAuthorsPlugin(NewsBlogCMSPlugin):
 @python_2_unicode_compatible
 class NewsBlogCategoriesPlugin(NewsBlogCMSPlugin):
     def __str__(self):
-        return _('{0} categories') % (self.app_config.get_app_title(), )
+        return _('%s categories') % (self.app_config.get_app_title(), )
 
     def get_categories(self):
         category_list = Article.objects.published().filter(
@@ -223,7 +259,7 @@ class NewsBlogFeaturedArticlesPlugin(NewsBlogCMSPlugin):
     )
 
     def get_articles(self):
-        if not self.article_count:  # None or 0
+        if not self.article_count:
             return Article.objects.none()
         articles = Article.objects.published().active_translations(
             get_language()
@@ -276,7 +312,7 @@ class NewsBlogRelatedPlugin(CMSPlugin):
 @python_2_unicode_compatible
 class NewsBlogTagsPlugin(NewsBlogCMSPlugin):
     def __str__(self):
-        return _('{0} tags') % (self.app_config.get_app_title(), )
+        return _('%s tags') % (self.app_config.get_app_title(), )
 
     def get_tags(self):
         tags = {}

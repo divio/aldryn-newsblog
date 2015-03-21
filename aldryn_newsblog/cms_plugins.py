@@ -30,6 +30,21 @@ class NewsBlogArchivePlugin(NewsBlogPlugin):
 plugin_pool.register_plugin(NewsBlogArchivePlugin)
 
 
+class NewsBlogArticleSearchPlugin(NewsBlogPlugin):
+    render_template = 'aldryn_newsblog/plugins/article_search.html'
+    name = _('Article Search')
+    model = models.NewsBlogArticleSearchPlugin
+
+    def render(self, context, instance, placeholder):
+        context['instance'] = instance
+        context['query_url'] = reverse('{0}:article-search'.format(
+            instance.app_config.namespace))
+        return context
+
+
+plugin_pool.register_plugin(NewsBlogArticleSearchPlugin)
+
+
 class NewsBlogAuthorsPlugin(NewsBlogPlugin):
     render_template = 'aldryn_newsblog/plugins/authors.html'
     name = _('Authors')
@@ -64,12 +79,10 @@ plugin_pool.register_plugin(NewsBlogCategoriesPlugin)
 class NewsBlogFeaturedArticlesPlugin(NewsBlogPlugin):
     render_template = 'aldryn_newsblog/plugins/featured_articles.html'
     name = _('Featured Articles')
-    cache = False
     model = models.NewsBlogFeaturedArticlesPlugin
 
     def render(self, context, instance, placeholder):
         context['instance'] = instance
-        # article = self.get_article(context)
         return context
 
 
