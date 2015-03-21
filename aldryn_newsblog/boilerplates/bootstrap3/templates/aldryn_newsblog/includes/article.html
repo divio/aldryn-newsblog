@@ -2,7 +2,7 @@
 {% load url from future %}
 
 <article{% if article.is_featured %} class="aldryn-newsblog-featured"{% endif %}>
-    {% block blog_visual %}
+    {% block newsblog_visual %}
         {% if article.featured_image_id %}
             <p class="visual">
                 {% if not detail_view %}
@@ -14,7 +14,7 @@
                 {% endif %}
             </p>
         {% endif %}
-    {% endblock %}
+    {% endblock newsblog_visual %}
 
     {% block newsblog_categories %}
         {% if article.categories %}
@@ -66,5 +66,5 @@
                 {% render_placeholder article.content language placeholder_language %}
             </div>
         {% endif %}
-    {% endblock %}
+    {% endblock newsblog_content %}
 </article>
