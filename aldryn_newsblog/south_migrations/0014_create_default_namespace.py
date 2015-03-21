@@ -9,16 +9,10 @@ from django.db.transaction import set_autocommit
 class Migration(DataMigration):
 
     def forwards(self, orm):
-        if connection.vendor == 'sqlite':
-            set_autocommit(True)
-
-        ns, created = orm.NewsBlogConfig.objects.get_or_create(
-            namespace='latest_entries_plugin_default_namespace')
-
-        for plugin in orm.LatestEntriesPlugin.objects.all():
-            if plugin.namespace is None:
-                plugin.namespace = ns
-                plugin.save()
+        """
+        This was used to make a default namespace, but now its just a
+        null migration.
+        """
 
     def backwards(self, orm):
         "Write your backwards methods here."
