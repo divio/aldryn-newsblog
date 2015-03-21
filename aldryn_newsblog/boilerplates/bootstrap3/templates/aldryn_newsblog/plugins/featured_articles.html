@@ -1,6 +1,6 @@
 {% load i18n %}
 
-<div class="aldryn aldryn-newsblog aldryn-newsblog-entries aldryn-newsblog-entries-featured">
+<div class="aldryn aldryn-newsblog aldryn-newsblog-articles aldryn-newsblog-articles-featured">
     {% for article in instance.get_articles %}
         {% include "aldryn_newsblog/includes/article.html" %}
     {% endfor %}

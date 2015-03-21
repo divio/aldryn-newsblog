@@ -159,12 +159,6 @@ class Article(TranslatableModel):
                 i += 1
 
 
-@python_2_unicode_compatible
-class RelatedPlugin(CMSPlugin):
-    def __str__(self):
-        return _('Related articles')
-
-
 class NewsBlogCMSPlugin(CMSPlugin):
     """AppHookConfig aware abstract CMSPlugin class for Aldryn Newsblog"""
     # avoid reverse relation name clashes by not adding a related_name
@@ -182,13 +176,13 @@ class NewsBlogCMSPlugin(CMSPlugin):
 
 
 @python_2_unicode_compatible
-class ArchivePlugin(NewsBlogCMSPlugin):
+class NewsBlogArchivePlugin(NewsBlogCMSPlugin):
     def __str__(self):
         return _('%s archive') % (self.app_config.get_app_title(), )
 
 
 @python_2_unicode_compatible
-class AuthorsPlugin(NewsBlogCMSPlugin):
+class NewsBlogAuthorsPlugin(NewsBlogCMSPlugin):
     def __str__(self):
         return _('%s authors') % (self.app_config.get_app_title(), )
 
@@ -204,7 +198,7 @@ class AuthorsPlugin(NewsBlogCMSPlugin):
 
 
 @python_2_unicode_compatible
-class CategoriesPlugin(NewsBlogCMSPlugin):
+class NewsBlogCategoriesPlugin(NewsBlogCMSPlugin):
     def __str__(self):
         return _('{0} categories') % (self.app_config.get_app_title(), )
 
@@ -221,48 +215,11 @@ class CategoriesPlugin(NewsBlogCMSPlugin):
 
 
 @python_2_unicode_compatible
-class LatestEntriesPlugin(NewsBlogCMSPlugin):
-    latest_entries = models.IntegerField(
-        default=5,
-        help_text=_('The maximum number of latest entries to display.')
-    )
-
-    def __str__(self):
-        return _('%s latest entries: %s') % (
-            self.app_config.get_app_title(), self.latest_entries, )
-
-    def get_articles(self):
-        articles = Article.objects.published().active_translations(
-            get_language()).filter(app_config=self.app_config)
-        return articles[:self.latest_entries]
-
-
-@python_2_unicode_compatible
-class TagsPlugin(NewsBlogCMSPlugin):
-    def __str__(self):
-        return _('{0} tags') % (self.app_config.get_app_title(), )
-
-    def get_tags(self):
-        tags = {}
-        articles = Article.objects.published().filter(
-            app_config=self.app_config)
-        for article in articles:
-            for tag in article.tags.all():
-                if tag.id in tags:
-                    tags[tag.id].count += 1
-                else:
-                    tag.count = 1
-                    tags[tag.id] = tag
-        # Return most frequently used tags first
-        return sorted(tags.values(), key=lambda x: x.count, reverse=True)
-
-
-@python_2_unicode_compatible
-class FeaturedArticlesPlugin(NewsBlogCMSPlugin):
+class NewsBlogFeaturedArticlesPlugin(NewsBlogCMSPlugin):
     article_count = models.PositiveIntegerField(
         default=1,
         validators=[django.core.validators.MinValueValidator(1)],
-        help_text=_('The maximum number of featured entries display.')
+        help_text=_('The maximum number of featured articles display.')
     )
 
     def get_articles(self):
@@ -287,3 +244,50 @@ class FeaturedArticlesPlugin(NewsBlogCMSPlugin):
                 'count': self.article_count,
             }
         return '{0} {1}'.format(prefix, title)
+
+
+@python_2_unicode_compatible
+class NewsBlogLatestArticlesPlugin(NewsBlogCMSPlugin):
+    latest_articles = models.IntegerField(
+        default=5,
+        help_text=_('The maximum number of latest articles to display.')
+    )
+
+    def __str__(self):
+        return _('%s latest articles: %s') % (
+            self.app_config.get_app_title(), self.latest_articles, )
+
+    def get_articles(self):
+        articles = Article.objects.published().active_translations(
+            get_language()).filter(app_config=self.app_config)
+        return articles[:self.latest_articles]
+
+
+@python_2_unicode_compatible
+class NewsBlogRelatedPlugin(CMSPlugin):
+    # NOTE: This one does NOT subclass NewsBlogCMSPlugin
+    cmsplugin_ptr = models.OneToOneField(
+        CMSPlugin, related_name='+', parent_link=True)
+
+    def __str__(self):
+        return _('Related articles')
+
+
+@python_2_unicode_compatible
+class NewsBlogTagsPlugin(NewsBlogCMSPlugin):
+    def __str__(self):
+        return _('{0} tags') % (self.app_config.get_app_title(), )
+
+    def get_tags(self):
+        tags = {}
+        articles = Article.objects.published().filter(
+            app_config=self.app_config)
+        for article in articles:
+            for tag in article.tags.all():
+                if tag.id in tags:
+                    tags[tag.id].count += 1
+                else:
+                    tag.count = 1
+                    tags[tag.id] = tag
+        # Return most frequently used tags first
+        return sorted(tags.values(), key=lambda x: x.count, reverse=True)
