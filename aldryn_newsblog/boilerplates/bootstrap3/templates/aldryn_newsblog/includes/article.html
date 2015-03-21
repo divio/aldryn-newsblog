@@ -2,7 +2,7 @@
 {% load url from future %}
 
 <article{% if article.is_featured %} class="aldryn-newsblog-featured"{% endif %}>
-    {% block blog_visual %}
+    {% block newsblog_visual %}
         {% if article.featured_image_id %}
             <p class="visual">
                 {% if not detail_view %}
