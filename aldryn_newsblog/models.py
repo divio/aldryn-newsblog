@@ -207,6 +207,16 @@ class NewsBlogArchivePlugin(NewsBlogCMSPlugin):
         return _('%s archive') % (self.app_config.get_app_title(), )
 
 
+class NewsBlogArticleSearchPlugin(NewsBlogCMSPlugin):
+    max_articles = models.PositiveIntegerField(_('max articles'), default=10,
+        validators=[django.core.validators.MinValueValidator(1)],
+        help_text=_('The maximum number of found articles display.')
+    )
+
+    def __str__(self):
+        return _('%s archive') % (self.app_config.get_app_title(), )
+
+
 @python_2_unicode_compatible
 class NewsBlogAuthorsPlugin(NewsBlogCMSPlugin):
     def __str__(self):
@@ -226,7 +236,7 @@ class NewsBlogAuthorsPlugin(NewsBlogCMSPlugin):
 @python_2_unicode_compatible
 class NewsBlogCategoriesPlugin(NewsBlogCMSPlugin):
     def __str__(self):
-        return _('{0} categories') % (self.app_config.get_app_title(), )
+        return _('%s categories') % (self.app_config.get_app_title(), )
 
     def get_categories(self):
         category_list = Article.objects.published().filter(
@@ -249,7 +259,7 @@ class NewsBlogFeaturedArticlesPlugin(NewsBlogCMSPlugin):
     )
 
     def get_articles(self):
-        if not self.article_count:  # None or 0
+        if not self.article_count:
             return Article.objects.none()
         articles = Article.objects.published().active_translations(
             get_language()
@@ -302,7 +312,7 @@ class NewsBlogRelatedPlugin(CMSPlugin):
 @python_2_unicode_compatible
 class NewsBlogTagsPlugin(NewsBlogCMSPlugin):
     def __str__(self):
-        return _('{0} tags') % (self.app_config.get_app_title(), )
+        return _('%s tags') % (self.app_config.get_app_title(), )
 
     def get_tags(self):
         tags = {}

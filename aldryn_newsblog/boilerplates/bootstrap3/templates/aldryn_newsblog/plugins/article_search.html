@@ -1,11 +1,12 @@
 {% load i18n sekizai_tags %}
 
 <div class="aldryn aldryn-newsblog aldryn-newsblog-article-search">
-    <form class="form-inline" action="{{ query_url }}" method="post">
+    <form class="form-inline" action="{{ query_url }}" method="get">
         <div class="form-group">
             <div class="input-group">
                 <span class="input-group-addon"><span class="glyphicon glyphicon-search form-control-feedback" aria-hidden="true"></span></span>
                 <input class="form-control" type="text" id="q" name="q" placeholder="search articles" value="">
+                <input type="hidden" name="max_articles" value="{{ instance.max_articles }}">
             </div>
         </div>
     </form>

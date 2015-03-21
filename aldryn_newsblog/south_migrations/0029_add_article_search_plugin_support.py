@@ -8,13 +8,13 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'ArticleSearchPlugin'
-        db.create_table(u'aldryn_newsblog_articlesearchplugin', (
+        # Adding model 'NewsBlogArticleSearchPlugin'
+        db.create_table(u'aldryn_newsblog_newsblogarticlesearchplugin', (
             ('cmsplugin_ptr', self.gf('django.db.models.fields.related.OneToOneField')(related_name=u'+', unique=True, primary_key=True, to=orm['cms.CMSPlugin'])),
             ('app_config', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['aldryn_newsblog.NewsBlogConfig'])),
             ('max_articles', self.gf('django.db.models.fields.PositiveIntegerField')(default=10)),
         ))
-        db.send_create_signal(u'aldryn_newsblog', ['ArticleSearchPlugin'])
+        db.send_create_signal(u'aldryn_newsblog', ['NewsBlogArticleSearchPlugin'])
 
         # Adding field 'ArticleTranslation.search_data'
         db.add_column(u'aldryn_newsblog_article_translation', 'search_data',
@@ -23,8 +23,8 @@ class Migration(SchemaMigration):
 
 
     def backwards(self, orm):
-        # Deleting model 'ArticleSearchPlugin'
-        db.delete_table(u'aldryn_newsblog_articlesearchplugin')
+        # Deleting model 'NewsBlogArticleSearchPlugin'
+        db.delete_table(u'aldryn_newsblog_newsblogarticlesearchplugin')
 
         # Deleting field 'ArticleTranslation.search_data'
         db.delete_column(u'aldryn_newsblog_article_translation', 'search_data')
@@ -38,11 +38,6 @@ class Migration(SchemaMigration):
             'lft': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
             'rgt': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
             'tree_id': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'})
-        },
-        u'aldryn_newsblog.archiveplugin': {
-            'Meta': {'object_name': 'ArchivePlugin'},
-            'app_config': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['aldryn_newsblog.NewsBlogConfig']"}),
-            'cmsplugin_ptr': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "u'+'", 'unique': 'True', 'primary_key': 'True', 'to': "orm['cms.CMSPlugin']"})
         },
         u'aldryn_newsblog.article': {
             'Meta': {'ordering': "[u'-publishing_date']", 'object_name': 'Article'},
@@ -58,12 +53,6 @@ class Migration(SchemaMigration):
             'publishing_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'related': ('sortedm2m.fields.SortedManyToManyField', [], {'related_name': "'related_rel_+'", 'blank': 'True', 'to': u"orm['aldryn_newsblog.Article']"})
         },
-        u'aldryn_newsblog.articlesearchplugin': {
-            'Meta': {'object_name': 'ArticleSearchPlugin'},
-            'app_config': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['aldryn_newsblog.NewsBlogConfig']"}),
-            'cmsplugin_ptr': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "u'+'", 'unique': 'True', 'primary_key': 'True', 'to': "orm['cms.CMSPlugin']"}),
-            'max_articles': ('django.db.models.fields.PositiveIntegerField', [], {'default': '10'})
-        },
         u'aldryn_newsblog.articletranslation': {
             'Meta': {'unique_together': "[(u'language_code', u'slug'), (u'language_code', u'master')]", 'object_name': 'ArticleTranslation', 'db_table': "u'aldryn_newsblog_article_translation'"},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -77,27 +66,26 @@ class Migration(SchemaMigration):
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '255', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '234'})
         },
-        u'aldryn_newsblog.authorsplugin': {
-            'Meta': {'object_name': 'AuthorsPlugin'},
+        u'aldryn_newsblog.newsblogarchiveplugin': {
+            'Meta': {'object_name': 'NewsBlogArchivePlugin'},
             'app_config': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['aldryn_newsblog.NewsBlogConfig']"}),
             'cmsplugin_ptr': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "u'+'", 'unique': 'True', 'primary_key': 'True', 'to': "orm['cms.CMSPlugin']"})
         },
-        u'aldryn_newsblog.categoriesplugin': {
-            'Meta': {'object_name': 'CategoriesPlugin'},
+        u'aldryn_newsblog.newsblogarticlesearchplugin': {
+            'Meta': {'object_name': 'NewsBlogArticleSearchPlugin'},
+            'app_config': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['aldryn_newsblog.NewsBlogConfig']"}),
+            'cmsplugin_ptr': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "u'+'", 'unique': 'True', 'primary_key': 'True', 'to': "orm['cms.CMSPlugin']"}),
+            'max_articles': ('django.db.models.fields.PositiveIntegerField', [], {'default': '10'})
+        },
+        u'aldryn_newsblog.newsblogauthorsplugin': {
+            'Meta': {'object_name': 'NewsBlogAuthorsPlugin'},
             'app_config': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['aldryn_newsblog.NewsBlogConfig']"}),
             'cmsplugin_ptr': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "u'+'", 'unique': 'True', 'primary_key': 'True', 'to': "orm['cms.CMSPlugin']"})
         },
-        u'aldryn_newsblog.featuredarticlesplugin': {
-            'Meta': {'object_name': 'FeaturedArticlesPlugin'},
+        u'aldryn_newsblog.newsblogcategoriesplugin': {
+            'Meta': {'object_name': 'NewsBlogCategoriesPlugin'},
             'app_config': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['aldryn_newsblog.NewsBlogConfig']"}),
-            'cmsplugin_ptr': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "u'+'", 'unique': 'True', 'primary_key': 'True', 'to': "orm['cms.CMSPlugin']"}),
-            'entry_count': ('django.db.models.fields.PositiveIntegerField', [], {'default': '1'})
-        },
-        u'aldryn_newsblog.latestentriesplugin': {
-            'Meta': {'object_name': 'LatestEntriesPlugin'},
-            'app_config': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['aldryn_newsblog.NewsBlogConfig']"}),
-            'cmsplugin_ptr': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "u'+'", 'unique': 'True', 'primary_key': 'True', 'to': "orm['cms.CMSPlugin']"}),
-            'latest_entries': ('django.db.models.fields.IntegerField', [], {'default': '5'})
+            'cmsplugin_ptr': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "u'+'", 'unique': 'True', 'primary_key': 'True', 'to': "orm['cms.CMSPlugin']"})
         },
         u'aldryn_newsblog.newsblogconfig': {
             'Meta': {'object_name': 'NewsBlogConfig'},
@@ -118,12 +106,24 @@ class Migration(SchemaMigration):
             'language_code': ('django.db.models.fields.CharField', [], {'max_length': '15', 'db_index': 'True'}),
             u'master': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'translations'", 'null': 'True', 'to': u"orm['aldryn_newsblog.NewsBlogConfig']"})
         },
-        u'aldryn_newsblog.relatedplugin': {
-            'Meta': {'object_name': 'RelatedPlugin', '_ormbases': ['cms.CMSPlugin']},
-            u'cmsplugin_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['cms.CMSPlugin']", 'unique': 'True', 'primary_key': 'True'})
+        u'aldryn_newsblog.newsblogfeaturedarticlesplugin': {
+            'Meta': {'object_name': 'NewsBlogFeaturedArticlesPlugin'},
+            'app_config': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['aldryn_newsblog.NewsBlogConfig']"}),
+            'article_count': ('django.db.models.fields.PositiveIntegerField', [], {'default': '1'}),
+            'cmsplugin_ptr': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "u'+'", 'unique': 'True', 'primary_key': 'True', 'to': "orm['cms.CMSPlugin']"})
         },
-        u'aldryn_newsblog.tagsplugin': {
-            'Meta': {'object_name': 'TagsPlugin'},
+        u'aldryn_newsblog.newsbloglatestarticlesplugin': {
+            'Meta': {'object_name': 'NewsBlogLatestArticlesPlugin'},
+            'app_config': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['aldryn_newsblog.NewsBlogConfig']"}),
+            'cmsplugin_ptr': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "u'+'", 'unique': 'True', 'primary_key': 'True', 'to': "orm['cms.CMSPlugin']"}),
+            'latest_articles': ('django.db.models.fields.IntegerField', [], {'default': '5'})
+        },
+        u'aldryn_newsblog.newsblogrelatedplugin': {
+            'Meta': {'object_name': 'NewsBlogRelatedPlugin', '_ormbases': ['cms.CMSPlugin']},
+            'cmsplugin_ptr': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "u'+'", 'unique': 'True', 'primary_key': 'True', 'to': "orm['cms.CMSPlugin']"})
+        },
+        u'aldryn_newsblog.newsblogtagsplugin': {
+            'Meta': {'object_name': 'NewsBlogTagsPlugin'},
             'app_config': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['aldryn_newsblog.NewsBlogConfig']"}),
             'cmsplugin_ptr': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "u'+'", 'unique': 'True', 'primary_key': 'True', 'to': "orm['cms.CMSPlugin']"})
         },

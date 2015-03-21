@@ -90,11 +90,16 @@ class ArticleSearchResultsList(ArticleList):
 
     def get(self, request, *args, **kwargs):
         self.query = request.GET.get('q')
+        self.max_articles = request.GET.get('max_articles', 0)
         return super(ArticleSearchResultsList, self).get(request)
 
-    def post(self, request, *args, **kwargs):
-        self.query = request.POST.get('q')
-        return super(ArticleSearchResultsList, self).post(request)
+    def get_paginate_by(self, queryset):
+        """
+        If a max_articles was set (by a plugin), use that figure, else,
+        paginate by the app_config's settings.
+        """
+        return self.max_articles or super(
+            ArticleSearchResultsList, self).get_paginate_by(queryset)
 
     def get_queryset(self):
         if self.query:
