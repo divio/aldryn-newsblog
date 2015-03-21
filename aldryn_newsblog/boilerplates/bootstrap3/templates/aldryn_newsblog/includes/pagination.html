@@ -19,6 +19,8 @@
         {% else %}
             <li><span><a href="{{ request.path }}?page={{ num|add:"5" }}">...</a></span></li>
         {% endif %}
+    {% empty %}
+        <li class="active"><span>1</span></li>
     {% endfor %}
 
     {% if page_obj.has_next %}
