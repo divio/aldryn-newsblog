@@ -6,7 +6,7 @@
     <div class="aldryn-newsblog-detail">
         {% include "aldryn_newsblog/includes/article.html" with detail_view="true" %}
     </div>
-    {% static_placeholder "detail_view_newsblog" %}
+    {% static_placeholder "newsblog_detail_view" %}
 {% endblock %}
 
 {% block newsblog_footer %}
@@ -17,12 +17,12 @@
             {% endif %}
             <li>
                 <span class="pager-back">– <a href="{% namespace_url "article-list" %}">{% trans "Back to Overview" %}</a> –</span>
-                {% static_placeholder "pager_footer_newsblog" %}
+                {% static_placeholder "newsblog_pager_footer" %}
             </li>
             {% if next_article %}
                 <li class="next"><a href="{{ next_article.get_absolute_url }}">{% trans "Next Article" %} <span aria-hidden="true">&rarr;</span></a></li>
             {% endif %}
         </ul>
     </div>
-    {% static_placeholder "detail_footer_newsblog" %}
+    {% static_placeholder "newsblog_detail_footer" %}
 {% endblock %}
