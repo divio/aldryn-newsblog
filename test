@@ -1,3 +1,3 @@
 #!/bin/bash
 
-djangocms-helper aldryn_newsblog --cms test --extra-settings=test_settings $@
+djangocms-helper aldryn_newsblog --cms test --migrate --extra-settings=test_settings $@

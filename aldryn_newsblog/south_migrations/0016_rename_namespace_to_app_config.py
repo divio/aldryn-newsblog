@@ -8,20 +8,20 @@ from django.db import models, connection
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # SQLite3 NOTE: Altering FK constraints are broken this backend, but,
-        # its OK to just rename the columns here, because constraints are
-        # disabled anyway.
-        if connection.vendor != 'sqlite':
+        # SQLite3 and MySQL NOTE: Altering FK constraints are broken this
+        # backend, but, its OK to just rename the columns here, because
+        # constraints are disabled anyway.
+        if connection.vendor not in ('sqlite', ):
             db.drop_foreign_key('aldryn_newsblog_latestentriesplugin', 'namespace_id')
         db.rename_column('aldryn_newsblog_latestentriesplugin', 'namespace_id', 'app_config_id')
-        if connection.vendor != 'sqlite':
+        if connection.vendor not in ('sqlite', 'mysql', ):
             db.alter_column('aldryn_newsblog_latestentriesplugin', 'app_config_id',
                             models.ForeignKey(orm['aldryn_newsblog.NewsBlogConfig']))
 
-        if connection.vendor != 'sqlite':
+        if connection.vendor not in ('sqlite', ):
             db.drop_foreign_key('aldryn_newsblog_article', 'namespace_id')
         db.rename_column('aldryn_newsblog_article', 'namespace_id', 'app_config_id')
-        if connection.vendor != 'sqlite':
+        if connection.vendor not in ('sqlite', 'mysql', ):
             db.alter_column('aldryn_newsblog_article', 'app_config_id',
                             models.ForeignKey(orm['aldryn_newsblog.NewsBlogConfig']))
 
