@@ -1,35 +1,24 @@
 {% load i18n apphooks_config_tags %}
 
-<ul class="results list-unstyled">
-    <h3>{% blocktrans with query=query %}Most recent articles containing "{{ query }}".{% endblocktrans %}</h3>
+<ul class="results-list list-unstyled">
+    <h3>{% blocktrans with query=query %}Most recent articles containing "<strong>{{ query }}</strong>"{% endblocktrans %}</h3>
     {% for article in object_list %}
-        <li class="article">
-            <h4><a href="{% namespace_url "article-detail" article.slug namespace=view.app_config.namespace %}">{{ article.title }}</a></h4>
-            {% if article.author and article.author.slug %}
-                <p class="meta author"><strong>Author</strong>:
-                    <a href="{% namespace_url "article-list-by-author" article.author.slug namespace=view.app_config.namespace %}">{{ article.author.name }}</a>
-                </p>
-            {% endif %}
-            {% if article.categories %}
-                <p class="meta category"><strong>Categories</strong>:
+        <li>
+            <a href="{% namespace_url "article-detail" article.slug namespace=view.app_config.namespace %}">
+                <strong>
                     {% for category in article.categories.all %}
-                        <a href="{% namespace_url "article-list-by-category" category.slug namespace=view.app_config.namespace %}">{{ category.name }}</a>{% if not forloop.last %}, {% endif %}
+                        {{ category.name }}{% if not forloop.last %}, {% endif %}
                     {% endfor %}
-                </p>
-            {% endif %}
-            {% if article.tags.count %}
-                <p class="meta tags"><strong>Tags</strong>:
-                    {% for tag in article.tags.all %}
-                        <a href="{% namespace_url "article-list-by-tag" tag.slug %}">{{ tag.name }}</a>
-                    {% endfor %}
-                </p>
-            {% endif %}
+                </strong>
+                {{ article.title }}<br />
+                <span class="text-muted">{{ article.lead_in|striptags|truncatewords:"10" }}</span>
+            </a>
         </li>
     {% empty %}
         {% if query %}
-            <p class="well">{% blocktrans with query=query %}No articles found containing "{{ query }}".{% endblocktrans %}</p>
+            <p class="well">{% blocktrans with query=query %}No articles found{% endblocktrans %}</p>
         {% else %}
-            <p class="well">{% trans "Enter a query above." %}</p>
+            <p class="well">{% trans "Enter a query above" %}</p>
         {% endif %}
     {% endfor %}
 </ul>
