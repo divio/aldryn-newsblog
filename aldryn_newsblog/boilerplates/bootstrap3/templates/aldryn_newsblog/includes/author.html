@@ -7,7 +7,7 @@
                 {% thumbnail author.visual "50x50" crop upscale subject_location=author.visual.subject_location as author_image %}
                 <img src="{{ author_image.url }}" width="50" height="50" alt="{{ author }}">
             {% else %}
-                <img src="{% static "aldryn_newsblog/img/no-photo.png" %}" height="50" width="50" alt="{{ author }}">
+                <img src="{% static "img/aldryn_newsblog/no-photo.png" %}" height="50" width="50" alt="{{ author }}">
             {% endif %}
         </a>
     </div>
