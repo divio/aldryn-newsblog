@@ -2,12 +2,16 @@ from django.conf.urls import patterns, url
 
 from aldryn_newsblog.views import (
     ArticleDetail, ArticleList, AuthorArticleList, CategoryArticleList,
-    YearArticleList, MonthArticleList, DayArticleList, TagArticleList)
+    YearArticleList, MonthArticleList, DayArticleList, TagArticleList,
+    ArticleSearchResultsList)
 
 urlpatterns = patterns(
     '',
     url(r'^$',
         ArticleList.as_view(), name='article-list'),
+
+    url(r'^search/$',
+        ArticleSearchResultsList.as_view(), name='article-search'),
 
     url(r'^(?P<year>[0-9]{4})/$',
         YearArticleList.as_view(), name='article-list-by-year'),
@@ -27,4 +31,5 @@ urlpatterns = patterns(
 
     url(r'^tag/(?P<tag>\w[-\w]*)/$',
         TagArticleList.as_view(), name='article-list-by-tag'),
+
 )
