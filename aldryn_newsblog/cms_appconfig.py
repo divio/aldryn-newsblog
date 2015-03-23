@@ -41,13 +41,39 @@ class NewsBlogConfig(TranslatableModel, AppHookConfig):
         help_text=_('Include articles in search indexes?'),
     )
 
-    list_view_placeholder = PlaceholderField(
-        'newsblog_list_view',
-        related_name='aldryn_newsblog_list_view_placeholder_set',
+    placeholder_base_top = PlaceholderField(
+        'newsblog_base_top',
+        related_name='aldryn_newsblog_base_top',
     )
-    detail_view_placeholder = PlaceholderField(
-        'newsblog_detail_view',
-        related_name='aldryn_newsblog_detail_view_placeholder_set',
+
+    placeholder_base_sidebar = PlaceholderField(
+        'newsblog_base_sidebar',
+        related_name='aldryn_newsblog_base_sidebar',
+    )
+
+    placeholder_list_top = PlaceholderField(
+        'newsblog_list_top',
+        related_name='aldryn_newsblog_list_top',
+    )
+
+    placeholder_list_footer = PlaceholderField(
+        'newsblog_list_footer',
+        related_name='aldryn_newsblog_list_footer',
+    )
+
+    placeholder_detail_top = PlaceholderField(
+        'newsblog_detail_top',
+        related_name='aldryn_newsblog_detail_top',
+    )
+
+    placeholder_detail_bottom = PlaceholderField(
+        'newsblog_detail_bottom',
+        related_name='aldryn_newsblog_detail_bottom',
+    )
+
+    placeholder_detail_footer = PlaceholderField(
+        'newsblog_detail_footer',
+        related_name='aldryn_newsblog_detail_footer',
     )
 
     def get_app_title(self):
