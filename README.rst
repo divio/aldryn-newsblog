@@ -22,6 +22,11 @@ NOTICE: ::
     Version 0.6.0 will remove the old static placeholders to avoid any further
     confusion.
 
+    ALSO NOTE: The article's PlaceholderField has also had its visible name
+    updated. The old name will continue to be displayed in structure mode until
+    the article is saved. Similarly, the new app_config-based PlaceholderFields
+    will not actually appear in structure mode until the app_config is saved
+    again.
 
 Description
 ~~~~~~~~~~~
