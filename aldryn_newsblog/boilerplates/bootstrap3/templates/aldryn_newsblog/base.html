@@ -7,22 +7,4 @@
 {% endblock extend_breadcrumb %}
 
 {% block content %}
-<div class="container">
-    <div class="row">
-        <div class="col-md-17">
-            {% if view.show_header %}
-            {% static_placeholder "newsblog_top" %}
-            {% endif %}
-            <div class="aldryn aldryn-newsblog">
-                {% block newsblog_title %}{% endblock %}
-                {% block newsblog_content %}{% endblock %}
-                {% block newsblog_footer %}{% endblock %}
-            </div>
-        </div>
-        <div class="col-md-7 aldryn-newsblog aldryn-newsblog-sidebar">
-            {% static_placeholder "newsblog_sidebar" %}
-            {% block newsblog_sidebar %}{% endblock %}
-        </div>
-    </div>
-</div>
 {% endblock content %}

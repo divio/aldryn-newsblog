@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load i18n cms_tags %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-17">
+            {% if view.show_header %}
+            {# DEPRECATED - STATIC PLACEHOLDER "NEWSBLOG_TOP" WILL BE REMOVED IN 1.0.0 #}
+            {% static_placeholder "newsblog_top" %}
+            {% render_placeholder view.app_config.list_view_placeholder_top %}
+            {% endif %}
+            <div class="aldryn aldryn-newsblog">
+                {% block newsblog_title %}{% endblock %}
+                {% block newsblog_content %}{% endblock %}
+                {% block newsblog_footer %}{% endblock %}
+            </div>
+        </div>
+        <div class="col-md-7 aldryn-newsblog aldryn-newsblog-sidebar">
+            {# DEPRECATED - STATIC PLACEHOLDER "NEWSBLOG_SIDEBAR" WILL BE REMOVED IN 1.0.0 #}
+            {% static_placeholder "newsblog_sidebar" %}
+            {% render_placeholder view.config.placeholder_base_sidebar %}
+            {% block newsblog_sidebar %}{% endblock %}
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -76,8 +76,8 @@ class Article(TranslatableModel):
         search_data=models.TextField(blank=True, editable=False)
     )
 
-    content = PlaceholderField('aldryn_newsblog_article_content',
-                               related_name='aldryn_newsblog_articles',
+    content = PlaceholderField('newsblog_article_content',
+                               related_name='newsblog_article_content',
                                unique=True)
     author = models.ForeignKey(Person, null=True, blank=True,
                                verbose_name=_('author'))
