@@ -60,9 +60,9 @@ class ArticleDetail(TranslatableSlugMixin, AppConfigMixin, DetailView):
         )
 
 
-class ArticleList(ViewUrlMixin, AppConfigMixin, ListView):
-    """A complete list of articles."""
+class ArticleListBase(ViewUrlMixin, AppConfigMixin, ListView):
     model = Article
+    show_header = False
 
     def get_paginate_by(self, queryset):
         if self.paginate_by and self.paginate_by is not None:
@@ -82,7 +82,12 @@ class ArticleList(ViewUrlMixin, AppConfigMixin, ListView):
         )
 
 
-class ArticleSearchResultsList(ArticleList):
+class ArticleList(ArticleListBase):
+    """A complete list of articles."""
+    show_header = True
+
+
+class ArticleSearchResultsList(ArticleListBase):
     model = Article
     http_method_names = ['get', 'post', ]
     partial_name = 'aldryn_newsblog/includes/search_results.html'
@@ -123,7 +128,7 @@ class ArticleSearchResultsList(ArticleList):
             return [self.template_name, ]
 
 
-class AuthorArticleList(ArticleList):
+class AuthorArticleList(ArticleListBase):
     """A list of articles written by a specific author."""
     @property
     def queryset(self):
@@ -141,7 +146,7 @@ class AuthorArticleList(ArticleList):
         return super(AuthorArticleList, self).get_context_data(**kwargs)
 
 
-class CategoryArticleList(ArticleList):
+class CategoryArticleList(ArticleListBase):
     """A list of articles filtered by categories."""
     @property
     def queryset(self):
@@ -159,7 +164,7 @@ class CategoryArticleList(ArticleList):
         return ctx
 
 
-class TagArticleList(ArticleList):
+class TagArticleList(ArticleListBase):
     """A list of articles filtered by tags."""
     @property
     def queryset(self):
@@ -175,7 +180,7 @@ class TagArticleList(ArticleList):
         return super(TagArticleList, self).get_context_data(**kwargs)
 
 
-class DateRangeArticleList(ArticleList):
+class DateRangeArticleList(ArticleListBase):
     """A list of articles for a specific date range"""
     @property
     def queryset(self):
