@@ -61,7 +61,6 @@ class NewsBlogConfig(TranslatableModel, AppHookConfig):
         related_name='aldryn_newsblog_list_footer',
     )
 
-    # Renamed
     placeholder_detail_top = PlaceholderField(
         'newsblog_detail_top',
         related_name='aldryn_newsblog_detail_top',
