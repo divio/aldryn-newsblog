@@ -2,7 +2,7 @@
 
 <div class="aldryn aldryn-newsblog aldryn-newsblog-articles">
     {% for article in instance.get_articles %}
-        {% include "aldryn_newsblog/includes/article.html" %}
+        {% include "aldryn_newsblog/includes/article.html" with namespace=instance.app_config.namespace %}
     {% empty %}
         <p class="well">{% trans "No items available" %}</p>
     {% endfor %}

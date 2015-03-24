@@ -20,7 +20,7 @@
         {% if article.categories %}
             <p class="category">
                 {% for category in article.categories.all %}
-                    <a href="{% namespace_url "article-list-by-category" category.slug %}">{{ category.name }}</a>{% if not forloop.last %}, {% endif %}
+                    <a href="{% namespace_url "article-list-by-category" category.slug namespace=namespace %}">{{ category.name }}</a>{% if not forloop.last %}, {% endif %}
                 {% endfor %}
             </p>
         {% endif %}
@@ -48,7 +48,7 @@
         {% if article.tags and detail_view %}
             <p class="tags">
                 {% for tag in article.tags.all %}
-                    <a href="{% namespace_url "article-list-by-tag" tag.slug %}">{{ tag.name }}</a>
+                    <a href="{% namespace_url "article-list-by-tag" tag.slug namespace=namespace %}">{{ tag.name }}</a>
                 {% endfor %}
             </p>
         {% endif %}
