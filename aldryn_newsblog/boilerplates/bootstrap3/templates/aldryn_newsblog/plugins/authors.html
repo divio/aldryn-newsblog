@@ -4,7 +4,7 @@
     <ul class="list-unstyled">
         {% for author in instance.get_authors %}
             <li>
-                {% include "aldryn_newsblog/includes/author.html" with author_view="true" %}
+                {% include "aldryn_newsblog/includes/author.html" with author_view="true" namespace=instance.app_config.namespace %}
             </li>
         {% empty %}
             <li class="well">{% trans "No items available" %}</li>
