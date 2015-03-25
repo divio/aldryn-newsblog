@@ -143,6 +143,16 @@ __ http://django-filer.readthedocs.org/en/latest/installation.html#subject-locat
 5) (Re-)Start your application server.
 
 
+Settings
+~~~~~~~~
+
+The flag `ALDRYN_NEWSBLOG_SEARCH` can be set to `False` in settings if indexing
+should be globally disabled for NewsBlog. When this is `False`, it overrides
+the setting in the application configuration on each apphook.
+
+If aldryn-search, Haystack, et al, are not installed, this setting does nothing.
+
+
 -----
 Notes
 -----
