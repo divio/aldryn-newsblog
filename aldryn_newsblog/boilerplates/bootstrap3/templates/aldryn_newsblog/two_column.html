@@ -6,8 +6,6 @@
     <div class="row">
         <div class="col-md-17">
             {% if view.show_header %}
-            {# DEPRECATED - STATIC PLACEHOLDER "NEWSBLOG_TOP" WILL BE REMOVED IN 0.6.0 #}
-            {% static_placeholder "newsblog_top" %}
             {% render_placeholder view.config.placeholder_base_top %}
             {% endif %}
             <div class="aldryn aldryn-newsblog">
@@ -17,8 +15,6 @@
             </div>
         </div>
         <div class="col-md-7 aldryn-newsblog aldryn-newsblog-sidebar">
-            {# DEPRECATED - STATIC PLACEHOLDER "NEWSBLOG_SIDEBAR" WILL BE REMOVED IN 0.6.0 #}
-            {% static_placeholder "newsblog_sidebar" %}
             {% render_placeholder view.config.placeholder_base_sidebar %}
             {% block newsblog_sidebar %}{% endblock %}
         </div>

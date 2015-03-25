@@ -6,8 +6,6 @@
     <div class="aldryn-newsblog-detail">
         {% include "aldryn_newsblog/includes/article.html" with detail_view="true" %}
     </div>
-    {# DEPRECATED - STATIC PLACEHOLDER "NEWSBLOG_DETAIL_VIEW" WILL BE REMOVED IN 0.6.0 #}
-    {% static_placeholder "newsblog_detail_view" %}
     {% render_placeholder view.config.placeholder_detail_bottom %}
 {% endblock %}
 
@@ -27,7 +25,5 @@
             {% endif %}
         </ul>
     </div>
-    {# DEPRECATED - STATIC PLACEHOLDER "NEWSBLOG_DETAIL_FOOTER" WILL BE REMOVED IN 0.6.0 #}
-    {% static_placeholder "newsblog_detail_footer" %}
     {% render_placeholder view.config.placeholder_detail_footer %}
 {% endblock %}
