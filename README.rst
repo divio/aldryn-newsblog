@@ -66,6 +66,7 @@ Manual Installation
    may need to be installed if they are not already: ::
 
       aldryn-apphooks-config
+      aldryn-boilerplates
       aldryn-categories
       aldryn-people
       aldryn-reversion
@@ -81,6 +82,7 @@ Manual Installation
     INSTALLED_APPS = [
         …
         'aldryn_apphooks_config',
+        'aldryn_boilerplates',
         'aldryn_categories',
         'aldryn_newsblog',
         'aldryn_people',
