@@ -77,8 +77,7 @@ class Article(TranslatableModel):
     )
 
     content = PlaceholderField('newsblog_article_content',
-                               related_name='newsblog_article_content',
-                               unique=True)
+                               related_name='newsblog_article_content')
     author = models.ForeignKey(Person, null=True, blank=True,
                                verbose_name=_('author'))
     owner = models.ForeignKey(User, verbose_name=_('owner'))
