@@ -1,13 +1,16 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from django.conf import settings
+
 from aldryn_search.utils import get_index_base
 
 from .models import Article
 
 
 class ArticleIndex(get_index_base()):
-    haystack_use_for_indexing = True
+    haystack_use_for_indexing = getattr(
+        settings, 'ALDRYN_NEWSBLOG_SEARCH', True)
 
     index_title = True
 
