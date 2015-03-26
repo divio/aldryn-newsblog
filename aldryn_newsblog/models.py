@@ -8,6 +8,8 @@ from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.utils.encoding import python_2_unicode_compatible
 try:
     from django.utils.encoding import force_unicode
@@ -122,11 +124,13 @@ class Article(TranslatableModel):
             slug += "_%d" % i
         return slug
 
-    def get_search_data(self, language, request=None):
+    def get_search_data(self, language=None, request=None):
         """
         Provides an index for use with Haystack, or, for populating
         Article.translations.search_data.
         """
+        if language is None:
+            language = get_language()
         if request is None:
             request = get_request(language=language)
         description = self.safe_translation_getter('lead_in')
@@ -142,6 +146,9 @@ class Article(TranslatableModel):
         return ' '.join(text_bits)
 
     def save(self, *args, **kwargs):
+        # Update the search index
+        article.search_data = self.get_search_data()
+
         # Ensure there is an owner.
         if self.app_config.create_authors and self.author is None:
             self.author = Person.objects.get_or_create(
@@ -326,3 +333,17 @@ class NewsBlogTagsPlugin(NewsBlogCMSPlugin):
                     tags[tag.id] = tag
         # Return most frequently used tags first
         return sorted(tags.values(), key=lambda x: x.count, reverse=True)
+
+
+@receiver(post_save)
+def update_seach_index(sender, instance, **kwargs):
+    """
+    Upon detecting changes in a plugin used in an Article's content
+    (PlaceholderField), update the article's search_index so that we can
+    perform simple searches even without Haystack, etc.
+    """
+    if issubclass(instance.__class__, CMSPlugin):
+        placeholder = instance._placeholder_cache
+        article = placeholder._attached_model_cache.objects.get(content=placeholder.id)
+        article.search_data = article.get_search_data(instance.language)
+        article.save()
