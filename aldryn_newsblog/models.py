@@ -108,13 +108,21 @@ class Article(TranslatableModel):
         return self.safe_translation_getter('title', any_language=True)
 
     def get_absolute_url(self):
-        return reverse(
-            '{namespace}:article-detail'.format(
-                namespace=self.app_config.namespace
-            ), kwargs={
-                'slug': self.safe_translation_getter('slug', any_language=True)
-            }
-        )
+        #
+        # NB: It is important that this is safe to run even when the user has
+        # not created the apphook yet, as some user work-flows involve creating
+        # articles before the page exists.
+        #
+        try:
+            return reverse(
+                '{namespace}:article-detail'.format(
+                    namespace=self.app_config.namespace
+                ), kwargs={
+                    'slug': self.safe_translation_getter('slug', any_language=True)
+                }
+            )
+        except:
+            return ''  # Note NOT None here
 
     def slugify(self, source_text, i=None):
         slug = default_slugify(source_text)
@@ -132,12 +140,15 @@ class Article(TranslatableModel):
         description = self.safe_translation_getter('lead_in')
         text_bits = [strip_tags(description)]
         for category in self.categories.all():
-            text_bits.append(force_unicode(category.safe_translation_getter('name')))
+            text_bits.append(
+                force_unicode(category.safe_translation_getter('name')))
         for tag in self.tags.all():
             text_bits.append(force_unicode(tag.name))
         if self.content:
-            for base_plugin in self.content.cmsplugin_set.filter(language=language):
-                plugin_text_content = ' '.join(get_plugin_index_data(base_plugin, request))
+            plugins = self.content.cmsplugin_set.filter(language=language)
+            for base_plugin in plugins:
+                plugin_text_content = ' '.join(
+                    get_plugin_index_data(base_plugin, request))
                 text_bits.append(plugin_text_content)
         return ' '.join(text_bits)
 

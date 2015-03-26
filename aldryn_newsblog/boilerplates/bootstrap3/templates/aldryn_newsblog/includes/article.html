@@ -29,7 +29,13 @@
     {% block newsblock_title %}
         <h2>
             {% if not detail_view %}
+                {% with url=article.get_absolute_url %}
+                {% if url %}
                 <a href="{{ article.get_absolute_url }}">{% render_model article "title" %}</a>
+                {% else %}
+                {% render_model article "title" %}
+                {% endif %}
+                {% endwith %}
             {% else %}
                 {% render_model article "title" %}
             {% endif %}
