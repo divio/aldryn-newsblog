@@ -129,6 +129,8 @@ class Article(TranslatableModel):
         Provides an index for use with Haystack, or, for populating
         Article.translations.search_data.
         """
+        if not self.pk:
+            return ''
         if language is None:
             language = get_language()
         if request is None:
@@ -147,7 +149,7 @@ class Article(TranslatableModel):
 
     def save(self, *args, **kwargs):
         # Update the search index
-        article.search_data = self.get_search_data()
+        self.search_data = self.get_search_data()
 
         # Ensure there is an owner.
         if self.app_config.create_authors and self.author is None:
@@ -344,6 +346,8 @@ def update_seach_index(sender, instance, **kwargs):
     """
     if issubclass(instance.__class__, CMSPlugin):
         placeholder = instance._placeholder_cache
-        article = placeholder._attached_model_cache.objects.get(content=placeholder.id)
-        article.search_data = article.get_search_data(instance.language)
-        article.save()
+        if hasattr(placeholder, '_attached_model_cache'):
+            if placeholder._attached_model_cache == Article:
+                article = placeholder._attached_model_cache.objects.get(content=placeholder.id)
+                article.search_data = article.get_search_data(instance.language)
+                article.save()

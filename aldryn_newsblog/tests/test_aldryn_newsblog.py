@@ -617,6 +617,7 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
             article.tags.add(tag_name)
         for category in (self.category1, self.category2):
             article.categories.add(category)
+        article.save()
 
         self.assertEqual(self.index.get_title(article), 'a title')
         self.assertEqual(self.index.get_description(article), 'lead in text')
