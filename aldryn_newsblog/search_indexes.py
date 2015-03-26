@@ -37,7 +37,4 @@ class ArticleIndex(get_index_base()):
         return Article
 
     def get_search_data(self, article, language, request):
-        if not article.search_data:
-            article.search_data = article.get_search_data(language, request)
-            article.save()
         return article.search_data
