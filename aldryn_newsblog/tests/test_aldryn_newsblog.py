@@ -15,7 +15,7 @@ from random import randint
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.files import File as DjangoFile
-from django.core.urlresolvers import reverse, NoReverseMatch
+from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.test import TransactionTestCase
 from django.utils.translation import activate, override, get_language
@@ -397,12 +397,10 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
         for month in months:
             for _ in range(month['num_articles']):
                 article = self.create_article(publishing_date=month['date'])
+
         # unpublish one specific article to test that it is not counted
         article.is_published = False
         article.save()
-
-        # article = Article.objects.namespace(
-        #     self.app_config.namespace).order_by('publishing_date').last()
         months[-1]['num_articles'] -= 1
 
         self.assertEquals(
