@@ -55,8 +55,8 @@ class ArticleDetail(TranslatableSlugMixin, AppConfigMixin, DetailView):
     def get_queryset(self):
         return Article.objects.published().active_translations(
             translation.get_language()
-        ).filter(
-            app_config__namespace=self.namespace
+        ).namespace(
+            self.namespace
         )
 
 
@@ -77,8 +77,8 @@ class ArticleListBase(ViewUrlMixin, AppConfigMixin, ListView):
     def queryset(self):
         return Article.objects.published().active_translations(
             translation.get_language()
-        ).filter(
-            app_config__namespace=self.namespace
+        ).namespace(
+            self.namespace
         )
 
 
