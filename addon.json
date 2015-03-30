@@ -1,7 +1,4 @@
 {
-    "name": "Aldryn News & Blog",
-    "description": "Adds news and blogging abilities to django CMS",
-    "url": "https://github.com/aldryn/aldryn-newsblog",
     "package-name": "aldryn-newsblog",
     "installed-apps": [
         "aldryn_apphooks_config",
