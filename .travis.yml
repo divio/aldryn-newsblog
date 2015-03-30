@@ -45,4 +45,4 @@ after_success: coveralls
 
 # Testing only...
 notifications:
-  webhooks: http://www.sisuconsulting.com/addons/travis-endpoint/
+  webhooks: http://addons.us-iad-rs.aldryn.io/en/travis-endpoint/
