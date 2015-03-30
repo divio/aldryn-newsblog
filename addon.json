@@ -6,13 +6,15 @@
     "installed-apps": [
         "aldryn_apphooks_config",
         "aldryn_boilerplates",
-        "aldryn_people",
-        "aldryn_reversion",
         "aldryn_categories",
         "aldryn_common",
+        "aldryn_newsblog",
+        "aldryn_people",
+        "aldryn_reversion",
+        "easy_thumbnails",
+        "filer",
         "sortedm2m",
-        "taggit",
-        "aldryn_newsblog"
+        "taggit"
     ],
     "author": {
         "name": "Divio AG",
