@@ -98,8 +98,8 @@ class Article(TranslatableModel):
 
     tags = TaggableManager(blank=True)
 
-    related = SortedManyToManyField('self',
-        verbose_name=_('related articles'), blank=True)
+    related = SortedManyToManyField('self', verbose_name=_('related articles'),
+                                    blank=True)
 
     objects = RelatedManager()
 
@@ -227,7 +227,8 @@ class NewsBlogArchivePlugin(NewsBlogCMSPlugin):
 
 
 class NewsBlogArticleSearchPlugin(NewsBlogCMSPlugin):
-    max_articles = models.PositiveIntegerField(_('max articles'), default=10,
+    max_articles = models.PositiveIntegerField(
+        _('max articles'), default=10,
         validators=[django.core.validators.MinValueValidator(1)],
         help_text=_('The maximum number of found articles display.')
     )

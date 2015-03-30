@@ -15,7 +15,7 @@ from random import randint
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.files import File as DjangoFile
-from django.core.urlresolvers import reverse, NoReverseMatch
+from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.test import TransactionTestCase
 from django.utils.translation import activate, override, get_language
@@ -88,13 +88,14 @@ class NewsBlogTestsMixin(CategoryTestCaseMixin):
 
         return article
 
-    def create_tagged_articles(self, num_articles=3, tags=('tag1', 'tag2')):
+    def create_tagged_articles(self, num_articles=3, tags=('tag1', 'tag2'),
+                               **kwargs):
         """Create num_articles Articles for each tag"""
         articles = {}
         for tag_name in tags:
             tagged_articles = []
             for _ in range(num_articles):
-                article = self.create_article()
+                article = self.create_article(**kwargs)
                 article.save()
                 article.tags.add(tag_name)
                 tagged_articles.append(article)
@@ -395,7 +396,13 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
         ]
         for month in months:
             for _ in range(month['num_articles']):
-                self.create_article(publishing_date=month['date'])
+                article = self.create_article(publishing_date=month['date'])
+
+        # unpublish one specific article to test that it is not counted
+        article.is_published = False
+        article.save()
+        months[-1]['num_articles'] -= 1
+
         self.assertEquals(
             sorted(
                 Article.objects.get_months(
@@ -412,9 +419,14 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
 
         for i, data in enumerate(authors):
             for _ in range(data[1]):
-                self.create_article(author=data[0])
+                article = self.create_article(author=data[0])
             # replace author with it's pk, as we need it to easily compare
             authors[i] = (data[0].pk, data[1])
+
+        # unpublish one specific article to test that it is not counted
+        article.is_published = False
+        article.save()
+        authors[-1] = (authors[-1][0], authors[-1][1] - 1)
 
         self.assertEquals(
             sorted(
@@ -425,15 +437,20 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
             authors)
 
     def test_articles_count_by_tags(self):
+        tags = Article.objects.get_tags(namespace=self.app_config.namespace)
+        self.assertEquals(tags, [])
+
         untagged_articles = []
         for _ in range(5):
             article = self.create_article()
             untagged_articles.append(article)
+
         # Tag objects are created on attaching tag name to Article,
         # so this looks not very DRY
         tag_names = ('tag foo', 'tag bar', 'tag buzz')
-        tag_slug1 = self.create_tagged_articles(
-            1, tags=(tag_names[0],)).keys()[0]
+        # create unpublished article to test that it is not counted
+        self.create_tagged_articles(
+            1, tags=(tag_names[0],), is_published=False)
         tag_slug2 = self.create_tagged_articles(
             3, tags=(tag_names[1],)).keys()[0]
         tag_slug3 = self.create_tagged_articles(
@@ -441,7 +458,6 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
         tags_expected = [
             (tag_slug3, 5),
             (tag_slug2, 3),
-            (tag_slug1, 1),
         ]
         tags = Article.objects.get_tags(namespace=self.app_config.namespace)
         tags = map(lambda x: (x.slug, x.num_articles), tags)
