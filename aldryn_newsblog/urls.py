@@ -4,11 +4,13 @@ from aldryn_newsblog.views import (
     ArticleDetail, ArticleList, AuthorArticleList, CategoryArticleList,
     YearArticleList, MonthArticleList, DayArticleList, TagArticleList,
     ArticleSearchResultsList)
+from aldryn_newsblog.feeds import LatestArticlesFeed, TagFeed, CategoryFeed
 
 urlpatterns = patterns(
     '',
     url(r'^$',
         ArticleList.as_view(), name='article-list'),
+    url(r'^feed/$', LatestArticlesFeed(), name='article-list-feed'),
 
     url(r'^search/$',
         ArticleSearchResultsList.as_view(), name='article-search'),
@@ -28,8 +30,12 @@ urlpatterns = patterns(
 
     url(r'^category/(?P<category>\w[-\w]*)/$',
         CategoryArticleList.as_view(), name='article-list-by-category'),
+    url(r'^category/(?P<category>\w[-\w]*)/feed/$', CategoryFeed(),
+        name='article-list-by-category-feed'),
 
     url(r'^tag/(?P<tag>\w[-\w]*)/$',
         TagArticleList.as_view(), name='article-list-by-tag'),
+    url(r'^tag/(?P<tag>\w[-\w]*)/feed/$', TagFeed(),
+        name='article-list-by-tag-feed'),
 
 )
