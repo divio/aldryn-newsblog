@@ -82,7 +82,6 @@ class ArticleAdmin(VersionedPlaceholderAdminMixin,
             )
         }),
         ('Details', {
-            'classes': ('collapse',),
             'fields': (
                 'is_featured',
                 'tags',
