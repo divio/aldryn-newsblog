@@ -141,7 +141,7 @@ class NewsBlogTestsMixin(CategoryTestCaseMixin):
         self.root_page = api.create_page(
             'root page', self.template, self.language, published=True)
         self.app_config = NewsBlogConfig.objects.create(
-            namespace='NBNS', paginate_by=10)
+            namespace='NBNS', paginate_by=15)
         self.page = api.create_page(
             'page', self.template, self.language, published=True,
             parent=self.root_page,
@@ -190,7 +190,7 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
         self.assertEqual(response.status_code, 404)
 
     def test_articles_list(self):
-        articles = [self.create_article() for _ in range(10)]
+        articles = [self.create_article() for _ in range(11)]
         unpublished_article = articles[0]
         unpublished_article.is_published = False
         unpublished_article.save()
@@ -226,7 +226,7 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
         author1, author2 = self.create_person(), self.create_person()
         for author in (author1, author2):
             articles = [
-                self.create_article(author=author) for _ in range(10)]
+                self.create_article(author=author) for _ in range(11)]
             response = self.client.get(reverse(
                 'aldryn_newsblog:article-list-by-author',
                 kwargs={'author': author.slug}))
@@ -240,7 +240,7 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
         for category in (self.category1, self.category2):
             articles = []
             code = "{0}-".format(self.language)
-            for _ in range(10):
+            for _ in range(11):
                 article = Article.objects.create(
                     title=rand_str(), slug=rand_str(prefix=code),
                     app_config=self.app_config,
@@ -469,12 +469,12 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
             self.create_article(
                 publishing_date=datetime(
                     1914, 7, 28, randint(0, 23), randint(0, 59)))
-            for _ in range(10)]
+            for _ in range(11)]
         out_articles = [
             self.create_article(
                 publishing_date=datetime(
                     1939, 9, 1, randint(0, 23), randint(0, 59)))
-            for _ in range(10)]
+            for _ in range(11)]
         response = self.client.get(reverse(
             'aldryn_newsblog:article-list-by-day',
             kwargs={'year': '1914', 'month': '07', 'day': '28'}))
@@ -488,12 +488,12 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
             self.create_article(
                 publishing_date=datetime(
                     1914, 7, randint(1, 31), randint(0, 23), randint(0, 59)))
-            for _ in range(10)]
+            for _ in range(11)]
         out_articles = [
             self.create_article(
                 publishing_date=datetime(
                     1939, 9, 1, randint(0, 23), randint(0, 59)))
-            for _ in range(10)]
+            for _ in range(11)]
         response = self.client.get(reverse(
             'aldryn_newsblog:article-list-by-month',
             kwargs={'year': '1914', 'month': '07'}))
@@ -506,15 +506,15 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
         in_articles = [
             self.create_article(
                 publishing_date=datetime(
-                    1914, randint(1, 12), randint(1, 28),
+                    1914, randint(1, 11), randint(1, 28),
                     randint(0, 23), randint(0, 59)))
-            for _ in range(10)]
+            for _ in range(11)]
         out_articles = [
             self.create_article(
                 publishing_date=datetime(
                     1939, randint(1, 12), randint(1, 28),
                     randint(0, 23), randint(0, 59)))
-            for _ in range(10)]
+            for _ in range(11)]
         response = self.client.get(reverse(
             'aldryn_newsblog:article-list-by-year', kwargs={'year': '1914'}))
         for article in out_articles:
@@ -544,7 +544,7 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
         # create a new namespace that has no corresponding blog app page
         app_config = NewsBlogConfig.objects.create(namespace='another')
         articles = [self.create_article(app_config=app_config)
-                    for _ in range(10)]
+                    for _ in range(11)]
         try:
             response = self.client.get(articles[0].get_absolute_url())
         except:
