@@ -2,8 +2,6 @@
 
 from __future__ import unicode_literals
 
-import datetime
-
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse
@@ -16,6 +14,7 @@ try:
 except ImportError:
     from django.utils.encoding import force_text as force_unicode
 from django.utils.text import slugify as default_slugify
+from django.utils.timezone import now
 from django.utils.translation import get_language, ugettext_lazy as _
 from django.contrib.auth.models import User
 from cms.models.fields import PlaceholderField
@@ -89,7 +88,7 @@ class Article(TranslatableModel):
                                          verbose_name=_('categories'),
                                          blank=True)
     publishing_date = models.DateTimeField(_('publishing date'),
-                                           default=datetime.datetime.now)
+                                           default=now())
     is_published = models.BooleanField(_('is published'), default=True,
                                        db_index=True)
     is_featured = models.BooleanField(_('is featured'), default=False,
