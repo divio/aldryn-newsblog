@@ -69,7 +69,7 @@ class ArticleListBase(ViewUrlMixin, AppConfigMixin, ListView):
             return self.paginate_by
         else:
             try:
-                return self.app_config.paginate_by
+                return self.config.paginate_by
             except AttributeError:
                 return 10  # sensible failsafe
 
