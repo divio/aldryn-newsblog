@@ -176,8 +176,8 @@ class Article(TranslatableModel):
             self.slug = default_slugify(self.title)
 
         # Ensure we aren't colliding with an existing slug *for this language*.
-        if Article.objects.translated(
-                slug=self.slug).exclude(id=self.id).count() == 0:
+        if not Article.objects.translated(
+                slug=self.slug).exclude(pk=self.pk).exists():
             return super(Article, self).save(*args, **kwargs)
 
         for lang in LANGUAGE_CODES:
@@ -191,7 +191,7 @@ class Article(TranslatableModel):
             #
             slugs = []
             all_slugs = Article.objects.language(lang).exclude(
-                id=self.id).values_list('translations__slug', flat=True)
+                pk=self.pk).values_list('translations__slug', flat=True)
             for slug in all_slugs:
                 if slug and slug.startswith(self.slug):
                     slugs.append(slug)
@@ -264,7 +264,7 @@ class NewsBlogCategoriesPlugin(NewsBlogCMSPlugin):
                                                     flat=True).distinct()
         category_list = list(category_list)
         qs = Category.objects.filter(
-            id__in=category_list,
+            pk__in=category_list,
             article__app_config=self.app_config,
         ).annotate(count=models.Count('article')).order_by('-count')
         return qs
@@ -337,14 +337,14 @@ class NewsBlogTagsPlugin(NewsBlogCMSPlugin):
     def get_tags(self):
         tags = {}
         articles = Article.objects.published().filter(
-            app_config=self.app_config)
+            app_config=self.app_config).prefetch_related('tags')
         for article in articles:
             for tag in article.tags.all():
-                if tag.id in tags:
-                    tags[tag.id].count += 1
+                if tag.pk in tags:
+                    tags[tag.pk].count += 1
                 else:
                     tag.count = 1
-                    tags[tag.id] = tag
+                    tags[tag.pk] = tag
         # Return most frequently used tags first
         return sorted(tags.values(), key=lambda x: x.count, reverse=True)
 
@@ -360,6 +360,6 @@ def update_seach_index(sender, instance, **kwargs):
         placeholder = instance._placeholder_cache
         if hasattr(placeholder, '_attached_model_cache'):
             if placeholder._attached_model_cache == Article:
-                article = placeholder._attached_model_cache.objects.get(content=placeholder.id)
+                article = placeholder._attached_model_cache.objects.get(content=placeholder.pk)
                 article.search_data = article.get_search_data(instance.language)
                 article.save()
