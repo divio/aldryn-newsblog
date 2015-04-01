@@ -8,7 +8,6 @@ import string
 import unittest
 
 from datetime import datetime, date, timedelta
-from easy_thumbnails.files import get_thumbnailer
 from operator import itemgetter
 from random import randint
 
@@ -18,27 +17,24 @@ from django.core.files import File as DjangoFile
 from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.test import TransactionTestCase
+from django.utils.timezone import now
 from django.utils.translation import activate, override, get_language
-from aldryn_newsblog.search_indexes import ArticleIndex
 
+from aldryn_categories.models import Category
+from aldryn_categories.tests import CategoryTestCaseMixin
+from aldryn_newsblog.feeds import LatestArticlesFeed, TagFeed, CategoryFeed
+from aldryn_newsblog.models import Article, NewsBlogConfig
+from aldryn_newsblog.search_indexes import ArticleIndex
+from aldryn_people.models import Person
+from aldryn_reversion.core import create_revision_with_placeholders
+from aldryn_search.helpers import get_request
 from cms import api
 from cms.utils import get_cms_setting
+from easy_thumbnails.files import get_thumbnailer
 from filer.models.imagemodels import Image
 from parler.tests.utils import override_parler_settings
 from parler.utils.conf import add_default_language_settings
 from parler.utils.context import switch_language, smart_override
-
-
-from aldryn_categories.models import Category
-from aldryn_categories.tests import CategoryTestCaseMixin
-
-from aldryn_people.models import Person
-
-from aldryn_search.helpers import get_request
-
-from aldryn_newsblog.feeds import LatestArticlesFeed, TagFeed, CategoryFeed
-from aldryn_newsblog.models import Article, NewsBlogConfig
-from aldryn_reversion.core import create_revision_with_placeholders
 
 from . import TESTS_STATIC_ROOT
 
@@ -923,7 +919,6 @@ class TestFeeds(NewsBlogTestsMixin, TransactionTestCase):
         self.request.path = reverse('{0}:article-list-by-category-feed'.format(
             self.app_config.namespace), args=[self.category1.slug])
         feed = CategoryFeed()(self.request, self.category1.slug)
-
         self.assertContains(feed, article.title)
         self.assertNotContains(feed, different_category_article.title)
 
