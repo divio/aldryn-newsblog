@@ -22,9 +22,16 @@ class NewsBlogArchivePlugin(NewsBlogPlugin):
     model = models.NewsBlogArchivePlugin
 
     def render(self, context, instance, placeholder):
+        request = context['request'] if 'request' in context else None
         context['instance'] = instance
-        context['dates'] = models.Article.objects.get_months(
-            namespace=instance.app_config.namespace)
+
+        queryset = models.Article.objects
+        if not instance.edit_mode(request):
+            queryset = queryset.published()
+
+        context['dates'] = queryset.get_months(
+            namespace=instance.app_config.namespace
+        )
         return context
 
 plugin_pool.register_plugin(NewsBlogArchivePlugin)
@@ -41,21 +48,22 @@ class NewsBlogArticleSearchPlugin(NewsBlogPlugin):
             instance.app_config.namespace))
         return context
 
-
 plugin_pool.register_plugin(NewsBlogArticleSearchPlugin)
 
 
+# TODO: NEEDS TESTS
 class NewsBlogAuthorsPlugin(NewsBlogPlugin):
     render_template = 'aldryn_newsblog/plugins/authors.html'
     name = _('Authors')
     model = models.NewsBlogAuthorsPlugin
 
     def render(self, context, instance, placeholder):
+        request = context['request'] if 'request' in context else None
         context['instance'] = instance
+        context['authors_list'] = instance.get_authors(request)
         context['article_list_url'] = reverse(
             '{0}:article-list'.format(instance.app_config.namespace))
         return context
-
 
 plugin_pool.register_plugin(NewsBlogAuthorsPlugin)
 
@@ -66,8 +74,9 @@ class NewsBlogCategoriesPlugin(NewsBlogPlugin):
     model = models.NewsBlogCategoriesPlugin
 
     def render(self, context, instance, placeholder):
+        request = context['request'] if 'request' in context else None
         context['instance'] = instance
-        context['categories'] = instance.get_categories()
+        context['categories'] = instance.get_categories(request)
         context['article_list_url'] = reverse(
             '{0}:article-list'.format(instance.app_config.namespace))
         return context
@@ -76,13 +85,16 @@ class NewsBlogCategoriesPlugin(NewsBlogPlugin):
 plugin_pool.register_plugin(NewsBlogCategoriesPlugin)
 
 
+# TODO: NEEDS TESTS
 class NewsBlogFeaturedArticlesPlugin(NewsBlogPlugin):
     render_template = 'aldryn_newsblog/plugins/featured_articles.html'
     name = _('Featured Articles')
     model = models.NewsBlogFeaturedArticlesPlugin
 
     def render(self, context, instance, placeholder):
+        request = context['request'] if 'request' in context else None
         context['instance'] = instance
+        context['articles_list'] = instance.get_articles(request)
         return context
 
 
@@ -96,7 +108,9 @@ class NewsBlogLatestArticlesPlugin(NewsBlogPlugin):
     model = models.NewsBlogLatestArticlesPlugin
 
     def render(self, context, instance, placeholder):
+        request = context['request'] if 'request' in context else None
         context['instance'] = instance
+        context['article_list'] = instance.get_articles(request)
         return context
 
 
@@ -126,7 +140,7 @@ class NewsBlogRelatedPlugin(NewsBlogPlugin):
         article = self.get_article(context)
         if article:
             context['article'] = article
-            context['related'] = article.related.all()
+            context['article_list'] = article.related.all()
         return context
 
 
@@ -139,8 +153,9 @@ class NewsBlogTagsPlugin(NewsBlogPlugin):
     model = models.NewsBlogTagsPlugin
 
     def render(self, context, instance, placeholder):
+        request = context['request'] if 'request' in context else None
         context['instance'] = instance
-        context['tags'] = instance.get_tags()
+        context['tags'] = instance.get_tags(request)
         context['article_list_url'] = reverse(
             '{0}:article-list'.format(instance.app_config.namespace))
         return context
