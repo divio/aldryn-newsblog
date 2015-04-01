@@ -6,6 +6,7 @@ from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
 
 from django.db.models import Q
+from django.shortcuts import get_object_or_404
 from django.utils import translation
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView
@@ -35,8 +36,9 @@ class ArticleDetail(TranslatableSlugMixin, AppConfigMixin, DetailView):
             queryset = self.get_queryset()
         if object is None:
             object = self.get_object(self)
-        prev_objs = queryset.filter(publishing_date__lt=object.publishing_date)
-        if prev_objs.count() > 0:
+        prev_objs = queryset.filter(
+            publishing_date__lt=object.publishing_date)[:1]
+        if prev_objs:
             return prev_objs[0]
         else:
             return None
@@ -46,8 +48,9 @@ class ArticleDetail(TranslatableSlugMixin, AppConfigMixin, DetailView):
             queryset = self.get_queryset()
         if object is None:
             object = self.get_object(self)
-        next_objs = queryset.filter(publishing_date__gt=object.publishing_date)
-        if next_objs.count() > 0:
+        next_objs = queryset.filter(
+            publishing_date__gt=object.publishing_date)[:1]
+        if next_objs:
             return next_objs[0]
         else:
             return None
@@ -65,7 +68,7 @@ class ArticleListBase(ViewUrlMixin, AppConfigMixin, ListView):
     show_header = False
 
     def get_paginate_by(self, queryset):
-        if self.paginate_by and self.paginate_by is not None:
+        if self.paginate_by is not None:
             return self.paginate_by
         else:
             try:
@@ -138,7 +141,7 @@ class AuthorArticleList(ArticleListBase):
             author=self.author)
 
     def get(self, request, author):
-        self.author = Person.objects.get(slug=author)
+        self.author = get_object_or_404(Person, slug=author)
         return super(AuthorArticleList, self).get(request)
 
     def get_context_data(self, **kwargs):
@@ -154,7 +157,8 @@ class CategoryArticleList(ArticleListBase):
             categories=self.category)
 
     def get(self, request, category):
-        self.category = Category.objects.get(translations__slug=category)
+        self.category = get_object_or_404(
+            Category, translations__slug=category)
         return super(CategoryArticleList, self).get(request)
 
     def get_context_data(self, **kwargs):
@@ -172,7 +176,7 @@ class TagArticleList(ArticleListBase):
             tags=self.tag)
 
     def get(self, request, tag):
-        self.tag = Tag.objects.get(slug=tag)
+        self.tag = get_object_or_404(Tag, slug=tag)
         return super(TagArticleList, self).get(request)
 
     def get_context_data(self, **kwargs):
