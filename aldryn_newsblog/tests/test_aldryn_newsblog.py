@@ -233,6 +233,12 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
             for article in articles:
                 self.assertContains(response, article.title)
 
+    def test_articles_by_unknown_author(self):
+        response = self.client.get(reverse(
+            'aldryn_newsblog:article-list-by-author',
+            kwargs={'author': 'unknown'}))
+        self.assertEqual(response.status_code, 404)
+
     def test_articles_by_category(self):
         """Tests that we can find articles by their categories, in ANY of the
         languages they are translated to"""
@@ -268,6 +274,12 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
                     else:
                         article.set_current_language(language)
                         self.assertNotContains(response, article.title)
+
+    def test_articles_by_unknown_category(self):
+        response = self.client.get(reverse(
+            'aldryn_newsblog:article-list-by-category',
+            kwargs={'category': 'unknown'}))
+        self.assertEqual(response.status_code, 404)
 
     def test_article_detail_not_translated_fallback(self):
         """
@@ -388,6 +400,12 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
             self.assertNotContains(response, article.title)
         for article in untagged_articles:
             self.assertNotContains(response, article.title)
+
+    def test_articles_by_unknown_tag(self):
+        response = self.client.get(reverse(
+            'aldryn_newsblog:article-list-by-tag',
+            kwargs={'tag': 'unknown'}))
+        self.assertEqual(response.status_code, 404)
 
     def test_articles_count_by_month(self):
         months = [
