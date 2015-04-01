@@ -3,7 +3,6 @@
 from django.contrib.sites.models import Site
 from django.contrib.syndication.views import Feed
 from django.core.urlresolvers import reverse
-from django.utils import timezone
 from django.utils.translation import (
     get_language, get_language_from_request, ugettext as _)
 
@@ -27,9 +26,9 @@ class LatestArticlesFeed(Feed):
 
     def get_queryset(self):
         language = get_language()
-        return Article.objects.published().filter(
-            publishing_date__lte=timezone.now).active_translations(
-                language).namespace(self.namespace)
+        return Article.objects.published().active_translations(
+            language
+        ).namespace(self.namespace)
 
     def items(self, obj):
         qs = self.get_queryset()

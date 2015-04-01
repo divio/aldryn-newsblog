@@ -2,34 +2,35 @@
 
 from __future__ import unicode_literals
 
-import datetime
-
 from django.conf import settings
+from django.contrib.auth.models import User
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.utils.encoding import python_2_unicode_compatible
 try:
     from django.utils.encoding import force_unicode
 except ImportError:
     from django.utils.encoding import force_text as force_unicode
+from django.utils.encoding import python_2_unicode_compatible
 from django.utils.text import slugify as default_slugify
+from django.utils.timezone import now
 from django.utils.translation import get_language, ugettext_lazy as _
-from django.contrib.auth.models import User
-from cms.models.fields import PlaceholderField
-from cms.models.pluginmodel import CMSPlugin
-from djangocms_text_ckeditor.fields import HTMLField
-from filer.fields.image import FilerImageField
 
 from aldryn_categories.fields import CategoryManyToManyField
 from aldryn_categories.models import Category
 from aldryn_people.models import Person
 from aldryn_reversion.core import version_controlled_content
+
+from cms.models.fields import PlaceholderField
+from cms.models.pluginmodel import CMSPlugin
+
+from djangocms_text_ckeditor.fields import HTMLField
+from filer.fields.image import FilerImageField
 from parler.models import TranslatableModel, TranslatedFields
-from taggit.managers import TaggableManager
 from sortedm2m.fields import SortedManyToManyField
+from taggit.managers import TaggableManager
 
 from .cms_appconfig import NewsBlogConfig
 from .managers import RelatedManager
@@ -89,7 +90,7 @@ class Article(TranslatableModel):
                                          verbose_name=_('categories'),
                                          blank=True)
     publishing_date = models.DateTimeField(_('publishing date'),
-                                           default=datetime.datetime.now)
+                                           default=now())
     is_published = models.BooleanField(_('is published'), default=True,
                                        db_index=True)
     is_featured = models.BooleanField(_('is featured'), default=False,
@@ -106,8 +107,13 @@ class Article(TranslatableModel):
     class Meta:
         ordering = ['-publishing_date']
 
-    def __str__(self):
-        return self.safe_translation_getter('title', any_language=True)
+    @property
+    def published(self):
+        """
+        Returns True only if the article (is_published == True) AND has a
+        published_date that has passed.
+        """
+        return (self.is_published and self.publishing_date < now())
 
     def get_absolute_url(self):
         #
@@ -203,6 +209,19 @@ class Article(TranslatableModel):
                     return super(Article, self).save(*args, **kwargs)
                 i += 1
 
+    def __str__(self):
+        return self.safe_translation_getter('title', any_language=True)
+
+
+class PluginEditModeMixin(object):
+
+    def edit_mode(self, request):
+        """
+        Returns True only if an operator is logged-into the CMS and is in
+        edit mode.
+        """
+        return (request.toolbar and request.toolbar.edit_mode)
+
 
 class NewsBlogCMSPlugin(CMSPlugin):
     """AppHookConfig aware abstract CMSPlugin class for Aldryn Newsblog"""
@@ -221,7 +240,9 @@ class NewsBlogCMSPlugin(CMSPlugin):
 
 
 @python_2_unicode_compatible
-class NewsBlogArchivePlugin(NewsBlogCMSPlugin):
+class NewsBlogArchivePlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
+    # NOTE: the PluginEditModeMixin is used in the cmsplugin, not here in
+    # the model
     def __str__(self):
         return _('%s archive') % (self.app_config.get_app_title(), )
 
@@ -238,56 +259,74 @@ class NewsBlogArticleSearchPlugin(NewsBlogCMSPlugin):
 
 
 @python_2_unicode_compatible
-class NewsBlogAuthorsPlugin(NewsBlogCMSPlugin):
+class NewsBlogAuthorsPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
     def __str__(self):
         return _('%s authors') % (self.app_config.get_app_title(), )
 
-    def get_authors(self):
-        author_list = Article.objects.published().filter(
-            app_config=self.app_config).values_list('author',
-                                                    flat=True).distinct()
-        author_list = list(author_list)
+    def get_authors(self, request):
+        queryset = Article.objects
+
+        if not self.edit_mode(request):
+            queryset = queryset.published()
+
+        queryset = queryset.filter(
+            app_config=self.app_config
+        ).values_list('author', flat=True).distinct()
+
         qs = Person.objects.filter(
-            id__in=author_list, article__app_config=self.app_config
-        ).annotate(count=models.Count('article'))
+            pk__in=list(queryset), article__app_config=self.app_config
+        ).annotate(
+            count=models.Count('article')
+        ).order_by('name')
         return qs
 
 
 @python_2_unicode_compatible
-class NewsBlogCategoriesPlugin(NewsBlogCMSPlugin):
+class NewsBlogCategoriesPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
     def __str__(self):
         return _('%s categories') % (self.app_config.get_app_title(), )
 
-    def get_categories(self):
-        category_list = Article.objects.published().filter(
-            app_config=self.app_config).values_list('categories',
-                                                    flat=True).distinct()
-        category_list = list(category_list)
+    def get_categories(self, request):
+        queryset = Article.objects
+
+        if not self.edit_mode(request):
+            queryset = queryset.published()
+
+        queryset = queryset.filter(
+            app_config=self.app_config
+        ).values_list('categories', flat=True).distinct()
+
         qs = Category.objects.filter(
-            pk__in=category_list,
+            pk__in=list(queryset),
             article__app_config=self.app_config,
-        ).annotate(count=models.Count('article')).order_by('-count')
+        ).annotate(
+            count=models.Count('article')
+        ).order_by('-count')
         return qs
 
 
 @python_2_unicode_compatible
-class NewsBlogFeaturedArticlesPlugin(NewsBlogCMSPlugin):
+class NewsBlogFeaturedArticlesPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
     article_count = models.PositiveIntegerField(
         default=1,
         validators=[django.core.validators.MinValueValidator(1)],
         help_text=_('The maximum number of featured articles display.')
     )
 
-    def get_articles(self):
+    def get_articles(self, request):
         if not self.article_count:
             return Article.objects.none()
-        articles = Article.objects.published().active_translations(
-            get_language()
-        ).filter(
+
+        queryset = Article.objects
+
+        if not self.edit_mode(request):
+            queryset = queryset.published()
+
+        queryset = queryset.active_translations(get_language()).filter(
             app_config=self.app_config,
-            is_featured=True
+            is_featured=True,
         )
-        return articles[:self.article_count]
+        return queryset[:self.article_count]
 
     def __str__(self):
         if not self.pk:
@@ -303,7 +342,7 @@ class NewsBlogFeaturedArticlesPlugin(NewsBlogCMSPlugin):
 
 
 @python_2_unicode_compatible
-class NewsBlogLatestArticlesPlugin(NewsBlogCMSPlugin):
+class NewsBlogLatestArticlesPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
     latest_articles = models.IntegerField(
         default=5,
         help_text=_('The maximum number of latest articles to display.')
@@ -313,10 +352,14 @@ class NewsBlogLatestArticlesPlugin(NewsBlogCMSPlugin):
         return _('%s latest articles: %s') % (
             self.app_config.get_app_title(), self.latest_articles, )
 
-    def get_articles(self):
-        articles = Article.objects.published().active_translations(
-            get_language()).filter(app_config=self.app_config)
-        return articles[:self.latest_articles]
+    def get_articles(self, request):
+        queryset = Article.objects
+        if not self.edit_mode(request):
+            queryset = queryset.published()
+        queryset = queryset.active_translations(get_language()).filter(
+            app_config=self.app_config
+        )
+        return queryset[:self.latest_articles]
 
 
 @python_2_unicode_compatible
@@ -330,15 +373,20 @@ class NewsBlogRelatedPlugin(CMSPlugin):
 
 
 @python_2_unicode_compatible
-class NewsBlogTagsPlugin(NewsBlogCMSPlugin):
+class NewsBlogTagsPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
     def __str__(self):
         return _('%s tags') % (self.app_config.get_app_title(), )
 
-    def get_tags(self):
+    def get_tags(self, request):
         tags = {}
-        articles = Article.objects.published().filter(
-            app_config=self.app_config).prefetch_related('tags')
-        for article in articles:
+        queryset = Article.objects
+        if not self.edit_mode(request):
+            queryset = queryset.published()
+        queryset = queryset.filter(
+            app_config=self.app_config
+        ).prefetch_related('tags')
+
+        for article in queryset:
             for tag in article.tags.all():
                 if tag.pk in tags:
                     tags[tag.pk].count += 1
@@ -360,6 +408,7 @@ def update_seach_index(sender, instance, **kwargs):
         placeholder = instance._placeholder_cache
         if hasattr(placeholder, '_attached_model_cache'):
             if placeholder._attached_model_cache == Article:
-                article = placeholder._attached_model_cache.objects.get(content=placeholder.pk)
+                article = placeholder._attached_model_cache.objects.get(
+                    content=placeholder.pk)
                 article.search_data = article.get_search_data(instance.language)
                 article.save()

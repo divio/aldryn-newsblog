@@ -30,12 +30,12 @@ urlpatterns = patterns(
 
     url(r'^category/(?P<category>\w[-\w]*)/$',
         CategoryArticleList.as_view(), name='article-list-by-category'),
-    url(r'^category/(?P<category>\w[-\w]*)/feed/$', CategoryFeed(),
-        name='article-list-by-category-feed'),
+    url(r'^category/(?P<category>\w[-\w]*)/feed/$',
+        CategoryFeed(), name='article-list-by-category-feed'),
 
     url(r'^tag/(?P<tag>\w[-\w]*)/$',
         TagArticleList.as_view(), name='article-list-by-tag'),
-    url(r'^tag/(?P<tag>\w[-\w]*)/feed/$', TagFeed(),
-        name='article-list-by-tag-feed'),
+    url(r'^tag/(?P<tag>\w[-\w]*)/feed/$',
+        TagFeed(), name='article-list-by-tag-feed'),
 
 )

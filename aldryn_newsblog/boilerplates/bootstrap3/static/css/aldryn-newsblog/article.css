@@ -1,0 +1,5 @@
+.aldryn-newsblog-article-search .results-list .unpublished,
+.aldryn-newsblog-article.unpublished {
+    background: #FDFAF2 url('../../img/aldryn_newsblog/unpublished.png') repeat; /* hsl(44, 70%, 97%) */
+}
+

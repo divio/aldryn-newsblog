@@ -8,7 +8,6 @@ import string
 import unittest
 
 from datetime import datetime, date, timedelta
-from easy_thumbnails.files import get_thumbnailer
 from operator import itemgetter
 from random import randint
 
@@ -18,27 +17,24 @@ from django.core.files import File as DjangoFile
 from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.test import TransactionTestCase
+from django.utils.timezone import now
 from django.utils.translation import activate, override, get_language
-from aldryn_newsblog.search_indexes import ArticleIndex
 
+from aldryn_categories.models import Category
+from aldryn_categories.tests import CategoryTestCaseMixin
+from aldryn_newsblog.feeds import LatestArticlesFeed, TagFeed, CategoryFeed
+from aldryn_newsblog.models import Article, NewsBlogConfig
+from aldryn_newsblog.search_indexes import ArticleIndex
+from aldryn_people.models import Person
+from aldryn_reversion.core import create_revision_with_placeholders
+from aldryn_search.helpers import get_request
 from cms import api
 from cms.utils import get_cms_setting
+from easy_thumbnails.files import get_thumbnailer
 from filer.models.imagemodels import Image
 from parler.tests.utils import override_parler_settings
 from parler.utils.conf import add_default_language_settings
 from parler.utils.context import switch_language, smart_override
-
-
-from aldryn_categories.models import Category
-from aldryn_categories.tests import CategoryTestCaseMixin
-
-from aldryn_people.models import Person
-
-from aldryn_search.helpers import get_request
-
-from aldryn_newsblog.feeds import LatestArticlesFeed, TagFeed, CategoryFeed
-from aldryn_newsblog.models import Article, NewsBlogConfig
-from aldryn_reversion.core import create_revision_with_placeholders
 
 from . import TESTS_STATIC_ROOT
 
@@ -75,7 +71,7 @@ class NewsBlogTestsMixin(CategoryTestCaseMixin):
             'author': author,
             'owner': owner,
             'app_config': self.app_config,
-            'publishing_date': datetime.now(),
+            'publishing_date': now(),
             'is_published': True,
         }
 
@@ -251,7 +247,7 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
                     title=rand_str(), slug=rand_str(prefix=code),
                     app_config=self.app_config,
                     author=author, owner=author.user,
-                    publishing_date=datetime.now())
+                    publishing_date=now())
                 # Make sure there are translations in place for the articles.
                 for language, _ in settings.LANGUAGES[1:]:
                     with switch_language(article, language):
@@ -291,7 +287,7 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
             title=rand_str(), slug=rand_str(prefix=code),
             app_config=self.app_config,
             author=author, owner=author.user,
-            publishing_date=datetime.now())
+            publishing_date=now())
         article.save()
         article.categories.add(self.category1)
 
@@ -323,7 +319,7 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
             title=rand_str(), slug=rand_str(prefix=code),
             app_config=self.app_config,
             author=author, owner=author.user,
-            publishing_date=datetime.now())
+            publishing_date=now())
         article.save()
         article.categories.add(self.category1)
 
@@ -548,7 +544,7 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
         author = self.create_person()
         article = Article.objects.create(
             title=title, slug=rand_str(), author=author, owner=author.user,
-            app_config=self.app_config, publishing_date=datetime.now())
+            app_config=self.app_config, publishing_date=now())
         article.save()
         api.add_plugin(article.content, 'TextPlugin', self.language)
         plugin = article.content.get_plugins()[0].get_plugin_instance()[0]
@@ -579,7 +575,7 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
         author = self.create_person()
         article = Article.objects.create(
             title=title, author=author, owner=author.user,
-            app_config=self.app_config, publishing_date=datetime.now())
+            app_config=self.app_config, publishing_date=now())
         article.save()
         self.assertEquals(article.slug, 'this-is-a-title')
         # Now, let's try another with the same title
@@ -599,7 +595,7 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
         author = self.create_person()
         article = Article.objects.create(
             title=rand_str(), owner=author.user,
-            app_config=self.app_config, publishing_date=datetime.now())
+            app_config=self.app_config, publishing_date=now())
         article.save()
         self.assertEquals(article.author.user, article.owner)
 
@@ -608,7 +604,7 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
         self.app_config.save()
         article = Article.objects.create(
             title=rand_str(), owner=author.user,
-            app_config=self.app_config, publishing_date=datetime.now())
+            app_config=self.app_config, publishing_date=now())
         self.app_config.create_authors = old
         self.app_config.save()
         self.assertEquals(article.author, None)
@@ -617,7 +613,7 @@ class TestAldrynNewsBlog(NewsBlogTestsMixin, TransactionTestCase):
         user = self.create_user()
         article = Article.objects.create(
             title=rand_str(), owner=user,
-            app_config=self.app_config, publishing_date=datetime.now())
+            app_config=self.app_config, publishing_date=now())
         article.save()
         self.assertEquals(article.author.name,
                           u' '.join((user.first_name, user.last_name)))
@@ -893,7 +889,7 @@ class TestFeeds(NewsBlogTestsMixin, TransactionTestCase):
     def test_latest_feeds(self):
         article = self.create_article()
         future_article = self.create_article(
-            publishing_date=datetime.now() + timedelta(days=3))
+            publishing_date=now() + timedelta(days=3))
         self.request.current_page = self.page
         self.request.path = reverse('{0}:article-list-feed'.format(
             self.app_config.namespace))
@@ -923,7 +919,6 @@ class TestFeeds(NewsBlogTestsMixin, TransactionTestCase):
         self.request.path = reverse('{0}:article-list-by-category-feed'.format(
             self.app_config.namespace), args=[self.category1.slug])
         feed = CategoryFeed()(self.request, self.category1.slug)
-
         self.assertContains(feed, article.title)
         self.assertNotContains(feed, different_category_article.title)
 

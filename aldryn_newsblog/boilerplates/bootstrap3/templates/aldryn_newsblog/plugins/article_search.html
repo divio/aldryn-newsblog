@@ -1,4 +1,8 @@
-{% load i18n sekizai_tags %}
+{% load i18n sekizai_tags staticfiles %}
+
+{% addtoblock "css" %}
+<link rel="stylesheet" href="{% static "css/aldryn-newsblog/article.css" %}">
+{% endaddtoblock %}
 
 <div class="aldryn aldryn-newsblog aldryn-newsblog-article-search">
     <form action="{{ query_url }}" class="form-inline" method="get">
