@@ -1,11 +1,17 @@
+# -*- coding: utf-8 -*-
+
+from __future__ import unicode_literals
+
 try:
     from collections import Counter
 except ImportError:
     from backport_collections import Counter
+
 import datetime
 from operator import attrgetter
 
 from django.db import models
+from django.utils import timezone
 
 from aldryn_apphooks_config.managers.base import ManagerMixin, QuerySetMixin
 from aldryn_people.models import Person
@@ -15,7 +21,13 @@ from taggit.models import Tag, TaggedItem
 
 class ArticleQuerySet(QuerySetMixin, TranslatableQuerySet):
     def published(self):
-        return self.filter(is_published=True)
+        """
+        Returns articles that are published AND have a publishing_date that
+        has actually passed.
+        """
+        return self.filter(is_published=True).filter(
+            publishing_date__lte=timezone.now
+        )
 
 
 class RelatedManager(ManagerMixin, TranslatableManager):
