@@ -264,24 +264,24 @@ class NewsBlogAuthorsPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
         return _('%s authors') % (self.app_config.get_app_title(), )
 
     def get_authors(self, request):
-        queryset = Article.objects
+        """
+        Returns a list of authors, each "manually" annotated with the number of
+        published(*) articles attached to it.
 
-        if not self.edit_mode(request):
-            queryset = queryset.published()
-
-        queryset = queryset.filter(
-            app_config=self.app_config
-        ).values_list('author', flat=True).distinct()
-
-        qs = Person.objects.filter(
-            pk__in=list(queryset),
-            article__is_published=True,
-            article__publishing_date__lte=now,
-            article__app_config=self.app_config
-        ).annotate(
-            count=models.Count('article')
-        ).order_by('name')
-        return qs
+        * unless the request is from a logged-in content manager in edit mode,
+        then all articles.
+        """
+        edit_mode = self.edit_mode(request)
+        authors = Person.objects
+        author_list = []
+        for author in authors.all():
+            if edit_mode:
+                count = Article.objects.filter(author=author).count()
+            else:
+                count = Article.objects.published().filter(author=author).count()
+            author.count = count
+            author_list.append(author)
+        return author_list
 
 
 @python_2_unicode_compatible
@@ -290,24 +290,32 @@ class NewsBlogCategoriesPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
         return _('%s categories') % (self.app_config.get_app_title(), )
 
     def get_categories(self, request):
-        queryset = Article.objects
+        """
+        Returns a list of categories, each "manually" annotated with the number
+        of published articles(*) attached to it.
 
+        * unless the request is from a logged-in content manager in edit mode,
+        then all articles.
+        """
+        categories = {}
+        queryset = Article.objects
         if not self.edit_mode(request):
             queryset = queryset.published()
 
         queryset = queryset.filter(
             app_config=self.app_config
-        ).values_list('categories', flat=True).distinct()
+        ).prefetch_related('categories')
 
-        qs = Category.objects.filter(
-            pk__in=list(queryset),
-            article__is_published=True,
-            article__publishing_date__lte=now,
-            article__app_config=self.app_config,
-        ).annotate(
-            count=models.Count('article')
-        ).order_by('-count')
-        return qs
+        for article in queryset:
+            for category in article.categories.all():
+                if category.pk in categories:
+                    categories[category.pk].count += 1
+                else:
+                    category.count = 1
+                    categories[category.pk] = category
+
+        # Return most frequently used tags first
+        return sorted(categories.values(), key=lambda x: x.count, reverse=True)
 
 
 @python_2_unicode_compatible
