@@ -53,12 +53,13 @@ PARLER_LANGUAGES_SHOW = {
 class TestViews(NewsBlogTestCase):
 
     def test_articles_list(self):
+        namespace = self.app_config.namespace
         articles = [self.create_article() for _ in range(11)]
         unpublished_article = articles[0]
         unpublished_article.is_published = False
         unpublished_article.save()
         response = self.client.get(
-            reverse('aldryn_newsblog:article-list'))
+            reverse('{0}:article-list'.format(namespace)))
         for article in articles[1:]:
             self.assertContains(response, article.title)
         self.assertNotContains(response, unpublished_article.title)
@@ -147,6 +148,30 @@ class TestViews(NewsBlogTestCase):
             'aldryn_newsblog:article-list-by-category',
             kwargs={'category': 'unknown'}))
         self.assertEqual(response.status_code, 404)
+
+
+class TestTemplatePrefixes(NewsBlogTestCase):
+
+    def setUp(self):
+        super(TestTemplatePrefixes, self).setUp()
+        self.app_config.template_prefix = 'dummy'
+        self.app_config.save()
+
+    def test_articles_list(self):
+        namespace = self.app_config.namespace
+        response = self.client.get(
+            reverse('{0}:article-list'.format(namespace)))
+        self.assertContains(response, 'This is dummy article list page')
+
+    def test_article_detail(self):
+        article = self.create_article(app_config=self.app_config)
+        namespace = self.app_config.namespace
+        response = self.client.get(
+            reverse(
+                '{0}:article-detail'.format(namespace),
+                kwargs={'slug': article.slug}
+            ))
+        self.assertContains(response, 'This is dummy article detail page')
 
 
 class TestTranslationFallbacks(NewsBlogTestCase):

@@ -140,6 +140,7 @@ class NewsBlogConfigAdmin(
     def get_config_fields(self):
         return (
             'app_title', 'permalink_type', 'non_permalink_handling',
+            'template_prefix',
             'paginate_by', 'create_authors', 'search_indexed',
             'config.default_published', )
 

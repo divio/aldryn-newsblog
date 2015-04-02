@@ -29,6 +29,11 @@ NON_PERMALINK_HANDLING = (
     (404, _('Return 404: Not Found')),
 )
 
+# TODO ovveride default if support for Django 1.6 will be dropped
+TEMPLATE_PREFIX_CHOICES = getattr(
+    settings, 'ALDRYN_NEWSBLOG_TEMPLATE_PREFIXES',
+    [])
+
 
 class NewsBlogConfig(TranslatableModel, AppHookConfig):
     """Adds some translatable, per-app-instance fields."""
@@ -52,6 +57,12 @@ class NewsBlogConfig(TranslatableModel, AppHookConfig):
         default=5,
         help_text=_('When paginating list views, how many articles per page?'),
     )
+
+    template_prefix = models.CharField(
+        max_length=20,
+        null=True, blank=True,
+        choices=TEMPLATE_PREFIX_CHOICES,
+        verbose_name=_("Prefix for template dirs"))
 
     # ALDRYN_NEWSBLOG_CREATE_AUTHOR
     create_authors = models.BooleanField(
