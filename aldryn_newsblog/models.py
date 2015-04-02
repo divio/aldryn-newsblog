@@ -274,12 +274,15 @@ class NewsBlogAuthorsPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
         edit_mode = self.edit_mode(request)
         authors = Person.objects
         author_list = []
+
         for author in authors.all():
-            if edit_mode:
-                count = Article.objects.filter(author=author).count()
-            else:
-                count = Article.objects.published().filter(author=author).count()
-            author.count = count
+            count_qs = Article.objects
+            if not edit_mode:
+                count_qs = count_qs.published()
+            author.count = count_qs.filter(
+                author=author,
+                app_config=self.app_config,
+            ).count()
             author_list.append(author)
         return author_list
 
