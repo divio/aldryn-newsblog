@@ -301,7 +301,7 @@ class TestVariousViews(NewsBlogTestsMixin, TestCase):
 
         self.assertEquals(
             sorted(
-                Article.objects.get_months(
+                Article.objects.get_months(request=None,
                     namespace=self.app_config.namespace),
                 key=itemgetter('num_articles')),
             months)
@@ -333,7 +333,7 @@ class TestVariousViews(NewsBlogTestsMixin, TestCase):
             authors)
 
     def test_articles_count_by_tags(self):
-        tags = Article.objects.get_tags(namespace=self.app_config.namespace)
+        tags = Article.objects.get_tags(request=None, namespace=self.app_config.namespace)
         self.assertEquals(tags, [])
 
         untagged_articles = []
@@ -355,7 +355,7 @@ class TestVariousViews(NewsBlogTestsMixin, TestCase):
             (tag_slug3, 5),
             (tag_slug2, 3),
         ]
-        tags = Article.objects.get_tags(namespace=self.app_config.namespace)
+        tags = Article.objects.get_tags(request=None, namespace=self.app_config.namespace)
         tags = map(lambda x: (x.slug, x.num_articles), tags)
         self.assertEquals(tags, tags_expected)
 

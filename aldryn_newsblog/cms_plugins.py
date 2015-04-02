@@ -26,10 +26,9 @@ class NewsBlogArchivePlugin(NewsBlogPlugin):
         context['instance'] = instance
 
         queryset = models.Article.objects
-        if not instance.edit_mode(request):
-            queryset = queryset.published()
 
         context['dates'] = queryset.get_months(
+            request,
             namespace=instance.app_config.namespace
         )
         return context
@@ -51,7 +50,6 @@ class NewsBlogArticleSearchPlugin(NewsBlogPlugin):
 plugin_pool.register_plugin(NewsBlogArticleSearchPlugin)
 
 
-# TODO: NEEDS TESTS
 class NewsBlogAuthorsPlugin(NewsBlogPlugin):
     render_template = 'aldryn_newsblog/plugins/authors.html'
     name = _('Authors')
@@ -85,7 +83,6 @@ class NewsBlogCategoriesPlugin(NewsBlogPlugin):
 plugin_pool.register_plugin(NewsBlogCategoriesPlugin)
 
 
-# TODO: NEEDS TESTS
 class NewsBlogFeaturedArticlesPlugin(NewsBlogPlugin):
     render_template = 'aldryn_newsblog/plugins/featured_articles.html'
     name = _('Featured Articles')
