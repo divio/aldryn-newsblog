@@ -36,10 +36,13 @@ class RelatedManager(ManagerMixin, TranslatableManager):
     def published(self):
         return self.get_query_set().published()
 
-    def get_months(self, namespace):
+    def get_months(self, request, namespace):
         """
-        Get months and years with articles count for given namespace string.
-        This means how many articles there are in each month.
+        Get months and years with articles count for given request and namespace
+        string. This means how many articles there are in each month.
+
+        The request is required, because logged-in content managers may get
+        different counts.
 
         Return list of dictionaries ordered by article publishing date of the
         following format:
@@ -55,7 +58,11 @@ class RelatedManager(ManagerMixin, TranslatableManager):
         # TODO: check if this limitation still exists in Django 1.6+
         # This is done in a naive way as Django is having tough time while
         # aggregating on date fields
-        articles = self.published().namespace(namespace)
+        if (request and hasattr(request, 'toolbar') and
+                request.toolbar and request.toolbar.edit_mode):
+            articles = self.namespace(namespace)
+        else:
+            articles = self.published().namespace(namespace)
         dates = articles.values_list('publishing_date', flat=True)
         dates = [(x.year, x.month) for x in dates]
         date_counter = Counter(dates)
@@ -83,14 +90,17 @@ class RelatedManager(ManagerMixin, TranslatableManager):
             article__is_published=True).annotate(
                 num_articles=models.Count('article')).order_by('-num_articles')
 
-    def get_tags(self, namespace):
+    def get_tags(self, request, namespace):
         """
         Get tags with articles count for given namespace string.
 
         Return list of Tag objects ordered by custom 'num_articles' attribute.
         """
-
-        articles = self.published().namespace(namespace)
+        if (request and hasattr(request, 'toolbar') and
+                request.toolbar and request.toolbar.edit_mode):
+            articles = self.namespace(namespace)
+        else:
+            articles = self.published().namespace(namespace)
         if not articles:
             # return empty iterable early not to perform useless requests
             return []

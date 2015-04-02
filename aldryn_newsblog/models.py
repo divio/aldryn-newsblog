@@ -274,7 +274,10 @@ class NewsBlogAuthorsPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
         ).values_list('author', flat=True).distinct()
 
         qs = Person.objects.filter(
-            pk__in=list(queryset), article__app_config=self.app_config
+            pk__in=list(queryset),
+            article__is_published=True,
+            article__publishing_date__lte=now,
+            article__app_config=self.app_config
         ).annotate(
             count=models.Count('article')
         ).order_by('name')
@@ -298,6 +301,8 @@ class NewsBlogCategoriesPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
 
         qs = Category.objects.filter(
             pk__in=list(queryset),
+            article__is_published=True,
+            article__publishing_date__lte=now,
             article__app_config=self.app_config,
         ).annotate(
             count=models.Count('article')

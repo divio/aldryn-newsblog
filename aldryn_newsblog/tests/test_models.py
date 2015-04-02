@@ -9,6 +9,7 @@ from django.utils.timezone import now
 from django.utils.translation import activate
 
 from aldryn_newsblog.models import Article
+from cms import api
 
 from . import NewsBlogTestsMixin, TESTS_STATIC_ROOT
 
@@ -80,3 +81,21 @@ class TestModels(NewsBlogTestsMixin, TransactionTestCase):
         article.save()
         self.assertEquals(article.author.name,
                           u' '.join((user.first_name, user.last_name)))
+
+    def test_has_content(self):
+        # Just make sure we have a known language
+        activate(self.language)
+        title = self.rand_str()
+        content = self.rand_str()
+        author = self.create_person()
+        article = Article.objects.create(
+            title=title, slug=self.rand_str(), author=author, owner=author.user,
+            app_config=self.app_config, publishing_date=now())
+        article.save()
+        api.add_plugin(article.content, 'TextPlugin', self.language)
+        plugin = article.content.get_plugins()[0].get_plugin_instance()[0]
+        plugin.body = content
+        plugin.save()
+        response = self.client.get(article.get_absolute_url())
+        self.assertContains(response, title)
+        self.assertContains(response, content)
