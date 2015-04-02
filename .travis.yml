@@ -29,7 +29,7 @@ matrix:
   fast_finish: true
   include:
     - python: 2.7
-      env: DJANGO=1.7 CMD="flake8 aldryn_newsblog"
+      env: DJANGO=1.6 CMD="flake8 aldryn_newsblog"
 
 cache:
   directories:
