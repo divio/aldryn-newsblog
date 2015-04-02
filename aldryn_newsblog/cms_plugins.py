@@ -22,7 +22,7 @@ class NewsBlogArchivePlugin(NewsBlogPlugin):
     model = models.NewsBlogArchivePlugin
 
     def render(self, context, instance, placeholder):
-        request = context['request'] if 'request' in context else None
+        request = context.get('request')
         context['instance'] = instance
 
         queryset = models.Article.objects
@@ -58,7 +58,7 @@ class NewsBlogAuthorsPlugin(NewsBlogPlugin):
     model = models.NewsBlogAuthorsPlugin
 
     def render(self, context, instance, placeholder):
-        request = context['request'] if 'request' in context else None
+        request = context.get('request')
         context['instance'] = instance
         context['authors_list'] = instance.get_authors(request)
         context['article_list_url'] = reverse(
@@ -74,7 +74,7 @@ class NewsBlogCategoriesPlugin(NewsBlogPlugin):
     model = models.NewsBlogCategoriesPlugin
 
     def render(self, context, instance, placeholder):
-        request = context['request'] if 'request' in context else None
+        request = context.get('request')
         context['instance'] = instance
         context['categories'] = instance.get_categories(request)
         context['article_list_url'] = reverse(
@@ -92,7 +92,7 @@ class NewsBlogFeaturedArticlesPlugin(NewsBlogPlugin):
     model = models.NewsBlogFeaturedArticlesPlugin
 
     def render(self, context, instance, placeholder):
-        request = context['request'] if 'request' in context else None
+        request = context.get('request')
         context['instance'] = instance
         context['articles_list'] = instance.get_articles(request)
         return context
@@ -108,7 +108,7 @@ class NewsBlogLatestArticlesPlugin(NewsBlogPlugin):
     model = models.NewsBlogLatestArticlesPlugin
 
     def render(self, context, instance, placeholder):
-        request = context['request'] if 'request' in context else None
+        request = context.get('request')
         context['instance'] = instance
         context['article_list'] = instance.get_articles(request)
         return context
@@ -124,7 +124,7 @@ class NewsBlogRelatedPlugin(NewsBlogPlugin):
     model = models.NewsBlogRelatedPlugin
 
     def get_article(self, context):
-        request = context.get('request', None)
+        request = context.get('request')
         if request and request.resolver_match:
             view_name = request.resolver_match.view_name
             namespace = request.resolver_match.namespace
@@ -153,7 +153,7 @@ class NewsBlogTagsPlugin(NewsBlogPlugin):
     model = models.NewsBlogTagsPlugin
 
     def render(self, context, instance, placeholder):
-        request = context['request'] if 'request' in context else None
+        request = context.get('request')
         context['instance'] = instance
         context['tags'] = instance.get_tags(request)
         context['article_list_url'] = reverse(
