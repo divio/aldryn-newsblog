@@ -28,3 +28,4 @@ html5lib
 pyflakes
 selenium
 six
+pytz
