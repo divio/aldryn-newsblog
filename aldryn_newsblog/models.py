@@ -215,7 +215,7 @@ class Article(TranslatableModel):
 
 class PluginEditModeMixin(object):
 
-    def edit_mode(self, request):
+    def get_edit_mode(self, request):
         """
         Returns True only if an operator is logged-into the CMS and is in
         edit mode.
@@ -271,7 +271,7 @@ class NewsBlogAuthorsPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
         * unless the request is from a logged-in content manager in edit mode,
         then all articles.
         """
-        edit_mode = self.edit_mode(request)
+        edit_mode = self.get_edit_mode(request)
         authors = Person.objects
         author_list = []
 
@@ -279,7 +279,7 @@ class NewsBlogAuthorsPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
             count_qs = Article.objects
             if not edit_mode:
                 count_qs = count_qs.published()
-            author.count = count_qs.filter(
+            author.article_count = count_qs.filter(
                 author=author,
                 app_config=self.app_config,
             ).count()
@@ -302,7 +302,7 @@ class NewsBlogCategoriesPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
         """
         categories = {}
         queryset = Article.objects
-        if not self.edit_mode(request):
+        if not self.get_edit_mode(request):
             queryset = queryset.published()
 
         queryset = queryset.filter(
@@ -312,13 +312,13 @@ class NewsBlogCategoriesPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
         for article in queryset:
             for category in article.categories.all():
                 if category.pk in categories:
-                    categories[category.pk].count += 1
+                    categories[category.pk].article_count += 1
                 else:
-                    category.count = 1
+                    category.article_count = 1
                     categories[category.pk] = category
 
         # Return most frequently used tags first
-        return sorted(categories.values(), key=lambda x: x.count, reverse=True)
+        return sorted(categories.values(), key=lambda x: x.article_count, reverse=True)
 
 
 @python_2_unicode_compatible
@@ -335,7 +335,7 @@ class NewsBlogFeaturedArticlesPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
 
         queryset = Article.objects
 
-        if not self.edit_mode(request):
+        if not self.get_edit_mode(request):
             queryset = queryset.published()
 
         queryset = queryset.active_translations(get_language()).filter(
@@ -410,7 +410,7 @@ class NewsBlogTagsPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
     def get_tags(self, request):
         tags = {}
         queryset = Article.objects
-        if not self.edit_mode(request):
+        if not self.get_edit_mode(request):
             queryset = queryset.published()
         queryset = queryset.filter(
             app_config=self.app_config
@@ -419,12 +419,12 @@ class NewsBlogTagsPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
         for article in queryset:
             for tag in article.tags.all():
                 if tag.pk in tags:
-                    tags[tag.pk].count += 1
+                    tags[tag.pk].article_count += 1
                 else:
-                    tag.count = 1
+                    tag.article_count = 1
                     tags[tag.pk] = tag
         # Return most frequently used tags first
-        return sorted(tags.values(), key=lambda x: x.count, reverse=True)
+        return sorted(tags.values(), key=lambda x: x.article_count, reverse=True)
 
 
 @receiver(post_save)
