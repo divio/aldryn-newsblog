@@ -364,25 +364,39 @@ class NewsBlogLatestArticlesPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
         help_text=_('The maximum number of latest articles to display.')
     )
 
-    def __str__(self):
-        return _('%s latest articles: %s') % (
-            self.app_config.get_app_title(), self.latest_articles, )
-
     def get_articles(self, request):
+        """
+        Returns a queryset of the latest N articles. N is the plugin setting:
+        latest_articles.
+        """
         queryset = Article.objects
-        if not self.edit_mode(request):
+        if not self.get_edit_mode(request):
             queryset = queryset.published()
         queryset = queryset.active_translations(get_language()).filter(
             app_config=self.app_config
         )
         return queryset[:self.latest_articles]
 
+    def __str__(self):
+        return _('%s latest articles: %s') % (
+            self.app_config.get_app_title(), self.latest_articles, )
+
 
 @python_2_unicode_compatible
-class NewsBlogRelatedPlugin(CMSPlugin):
-    # NOTE: This one does NOT subclass NewsBlogCMSPlugin
+class NewsBlogRelatedPlugin(PluginEditModeMixin, CMSPlugin):
+    # NOTE: This one does NOT subclass NewsBlogCMSPlugin. This is because this
+    # plugin can really only be placed on the article detail view in an apphook.
     cmsplugin_ptr = models.OneToOneField(
         CMSPlugin, related_name='+', parent_link=True)
+
+    def get_articles(self, article, request):
+        """
+        Returns a queryset of articles that are related to the given article.
+        """
+        qs = article.related.all()
+        if not self.get_edit_mode(request):
+            qs = qs.published()
+        return qs
 
     def __str__(self):
         return _('Related articles')
