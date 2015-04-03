@@ -2,6 +2,7 @@
 
 from __future__ import unicode_literals
 
+import time
 import datetime
 import pytz
 
@@ -108,6 +109,8 @@ class TestAuthorsPlugin(TestAppConfigPluginsBase):
             app_config=self.another_app_config
         ))
 
+        time.sleep(1)
+
         response = self.client.get(self.page.get_absolute_url())
         pattern = '<p class="author"><a href="{url}"></a>'
         pattern += '</p>\s*<p[^>]*></p>\s*<p class="badge">{num}</p>'
@@ -158,6 +161,8 @@ class TestCategoriesPlugin(TestAppConfigPluginsBase):
             article = self.create_article(app_config=self.another_app_config)
             article.categories.add(self.category1)
             other_articles.append(article)
+
+        time.sleep(1)
 
         response = self.client.get(self.page.get_absolute_url())
         pattern = '<span[^>]*>{num}</span>\s*<a href=[^>]*>{name}</a>'
@@ -256,7 +261,7 @@ class TestTagsPlugin(TestAppConfigPluginsBase):
         # Some tag1 articles in another namespace
         other_articles += self.create_tagged_articles(
             1, tags=['tag1'], app_config=self.another_app_config)['tag1']
-
+        time.sleep(1)
         response = self.client.get(self.page.get_absolute_url())
         self.assertRegexpMatches(str(response), 'tag1\s*<span[^>]*>3</span>')
         self.assertRegexpMatches(str(response), 'tag2\s*<span[^>]*>5</span>')

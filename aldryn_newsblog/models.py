@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import unicode_literals
-
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse
-from django.db import models
+from django.db import connection, models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 try:
@@ -31,6 +31,7 @@ from filer.fields.image import FilerImageField
 from parler.models import TranslatableModel, TranslatedFields
 from sortedm2m.fields import SortedManyToManyField
 from taggit.managers import TaggableManager
+from taggit.models import Tag
 
 from .cms_appconfig import NewsBlogConfig
 from .managers import RelatedManager
@@ -45,6 +46,14 @@ elif settings.LANGUAGE:
 else:
     raise ImproperlyConfigured(
         'Neither LANGUAGES nor LANGUAGE was found in settings.')
+
+
+# At startup time, SQL_NOW_FUNC will contain the database-appropriate SQL to
+# obtain the CURRENT_TIMESTAMP.
+SQL_NOW_FUNC = {
+    'mssql': 'GetDate()', 'mysql': 'NOW()', 'postgresql': 'now()',
+    'sqlite': 'CURRENT_TIMESTAMP', 'oracle': 'CURRENT_TIMESTAMP'
+}[connection.vendor]
 
 
 @python_2_unicode_compatible
@@ -214,8 +223,7 @@ class Article(TranslatableModel):
 
 
 class PluginEditModeMixin(object):
-
-    def edit_mode(self, request):
+    def get_edit_mode(self, request):
         """
         Returns True only if an operator is logged-into the CMS and is in
         edit mode.
@@ -232,17 +240,17 @@ class NewsBlogCMSPlugin(CMSPlugin):
 
     app_config = models.ForeignKey(NewsBlogConfig)
 
-    def copy_relations(self, old_instance):
-        self.app_config = old_instance.app_config
-
     class Meta:
         abstract = True
+
+    def copy_relations(self, old_instance):
+        self.app_config = old_instance.app_config
 
 
 @python_2_unicode_compatible
 class NewsBlogArchivePlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
-    # NOTE: the PluginEditModeMixin is used in the cmsplugin, not here in
-    # the model
+    # NOTE: the PluginEditModeMixin is eventually used in the cmsplugin, not
+    # here in the model.
     def __str__(self):
         return _('%s archive') % (self.app_config.get_app_title(), )
 
@@ -260,31 +268,38 @@ class NewsBlogArticleSearchPlugin(NewsBlogCMSPlugin):
 
 @python_2_unicode_compatible
 class NewsBlogAuthorsPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
-    def __str__(self):
-        return _('%s authors') % (self.app_config.get_app_title(), )
-
     def get_authors(self, request):
         """
-        Returns a list of authors, each "manually" annotated with the number of
-        published(*) articles attached to it.
-
-        * unless the request is from a logged-in content manager in edit mode,
-        then all articles.
+        Returns a queryset of authors (people who have published an article),
+        annotated by the number of articles (article_count) that are visible to
+        the current user. If this user is anonymous, then this will be all
+        articles that are published and whose publishing_date has passed. If the
+        user is a logged-in cms operator, then it will be all articles.
         """
-        edit_mode = self.edit_mode(request)
-        authors = Person.objects
-        author_list = []
 
-        for author in authors.all():
-            count_qs = Article.objects
-            if not edit_mode:
-                count_qs = count_qs.published()
-            author.count = count_qs.filter(
-                author=author,
-                app_config=self.app_config,
-            ).count()
-            author_list.append(author)
+        subquery = """
+            SELECT COUNT(*)
+            FROM "aldryn_newsblog_article"
+            WHERE
+                "aldryn_newsblog_article"."author_id" = 
+                    "aldryn_people_person"."id" AND
+                "aldryn_newsblog_article"."app_config_id" = %d"""
+
+        if not self.get_edit_mode(request):
+            subquery += """ AND
+                "aldryn_newsblog_article"."is_published" = 1 AND
+                "aldryn_newsblog_article"."publishing_date" <= %s
+            """ % (SQL_NOW_FUNC, )
+
+        author_list = Person.objects.extra(
+            select={'article_count': subquery % (self.app_config.pk, )},
+        ).extra(
+            where=['"article_count" > 0', ]
+        )
         return author_list
+
+    def __str__(self):
+        return _('%s authors') % (self.app_config.get_app_title(), )
 
 
 @python_2_unicode_compatible
@@ -294,31 +309,36 @@ class NewsBlogCategoriesPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
 
     def get_categories(self, request):
         """
-        Returns a list of categories, each "manually" annotated with the number
-        of published articles(*) attached to it.
-
-        * unless the request is from a logged-in content manager in edit mode,
-        then all articles.
+        Returns a queryset of categories, annotated by the number of articles
+        (article_count) that are visible to the current user. If this user is
+        anonymous, then this will be all articles that are published and whose
+        publishing_date has passed. If the user is a logged-in cms operator,
+        then it will be all articles.
         """
-        categories = {}
-        queryset = Article.objects
-        if not self.edit_mode(request):
-            queryset = queryset.published()
 
-        queryset = queryset.filter(
-            app_config=self.app_config
-        ).prefetch_related('categories')
+        subquery = """
+            SELECT COUNT(*)
+            FROM "aldryn_newsblog_article", "aldryn_newsblog_article_categories"
+            WHERE
+                "aldryn_newsblog_article_categories"."category_id" =
+                    "aldryn_categories_category"."id" AND
+                "aldryn_newsblog_article_categories"."article_id" =
+                    "aldryn_newsblog_article"."id" AND
+                "aldryn_newsblog_article"."app_config_id" = %d
+        """ % (self.app_config.pk, )
 
-        for article in queryset:
-            for category in article.categories.all():
-                if category.pk in categories:
-                    categories[category.pk].count += 1
-                else:
-                    category.count = 1
-                    categories[category.pk] = category
+        if not self.get_edit_mode(request):
+            subquery += """ AND
+                "aldryn_newsblog_article"."is_published" = 1 AND
+                "aldryn_newsblog_article"."publishing_date" <= %s
+            """ % (SQL_NOW_FUNC, )
 
-        # Return most frequently used tags first
-        return sorted(categories.values(), key=lambda x: x.count, reverse=True)
+        category_list = Category.objects.extra(
+            select={'article_count': subquery},
+        ).extra(
+            where=['"article_count" > 0', ]
+        )
+        return category_list
 
 
 @python_2_unicode_compatible
@@ -332,12 +352,9 @@ class NewsBlogFeaturedArticlesPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
     def get_articles(self, request):
         if not self.article_count:
             return Article.objects.none()
-
         queryset = Article.objects
-
-        if not self.edit_mode(request):
+        if not self.get_edit_mode(request):
             queryset = queryset.published()
-
         queryset = queryset.active_translations(get_language()).filter(
             app_config=self.app_config,
             is_featured=True,
@@ -404,27 +421,42 @@ class NewsBlogRelatedPlugin(PluginEditModeMixin, CMSPlugin):
 
 @python_2_unicode_compatible
 class NewsBlogTagsPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
-    def __str__(self):
-        return _('%s tags') % (self.app_config.get_app_title(), )
 
     def get_tags(self, request):
-        tags = {}
-        queryset = Article.objects
-        if not self.edit_mode(request):
-            queryset = queryset.published()
-        queryset = queryset.filter(
-            app_config=self.app_config
-        ).prefetch_related('tags')
+        """
+        Returns a queryset of tags, annotated by the number of articles
+        (article_count) that are visible to the current user. If this user is
+        anonymous, then this will be all articles that are published and whose
+        publishing_date has passed. If the user is a logged-in cms operator,
+        then it will be all articles.
+        """
 
-        for article in queryset:
-            for tag in article.tags.all():
-                if tag.pk in tags:
-                    tags[tag.pk].count += 1
-                else:
-                    tag.count = 1
-                    tags[tag.pk] = tag
-        # Return most frequently used tags first
-        return sorted(tags.values(), key=lambda x: x.count, reverse=True)
+        article_content_type = ContentType.objects.get_for_model(Article)
+
+        subquery = """
+            SELECT COUNT(*)
+            FROM "aldryn_newsblog_article", "taggit_taggeditem"
+            WHERE
+                "taggit_taggeditem"."tag_id" = "taggit_tag"."id" AND
+                "taggit_taggeditem"."content_type_id" = %d AND
+                "taggit_taggeditem"."object_id" = "aldryn_newsblog_article"."id" AND
+                "aldryn_newsblog_article"."app_config_id" = %d"""
+
+        if not self.get_edit_mode(request):
+            subquery += """ AND
+                "aldryn_newsblog_article"."is_published" = 1 AND
+                "aldryn_newsblog_article"."publishing_date" <= %s
+            """ % (SQL_NOW_FUNC, )
+
+        return Tag.objects.extra(
+            select={'article_count': subquery % (
+                article_content_type.pk, self.app_config.pk, )},
+        ).extra(
+            where=['"article_count" > 0', ]
+        )
+
+    def __str__(self):
+        return _('%s tags') % (self.app_config.get_app_title(), )
 
 
 @receiver(post_save)
