@@ -84,22 +84,22 @@ HELPER_SETTINGS = {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': 'mydatabase',
         },
-        # 'mysql': {
-        #     'ENGINE': 'django.db.backends.mysql',
-        #     'NAME': 'djangocms_test',
-        #     'USER': 'root',
-        #     'PASSWORD': '',
-        #     'HOST': '',
-        #     'PORT': '3306',
-        # },
-        # 'default': {
-        #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        #     'NAME': 'newsblog_test',
-        #     'USER': 'test',
-        #     'PASSWORD': '',
-        #     'HOST': '127.0.0.1',
-        #     'PORT': '5432',
-        # }
+        'mysql': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'newsblog_test',
+            'USER': 'root',
+            'PASSWORD': '',
+            'HOST': '',
+            'PORT': '3306',
+        },
+        'postgres': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'newsblog_test',
+            'USER': 'test',
+            'PASSWORD': '',
+            'HOST': '127.0.0.1',
+            'PORT': '5432',
+        }
     }
 }
 
