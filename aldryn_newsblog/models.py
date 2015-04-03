@@ -126,7 +126,8 @@ class Article(TranslatableModel):
                 '{namespace}:article-detail'.format(
                     namespace=self.app_config.namespace
                 ), kwargs={
-                    'slug': self.safe_translation_getter('slug', any_language=True)
+                    'slug': self.safe_translation_getter(
+                        'slug', any_language=True)
                 }
             )
         except:
