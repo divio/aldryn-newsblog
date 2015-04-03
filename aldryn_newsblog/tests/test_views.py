@@ -11,7 +11,7 @@ from random import randint
 from django.conf import settings
 from django.core.files import File as DjangoFile
 from django.core.urlresolvers import reverse
-from django.test import TestCase
+from django.test import TransactionTestCase
 from django.utils.timezone import now
 from django.utils.translation import get_language, override
 
@@ -50,7 +50,7 @@ PARLER_LANGUAGES_SHOW = {
 }
 
 
-class TestViews(NewsBlogTestsMixin, TestCase):
+class TestViews(NewsBlogTestsMixin, TransactionTestCase):
 
     def test_articles_list(self):
         articles = [self.create_article() for _ in range(11)]
@@ -133,7 +133,7 @@ class TestViews(NewsBlogTestsMixin, TestCase):
                     with switch_language(category, language):
                         url = reverse('aldryn_newsblog:article-list-by-category',
                                       kwargs={'category': category.slug})
-                    response = self.client.get(url)
+                        response = self.client.get(url)
                     for article in articles:
                         if language in article.get_available_languages():
                             article.set_current_language(language)
@@ -149,7 +149,7 @@ class TestViews(NewsBlogTestsMixin, TestCase):
         self.assertEqual(response.status_code, 404)
 
 
-class TestTranslationFallbacks(NewsBlogTestsMixin, TestCase):
+class TestTranslationFallbacks(NewsBlogTestsMixin, TransactionTestCase):
     def test_article_detail_not_translated_fallback(self):
         """
         If the fallback is configured, article is available in any
@@ -160,7 +160,8 @@ class TestTranslationFallbacks(NewsBlogTestsMixin, TestCase):
 
         with override(settings.LANGUAGES[0][0]):
             article = Article.objects.create(
-                title=self.rand_str(), slug=self.rand_str(prefix=code),
+                title=self.rand_str(),
+                slug=self.rand_str(prefix=code),
                 app_config=self.app_config,
                 author=author, owner=author.user,
                 publishing_date=now())
@@ -231,7 +232,7 @@ class TestTranslationFallbacks(NewsBlogTestsMixin, TestCase):
                 self.assertEqual(response.status_code, 404)
 
 
-class TestImages(NewsBlogTestsMixin, TestCase):
+class TestImages(NewsBlogTestsMixin, TransactionTestCase):
     def test_article_detail_show_featured_image(self):
         author = self.create_person()
         with open(FEATURED_IMAGE_PATH, 'rb') as f:
@@ -250,7 +251,7 @@ class TestImages(NewsBlogTestsMixin, TestCase):
         self.assertContains(response, image_url)
 
 
-class TestVariousViews(NewsBlogTestsMixin, TestCase):
+class TestVariousViews(NewsBlogTestsMixin, TransactionTestCase):
     def test_articles_by_tag(self):
         """
         Tests that TagArticleList view properly filters articles by their tags.
@@ -433,7 +434,7 @@ class TestVariousViews(NewsBlogTestsMixin, TestCase):
             self.assertNotContains(response, article.title)
 
 
-class TestIndex(NewsBlogTestsMixin, TestCase):
+class TestIndex(NewsBlogTestsMixin, TransactionTestCase):
     def test_index_simple(self):
         self.index = ArticleIndex()
         content0 = self.rand_str(prefix='content0_')

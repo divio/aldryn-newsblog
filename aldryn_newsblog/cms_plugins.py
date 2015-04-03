@@ -120,8 +120,7 @@ class NewsBlogRelatedPlugin(NewsBlogPlugin):
     cache = False
     model = models.NewsBlogRelatedPlugin
 
-    def get_article(self, context):
-        request = context.get('request')
+    def get_article(self, request):
         if request and request.resolver_match:
             view_name = request.resolver_match.view_name
             namespace = request.resolver_match.namespace
@@ -133,11 +132,12 @@ class NewsBlogRelatedPlugin(NewsBlogPlugin):
         return None
 
     def render(self, context, instance, placeholder):
+        request = context.get('request')
         context['instance'] = instance
-        article = self.get_article(context)
+        article = self.get_article(request)
         if article:
             context['article'] = article
-            context['article_list'] = article.related.all()
+            context['article_list'] = instance.get_articles(article, request)
         return context
 
 

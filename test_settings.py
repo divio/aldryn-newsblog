@@ -48,6 +48,17 @@ HELPER_SETTINGS = {
             'hide_untranslated': False,
         }
     },
+    #
+    # NOTE: The following setting `PARLER_ENABLE_CACHING = False` is required
+    # for tests to pass.
+    #
+    # There appears to be a bug in Parler which leaves translations in Parler's
+    # cache even after the parent object has been deleted. In production
+    # environments, this is unlikely to affect anything, because newly created
+    # objects will have new IDs. In testing, new objects are created with IDs
+    # that were previously used, which reveals this issue.
+    #
+    'PARLER_ENABLE_CACHING': False,
     'HAYSTACK_CONNECTIONS': {
         'default': {
             'ENGINE': 'haystack.backends.simple_backend.SimpleEngine',
@@ -64,10 +75,32 @@ HELPER_SETTINGS = {
     'THUMBNAIL_PROCESSORS': (
         'easy_thumbnails.processors.colorspace',
         'easy_thumbnails.processors.autocrop',
-        #'easy_thumbnails.processors.scale_and_crop',
+        # 'easy_thumbnails.processors.scale_and_crop',
         'filer.thumbnail_processors.scale_and_crop_with_subject_location',
         'easy_thumbnails.processors.filters',
-    )
+    ),
+    # 'DATABASES': {
+    #     'default': {
+    #         'ENGINE': 'django.db.backends.sqlite3',
+    #         'NAME': 'mydatabase',
+    #     },
+    #     'mysql': {
+    #         'ENGINE': 'django.db.backends.mysql',
+    #         'NAME': 'newsblog_test',
+    #         'USER': 'root',
+    #         'PASSWORD': '',
+    #         'HOST': '',
+    #         'PORT': '3306',
+    #     },
+    #     'postgres': {
+    #         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #         'NAME': 'newsblog_test',
+    #         'USER': 'test',
+    #         'PASSWORD': '',
+    #         'HOST': '127.0.0.1',
+    #         'PORT': '5432',
+    #     }
+    # }
 }
 
 

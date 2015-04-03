@@ -7,7 +7,7 @@
         </li>
         {% for category in categories %}
             <li{% if newsblog_category.id == category.id %} class="active"{% endif %}>
-                <span class="badge">{{ category.count }}</span>
+                <span class="badge">{{ category.article_count }}</span>
                 <a href="{% namespace_url "article-list-by-category" category.slug namespace=instance.app_config.namespace %}">{{ category.name }}</a>
             </li>
         {% endfor %}
