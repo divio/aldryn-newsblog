@@ -2,11 +2,12 @@
 
 from __future__ import unicode_literals
 
+import time
 import datetime
 import pytz
 
 from django.core.urlresolvers import reverse
-from django.test import TestCase
+from django.test import TransactionTestCase
 
 from aldryn_newsblog.models import NewsBlogConfig
 from cms import api
@@ -14,7 +15,7 @@ from cms import api
 from . import NewsBlogTestsMixin
 
 
-class TestAppConfigPluginsBase(NewsBlogTestsMixin, TestCase):
+class TestAppConfigPluginsBase(NewsBlogTestsMixin, TransactionTestCase):
     plugin_to_test = 'TextPlugin'
     plugin_params = {}
 
@@ -101,12 +102,15 @@ class TestAuthorsPlugin(TestAppConfigPluginsBase):
                 is_published=False
             )
             other_articles.append(article)
-        
+
         # Published, author1 articles in a different namespace
         other_articles.append(self.create_article(
             author=author1,
             app_config=self.another_app_config
         ))
+
+        # REQUIRED DUE TO USE OF RAW QUERIES
+        time.sleep(1)
 
         response = self.client.get(self.page.get_absolute_url())
         pattern = '<p class="author"><a href="{url}"></a>'
@@ -158,6 +162,9 @@ class TestCategoriesPlugin(TestAppConfigPluginsBase):
             article = self.create_article(app_config=self.another_app_config)
             article.categories.add(self.category1)
             other_articles.append(article)
+
+        # REQUIRED DUE TO USE OF RAW QUERIES
+        time.sleep(1)
 
         response = self.client.get(self.page.get_absolute_url())
         pattern = '<span[^>]*>{num}</span>\s*<a href=[^>]*>{name}</a>'
@@ -216,7 +223,7 @@ class TestLatestArticlesPlugin(TestAppConfigPluginsBase):
             self.assertNotContains(response, article.title)
 
 
-class TestRelatedArticlesPlugin(NewsBlogTestsMixin, TestCase):
+class TestRelatedArticlesPlugin(NewsBlogTestsMixin, TransactionTestCase):
 
     def test_related_articles_plugin(self):
         main_article = self.create_article(app_config=self.app_config)
@@ -256,6 +263,9 @@ class TestTagsPlugin(TestAppConfigPluginsBase):
         # Some tag1 articles in another namespace
         other_articles += self.create_tagged_articles(
             1, tags=['tag1'], app_config=self.another_app_config)['tag1']
+
+        # REQUIRED DUE TO USE OF RAW QUERIES
+        time.sleep(1)
 
         response = self.client.get(self.page.get_absolute_url())
         self.assertRegexpMatches(str(response), 'tag1\s*<span[^>]*>3</span>')

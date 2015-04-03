@@ -16,7 +16,7 @@
         <p class="author"><a href="{% namespace_url "article-list-by-author" author.slug namespace=namespace %}">{{ author.name }}</a></p>
         {% if author_view and author.slug %}
             <p class="job">{{ author.function }}</p>
-            <p class="badge">{{ author.count }}</p>
+            <p class="badge">{{ author.article_count }}</p>
         {% else %}
             <p class="date">{{ article.publishing_date|date }}</p>
         {% endif %}

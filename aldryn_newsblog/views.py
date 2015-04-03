@@ -111,6 +111,7 @@ class ArticleSearchResultsList(ArticleListBase):
     def get(self, request, *args, **kwargs):
         self.query = request.GET.get('q')
         self.max_articles = request.GET.get('max_articles', 0)
+        self.edit_mode = (request.toolbar and request.toolbar.edit_mode)
         return super(ArticleSearchResultsList, self).get(request)
 
     def get_paginate_by(self, queryset):
@@ -123,6 +124,8 @@ class ArticleSearchResultsList(ArticleListBase):
 
     def get_queryset(self):
         qs = super(ArticleSearchResultsList, self).get_queryset()
+        if not self.edit_mode:
+            qs = qs.published()
         if self.query:
             return qs.filter(
                 Q(translations__title__icontains=self.query) |
