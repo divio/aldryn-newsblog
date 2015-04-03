@@ -133,7 +133,7 @@ class TestViews(NewsBlogTestsMixin, TransactionTestCase):
                     with switch_language(category, language):
                         url = reverse('aldryn_newsblog:article-list-by-category',
                                       kwargs={'category': category.slug})
-                    response = self.client.get(url)
+                        response = self.client.get(url)
                     for article in articles:
                         if language in article.get_available_languages():
                             article.set_current_language(language)
