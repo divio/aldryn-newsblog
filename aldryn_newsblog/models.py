@@ -55,6 +55,11 @@ SQL_NOW_FUNC = {
     'sqlite': 'CURRENT_TIMESTAMP', 'oracle': 'CURRENT_TIMESTAMP'
 }[connection.vendor]
 
+if connection.vendor == 'mysql':
+    SQL_WHERE = 'HAVING'
+else:
+    SQL_WHERE = 'WHERE'
+
 
 @python_2_unicode_compatible
 @version_controlled_content
@@ -277,26 +282,30 @@ class NewsBlogAuthorsPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
         user is a logged-in cms operator, then it will be all articles.
         """
 
+        # The basic subquery (for logged-in content managers in edit mode)
         subquery = """
             SELECT COUNT(*)
-            FROM "aldryn_newsblog_article"
+            FROM `aldryn_newsblog_article`
             WHERE
-                "aldryn_newsblog_article"."author_id" = 
-                    "aldryn_people_person"."id" AND
-                "aldryn_newsblog_article"."app_config_id" = %d"""
+                `aldryn_newsblog_article`.`author_id` = 
+                    `aldryn_people_person`.`id` AND
+                `aldryn_newsblog_article`.`app_config_id` = %d"""
 
+        # For other users, limit subquery to published articles
         if not self.get_edit_mode(request):
             subquery += """ AND
-                "aldryn_newsblog_article"."is_published" = 1 AND
-                "aldryn_newsblog_article"."publishing_date" <= %s
+                `aldryn_newsblog_article`.`is_published` = 1 AND
+                `aldryn_newsblog_article`.`publishing_date` <= %s
             """ % (SQL_NOW_FUNC, )
 
-        author_list = Person.objects.extra(
-            select={'article_count': subquery % (self.app_config.pk, )},
-        ).extra(
-            where=['"article_count" > 0', ]
-        )
-        return author_list
+        # Now, use this subquery in the construction of the main query.
+        # NOTE: The 'HAVING' here is intentional.
+        query = """
+            SELECT (%s) as `article_count`, `aldryn_people_person`.*
+            FROM `aldryn_people_person`
+            %s `article_count` > 0
+        """ % (subquery % (self.app_config.pk, ), SQL_WHERE, )
+        return Person.objects.raw(query)
 
     def __str__(self):
         return _('%s authors') % (self.app_config.get_app_title(), )
@@ -318,27 +327,28 @@ class NewsBlogCategoriesPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
 
         subquery = """
             SELECT COUNT(*)
-            FROM "aldryn_newsblog_article", "aldryn_newsblog_article_categories"
+            FROM `aldryn_newsblog_article`, `aldryn_newsblog_article_categories`
             WHERE
-                "aldryn_newsblog_article_categories"."category_id" =
-                    "aldryn_categories_category"."id" AND
-                "aldryn_newsblog_article_categories"."article_id" =
-                    "aldryn_newsblog_article"."id" AND
-                "aldryn_newsblog_article"."app_config_id" = %d
+                `aldryn_newsblog_article_categories`.`category_id` =
+                    `aldryn_categories_category`.`id` AND
+                `aldryn_newsblog_article_categories`.`article_id` =
+                    `aldryn_newsblog_article`.`id` AND
+                `aldryn_newsblog_article`.`app_config_id` = %d
         """ % (self.app_config.pk, )
 
         if not self.get_edit_mode(request):
             subquery += """ AND
-                "aldryn_newsblog_article"."is_published" = 1 AND
-                "aldryn_newsblog_article"."publishing_date" <= %s
+                `aldryn_newsblog_article`.`is_published` = 1 AND
+                `aldryn_newsblog_article`.`publishing_date` <= %s
             """ % (SQL_NOW_FUNC, )
 
-        category_list = Category.objects.extra(
-            select={'article_count': subquery},
-        ).extra(
-            where=['"article_count" > 0', ]
-        )
-        return category_list
+        query = """
+            SELECT (%s) as `article_count`, `aldryn_categories_category`.*
+            FROM `aldryn_categories_category`
+            %s `article_count` > 0
+        """ % (subquery, SQL_WHERE, )
+
+        return Category.objects.raw(query)
 
 
 @python_2_unicode_compatible
@@ -435,25 +445,29 @@ class NewsBlogTagsPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
 
         subquery = """
             SELECT COUNT(*)
-            FROM "aldryn_newsblog_article", "taggit_taggeditem"
+            FROM `aldryn_newsblog_article`, `taggit_taggeditem`
             WHERE
-                "taggit_taggeditem"."tag_id" = "taggit_tag"."id" AND
-                "taggit_taggeditem"."content_type_id" = %d AND
-                "taggit_taggeditem"."object_id" = "aldryn_newsblog_article"."id" AND
-                "aldryn_newsblog_article"."app_config_id" = %d"""
+                `taggit_taggeditem`.`tag_id` = `taggit_tag`.`id` AND
+                `taggit_taggeditem`.`content_type_id` = %d AND
+                `taggit_taggeditem`.`object_id` = `aldryn_newsblog_article`.`id` AND
+                `aldryn_newsblog_article`.`app_config_id` = %d"""
 
         if not self.get_edit_mode(request):
             subquery += """ AND
-                "aldryn_newsblog_article"."is_published" = 1 AND
-                "aldryn_newsblog_article"."publishing_date" <= %s
+                `aldryn_newsblog_article`.`is_published` = 1 AND
+                `aldryn_newsblog_article`.`publishing_date` <= %s
             """ % (SQL_NOW_FUNC, )
 
-        return Tag.objects.extra(
-            select={'article_count': subquery % (
-                article_content_type.pk, self.app_config.pk, )},
-        ).extra(
-            where=['"article_count" > 0', ]
+        query = """
+            SELECT (%s) as `article_count`, `taggit_tag`.*
+            FROM `taggit_tag`
+            %s `article_count` > 0
+        """ % (
+            subquery % (article_content_type.id, self.app_config.pk),
+            SQL_WHERE,
         )
+
+        return Tag.objects.raw(query)
 
     def __str__(self):
         return _('%s tags') % (self.app_config.get_app_title(), )
