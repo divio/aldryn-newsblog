@@ -109,6 +109,7 @@ class TestAuthorsPlugin(TestAppConfigPluginsBase):
             app_config=self.another_app_config
         ))
 
+        # REQUIRED DUE TO USE OF RAW QUERIES
         time.sleep(1)
 
         response = self.client.get(self.page.get_absolute_url())
@@ -162,6 +163,7 @@ class TestCategoriesPlugin(TestAppConfigPluginsBase):
             article.categories.add(self.category1)
             other_articles.append(article)
 
+        # REQUIRED DUE TO USE OF RAW QUERIES
         time.sleep(1)
 
         response = self.client.get(self.page.get_absolute_url())
@@ -261,7 +263,10 @@ class TestTagsPlugin(TestAppConfigPluginsBase):
         # Some tag1 articles in another namespace
         other_articles += self.create_tagged_articles(
             1, tags=['tag1'], app_config=self.another_app_config)['tag1']
+
+        # REQUIRED DUE TO USE OF RAW QUERIES
         time.sleep(1)
+
         response = self.client.get(self.page.get_absolute_url())
         self.assertRegexpMatches(str(response), 'tag1\s*<span[^>]*>3</span>')
         self.assertRegexpMatches(str(response), 'tag2\s*<span[^>]*>5</span>')
