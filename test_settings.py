@@ -48,6 +48,17 @@ HELPER_SETTINGS = {
             'hide_untranslated': False,
         }
     },
+    #
+    # NOTE: The following setting `PARLER_ENABLE_CACHING = False` is required
+    # for tests to pass.
+    #
+    # There appears to be a bug in Parler which leaves translations in Parler's
+    # cache even after the parent object has been deleted. In production
+    # environments, this is unlikely to affect anything, because newly created
+    # objects will have new IDs. In testing, new objects are created with IDs
+    # that were previously used, which reveals this issue.
+    #
+    'PARLER_ENABLE_CACHING': False,
     'HAYSTACK_CONNECTIONS': {
         'default': {
             'ENGINE': 'haystack.backends.simple_backend.SimpleEngine',
