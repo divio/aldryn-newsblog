@@ -65,7 +65,6 @@ class NewsBlogTestsMixin(CategoryTestCaseMixin):
         if content:
             api.add_plugin(article.content, 'TextPlugin',
                            self.language, body=content)
-
         return article
 
     def create_tagged_articles(self, num_articles=3, tags=('tag1', 'tag2'),

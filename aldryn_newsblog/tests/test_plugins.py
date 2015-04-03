@@ -101,7 +101,7 @@ class TestAuthorsPlugin(TestAppConfigPluginsBase):
                 is_published=False
             )
             other_articles.append(article)
-        
+
         # Published, author1 articles in a different namespace
         other_articles.append(self.create_article(
             author=author1,

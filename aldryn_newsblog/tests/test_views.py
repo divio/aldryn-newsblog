@@ -160,7 +160,8 @@ class TestTranslationFallbacks(NewsBlogTestsMixin, TransactionTestCase):
 
         with override(settings.LANGUAGES[0][0]):
             article = Article.objects.create(
-                title=self.rand_str(), slug=self.rand_str(prefix=code),
+                title=self.rand_str(),
+                slug=self.rand_str(prefix=code),
                 app_config=self.app_config,
                 author=author, owner=author.user,
                 publishing_date=now())
