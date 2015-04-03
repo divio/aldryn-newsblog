@@ -79,28 +79,28 @@ HELPER_SETTINGS = {
         'filer.thumbnail_processors.scale_and_crop_with_subject_location',
         'easy_thumbnails.processors.filters',
     ),
-    'DATABASES': {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': 'mydatabase',
-        },
-        'mysql': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'newsblog_test',
-            'USER': 'root',
-            'PASSWORD': '',
-            'HOST': '',
-            'PORT': '3306',
-        },
-        'postgres': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'newsblog_test',
-            'USER': 'test',
-            'PASSWORD': '',
-            'HOST': '127.0.0.1',
-            'PORT': '5432',
-        }
-    }
+    # 'DATABASES': {
+    #     'default': {
+    #         'ENGINE': 'django.db.backends.sqlite3',
+    #         'NAME': 'mydatabase',
+    #     },
+    #     'mysql': {
+    #         'ENGINE': 'django.db.backends.mysql',
+    #         'NAME': 'newsblog_test',
+    #         'USER': 'root',
+    #         'PASSWORD': '',
+    #         'HOST': '',
+    #         'PORT': '3306',
+    #     },
+    #     'postgres': {
+    #         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #         'NAME': 'newsblog_test',
+    #         'USER': 'test',
+    #         'PASSWORD': '',
+    #         'HOST': '127.0.0.1',
+    #         'PORT': '5432',
+    #     }
+    # }
 }
 
 
