@@ -18,8 +18,16 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.utils.text import slugify as default_slugify
 from django.utils.timezone import now
 from django.utils.translation import get_language, ugettext_lazy as _
+from django.contrib.auth.models import User
+
+from aldryn_apphooks_config.fields import AppHookConfigField
+from cms.models.fields import PlaceholderField
+from cms.models.pluginmodel import CMSPlugin
+from djangocms_text_ckeditor.fields import HTMLField
+from filer.fields.image import FilerImageField
 
 from aldryn_categories.fields import CategoryManyToManyField
+from aldryn_apphooks_config.fields import AppHookConfigField
 from aldryn_categories.models import Category
 from aldryn_people.models import Person
 from aldryn_reversion.core import version_controlled_content
@@ -99,8 +107,8 @@ class Article(TranslatableModel):
     author = models.ForeignKey(Person, null=True, blank=True,
                                verbose_name=_('author'))
     owner = models.ForeignKey(User, verbose_name=_('owner'))
-    app_config = models.ForeignKey(NewsBlogConfig,
-                                   verbose_name=_('app. config'))
+    app_config = AppHookConfigField(NewsBlogConfig,
+                                    verbose_name=_('app. config'))
     categories = CategoryManyToManyField('aldryn_categories.Category',
                                          verbose_name=_('categories'),
                                          blank=True)

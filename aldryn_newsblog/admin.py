@@ -2,6 +2,7 @@
 
 from __future__ import unicode_literals
 
+from django.conf import settings
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 from cms.admin.placeholderadmin import (
@@ -10,9 +11,10 @@ from cms.admin.placeholderadmin import (
 )
 from parler.forms import TranslatableModelForm
 from parler.admin import TranslatableAdmin
-from aldryn_apphooks_config.admin import BaseAppHookConfig
+from aldryn_apphooks_config.admin import BaseAppHookConfig, ModelAppHookConfig
 from aldryn_people.models import Person
 from aldryn_reversion.admin import VersionedPlaceholderAdminMixin
+
 from . import models
 
 
@@ -60,12 +62,14 @@ class ArticleAdminForm(TranslatableModelForm):
         if self.instance.pk:
             qs = qs.exclude(pk=self.instance.pk)
 
-        self.fields['related'].queryset = qs
+        if 'related' in self.fields:
+            self.fields['related'].queryset = qs
 
 
 class ArticleAdmin(VersionedPlaceholderAdminMixin,
                    TranslatableAdmin,
                    FrontendEditableAdminMixin,
+                   ModelAppHookConfig,
                    admin.ModelAdmin):
     form = ArticleAdminForm
     list_display = ('title', 'app_config', 'slug', 'is_featured',
@@ -102,6 +106,10 @@ class ArticleAdmin(VersionedPlaceholderAdminMixin,
         }),
     )
 
+    app_config_values = {
+        'default_published': 'is_published'
+    }
+
     def add_view(self, request, *args, **kwargs):
         data = request.GET.copy()
         try:
@@ -123,7 +131,6 @@ class NewsBlogConfigAdmin(TranslatableAdmin,
                           PlaceholderAdminMixin,
                           BaseAppHookConfig):
     def get_config_fields(self):
-        return ('app_title', 'paginate_by', 'create_authors', 'search_indexed', )
-
+        return ('app_title', 'paginate_by', 'create_authors', 'search_indexed', 'config.default_published', )
 
 admin.site.register(models.NewsBlogConfig, NewsBlogConfigAdmin)
