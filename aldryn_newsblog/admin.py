@@ -2,7 +2,7 @@
 
 from __future__ import unicode_literals
 
-from django.conf import settings
+from django import forms
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 from cms.admin.placeholderadmin import (
@@ -14,7 +14,9 @@ from parler.admin import TranslatableAdmin
 from aldryn_apphooks_config.admin import BaseAppHookConfig, ModelAppHookConfig
 from aldryn_people.models import Person
 from aldryn_reversion.admin import VersionedPlaceholderAdminMixin
+from aldryn_apphooks_config.fields import AppHookConfigFormField
 
+from .cms_appconfig import NewsBlogConfig
 from . import models
 
 
@@ -65,6 +67,10 @@ class ArticleAdminForm(TranslatableModelForm):
         if 'related' in self.fields:
             self.fields['related'].queryset = qs
 
+        # Don't allow app_configs to be added here. The correct way to add an
+        # apphook-config is to create an apphook on a cms Page.
+        self.fields['app_config'].widget.can_add_related = False
+
 
 class ArticleAdmin(VersionedPlaceholderAdminMixin,
                    TranslatableAdmin,
@@ -81,31 +87,31 @@ class ArticleAdmin(VersionedPlaceholderAdminMixin,
     fieldsets = (
         (None, {
             'fields': (
+                'app_config',
                 'title',
                 'featured_image',
+                ('owner', 'author', ),
             )
         }),
         ('Details', {
             'fields': (
-                'is_featured',
+                ('is_published', 'is_featured', ),
                 'tags',
                 'categories',
                 'lead_in',
                 'publishing_date',
-                'is_published',
                 'related',
             )
         }),
         ('Meta options', {
             'classes': ('collapse',),
-            'fields': ('meta_title', 'meta_description', 'meta_keywords')
-        }),
-        ('Advanced', {
-            'classes': ('collapse',),
-            'fields': ('author', 'owner', 'app_config')
+            'fields': (
+                'meta_title',
+                'meta_description',
+                'meta_keywords',
+            )
         }),
     )
-
     app_config_values = {
         'default_published': 'is_published'
     }
