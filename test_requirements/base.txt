@@ -1,5 +1,5 @@
 aldryn-apphooks-config
-aldryn-boilerplates
+-e git+https://github.com/aldryn/aldryn-boilerplates.git#egg=aldryn-boilerplates
 aldryn-categories
 aldryn-common
 aldryn-people==0.4.6
