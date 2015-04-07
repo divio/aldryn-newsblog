@@ -10,31 +10,24 @@ from django.core.urlresolvers import reverse
 from django.db import connection, models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+
 try:
     from django.utils.encoding import force_unicode
 except ImportError:
     from django.utils.encoding import force_text as force_unicode
+
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.text import slugify as default_slugify
 from django.utils.timezone import now
 from django.utils.translation import get_language, ugettext_lazy as _
-from django.contrib.auth.models import User
 
 from aldryn_apphooks_config.fields import AppHookConfigField
-from cms.models.fields import PlaceholderField
-from cms.models.pluginmodel import CMSPlugin
-from djangocms_text_ckeditor.fields import HTMLField
-from filer.fields.image import FilerImageField
-
 from aldryn_categories.fields import CategoryManyToManyField
-from aldryn_apphooks_config.fields import AppHookConfigField
 from aldryn_categories.models import Category
 from aldryn_people.models import Person
 from aldryn_reversion.core import version_controlled_content
-
 from cms.models.fields import PlaceholderField
 from cms.models.pluginmodel import CMSPlugin
-
 from djangocms_text_ckeditor.fields import HTMLField
 from filer.fields.image import FilerImageField
 from parler.models import TranslatableModel, TranslatedFields
@@ -254,8 +247,8 @@ class NewsBlogCMSPlugin(CMSPlugin):
         CMSPlugin, related_name='+', parent_link=True)
 
     app_config = models.ForeignKey(NewsBlogConfig)
-    class Meta:
 
+    class Meta:
         abstract = True
 
     def copy_relations(self, old_instance):
@@ -295,25 +288,24 @@ class NewsBlogAuthorsPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
         # The basic subquery (for logged-in content managers in edit mode)
         subquery = """
             SELECT COUNT(*)
-            FROM `aldryn_newsblog_article`
+            FROM aldryn_newsblog_article
             WHERE
-                `aldryn_newsblog_article`.`author_id` = 
-                    `aldryn_people_person`.`id` AND
-                `aldryn_newsblog_article`.`app_config_id` = %d"""
+                aldryn_newsblog_article.author_id = 
+                    aldryn_people_person.id AND
+                aldryn_newsblog_article.app_config_id = %d"""
 
         # For other users, limit subquery to published articles
         if not self.get_edit_mode(request):
             subquery += """ AND
-                `aldryn_newsblog_article`.`is_published` = 1 AND
-                `aldryn_newsblog_article`.`publishing_date` <= %s
+                aldryn_newsblog_article.is_published = 1 AND
+                aldryn_newsblog_article.publishing_date <= %s
             """ % (SQL_NOW_FUNC, )
 
         # Now, use this subquery in the construction of the main query.
-        # NOTE: The 'HAVING' here is intentional.
         query = """
-            SELECT (%s) as `article_count`, `aldryn_people_person`.*
-            FROM `aldryn_people_person`
-            %s `article_count` > 0
+            SELECT (%s) as article_count, aldryn_people_person.*
+            FROM aldryn_people_person
+            %s article_count > 0
         """ % (subquery % (self.app_config.pk, ), SQL_WHERE, )
         return Person.objects.raw(query)
 
@@ -337,25 +329,25 @@ class NewsBlogCategoriesPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
 
         subquery = """
             SELECT COUNT(*)
-            FROM `aldryn_newsblog_article`, `aldryn_newsblog_article_categories`
+            FROM aldryn_newsblog_article, aldryn_newsblog_article_categories
             WHERE
-                `aldryn_newsblog_article_categories`.`category_id` =
-                    `aldryn_categories_category`.`id` AND
-                `aldryn_newsblog_article_categories`.`article_id` =
-                    `aldryn_newsblog_article`.`id` AND
-                `aldryn_newsblog_article`.`app_config_id` = %d
+                aldryn_newsblog_article_categories.category_id =
+                    aldryn_categories_category.id AND
+                aldryn_newsblog_article_categories.article_id =
+                    aldryn_newsblog_article.id AND
+                aldryn_newsblog_article.app_config_id = %d
         """ % (self.app_config.pk, )
 
         if not self.get_edit_mode(request):
             subquery += """ AND
-                `aldryn_newsblog_article`.`is_published` = 1 AND
-                `aldryn_newsblog_article`.`publishing_date` <= %s
+                aldryn_newsblog_article.is_published = 1 AND
+                aldryn_newsblog_article.publishing_date <= %s
             """ % (SQL_NOW_FUNC, )
 
         query = """
-            SELECT (%s) as `article_count`, `aldryn_categories_category`.*
-            FROM `aldryn_categories_category`
-            %s `article_count` > 0
+            SELECT (%s) as article_count, aldryn_categories_category.*
+            FROM aldryn_categories_category
+            %s article_count > 0
         """ % (subquery, SQL_WHERE, )
 
         return Category.objects.raw(query)
@@ -455,23 +447,23 @@ class NewsBlogTagsPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
 
         subquery = """
             SELECT COUNT(*)
-            FROM `aldryn_newsblog_article`, `taggit_taggeditem`
+            FROM aldryn_newsblog_article, taggit_taggeditem
             WHERE
-                `taggit_taggeditem`.`tag_id` = `taggit_tag`.`id` AND
-                `taggit_taggeditem`.`content_type_id` = %d AND
-                `taggit_taggeditem`.`object_id` = `aldryn_newsblog_article`.`id` AND
-                `aldryn_newsblog_article`.`app_config_id` = %d"""
+                taggit_taggeditem.tag_id = taggit_tag.id AND
+                taggit_taggeditem.content_type_id = %d AND
+                taggit_taggeditem.object_id = aldryn_newsblog_article.id AND
+                aldryn_newsblog_article.app_config_id = %d"""
 
         if not self.get_edit_mode(request):
             subquery += """ AND
-                `aldryn_newsblog_article`.`is_published` = 1 AND
-                `aldryn_newsblog_article`.`publishing_date` <= %s
+                aldryn_newsblog_article.is_published = 1 AND
+                aldryn_newsblog_article.publishing_date <= %s
             """ % (SQL_NOW_FUNC, )
 
         query = """
-            SELECT (%s) as `article_count`, `taggit_tag`.*
-            FROM `taggit_tag`
-            %s `article_count` > 0
+            SELECT (%s) as article_count, taggit_tag.*
+            FROM taggit_tag
+            %s article_count > 0
         """ % (
             subquery % (article_content_type.id, self.app_config.pk),
             SQL_WHERE,
