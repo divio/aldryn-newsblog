@@ -10,31 +10,24 @@ from django.core.urlresolvers import reverse
 from django.db import connection, models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+
 try:
     from django.utils.encoding import force_unicode
 except ImportError:
     from django.utils.encoding import force_text as force_unicode
+
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.text import slugify as default_slugify
 from django.utils.timezone import now
 from django.utils.translation import get_language, ugettext_lazy as _
-from django.contrib.auth.models import User
 
 from aldryn_apphooks_config.fields import AppHookConfigField
-from cms.models.fields import PlaceholderField
-from cms.models.pluginmodel import CMSPlugin
-from djangocms_text_ckeditor.fields import HTMLField
-from filer.fields.image import FilerImageField
-
 from aldryn_categories.fields import CategoryManyToManyField
-from aldryn_apphooks_config.fields import AppHookConfigField
 from aldryn_categories.models import Category
 from aldryn_people.models import Person
 from aldryn_reversion.core import version_controlled_content
-
 from cms.models.fields import PlaceholderField
 from cms.models.pluginmodel import CMSPlugin
-
 from djangocms_text_ckeditor.fields import HTMLField
 from filer.fields.image import FilerImageField
 from parler.models import TranslatableModel, TranslatedFields
