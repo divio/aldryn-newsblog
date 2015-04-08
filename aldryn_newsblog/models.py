@@ -137,14 +137,24 @@ class Article(TranslatableModel):
         # not created the apphook yet, as some user work-flows involve creating
         # articles before the page exists.
         #
+        kwargs = {}
+        permalink_type = self.app_config.permalink_type
+        if 'y' in permalink_type:
+            kwargs.update(year=self.publishing_date.year)
+        if 'm' in permalink_type:
+            kwargs.update(month=self.publishing_date.month)
+        if 'd' in permalink_type:
+            kwargs.update(day=self.publishing_date.day)
+        if 'i' in permalink_type:
+            kwargs.update(pk=self.pk)
+        if 's' in permalink_type:
+            kwargs.update(
+                slug=self.safe_translation_getter('slug', any_language=True))
         try:
             return reverse(
                 '{namespace}:article-detail'.format(
                     namespace=self.app_config.namespace
-                ), kwargs={
-                    'slug': self.safe_translation_getter(
-                        'slug', any_language=True)
-                }
+                ), kwargs=kwargs
             )
         except:
             return ''  # Note NOT None here

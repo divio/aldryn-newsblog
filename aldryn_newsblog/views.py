@@ -2,12 +2,18 @@
 
 from __future__ import unicode_literals
 
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 from dateutil.relativedelta import relativedelta
 
 from django.db.models import Q
+from django.http import (
+    Http404,
+    HttpResponseRedirect,
+    HttpResponsePermanentRedirect,
+)
 from django.shortcuts import get_object_or_404
 from django.utils import translation
+from django.utils.translation import ugettext as _
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView
 
@@ -51,6 +57,71 @@ class PreviewModeMixin(EditModeMixin):
 class ArticleDetail(PreviewModeMixin, TranslatableSlugMixin, AppConfigMixin, DetailView):
     model = Article
     slug_field = 'slug'
+    year_url_kwarg = 'year'
+    month_url_kwarg = 'month'
+    day_url_kwarg = 'day'
+    slug_url_kwarg = 'slug'
+    pk_url_kwarg = 'pk'
+
+    def get(self, request, *args, **kwargs):
+        """
+        This handles non-permalinked URLs according to preferences as set in
+        NewsBlogConfig.
+        """
+        url = self.get_object().get_absolute_url()
+        if (self.config.non_permalink_handling == 200 or request.path == url):
+            # Continue as normal
+            return super(ArticleDetail, self).get(request, *args, **kwargs)
+
+        # Check to see if the URL path matches the correct absolute_url of
+        # the found object
+        if self.config.non_permalink_handling == 302:
+            return HttpResponseRedirect(url)
+        elif self.config.non_permalink_handling == 301:
+            return HttpResponsePermanentRedirect(url)
+        else:
+            raise Http404('This is not the canonical uri of this object.')
+
+    def get_object(self, queryset=None):
+        """
+        Supports ALL of the types of permalinks that we've defined in urls.py.
+        """
+        if queryset is None:
+            queryset = self.get_queryset()
+
+        year = self.kwargs.get(self.year_url_kwarg, None)
+        month = self.kwargs.get(self.month_url_kwarg, None)
+        day = self.kwargs.get(self.day_url_kwarg, None)
+        slug = self.kwargs.get(self.slug_url_kwarg, None)
+        pk = self.kwargs.get(self.pk_url_kwarg, None)
+
+        if year is not None and month is not None and day is not None:
+            start = datetime(int(year), int(month), int(day))
+            end = start + timedelta(days=1) - timedelta(seconds=1)
+            queryset = queryset.filter(
+                publishing_date__range=(start, end))
+        elif year is not None and month is not None:
+            start = datetime(int(year), int(month), 1)
+            if int(month) == 12:
+                end = datetime(int(year) + 1, 1, 1)
+            else:
+                end = datetime(int(year), int(month) + 1, 1)
+            end = end - timedelta(seconds=1)
+            queryset = queryset.filter(
+                publishing_date__range=(start, end))
+        elif year is not None:
+            queryset = queryset.filter(
+                publishing_date__year=int(year))
+
+        if pk is not None:
+            # Let the DetailView itself handle this one
+            return DetailView.get_object(self, queryset=queryset)
+        elif slug is not None:
+            # Let the TranslatedSlugMixin take over
+            return super(ArticleDetail, self).get_object(queryset=queryset)
+
+        raise AttributeError('ArticleDetail view must be called with either '
+                             'an object pk or a slug')
 
     def get_context_data(self, **kwargs):
         context = super(ArticleDetail, self).get_context_data(**kwargs)

@@ -72,9 +72,14 @@ class NewsBlogToolbar(CMSToolbar):
         view_name = self.request.resolver_match.view_name
         if (view_name == '{0}:article-detail'.format(config.namespace) and
                 self.request.user.has_perm('aldryn_newsblog.change_article')):
-
-            slug = self.request.resolver_match.kwargs['slug']
-            articles = Article.objects.translated(slug=slug)
+            kwargs = self.request.resolver_match.kwargs
+            articles = Article.objects
+            if hasattr(kwargs, 'slug'):
+                slug = kwargs['slug']
+                articles = articles.translated(slug=slug)
+            elif hasattr(kwargs, 'pk'):
+                pk = kwargs['pk']
+                articles = articles.filter(pk=pk)
             if articles.count() == 1:
                 menu.add_modal_item(_('Edit article'), admin_reverse(
                     'aldryn_newsblog_article_change', args=(

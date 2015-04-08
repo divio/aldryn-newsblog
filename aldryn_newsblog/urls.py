@@ -15,14 +15,29 @@ urlpatterns = patterns(
     url(r'^search/$',
         ArticleSearchResultsList.as_view(), name='article-search'),
 
-    url(r'^(?P<year>[0-9]{4})/$',
+    url(r'^(?P<year>\d{4})/$',
         YearArticleList.as_view(), name='article-list-by-year'),
-    url(r'^(?P<year>[0-9]{4})/(?P<month>[0-9]{1,2})/$',
+    url(r'^(?P<year>\d{4})/(?P<month>\d{1,2})/$',
         MonthArticleList.as_view(), name='article-list-by-month'),
-    url(r'^(?P<year>[0-9]{4})/(?P<month>[0-9]{1,2})/(?P<day>[0-9]{1,2})/$',
+    url(r'^(?P<year>\d{4})/(?P<month>\d{1,2})/(?P<day>\d{1,2})/$',
         DayArticleList.as_view(), name='article-list-by-day'),
 
+    # Various permalink styles that we support
+    # ----------------------------------------
+    # This supports permalinks with <article_pk>
+    # NOTE: We cannot support /year/month/pk, /year/pk, or /pk, since these
+    # patterns collide with the list/archive views, which we'd prefer to
+    # continue to support.
+    url(r'^(?P<year>\d{4})/(?P<month>\d{1,2})/(?P<day>\d{1,2})/(?P<pk>\d+)/$',
+        ArticleDetail.as_view(), name='article-detail'),
+    # These support permalinks with <article_slug>
     url(r'^(?P<slug>\w[-\w]*)/$',
+        ArticleDetail.as_view(), name='article-detail'),
+    url(r'^(?P<year>\d{4})/(?P<slug>\w[-\w]*)/$',
+        ArticleDetail.as_view(), name='article-detail'),
+    url(r'^(?P<year>\d{4})/(?P<month>\d{1,2})/(?P<slug>\w[-\w]*)/$',
+        ArticleDetail.as_view(), name='article-detail'),
+    url(r'^(?P<year>\d{4})/(?P<month>\d{1,2})/(?P<day>\d{1,2})/(?P<slug>\w[-\w]*)/$',
         ArticleDetail.as_view(), name='article-detail'),
 
     url(r'^author/(?P<author>\w[-\w]*)/$',

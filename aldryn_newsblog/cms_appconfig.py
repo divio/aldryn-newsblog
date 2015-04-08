@@ -14,12 +14,36 @@ from cms.models.fields import PlaceholderField
 from parler.models import TranslatableModel
 from parler.models import TranslatedFields
 
+PERMALINK_CHOICES = (
+    ('s', _('the-eagle-has-landed/', )),
+    ('ys', _('1969/the-eagle-has-landed/', )),
+    ('yms', _('1969/07/the-eagle-has-landed/', )),
+    ('ymds', _('1969/07/16/the-eagle-has-landed/', )),
+    ('ymdi', _('1969/07/16/11/', )),
+)
+
+NON_PERMALINK_HANDLING = (
+    (200, _('Allow')),
+    (302, _('Redirect to permalink (default)')),
+    (301, _('Permanent redirect to permalink')),
+    (404, _('Return 404: Not Found')),
+)
+
 
 class NewsBlogConfig(TranslatableModel, AppHookConfig):
     """Adds some translatable, per-app-instance fields."""
     translations = TranslatedFields(
         app_title=models.CharField(_('application title'), max_length=234),
     )
+
+    permalink_type = models.CharField(_('permalink type'), max_length=8,
+        blank=False, default='slug', choices=PERMALINK_CHOICES,
+        help_text=_('Choose the style of urls to use from the examples. (Note, all types are relative to apphook)'))
+
+    non_permalink_handling = models.SmallIntegerField(_('non-permalink handling'),
+        blank=False, default=302,
+        choices=NON_PERMALINK_HANDLING,
+        help_text=_('How to handle non-permalink urls?'))
 
     # ALDRYN_NEWSBLOG_PAGINATE_BY
     paginate_by = models.PositiveIntegerField(
