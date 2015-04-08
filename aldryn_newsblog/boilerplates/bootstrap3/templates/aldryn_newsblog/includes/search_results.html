@@ -11,7 +11,7 @@
                     {% endfor %}
                 </strong>
                 {{ article.title }}<br />
-                <span class="text-muted">{{ article.lead_in|striptags|truncatewords:"10" }}</span>
+                <span class="text-muted">{{ article.lead_in|striptags|truncatewords:"10"|safe }}</span>
             </a>
         </li>
     {% empty %}
