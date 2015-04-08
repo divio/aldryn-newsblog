@@ -2,7 +2,6 @@
 
 from __future__ import unicode_literals
 
-from django import forms
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 from cms.admin.placeholderadmin import (
@@ -14,9 +13,7 @@ from parler.admin import TranslatableAdmin
 from aldryn_apphooks_config.admin import BaseAppHookConfig, ModelAppHookConfig
 from aldryn_people.models import Person
 from aldryn_reversion.admin import VersionedPlaceholderAdminMixin
-from aldryn_apphooks_config.fields import AppHookConfigFormField
 
-from .cms_appconfig import NewsBlogConfig
 from . import models
 
 
@@ -106,6 +103,7 @@ class ArticleAdmin(VersionedPlaceholderAdminMixin,
         ('Meta options', {
             'classes': ('collapse',),
             'fields': (
+                'slug',
                 'meta_title',
                 'meta_description',
                 'meta_keywords',
