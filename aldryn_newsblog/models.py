@@ -308,12 +308,8 @@ class NewsBlogAuthorsPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
         """ % (subquery % (self.app_config.pk, ), )
 
         raw_authors = list(Person.objects.raw(query))
-        authors = []
-        for author in raw_authors:
-            if author.article_count:
-                authors.append(author)
-
-        return authors
+        authors = [author for author in raw_authors if author.article_count]
+        return sorted(authors, key=lambda x: x.article_count, reverse=True)
 
     def __str__(self):
         return _('%s authors') % (self.app_config.get_app_title(), )
@@ -356,12 +352,9 @@ class NewsBlogCategoriesPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
         """ % (subquery, )
 
         raw_categories = list(Category.objects.raw(query))
-        categories = []
-        for category in raw_categories:
-            if category.article_count:
-                categories.append(category)
-
-        return categories
+        categories = [
+            category for category in raw_categories if category.article_count]
+        return sorted(categories, key=lambda x: x.article_count, reverse=True)
 
 
 @python_2_unicode_compatible
@@ -477,12 +470,8 @@ class NewsBlogTagsPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
         """ % (subquery % (article_content_type.id, self.app_config.pk), )
 
         raw_tags = list(Tag.objects.raw(query))
-        tags = []
-        for tag in raw_tags:
-            if tag.article_count:
-                tags.append(tag)
-
-        return tags
+        tags = [tag for tag in raw_tags if tag.article_count]
+        return sorted(tags, key=lambda x: x.article_count, reverse=True) 
 
     def __str__(self):
         return _('%s tags') % (self.app_config.get_app_title(), )
