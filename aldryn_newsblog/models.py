@@ -57,6 +57,11 @@ SQL_NOW_FUNC = {
     'sqlite': 'CURRENT_TIMESTAMP', 'oracle': 'CURRENT_TIMESTAMP'
 }[connection.vendor]
 
+SQL_IS_TRUE = {
+    'mssql': '== TRUE', 'mysql': '== 1', 'postgresql': 'IS TRUE',
+    'sqlite': '== 1', 'oracle': 'IS TRUE'
+}[connection.vendor]
+
 
 @python_2_unicode_compatible
 @version_controlled_content
@@ -292,9 +297,9 @@ class NewsBlogAuthorsPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
         # For other users, limit subquery to published articles
         if not self.get_edit_mode(request):
             subquery += """ AND
-                aldryn_newsblog_article.is_published = 1 AND
+                aldryn_newsblog_article.is_published %s AND
                 aldryn_newsblog_article.publishing_date <= %s
-            """ % (SQL_NOW_FUNC, )
+            """ % (SQL_IS_TRUE, SQL_NOW_FUNC, )
 
         # Now, use this subquery in the construction of the main query.
         query = """
@@ -341,9 +346,9 @@ class NewsBlogCategoriesPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
 
         if not self.get_edit_mode(request):
             subquery += """ AND
-                aldryn_newsblog_article.is_published = 1 AND
+                aldryn_newsblog_article.is_published %s AND
                 aldryn_newsblog_article.publishing_date <= %s
-            """ % (SQL_NOW_FUNC, )
+            """ % (SQL_IS_TRUE, SQL_NOW_FUNC, )
 
         query = """
             SELECT (%s) as article_count, aldryn_categories_category.*
@@ -462,9 +467,9 @@ class NewsBlogTagsPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
 
         if not self.get_edit_mode(request):
             subquery += """ AND
-                aldryn_newsblog_article.is_published = 1 AND
+                aldryn_newsblog_article.is_published %s AND
                 aldryn_newsblog_article.publishing_date <= %s
-            """ % (SQL_NOW_FUNC, )
+            """ % (SQL_IS_TRUE, SQL_NOW_FUNC, )
 
         query = """
             SELECT (%s) as article_count, taggit_tag.*
