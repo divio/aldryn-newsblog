@@ -57,11 +57,6 @@ SQL_NOW_FUNC = {
     'sqlite': 'CURRENT_TIMESTAMP', 'oracle': 'CURRENT_TIMESTAMP'
 }[connection.vendor]
 
-if connection.vendor == 'mysql':
-    SQL_WHERE = 'HAVING'
-else:
-    SQL_WHERE = 'WHERE'
-
 
 @python_2_unicode_compatible
 @version_controlled_content
@@ -305,9 +300,15 @@ class NewsBlogAuthorsPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
         query = """
             SELECT (%s) as article_count, aldryn_people_person.*
             FROM aldryn_people_person
-            %s article_count > 0
-        """ % (subquery % (self.app_config.pk, ), SQL_WHERE, )
-        return Person.objects.raw(query)
+        """ % (subquery % (self.app_config.pk, ), )
+
+        raw_authors = list(Person.objects.raw(query))
+        authors = []
+        for author in raw_authors:
+            if author.article_count:
+                authors.append(author)
+
+        return authors
 
     def __str__(self):
         return _('%s authors') % (self.app_config.get_app_title(), )
@@ -320,7 +321,7 @@ class NewsBlogCategoriesPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
 
     def get_categories(self, request):
         """
-        Returns a queryset of categories, annotated by the number of articles
+        Returns a list of categories, annotated by the number of articles
         (article_count) that are visible to the current user. If this user is
         anonymous, then this will be all articles that are published and whose
         publishing_date has passed. If the user is a logged-in cms operator,
@@ -347,10 +348,15 @@ class NewsBlogCategoriesPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
         query = """
             SELECT (%s) as article_count, aldryn_categories_category.*
             FROM aldryn_categories_category
-            %s article_count > 0
-        """ % (subquery, SQL_WHERE, )
+        """ % (subquery, )
 
-        return Category.objects.raw(query)
+        raw_categories = list(Category.objects.raw(query))
+        categories = []
+        for category in raw_categories:
+            if category.article_count:
+                categories.append(category)
+
+        return categories
 
 
 @python_2_unicode_compatible
@@ -463,13 +469,15 @@ class NewsBlogTagsPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
         query = """
             SELECT (%s) as article_count, taggit_tag.*
             FROM taggit_tag
-            %s article_count > 0
-        """ % (
-            subquery % (article_content_type.id, self.app_config.pk),
-            SQL_WHERE,
-        )
+        """ % (subquery % (article_content_type.id, self.app_config.pk), )
 
-        return Tag.objects.raw(query)
+        raw_tags = list(Tag.objects.raw(query))
+        tags = []
+        for tag in raw_tags:
+            if tag.article_count:
+                tags.append(tag)
+
+        return tags
 
     def __str__(self):
         return _('%s tags') % (self.app_config.get_app_title(), )
