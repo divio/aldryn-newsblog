@@ -135,7 +135,10 @@ class ArticleDetail(PreviewModeMixin, TranslatableSlugMixin, AppConfigMixin, Det
         if object is None:
             object = self.get_object(self)
         prev_objs = queryset.filter(
-            publishing_date__lt=object.publishing_date)[:1]
+            publishing_date__lt=object.publishing_date
+        ).order_by(
+            '-publishing_date'
+        )[:1]
         if prev_objs:
             return prev_objs[0]
         else:
@@ -147,7 +150,10 @@ class ArticleDetail(PreviewModeMixin, TranslatableSlugMixin, AppConfigMixin, Det
         if object is None:
             object = self.get_object(self)
         next_objs = queryset.filter(
-            publishing_date__gt=object.publishing_date)[:1]
+            publishing_date__gt=object.publishing_date
+        ).order_by(
+            'publishing_date'
+        )[:1]
         if next_objs:
             return next_objs[0]
         else:
