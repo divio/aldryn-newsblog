@@ -142,9 +142,9 @@ class Article(TranslatableModel):
         if 'y' in permalink_type:
             kwargs.update(year=self.publishing_date.year)
         if 'm' in permalink_type:
-            kwargs.update(month=self.publishing_date.month)
+            kwargs.update(month="%02d" % self.publishing_date.month)
         if 'd' in permalink_type:
-            kwargs.update(day=self.publishing_date.day)
+            kwargs.update(day="%02d" % self.publishing_date.day)
         if 'i' in permalink_type:
             kwargs.update(pk=self.pk)
         if 's' in permalink_type:
@@ -300,7 +300,7 @@ class NewsBlogAuthorsPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
             SELECT COUNT(*)
             FROM aldryn_newsblog_article
             WHERE
-                aldryn_newsblog_article.author_id = 
+                aldryn_newsblog_article.author_id =
                     aldryn_people_person.id AND
                 aldryn_newsblog_article.app_config_id = %d"""
 
@@ -481,7 +481,7 @@ class NewsBlogTagsPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
 
         raw_tags = list(Tag.objects.raw(query))
         tags = [tag for tag in raw_tags if tag.article_count]
-        return sorted(tags, key=lambda x: x.article_count, reverse=True) 
+        return sorted(tags, key=lambda x: x.article_count, reverse=True)
 
     def __str__(self):
         return _('%s tags') % (self.app_config.get_app_title(), )
