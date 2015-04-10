@@ -69,11 +69,12 @@ class ArticleAdminForm(TranslatableModelForm):
         self.fields['app_config'].widget.can_add_related = False
 
 
-class ArticleAdmin(VersionedPlaceholderAdminMixin,
-                   TranslatableAdmin,
-                   FrontendEditableAdminMixin,
-                   ModelAppHookConfig,
-                   admin.ModelAdmin):
+class ArticleAdmin(
+    VersionedPlaceholderAdminMixin,
+    FrontendEditableAdminMixin,
+    ModelAppHookConfig,
+    TranslatableAdmin
+):
     form = ArticleAdminForm
     list_display = ('title', 'app_config', 'slug', 'is_featured',
                     'is_published')
@@ -131,9 +132,11 @@ class ArticleAdmin(VersionedPlaceholderAdminMixin,
 admin.site.register(models.Article, ArticleAdmin)
 
 
-class NewsBlogConfigAdmin(TranslatableAdmin,
-                          PlaceholderAdminMixin,
-                          BaseAppHookConfig):
+class NewsBlogConfigAdmin(
+    PlaceholderAdminMixin,
+    BaseAppHookConfig,
+    TranslatableAdmin
+):
     def get_config_fields(self):
         return (
             'app_title', 'permalink_type', 'non_permalink_handling', 'paginate_by', 'create_authors',
