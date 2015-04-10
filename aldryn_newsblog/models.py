@@ -19,8 +19,7 @@ except ImportError:
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.text import slugify as default_slugify
 from django.utils.timezone import now
-from django.utils.translation import get_language, ugettext_lazy as _
-
+from django.utils.translation import get_language, ugettext_lazy as _, override
 from aldryn_apphooks_config.fields import AppHookConfigField
 from aldryn_categories.fields import CategoryManyToManyField
 from aldryn_categories.models import Category
@@ -131,12 +130,14 @@ class Article(TranslatableModel):
         """
         return (self.is_published and self.publishing_date < now())
 
-    def get_absolute_url(self):
+    def get_absolute_url(self, language=None):
         #
         # NB: It is important that this is safe to run even when the user has
         # not created the apphook yet, as some user work-flows involve creating
         # articles before the page exists.
         #
+        if language is None:
+            language = get_language()
         kwargs = {}
         permalink_type = self.app_config.permalink_type
         if 'y' in permalink_type:
@@ -148,14 +149,12 @@ class Article(TranslatableModel):
         if 'i' in permalink_type:
             kwargs.update(pk=self.pk)
         if 's' in permalink_type:
-            kwargs.update(
-                slug=self.safe_translation_getter('slug', any_language=True))
+            kwargs.update(slug=self.safe_translation_getter(
+                'slug', language_code=language))
         try:
-            return reverse(
-                '{namespace}:article-detail'.format(
-                    namespace=self.app_config.namespace
-                ), kwargs=kwargs
-            )
+            with override(language):
+                return reverse('{namespace}:article-detail'.format(
+                    namespace=self.app_config.namespace), kwargs=kwargs)
         except:
             return ''  # Note NOT None here
 

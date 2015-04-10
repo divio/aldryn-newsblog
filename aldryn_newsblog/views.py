@@ -17,6 +17,7 @@ from django.utils.translation import ugettext as _
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView
 
+from menus.utils import set_language_changer
 from parler.views import TranslatableSlugMixin, ViewUrlMixin
 from taggit.models import Tag
 
@@ -49,8 +50,8 @@ class PreviewModeMixin(EditModeMixin):
         qs = Article.objects
         if not self.edit_mode:
             qs = qs.published()
-        qs = qs.active_translations(
-            translation.get_language()).namespace(self.namespace)
+        language = translation.get_language()
+        qs = qs.active_translations(language).namespace(self.namespace)
         return qs
 
 
@@ -68,7 +69,10 @@ class ArticleDetail(PreviewModeMixin, TranslatableSlugMixin, AppConfigMixin, Det
         This handles non-permalinked URLs according to preferences as set in
         NewsBlogConfig.
         """
-        url = self.get_object().get_absolute_url()
+        if not hasattr(self, 'object'):
+            self.object = self.get_object()
+        set_language_changer(request, self.object.get_absolute_url)
+        url = self.object.get_absolute_url()
         if (self.config.non_permalink_handling == 200 or request.path == url):
             # Continue as normal
             return super(ArticleDetail, self).get(request, *args, **kwargs)
