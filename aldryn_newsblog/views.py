@@ -55,7 +55,8 @@ class PreviewModeMixin(EditModeMixin):
         return qs
 
 
-class ArticleDetail(PreviewModeMixin, TranslatableSlugMixin, AppConfigMixin, DetailView):
+class ArticleDetail(PreviewModeMixin, TranslatableSlugMixin, AppConfigMixin,
+                    DetailView):
     model = Article
     slug_field = 'slug'
     year_url_kwarg = 'year'
