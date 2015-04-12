@@ -24,6 +24,11 @@ HELPER_SETTINGS = {
         'sortedm2m',
         'taggit',
     ],
+    'MIGRATION_MODULES': {
+        'cms': 'cms.migrations_django',
+        'djangocms_text_ckeditor': 'djangocms_text_ckeditor.migrations_django',
+        'filer': 'filer.migrations_django',
+    },
     'STATICFILES_FINDERS': [
         'django.contrib.staticfiles.finders.FileSystemFinder',
         # important! place right before django.contrib.staticfiles.finders.AppDirectoriesFinder
@@ -66,10 +71,6 @@ HELPER_SETTINGS = {
         'de': {
             'ENGINE': 'haystack.backends.simple_backend.SimpleEngine',
         },
-    },
-    'MIGRATION_MODULES': {
-        'djangocms_text_ckeditor': 'djangocms_text_ckeditor.migrations_django',
-        'filer': 'filer.migrations_django',
     },
     'THUMBNAIL_HIGH_RESOLUTION': True,
     'THUMBNAIL_PROCESSORS': (
