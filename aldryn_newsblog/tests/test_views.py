@@ -11,7 +11,6 @@ from random import randint
 from django.conf import settings
 from django.core.files import File as DjangoFile
 from django.core.urlresolvers import reverse
-from django.test import TransactionTestCase
 from django.utils.timezone import now
 from django.utils.translation import get_language, override
 
@@ -23,7 +22,7 @@ from parler.tests.utils import override_parler_settings
 from parler.utils.conf import add_default_language_settings
 from parler.utils.context import switch_language, smart_override
 
-from . import NewsBlogTestsMixin, TESTS_STATIC_ROOT
+from . import NewsBlogTestCase, TESTS_STATIC_ROOT
 
 FEATURED_IMAGE_PATH = os.path.join(TESTS_STATIC_ROOT, 'featured_image.jpg')
 
@@ -50,7 +49,7 @@ PARLER_LANGUAGES_SHOW = {
 }
 
 
-class TestViews(NewsBlogTestsMixin, TransactionTestCase):
+class TestViews(NewsBlogTestCase):
 
     def test_articles_list(self):
         articles = [self.create_article() for _ in range(11)]
@@ -149,7 +148,7 @@ class TestViews(NewsBlogTestsMixin, TransactionTestCase):
         self.assertEqual(response.status_code, 404)
 
 
-class TestTranslationFallbacks(NewsBlogTestsMixin, TransactionTestCase):
+class TestTranslationFallbacks(NewsBlogTestCase):
     def test_article_detail_not_translated_fallback(self):
         """
         If the fallback is configured, article is available in any
@@ -232,7 +231,7 @@ class TestTranslationFallbacks(NewsBlogTestsMixin, TransactionTestCase):
                 self.assertEqual(response.status_code, 404)
 
 
-class TestImages(NewsBlogTestsMixin, TransactionTestCase):
+class TestImages(NewsBlogTestCase):
     def test_article_detail_show_featured_image(self):
         author = self.create_person()
         with open(FEATURED_IMAGE_PATH, 'rb') as f:
@@ -251,7 +250,7 @@ class TestImages(NewsBlogTestsMixin, TransactionTestCase):
         self.assertContains(response, image_url)
 
 
-class TestVariousViews(NewsBlogTestsMixin, TransactionTestCase):
+class TestVariousViews(NewsBlogTestCase):
     def test_articles_by_tag(self):
         """
         Tests that TagArticleList view properly filters articles by their tags.
@@ -434,7 +433,7 @@ class TestVariousViews(NewsBlogTestsMixin, TransactionTestCase):
             self.assertNotContains(response, article.title)
 
 
-class TestIndex(NewsBlogTestsMixin, TransactionTestCase):
+class TestIndex(NewsBlogTestCase):
     def test_index_simple(self):
         self.index = ArticleIndex()
         content0 = self.rand_str(prefix='content0_')

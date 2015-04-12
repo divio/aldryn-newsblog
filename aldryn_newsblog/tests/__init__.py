@@ -5,18 +5,18 @@ from __future__ import unicode_literals
 import os
 import random
 import string
+import sys
 
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.utils.timezone import now
 from django.utils.translation import override
-
 from aldryn_categories.models import Category
-from aldryn_categories.tests import CategoryTestCaseMixin
 from aldryn_newsblog.models import Article, NewsBlogConfig
 from aldryn_people.models import Person
 from aldryn_search.helpers import get_request
 from cms import api
+from cms.test_utils.testcases import CMSTestCase
 from cms.utils import get_cms_setting
 from parler.utils.context import switch_language
 
@@ -24,7 +24,17 @@ TESTS_ROOT = os.path.abspath(os.path.dirname(__file__))
 TESTS_STATIC_ROOT = os.path.abspath(os.path.join(TESTS_ROOT, 'static'))
 
 
-class NewsBlogTestsMixin(CategoryTestCaseMixin):
+class NewsBlogTestsMixin(object):
+
+    @staticmethod
+    def reload(node):
+        """NOTE: django-treebeard requires nodes to be reloaded via the Django
+        ORM once its sub-tree is modified for the API to work properly.
+
+        See:: https://tabo.pe/projects/django-treebeard/docs/2.0/caveats.html
+
+        This is a simple helper-method to do that."""
+        return node.__class__.objects.get(id=node.id)
 
     @classmethod
     def rand_str(cls, prefix=u'', length=23, chars=string.ascii_letters):
@@ -135,3 +145,7 @@ class NewsBlogTestsMixin(CategoryTestCaseMixin):
             for language, _ in settings.LANGUAGES[1:]:
                 api.create_title(language, page.get_slug(), page)
                 page.publish(language)
+
+
+class NewsBlogTestCase(NewsBlogTestsMixin, CMSTestCase):
+    pass

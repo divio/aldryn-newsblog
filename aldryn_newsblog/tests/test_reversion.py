@@ -6,16 +6,15 @@ import reversion
 import six
 
 from django.db import transaction
-from django.test import TransactionTestCase
 
 from aldryn_reversion.core import create_revision_with_placeholders
 
 from parler.utils.context import switch_language
 
-from . import NewsBlogTestsMixin
+from . import NewsBlogTestCase
 
 
-class TestVersioning(NewsBlogTestsMixin, TransactionTestCase):
+class TestVersioning(NewsBlogTestCase):
     def create_revision(self, article, content=None, language=None, **kwargs):
         with transaction.atomic():
             with reversion.create_revision():

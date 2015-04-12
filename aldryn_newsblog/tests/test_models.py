@@ -4,19 +4,18 @@ from __future__ import unicode_literals
 
 import os
 
-from django.test import TransactionTestCase
 from django.utils.timezone import now
 from django.utils.translation import activate
 
 from aldryn_newsblog.models import Article
 from cms import api
 
-from . import NewsBlogTestsMixin, TESTS_STATIC_ROOT
+from . import NewsBlogTestCase, TESTS_STATIC_ROOT
 
 FEATURED_IMAGE_PATH = os.path.join(TESTS_STATIC_ROOT, 'featured_image.jpg')
 
 
-class TestModels(NewsBlogTestsMixin, TransactionTestCase):
+class TestModels(NewsBlogTestCase):
 
     def test_create_article(self):
         article = self.create_article()
