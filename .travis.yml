@@ -20,16 +20,13 @@ matrix:
   allow_failures:
     - python: 3.3
     - python: 3.4
-    # Remove this once aldryn-boilerplates is compatible with Django 1.7
-    - env: DJANGO=1.7 CMD=./test
-    - env: DJANGO=1.7 CMD="flake8 aldryn_newsblog"
   exclude:
     - python: 2.6
       env: DJANGO=1.7 CMD=./test
   fast_finish: true
   include:
     - python: 2.7
-      env: DJANGO=1.6 CMD="flake8 aldryn_newsblog"
+      env: DJANGO=1.7 CMD="flake8 aldryn_newsblog"
 
 cache:
   directories:
