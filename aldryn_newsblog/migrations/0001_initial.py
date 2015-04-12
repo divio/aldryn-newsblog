@@ -22,7 +22,7 @@ class Migration(migrations.Migration):
         ('taggit', '0001_initial'),
         ('cms', '0003_auto_20140926_2347'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('aldryn_people', '0003_auto_20150412_2134'),
+        ('aldryn_people', '0002_auto_20150128_1411'),
         ('filer', '0001_initial'),
         ('aldryn_categories', '0004_auto_20150412_2134'),
     ]
