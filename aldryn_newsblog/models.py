@@ -128,8 +128,16 @@ class Article(TranslatableModel):
         Returns True only if the article (is_published == True) AND has a
         published_date that has passed.
         """
-        return (self.is_published and self.publishing_date < now())
+        return (self.is_published and self.publishing_date <= now())
 
+    @property
+    def future(self):
+        """
+        Returns True if the article is published but is scheduled for a
+        future date/time.
+        """
+        return (self.is_published and self.publishing_date > now())
+    
     def get_absolute_url(self, language=None):
         #
         # NB: It is important that this is safe to run even when the user has
