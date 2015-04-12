@@ -47,7 +47,7 @@ class PreviewModeMixin(EditModeMixin):
     published articles should be returned.
     """
     def get_queryset(self):
-        qs = Article.objects
+        qs = super(PreviewModeMixin, self).get_queryset()
         if not self.edit_mode:
             qs = qs.published()
         language = translation.get_language()
