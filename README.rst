@@ -44,7 +44,7 @@ Installation & Usage
 django CMS Requirements
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-This project requires django CMS 3.0.12.
+This project requires django CMS 3.0.12 or later.
 
 
 Aldryn Platform Users
@@ -174,14 +174,6 @@ For more information, see the `documentation for django CMS`__.
 
 __ https://django-cms.readthedocs.org/en/support-3.0.x/how_to/apphooks.html#apphooks
 
-
-Django 1.7
-~~~~~~~~~~
-
-At time of this writing, due to circumstances beyond our control, we are unable
-to support both django-taggit and django-sortedm2m in the same Django 1.7
-environment. As both of these projects are dependences, this application is not
-yet compatible with Django 1.7. We expect this to be resolved very soon.
 
 .. |PyPI Version| image:: http://img.shields.io/pypi/v/aldryn-newsblog.svg
    :target: https://pypi.python.org/pypi/aldryn-newsblog

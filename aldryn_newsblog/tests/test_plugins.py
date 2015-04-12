@@ -7,15 +7,14 @@ import datetime
 import pytz
 
 from django.core.urlresolvers import reverse
-from django.test import TransactionTestCase
 
 from aldryn_newsblog.models import NewsBlogConfig
 from cms import api
 
-from . import NewsBlogTestsMixin
+from . import NewsBlogTestCase
 
 
-class TestAppConfigPluginsBase(NewsBlogTestsMixin, TransactionTestCase):
+class TestAppConfigPluginsBase(NewsBlogTestCase):
     plugin_to_test = 'TextPlugin'
     plugin_params = {}
 
@@ -223,7 +222,7 @@ class TestLatestArticlesPlugin(TestAppConfigPluginsBase):
             self.assertNotContains(response, article.title)
 
 
-class TestRelatedArticlesPlugin(NewsBlogTestsMixin, TransactionTestCase):
+class TestRelatedArticlesPlugin(NewsBlogTestCase):
 
     def test_related_articles_plugin(self):
         main_article = self.create_article(app_config=self.app_config)

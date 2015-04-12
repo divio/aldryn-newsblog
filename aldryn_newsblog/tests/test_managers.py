@@ -2,14 +2,12 @@
 
 from __future__ import unicode_literals
 
-from django.test import TransactionTestCase
-
 from aldryn_newsblog.models import Article
 
-from . import NewsBlogTestsMixin
+from . import NewsBlogTestCase
 
 
-class TestManagers(NewsBlogTestsMixin, TransactionTestCase):
+class TestManagers(NewsBlogTestCase):
 
     def test_published_articles_filtering(self):
         for i in range(5):
@@ -23,5 +21,6 @@ class TestManagers(NewsBlogTestsMixin, TransactionTestCase):
     # TODO: Should also test for publishing_date
     def test_view_article_not_published(self):
         article = self.create_article(is_published=False)
-        response = self.client.get(article.get_absolute_url())
+        article_url = article.get_absolute_url()
+        response = self.client.get(article_url)
         self.assertEqual(response.status_code, 404)
