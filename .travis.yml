@@ -25,6 +25,7 @@ matrix:
   exclude:
     - python: 2.6
       env: DJANGO=1.7 CMD=./test
+    - python: 2.6
       env: DJANGO=1.8 CMD=./test
   fast_finish: true
   include:
