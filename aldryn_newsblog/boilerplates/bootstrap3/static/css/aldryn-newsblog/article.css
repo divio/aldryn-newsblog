@@ -3,3 +3,7 @@
     background: #F9FCEE url('../../img/aldryn_newsblog/unpublished.png') repeat; /* hsl(44, 70%, 97%) */
 }
 
+.aldryn-newsblog-article-search .results-list .future,
+.aldryn-newsblog-article.future {
+    background: #EEFCFC url('../../img/aldryn_newsblog/future.png') repeat; /* hsl(181, 70%, 96%) */
+}
