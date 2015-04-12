@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="{% static "css/aldryn-newsblog/article.css" %}">
 {% endaddtoblock %}
 
-<article class="aldryn-newsblog-article{% if article.is_featured %} aldryn-newsblog-featured{% endif %}{% if not article.is_published %} unpublished{% endif %}">
+<article class="aldryn-newsblog-article{% if article.is_featured %} aldryn-newsblog-featured{% endif %}{% if not article.published %} unpublished{% endif %}{% if article.future %} future{% endif %}">
     {% block newsblog_visual %}
         {% if article.featured_image_id %}
             <p class="visual">
