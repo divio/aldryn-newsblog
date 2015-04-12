@@ -20,11 +20,11 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('taggit', '0001_initial'),
-        ('cms', '0003_auto_20140926_2347'),
+        ('cms', '0001_initial'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('aldryn_people', '0002_auto_20150128_1411'),
+        ('aldryn_people', '0001_initial'),
         ('filer', '0001_initial'),
-        ('aldryn_categories', '0004_auto_20150412_2134'),
+        ('aldryn_categories', '0001_initial'),
     ]
 
     operations = [
