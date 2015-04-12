@@ -15,7 +15,8 @@ env:
   matrix:
   - DJANGO=1.6 CMD=./test
   - DJANGO=1.7 CMD=./test
-  - DJANGO=1.8 CMD=./test
+  # Uncomment when CMS supports 1.8
+  # - DJANGO=1.8 CMD=./test
 
 matrix:
   allow_failures:
@@ -25,8 +26,9 @@ matrix:
   exclude:
     - python: 2.6
       env: DJANGO=1.7 CMD=./test
-    - python: 2.6
-      env: DJANGO=1.8 CMD=./test
+    # Uncomment when CMS supports 1.8
+    # - python: 2.6
+    #   env: DJANGO=1.8 CMD=./test
   fast_finish: true
   include:
     - python: 2.7
