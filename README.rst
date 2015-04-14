@@ -75,7 +75,7 @@ Manual Installation
       django-filer
       django-parler
       django-reversion
-      taggit
+      django-taggit
 
 2) Add below apps to ``INSTALLED_APPS``: ::
 
