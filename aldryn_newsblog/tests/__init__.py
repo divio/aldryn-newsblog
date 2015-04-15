@@ -5,7 +5,6 @@ from __future__ import unicode_literals
 import os
 import random
 import string
-import sys
 
 from django.conf import settings
 from django.contrib.auth.models import User

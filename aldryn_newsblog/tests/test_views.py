@@ -183,7 +183,8 @@ class TestTranslationFallbacks(NewsBlogTestCase):
                 )
                 self.assertNotEquals(url, url_one)
                 response = self.client.get(url)
-                self.assertEquals(response.status_code, 200)
+                # This is a redirect to the new language
+                self.assertEquals(response.status_code, 302)
 
     def test_article_detail_not_translated_no_fallback(self):
         """
