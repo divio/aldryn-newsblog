@@ -5,12 +5,12 @@ from __future__ import unicode_literals
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse
 from django.db import connection, models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-
 try:
     from django.utils.encoding import force_unicode
 except ImportError:
@@ -27,6 +27,7 @@ from aldryn_people.models import Person
 from aldryn_reversion.core import version_controlled_content
 from cms.models.fields import PlaceholderField
 from cms.models.pluginmodel import CMSPlugin
+from cms.utils.i18n import get_fallback_languages
 from djangocms_text_ckeditor.fields import HTMLField
 from filer.fields.image import FilerImageField
 from parler.models import TranslatableModel, TranslatedFields
@@ -62,9 +63,46 @@ SQL_IS_TRUE = {
 }[connection.vendor]
 
 
+class TranslationHelperMixin(object):
+    def known_translation_getter(self, field, default=None, language_code=None,
+                                 any_language=False):
+        """
+        This is meant to act like Parler's safe_translation_getter() but returns
+        both the translated field AND the language it represents as a tuple:
+        (field_value, language).
+
+        If no language is found, then it returns (default, None)
+        """
+        # NOTE: We're using the CMS fallbacks here, rather than the Parler
+        # fallbacks, the developer should ensure that their project's Parler
+        # settings match the CMS settings.
+        object_languages = self.get_available_languages()
+        if language_code not in object_languages:
+            # OK, we're going to have to use a fallback language
+            fallbacks = get_fallback_languages(language_code)
+            # Grab the first language that from fallbacks that is also a known
+            # translation of the article.
+            language_code = next(
+                (lang for lang in fallbacks if lang in object_languages),
+                None)
+            if not language_code:
+                if any_language:
+                    # Hmmm, we'll just use the first available_language then...
+                    language_code = next(object_languages, None)
+                    if not language_code:
+                        # Ummmm, how exactly did we get here again?
+                        return (default, None)
+                else:
+                    return (default, None)
+
+        value = self.safe_translation_getter(
+            field, default=default, language_code=language_code)
+        return (value, language_code)
+
+
 @python_2_unicode_compatible
 @version_controlled_content
-class Article(TranslatableModel):
+class Article(TranslationHelperMixin, TranslatableModel):
     translations = TranslatedFields(
         title=models.CharField(_('title'), max_length=234),
         slug=models.SlugField(
@@ -137,7 +175,7 @@ class Article(TranslatableModel):
         future date/time.
         """
         return (self.is_published and self.publishing_date > now())
-    
+
     def get_absolute_url(self, language=None):
         #
         # NB: It is important that this is safe to run even when the user has
@@ -157,14 +195,19 @@ class Article(TranslatableModel):
         if 'i' in permalink_type:
             kwargs.update(pk=self.pk)
         if 's' in permalink_type:
-            kwargs.update(slug=self.safe_translation_getter(
-                'slug', language_code=language))
+            slug, lang = self.known_translation_getter(
+                'slug', default=None, language_code=language)
+            if slug and lang:
+                language = lang
+                kwargs.update(slug=slug)
+            else:
+                return ''  # NOTE: NOT None here
         try:
             with override(language):
                 return reverse('{namespace}:article-detail'.format(
                     namespace=self.app_config.namespace), kwargs=kwargs)
         except:
-            return ''  # Note NOT None here
+            return ''  # NOTE: NOT None here
 
     def slugify(self, source_text, i=None):
         slug = default_slugify(source_text)

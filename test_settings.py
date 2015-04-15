@@ -53,6 +53,31 @@ HELPER_SETTINGS = {
             'hide_untranslated': False,
         }
     },
+    'SITE_ID': 1,
+    'CMS_LANGUAGES': {
+        1: [
+            {
+                'code': 'de',
+                'name': 'Deutsche',
+                'fallbacks': ['en', ]  # FOR TESTING DO NOT ADD 'fr' HERE
+            },
+            {
+                'code': 'fr',
+                'name': 'Française',
+                'fallbacks': ['en', ]  # FOR TESTING DO NOT ADD 'de' HERE
+            },
+            {
+                'code': 'en',
+                'name': 'English',
+                'fallbacks': ['de', 'fr', ]
+            },
+            {
+                'code': 'it',
+                'name': 'Italiano',
+                'fallbacks': ['fr', ]  # FOR TESTING, LEAVE AS ONLY 'fr'
+            }
+        ]
+    },
     #
     # NOTE: The following setting `PARLER_ENABLE_CACHING = False` is required
     # for tests to pass.
