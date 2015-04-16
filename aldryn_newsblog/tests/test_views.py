@@ -13,10 +13,11 @@ from django.core.files import File as DjangoFile
 from django.core.urlresolvers import reverse
 from django.test import TransactionTestCase
 from django.utils.timezone import now
-from django.utils.translation import get_language, override
+from django.utils.translation import override
 
 from aldryn_newsblog.models import Article, NewsBlogConfig
 from aldryn_newsblog.search_indexes import ArticleIndex
+from cms.utils.i18n import get_current_language
 from easy_thumbnails.files import get_thumbnailer
 from filer.models.imagemodels import Image
 from parler.tests.utils import override_parler_settings
@@ -482,7 +483,7 @@ class TestIndex(NewsBlogTestsMixin, TransactionTestCase):
         LANGUAGES = add_default_language_settings(PARLER_LANGUAGES_HIDE)
         with override_parler_settings(PARLER_LANGUAGES=LANGUAGES):
             with smart_override('de'):
-                language = get_language()
+                language = get_current_language()
                 # english-only article is excluded
                 qs = self.index.index_queryset(language)
                 self.assertEqual(qs.count(), 1)
