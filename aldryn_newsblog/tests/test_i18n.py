@@ -16,7 +16,7 @@ class TestI18N(NewsBlogTestCase):
                 title='God Save the Queen!', slug='god-save-queen')
         # Add a DE translation
         article.create_translation('de',
-            title='Deutschland über alles!', slug='deutschland-uber-alles')
+            title='Einigkeit und Recht und Freiheit!', slug='einigkeit-und-recht-und-freiheit')
 
         # Reload for good measure
         article = self.reload(article)
@@ -24,7 +24,7 @@ class TestI18N(NewsBlogTestCase):
         self.assertEquals(article.get_absolute_url(language='en'), '/en/page/god-save-queen/')
 
         # Test that we can request the other defined language too
-        self.assertEquals(article.get_absolute_url(language='de'), '/de/page/deutschland-uber-alles/')
+        self.assertEquals(article.get_absolute_url(language='de'), '/de/page/einigkeit-und-recht-und-freiheit/')
 
         # Now, let's request a language that article has not yet been translated
         # to, but has fallbacks defined, we should get EN
