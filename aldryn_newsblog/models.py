@@ -77,6 +77,7 @@ class TranslationHelperMixin(object):
         # fallbacks, the developer should ensure that their project's Parler
         # settings match the CMS settings.
         object_languages = self.get_available_languages()
+        language_code = language_code or get_current_language()
         if language_code not in object_languages:
             # OK, we're going to have to use a fallback language
             fallbacks = get_fallback_languages(language_code)
@@ -183,7 +184,7 @@ class Article(TranslationHelperMixin, TranslatableModel):
         # articles before the page exists.
         #
         if language is None:
-            language = get_language()
+            language = get_current_language()
         kwargs = {}
         permalink_type = self.app_config.permalink_type
         if 'y' in permalink_type:
