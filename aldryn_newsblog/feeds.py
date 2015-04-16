@@ -3,12 +3,12 @@
 from django.contrib.sites.models import Site
 from django.contrib.syndication.views import Feed
 from django.core.urlresolvers import reverse
-from django.utils.translation import (
-    get_language, get_language_from_request, ugettext as _)
+from django.utils.translation import get_language_from_request, ugettext as _
 
 from aldryn_apphooks_config.utils import get_app_instance
 from aldryn_categories.models import Category
 from aldryn_newsblog.models import Article
+from cms.utils.i18n import get_current_language
 
 
 class LatestArticlesFeed(Feed):
@@ -25,7 +25,7 @@ class LatestArticlesFeed(Feed):
         return _('Articles on {0}').format(Site.objects.get_current().name)
 
     def get_queryset(self):
-        language = get_language()
+        language = get_current_language()
         return Article.objects.published().active_translations(
             language
         ).namespace(self.namespace)
