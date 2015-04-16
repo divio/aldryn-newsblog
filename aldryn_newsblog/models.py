@@ -18,7 +18,8 @@ except ImportError:
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.text import slugify as default_slugify
 from django.utils.timezone import now
-from django.utils.translation import get_language, ugettext_lazy as _, override
+from django.utils.translation import ugettext_lazy as _, override
+
 from aldryn_apphooks_config.fields import AppHookConfigField
 from aldryn_categories.fields import CategoryManyToManyField
 from aldryn_categories.models import Category
@@ -26,7 +27,7 @@ from aldryn_people.models import Person
 from aldryn_reversion.core import version_controlled_content
 from cms.models.fields import PlaceholderField
 from cms.models.pluginmodel import CMSPlugin
-from cms.utils.i18n import get_fallback_languages
+from cms.utils.i18n import get_current_language, get_fallback_languages
 from djangocms_text_ckeditor.fields import HTMLField
 from filer.fields.image import FilerImageField
 from parler.models import TranslatableModel, TranslatedFields
@@ -222,7 +223,7 @@ class Article(TranslationHelperMixin, TranslatableModel):
         if not self.pk:
             return ''
         if language is None:
-            language = get_language()
+            language = get_current_language()
         if request is None:
             request = get_request(language=language)
         description = self.safe_translation_getter('lead_in')
@@ -430,7 +431,7 @@ class NewsBlogFeaturedArticlesPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
         queryset = Article.objects
         if not self.get_edit_mode(request):
             queryset = queryset.published()
-        queryset = queryset.active_translations(get_language()).filter(
+        queryset = queryset.active_translations(get_current_language()).filter(
             app_config=self.app_config,
             is_featured=True,
         )
@@ -464,7 +465,7 @@ class NewsBlogLatestArticlesPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
         queryset = Article.objects
         if not self.get_edit_mode(request):
             queryset = queryset.published()
-        queryset = queryset.active_translations(get_language()).filter(
+        queryset = queryset.active_translations(get_current_language()).filter(
             app_config=self.app_config
         )
         return queryset[:self.latest_articles]
