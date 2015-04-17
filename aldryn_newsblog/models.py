@@ -136,7 +136,7 @@ class Article(TranslationHelperMixin, TranslatableModel):
                                related_name='newsblog_article_content')
     author = models.ForeignKey(Person, null=True, blank=True,
                                verbose_name=_('author'))
-    owner = models.ForeignKey(User, verbose_name=_('owner'))
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_('owner'))
     app_config = AppHookConfigField(NewsBlogConfig,
                                     verbose_name=_('app. config'))
     categories = CategoryManyToManyField('aldryn_categories.Category',
