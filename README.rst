@@ -92,6 +92,7 @@ Manual Installation
         'filer',
         'parler',
         'reversion',
+        'sortedm2m',
         'taggit',
         …
     ]
@@ -110,14 +111,13 @@ Manual Installation
    NOTE: aldryn_newsblog supports both South and Django 1.7 migrations. If using
    Django 1.7, you may need to add the following to your settings: ::
 
-    MIGRATION_MODULES = [
+    MIGRATION_MODULES = {
        …
-       'aldryn_newsblog': 'aldryn_newsblog.south_migrations',
-       # The following are for some of the depenencies.
+       # The following are for some of the dependencies.
        'djangocms_text_ckeditor': 'djangocms_text_ckeditor.migrations_django',
        'filer': 'filer.migrations_django',
        …
-    ]
+    }
 
 4) Add Required Easy Thumbnail setting
 
@@ -133,7 +133,6 @@ Manual Installation
         # 'easy_thumbnails.processors.scale_and_crop',
         'filer.thumbnail_processors.scale_and_crop_with_subject_location',
         'easy_thumbnails.processors.filters',
-        # 'entercoms.apps.strategies.processors.reflect',
     )
 
    For more information on this optional processor, see the `documentation for Django Filer`__.
