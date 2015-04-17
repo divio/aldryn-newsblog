@@ -1,7 +1,7 @@
 {% extends "aldryn_newsblog/fullwidth.html" %}
 {% load cms_tags i18n apphooks_config_tags %}
 
-{% block title %}{{ article.title }} - {{ super }}{% endblock %}
+{% block title %}{{ article.title }} - {{ block.super }}{% endblock %}
 
 {% block newsblog_content %}
     {% render_placeholder view.config.placeholder_detail_top %}
