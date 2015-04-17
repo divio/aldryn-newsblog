@@ -201,14 +201,14 @@ class Article(TranslationHelperMixin, TranslatableModel):
             if slug and lang:
                 language = lang
                 kwargs.update(slug=slug)
-            else:
-                return ''  # NOTE: NOT None here
-        try:
-            with override(language):
-                return reverse('{namespace}:article-detail'.format(
-                    namespace=self.app_config.namespace), kwargs=kwargs)
-        except:
-            return ''  # NOTE: NOT None here
+
+        if self.app_config and self.app_config.namespace:
+            namespace = '{0}:'.format(self.app_config.namespace)
+        else:
+            namespace = ''
+
+        with override(language):
+            return reverse('{0}article-detail'.format(namespace), kwargs=kwargs)
 
     def slugify(self, source_text, i=None):
         slug = default_slugify(source_text)
