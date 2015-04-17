@@ -183,7 +183,7 @@ class Article(TranslationHelperMixin, TranslatableModel):
         # articles before the page exists.
         #
         if language is None:
-            language = get_language()
+            language = get_current_language()
         kwargs = {}
         permalink_type = self.app_config.permalink_type
         if 'y' in permalink_type:
