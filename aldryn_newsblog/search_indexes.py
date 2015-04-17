@@ -37,4 +37,4 @@ class ArticleIndex(get_index_base()):
         return Article
 
     def get_search_data(self, article, language, request):
-        return article.search_data
+        return article.safe_translation_getter('search_data')
