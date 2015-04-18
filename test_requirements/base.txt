@@ -5,6 +5,7 @@ aldryn-common
 aldryn-people
 aldryn-reversion>=0.0.2
 aldryn-search
+aldryn-translation-tools
 backport_collections>=0.1
 coverage>=3.7.1
 dj-database-url

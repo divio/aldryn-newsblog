@@ -9,6 +9,7 @@ REQUIREMENTS = [
     'aldryn-common',
     'aldryn-people>=0.4.6',
     'aldryn-reversion>=0.0.2',
+    'aldryn-translation-tools',
     'backport_collections==0.1',
     'django-appdata>=0.1.4',
     'django-cms>=3.0.12',
