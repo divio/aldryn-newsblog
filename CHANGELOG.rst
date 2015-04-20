@@ -1,7 +1,8 @@
-0.8.9 (2015-04-17)
+0.8.9 (2015-04-20)
 ==================
 
 * Fix a error in search indexer that break indexing if article has no search data
+* Search indexer is using switch_language from parler
 
 0.8.8 (2015-04-??)
 ==================
