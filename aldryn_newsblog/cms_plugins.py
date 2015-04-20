@@ -9,15 +9,17 @@ from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
 
 from . import models
+from .utils import add_prefix_to_path
 
 
 class TemplatePrefixMixin(object):
 
     def get_render_template(self, context, instance, placeholder):
         if hasattr(instance, 'app_config') and instance.app_config.template_prefix:
-            return "{0}/{1}".format(
-                instance.app_config.template_prefix,
-                self.render_template)
+            return add_prefix_to_path(
+                self.render_template,
+                instance.app_config.template_prefix
+            )
         return self.render_template
 
 

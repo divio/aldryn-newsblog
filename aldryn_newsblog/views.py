@@ -26,6 +26,7 @@ from aldryn_categories.models import Category
 from aldryn_people.models import Person
 
 from .models import Article
+from .utils import add_prefix_to_path
 
 
 class TemplatePrefixMixin(object):
@@ -34,7 +35,7 @@ class TemplatePrefixMixin(object):
         if self.config.template_prefix:
             prefix = self.config.template_prefix
             return [
-                "{0}/{1}".format(prefix, template)
+                add_prefix_to_path(template, prefix)
                 for template in template_names]
         return template_names
 

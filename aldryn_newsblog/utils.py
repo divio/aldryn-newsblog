@@ -112,3 +112,13 @@ def get_plugin_index_data(base_plugin, request):
             cleaned_bits = get_cleaned_bits(value or '')
             text_bits.extend(cleaned_bits)
     return text_bits
+
+
+def add_prefix_to_path(path, prefix):
+    splitted_path = path.split('/', 1)
+    if len(splitted_path) == 1:
+        # template is not in directory
+        # template.html => prefix/template.html
+        return "{0}/{1}".format(prefix, splitted_path[0])
+    # directory/template.html => directory/prefix/template.html
+    return "{0}/{1}/{2}".format(splitted_path[0], prefix, splitted_path[1])
