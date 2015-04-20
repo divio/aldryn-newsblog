@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 from aldryn_newsblog import __version__
 
 REQUIREMENTS = [
-    'aldryn-apphooks-config>=0.1.4',
+    'aldryn-apphooks-config>=0.2.4',
     'aldryn-boilerplates',
     'aldryn-categories',
     'aldryn-common',
