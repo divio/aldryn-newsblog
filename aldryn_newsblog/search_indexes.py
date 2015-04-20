@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from django.conf import settings
 
 from aldryn_search.utils import get_index_base
+from parler.utils.context import switch_language
 
 from .models import Article
 
@@ -15,10 +16,12 @@ class ArticleIndex(get_index_base()):
     index_title = True
 
     def get_title(self, obj):
-        return obj.safe_translation_getter('title')
+        with switch_language(obj, self.get_current_language()):
+            return obj.safe_translation_getter('title')
 
     def get_description(self, obj):
-        return obj.safe_translation_getter('lead_in')
+        with switch_language(obj, self.get_current_language()):
+            return obj.safe_translation_getter('lead_in')
 
     def index_queryset(self, using=None):
         self._get_backend(using)
@@ -30,11 +33,17 @@ class ArticleIndex(get_index_base()):
         return qs
 
     def get_index_queryset(self, language):
-        return self.get_model().objects.published().active_translations(
-            language_code=language).filter(app_config__search_indexed=True)
+        return (
+            self.get_model().objects
+                            .published()
+                            .language(language)
+                            .active_translations(language_code=language)
+                            .filter(app_config__search_indexed=True)
+        )
 
     def get_model(self):
         return Article
 
     def get_search_data(self, article, language, request):
-        return article.safe_translation_getter('search_data')
+        with switch_language(article, language):
+            return article.safe_translation_getter('search_data')
