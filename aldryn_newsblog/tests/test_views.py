@@ -10,7 +10,7 @@ from random import randint
 
 from django.conf import settings
 from django.core.files import File as DjangoFile
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, NoReverseMatch
 from django.utils.timezone import now
 from django.utils.translation import override
 
@@ -424,15 +424,8 @@ class TestVariousViews(NewsBlogTestCase):
         app_config = NewsBlogConfig.objects.create(namespace='another')
         articles = [self.create_article(app_config=app_config)
                     for _ in range(11)]
-        try:
-            response = self.client.get(articles[0].get_absolute_url())
-        except:
-            self.fail(
-                'get_absolute_url raises exception when config not apphooked.')
-        response = self.client.get(
-            reverse('aldryn_newsblog:article-list'))
-        for article in articles:
-            self.assertNotContains(response, article.title)
+        with self.assertRaises(NoReverseMatch):
+            self.client.get(articles[0].get_absolute_url())
 
 
 class TestIndex(NewsBlogTestCase):

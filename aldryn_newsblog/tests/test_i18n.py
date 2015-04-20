@@ -2,6 +2,7 @@
 
 from __future__ import unicode_literals
 
+from django.core.urlresolvers import NoReverseMatch
 from django.utils.translation import override
 
 from . import NewsBlogTestCase
@@ -31,8 +32,9 @@ class TestI18N(NewsBlogTestCase):
         self.assertEquals(article.get_absolute_url(language='fr'), '/en/page/god-save-queen/')
 
         # Now, let's request a language that has a fallback defined, but it is
-        # not available either.
-        self.assertEquals(article.get_absolute_url(language='it'), '')
+        # not available either (should raise NoReverseMatch)
+        with self.assertRaises(NoReverseMatch):
+            article.get_absolute_url(language='it')
 
         # Now let's test a non-existant language. We want it to return the
         # default language here, EN in this case.
