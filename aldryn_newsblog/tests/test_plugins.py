@@ -222,6 +222,22 @@ class TestLatestArticlesPlugin(TestAppConfigPluginsBase):
             self.assertNotContains(response, article.title)
 
 
+class TestPrefixedLatestArticlesPlugin(TestLatestArticlesPlugin):
+    plugin_to_test = 'NewsBlogLatestArticlesPlugin'
+    plugin_params = {
+        "latest_articles": 7,
+    }
+
+    def setUp(self):
+        super(TestPrefixedLatestArticlesPlugin, self).setUp()
+        self.app_config.template_prefix = 'dummy'
+        self.app_config.save()
+
+    def test_latest_articles_plugin(self):
+        response = self.client.get(self.page.get_absolute_url())
+        self.assertContains(response, 'This is dummy latest articles plugin')
+
+
 class TestRelatedArticlesPlugin(NewsBlogTestCase):
 
     def test_related_articles_plugin(self):

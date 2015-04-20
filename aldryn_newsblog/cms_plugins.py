@@ -9,12 +9,25 @@ from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
 
 from . import models
+from .utils import add_prefix_to_path
 
 
-class NewsBlogPlugin(CMSPluginBase):
+class TemplatePrefixMixin(object):
+
+    def get_render_template(self, context, instance, placeholder):
+        if hasattr(instance, 'app_config') and instance.app_config.template_prefix:
+            return add_prefix_to_path(
+                self.render_template,
+                instance.app_config.template_prefix
+            )
+        return self.render_template
+
+
+class NewsBlogPlugin(TemplatePrefixMixin, CMSPluginBase):
     module = 'NewsBlog'
 
 
+@plugin_pool.register_plugin
 class NewsBlogArchivePlugin(NewsBlogPlugin):
     render_template = 'aldryn_newsblog/plugins/archive.html'
     name = _('Archive')
@@ -33,9 +46,8 @@ class NewsBlogArchivePlugin(NewsBlogPlugin):
         )
         return context
 
-plugin_pool.register_plugin(NewsBlogArchivePlugin)
 
-
+@plugin_pool.register_plugin
 class NewsBlogArticleSearchPlugin(NewsBlogPlugin):
     render_template = 'aldryn_newsblog/plugins/article_search.html'
     name = _('Article Search')
@@ -47,9 +59,8 @@ class NewsBlogArticleSearchPlugin(NewsBlogPlugin):
             instance.app_config.namespace))
         return context
 
-plugin_pool.register_plugin(NewsBlogArticleSearchPlugin)
 
-
+@plugin_pool.register_plugin
 class NewsBlogAuthorsPlugin(NewsBlogPlugin):
     render_template = 'aldryn_newsblog/plugins/authors.html'
     name = _('Authors')
@@ -63,9 +74,8 @@ class NewsBlogAuthorsPlugin(NewsBlogPlugin):
             '{0}:article-list'.format(instance.app_config.namespace))
         return context
 
-plugin_pool.register_plugin(NewsBlogAuthorsPlugin)
 
-
+@plugin_pool.register_plugin
 class NewsBlogCategoriesPlugin(NewsBlogPlugin):
     render_template = 'aldryn_newsblog/plugins/categories.html'
     name = _('Categories')
@@ -80,9 +90,7 @@ class NewsBlogCategoriesPlugin(NewsBlogPlugin):
         return context
 
 
-plugin_pool.register_plugin(NewsBlogCategoriesPlugin)
-
-
+@plugin_pool.register_plugin
 class NewsBlogFeaturedArticlesPlugin(NewsBlogPlugin):
     render_template = 'aldryn_newsblog/plugins/featured_articles.html'
     name = _('Featured Articles')
@@ -95,9 +103,7 @@ class NewsBlogFeaturedArticlesPlugin(NewsBlogPlugin):
         return context
 
 
-plugin_pool.register_plugin(NewsBlogFeaturedArticlesPlugin)
-
-
+@plugin_pool.register_plugin
 class NewsBlogLatestArticlesPlugin(NewsBlogPlugin):
     render_template = 'aldryn_newsblog/plugins/latest_articles.html'
     name = _('Latest Articles')
@@ -111,9 +117,7 @@ class NewsBlogLatestArticlesPlugin(NewsBlogPlugin):
         return context
 
 
-plugin_pool.register_plugin(NewsBlogLatestArticlesPlugin)
-
-
+@plugin_pool.register_plugin
 class NewsBlogRelatedPlugin(NewsBlogPlugin):
     render_template = 'aldryn_newsblog/plugins/related_articles.html'
     name = _('Related Articles')
@@ -141,9 +145,7 @@ class NewsBlogRelatedPlugin(NewsBlogPlugin):
         return context
 
 
-plugin_pool.register_plugin(NewsBlogRelatedPlugin)
-
-
+@plugin_pool.register_plugin
 class NewsBlogTagsPlugin(NewsBlogPlugin):
     render_template = 'aldryn_newsblog/plugins/tags.html'
     name = _('Tags')
@@ -156,6 +158,3 @@ class NewsBlogTagsPlugin(NewsBlogPlugin):
         context['article_list_url'] = reverse(
             '{0}:article-list'.format(instance.app_config.namespace))
         return context
-
-
-plugin_pool.register_plugin(NewsBlogTagsPlugin)

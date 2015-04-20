@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import os
+
 HELPER_SETTINGS = {
     'TIME_ZONE': 'Europe/Zurich',
     'LANGUAGES': (
@@ -29,6 +31,10 @@ HELPER_SETTINGS = {
         'djangocms_text_ckeditor': 'djangocms_text_ckeditor.migrations_django',
         'filer': 'filer.migrations_django',
     },
+    'TEMPLATE_DIRS': (
+        os.path.join(
+            os.path.dirname(__file__),
+            'aldryn_newsblog', 'tests', 'templates'), ),
     'STATICFILES_FINDERS': [
         'django.contrib.staticfiles.finders.FileSystemFinder',
         # important! place right before django.contrib.staticfiles.finders.AppDirectoriesFinder
@@ -41,6 +47,7 @@ HELPER_SETTINGS = {
         'aldryn_boilerplates.template_loaders.AppDirectoriesLoader',
         'django.template.loaders.app_directories.Loader',
     ],
+    'ALDRYN_NEWSBLOG_TEMPLATE_PREFIXES': [('dummy', 'dummy'), ],
     'ALDRYN_BOILERPLATE_NAME': 'bootstrap3',
     # app-specific
     'PARLER_LANGUAGES': {

@@ -20,6 +20,7 @@ if __name__ == '__main__':
         'filer',
         'mptt',
         'cms',
+        'treebeard',
     ]
 
     TEMPLATE_CONTEXT_PROCESSORS = (
@@ -48,6 +49,9 @@ if __name__ == '__main__':
         ),
         SOUTH_MIGRATION_MODULES={
             'aldryn_newsblog': 'aldryn_newsblog.south_migrations',
+        },
+        MIGRATION_MODULES = {
+            'filer': 'filer.migrations_django',
         },
         TEMPLATE_CONTEXT_PROCESSORS=TEMPLATE_CONTEXT_PROCESSORS,
         ROOT_URLCONF='manage',

@@ -26,6 +26,22 @@ from aldryn_categories.models import Category
 from aldryn_people.models import Person
 
 from .models import Article
+from .utils import add_prefix_to_path
+
+
+class TemplatePrefixMixin(object):
+
+    def prefix_template_names(self, template_names):
+        if self.config.template_prefix:
+            prefix = self.config.template_prefix
+            return [
+                add_prefix_to_path(template, prefix)
+                for template in template_names]
+        return template_names
+
+    def get_template_names(self):
+        template_names = super(TemplatePrefixMixin, self).get_template_names()
+        return self.prefix_template_names(template_names)
 
 
 class EditModeMixin(object):
@@ -56,7 +72,7 @@ class PreviewModeMixin(EditModeMixin):
 
 
 class ArticleDetail(PreviewModeMixin, TranslatableSlugMixin, AppConfigMixin,
-                    DetailView):
+                    TemplatePrefixMixin, DetailView):
     model = Article
     slug_field = 'slug'
     year_url_kwarg = 'year'
@@ -165,7 +181,9 @@ class ArticleDetail(PreviewModeMixin, TranslatableSlugMixin, AppConfigMixin,
             return None
 
 
-class ArticleListBase(PreviewModeMixin, ViewUrlMixin, AppConfigMixin, ListView):
+class ArticleListBase(
+        TemplatePrefixMixin, PreviewModeMixin,
+        ViewUrlMixin, AppConfigMixin, ListView):
     model = Article
     show_header = False
 
@@ -224,9 +242,10 @@ class ArticleSearchResultsList(ArticleListBase):
 
     def get_template_names(self):
         if self.request.is_ajax:
-            return [self.partial_name, ]
+            template_names = [self.partial_name]
         else:
-            return [self.template_name, ]
+            template_names = [self.template_name]
+        return self.prefix_template_names(template_names)
 
 
 class AuthorArticleList(ArticleListBase):
