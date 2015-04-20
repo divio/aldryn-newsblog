@@ -22,5 +22,8 @@ class NewsBlogSitemap(Sitemap):
             qs = qs.filter(app_config__namespace=self.namespace)
         return qs
 
+    def location(self, item):
+        return item.get_absolute_url(self.language)
+
     def lastmod(self, obj):
         return obj.publishing_date

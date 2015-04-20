@@ -15,23 +15,31 @@ class TestSitemaps(NewsBlogTestCase):
         urls = [url_info['location'] for url_info in urls_info]
         return urls
 
-    def _article_urls(self, articles):
+    def _article_urls(self, articles, lang):
         host = 'http://' + get_current_site(self.request).domain
-        return [host + article.get_absolute_url() for article in articles]
+        return [host + article.get_absolute_url(lang) for article in articles]
 
     def assertArticlesIn(self, articles, sitemap):
         urls = self._sitemap_urls(sitemap)
-        article_urls = self._article_urls(articles)
+        article_urls = self._article_urls(articles, sitemap.language)
 
         for url in article_urls:
             self.assertIn(url, urls)
 
     def assertArticlesNotIn(self, articles, sitemap):
         urls = self._sitemap_urls(sitemap)
-        article_urls = self._article_urls(articles)
+        article_urls = self._article_urls(articles, sitemap.language)
 
         for url in article_urls:
             self.assertNotIn(url, urls)
+
+    def assertSitemapLanguage(self, sitemap, lang):
+        urls = self._sitemap_urls(sitemap)
+        host = 'http://' + get_current_site(self.request).domain
+        url_start = "{0}/{1}".format(host, lang)
+
+        for url in urls:
+            self.assertTrue(url.startswith(url_start))
 
     def test_listening_all_instances(self):
         articles = [self.create_article() for _ in range(11)]
@@ -66,7 +74,8 @@ class TestSitemaps(NewsBlogTestCase):
             multilanguage_article = self.create_article()
             en_article = self.create_article()
 
-        multilanguage_article.create_translation('de', title='DE title')
+        multilanguage_article.create_translation(
+            'de', title='DE title', slug='de-article')
         with override('de'):
             de_article = self.create_article()
 
@@ -76,7 +85,9 @@ class TestSitemaps(NewsBlogTestCase):
         en_sitemap = NewsBlogSitemap(language='en')
         self.assertArticlesIn([multilanguage_article, en_article], en_sitemap)
         self.assertArticlesNotIn([de_article], en_sitemap)
+        self.assertSitemapLanguage(en_sitemap, 'en')
 
         de_sitemap = NewsBlogSitemap(language='de')
         self.assertArticlesIn([multilanguage_article, de_article], de_sitemap)
         self.assertArticlesNotIn([en_article], de_sitemap)
+        self.assertSitemapLanguage(de_sitemap, 'de')
