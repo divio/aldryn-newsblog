@@ -1,3 +1,8 @@
+0.8.10 (2015-04-20)
+==================
+
+* Improvements and fixes on newsblog search index
+
 0.8.9 (2015-04-17)
 ==================
 
