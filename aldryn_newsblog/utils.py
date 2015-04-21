@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 
 from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
+from django.core.urlresolvers import reverse, NoReverseMatch
 from django.db import models
 from django.template import RequestContext
 from django.test import RequestFactory
@@ -15,6 +16,29 @@ from django.utils.html import strip_tags as _strip_tags
 from django.utils.text import smart_split
 
 from lxml.html.clean import Cleaner as LxmlCleaner
+
+
+def default_reverse(*args, **kwargs):
+    """
+    Acts just like django.core.urlresolvers.reverse() except that if the
+    resolver raises a NoReverseMatch exception, then a default value will be
+    returned instead. If no default value is provided, then the exception will
+    be raised as normal.
+
+    NOTE: Any exception that is not NoReverseMatch will always be raised as
+    normal, even if a default is provided.
+    """
+
+    # We're explicitly NOT happy to just re-raise the exception, as that may
+    # adversely affect stack traces.
+    if 'default' not in kwargs:
+        return reverse(*args, **kwargs)
+    else:
+        default = kwargs.pop('default', None)
+        try:
+            return reverse(*args, **kwargs)
+        except Exception:
+            return default
 
 
 def get_request(language=None):

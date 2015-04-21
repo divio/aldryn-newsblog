@@ -24,7 +24,7 @@
         {% if article.categories %}
             <p class="category">
                 {% for category in article.categories.all %}
-                    <a href="{% namespace_url "article-list-by-category" category.slug namespace=namespace %}">{{ category.name }}</a>{% if not forloop.last %}, {% endif %}
+                    <a href="{% namespace_url "article-list-by-category" category.slug namespace=namespace default='' %}">{{ category.name }}</a>{% if not forloop.last %}, {% endif %}
                 {% endfor %}
             </p>
         {% endif %}
@@ -33,13 +33,7 @@
     {% block newsblock_title %}
         <h2>
             {% if not detail_view %}
-                {% with url=article.get_absolute_url %}
-                {% if url %}
-                <a href="{{ article.get_absolute_url }}">{% render_model article "title" %}</a>
-                {% else %}
-                {% render_model article "title" %}
-                {% endif %}
-                {% endwith %}
+                <a href="{% namespace_url "article-detail" article.slug namespace=namespace default='' %}">{% render_model article "title" %}</a>
             {% else %}
                 {% render_model article "title" %}
             {% endif %}
@@ -58,7 +52,7 @@
         {% if article.tags and detail_view %}
             <p class="tags">
                 {% for tag in article.tags.all %}
-                    <a href="{% namespace_url "article-list-by-tag" tag.slug namespace=namespace %}">{{ tag.name }}</a>
+                    <a href="{% namespace_url safe "article-list-by-tag" tag.slug namespace=namespace default='' %}">{{ tag.name }}</a>
                 {% endfor %}
             </p>
         {% endif %}

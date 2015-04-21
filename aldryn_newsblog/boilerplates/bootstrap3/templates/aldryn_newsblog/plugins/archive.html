@@ -8,13 +8,13 @@
     <div class="panel panel-default">
         {% for year in years %}
             <div class="panel-heading">
-                <a href="{% namespace_url 'article-list-by-year' year=year.grouper namespace=instance.app_config.namespace %}" class="panel-title">{{ year.grouper }}</a>
+                <a href="{% namespace_url 'article-list-by-year' year=year.grouper namespace=instance.app_config.namespace default='' %}" class="panel-title">{{ year.grouper }}</a>
             </div>
             {# month list #}
             <div class="list-group">
                 {# NOTE: Wrapping the following anchor markup will break tests #}
                 {% for month in year.list %}
-                    <a href="{% namespace_url 'article-list-by-month' year=year.grouper month=month.date|date:"n" namespace=instance.app_config.namespace %}" class="list-group-item{% if year.grouper == current_year and month.date.month == current_month %} active{% endif %}">{{ month.date|date:"F" }}<span class="badge">{{ month.num_articles }}</span></a>
+                    <a href="{% namespace_url 'article-list-by-month' year=year.grouper month=month.date|date:"n" namespace=instance.app_config.namespace default='' %}" class="list-group-item{% if year.grouper == current_year and month.date.month == current_month %} active{% endif %}">{{ month.date|date:"F" }}<span class="badge">{{ month.num_articles }}</span></a>
                 {% endfor %}
             </div>
         {% empty %}

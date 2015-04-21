@@ -2,14 +2,13 @@
 
 from __future__ import unicode_literals
 
-from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
 
 from . import models
-from .utils import add_prefix_to_path
+from .utils import add_prefix_to_path, default_reverse
 
 
 class TemplatePrefixMixin(object):
@@ -55,8 +54,8 @@ class NewsBlogArticleSearchPlugin(NewsBlogPlugin):
 
     def render(self, context, instance, placeholder):
         context['instance'] = instance
-        context['query_url'] = reverse('{0}:article-search'.format(
-            instance.app_config.namespace))
+        context['query_url'] = default_reverse('{0}:article-search'.format(
+            instance.app_config.namespace), default=None)
         return context
 
 
@@ -70,8 +69,10 @@ class NewsBlogAuthorsPlugin(NewsBlogPlugin):
         request = context.get('request')
         context['instance'] = instance
         context['authors_list'] = instance.get_authors(request)
-        context['article_list_url'] = reverse(
-            '{0}:article-list'.format(instance.app_config.namespace))
+        context['article_list_url'] = default_reverse(
+            '{0}:article-list'.format(instance.app_config.namespace),
+            default=None)
+
         return context
 
 
@@ -85,8 +86,9 @@ class NewsBlogCategoriesPlugin(NewsBlogPlugin):
         request = context.get('request')
         context['instance'] = instance
         context['categories'] = instance.get_categories(request)
-        context['article_list_url'] = reverse(
-            '{0}:article-list'.format(instance.app_config.namespace))
+        context['article_list_url'] = default_reverse(
+            '{0}:article-list'.format(instance.app_config.namespace),
+            default=None)
         return context
 
 
@@ -155,6 +157,7 @@ class NewsBlogTagsPlugin(NewsBlogPlugin):
         request = context.get('request')
         context['instance'] = instance
         context['tags'] = instance.get_tags(request)
-        context['article_list_url'] = reverse(
-            '{0}:article-list'.format(instance.app_config.namespace))
+        context['article_list_url'] = default_reverse(
+            '{0}:article-list'.format(instance.app_config.namespace),
+            default=None)
         return context

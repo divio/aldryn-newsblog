@@ -106,33 +106,14 @@ class ArticleDetail(PreviewModeMixin, TranslatableSlugMixin, AppConfigMixin,
     def get_object(self, queryset=None):
         """
         Supports ALL of the types of permalinks that we've defined in urls.py.
+        However, it does require that either the id and the slug is available
+        and unique.
         """
         if queryset is None:
             queryset = self.get_queryset()
 
-        year = self.kwargs.get(self.year_url_kwarg, None)
-        month = self.kwargs.get(self.month_url_kwarg, None)
-        day = self.kwargs.get(self.day_url_kwarg, None)
         slug = self.kwargs.get(self.slug_url_kwarg, None)
         pk = self.kwargs.get(self.pk_url_kwarg, None)
-
-        if year is not None and month is not None and day is not None:
-            start = datetime(int(year), int(month), int(day))
-            end = start + timedelta(days=1) - timedelta(seconds=1)
-            queryset = queryset.filter(
-                publishing_date__range=(start, end))
-        elif year is not None and month is not None:
-            start = datetime(int(year), int(month), 1)
-            if int(month) == 12:
-                end = datetime(int(year) + 1, 1, 1)
-            else:
-                end = datetime(int(year), int(month) + 1, 1)
-            end = end - timedelta(seconds=1)
-            queryset = queryset.filter(
-                publishing_date__range=(start, end))
-        elif year is not None:
-            queryset = queryset.filter(
-                publishing_date__year=int(year))
 
         if pk is not None:
             # Let the DetailView itself handle this one

@@ -142,11 +142,7 @@ class Article(TranslationHelperMixin, TranslatableModel):
         return (self.is_published and self.publishing_date > now())
 
     def get_absolute_url(self, language=None):
-        #
-        # NB: It is important that this is safe to run even when the user has
-        # not created the apphook yet, as some user work-flows involve creating
-        # articles before the page exists.
-        #
+        """Returns the url for this Article in the selected permalink format."""
         if language is None:
             language = get_current_language()
         kwargs = {}
