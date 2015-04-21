@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+0.9.1 (2015-04-21)
+------------------
+
+* Pin parler to version 1.4, which is required by the latest migration.
+
 0.9.0 (2015-04-20)
 ------------------
 
