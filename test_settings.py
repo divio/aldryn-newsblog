@@ -57,7 +57,7 @@ HELPER_SETTINGS = {
             {'code': 'en', },
         ),
         'default': {
-            'hide_untranslated': False,
+            'hide_untranslated': True, # PLEASE DO NOT CHANGE THIS
         }
     },
     'SITE_ID': 1,
@@ -82,8 +82,11 @@ HELPER_SETTINGS = {
                 'code': 'it',
                 'name': 'Italiano',
                 'fallbacks': ['fr', ]  # FOR TESTING, LEAVE AS ONLY 'fr'
-            }
-        ]
+            },
+        ],
+        'default': {
+            'redirect_on_fallback': True,  # PLEASE DO NOT CHANGE THIS
+        }
     },
     #
     # NOTE: The following setting `PARLER_ENABLE_CACHING = False` is required

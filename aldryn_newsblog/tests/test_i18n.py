@@ -31,11 +31,11 @@ class TestI18N(NewsBlogTestCase):
         # to, but has fallbacks defined, we should get EN
         self.assertEquals(article.get_absolute_url(language='fr'), '/en/page/god-save-queen/')
 
+        # With settings changed to 'redirect_on_fallback': False, test again.
+        with self.settings(CMS_LANGUAGES=self.NO_REDIRECT_CMS_SETTINGS):
+            self.assertEquals(article.get_absolute_url(language='fr'), '/fr/page/god-save-queen/')
+
         # Now, let's request a language that has a fallback defined, but it is
         # not available either (should raise NoReverseMatch)
         with self.assertRaises(NoReverseMatch):
             article.get_absolute_url(language='it')
-
-        # Now let's test a non-existant language. We want it to return the
-        # default language here, EN in this case.
-        self.assertEquals(article.get_absolute_url(language='qq'), '/en/page/god-save-queen/')

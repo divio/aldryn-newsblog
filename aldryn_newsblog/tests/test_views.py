@@ -212,6 +212,20 @@ class TestTranslationFallbacks(NewsBlogTestCase):
                 # This is a redirect to the new language
                 self.assertEquals(response.status_code, 302)
 
+            # Test again with redirect_on_fallback = False
+            with self.settings(CMS_LANGUAGES=self.NO_REDIRECT_CMS_SETTINGS):
+                language = settings.LANGUAGES[1][0]
+                with switch_language(article, language):
+                    url = reverse(
+                        'aldryn_newsblog:article-detail',
+                        kwargs={'slug': article.slug, }
+                    )
+                    self.assertNotEquals(url, url_one)
+                    response = self.client.get(url)
+                    # This is a redirect to the new language
+                    self.assertEquals(response.status_code, 200)
+
+
     def test_article_detail_not_translated_no_fallback(self):
         """
         If the fallback is disabled, article is available only in the
