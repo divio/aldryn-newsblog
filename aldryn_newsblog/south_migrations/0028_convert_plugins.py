@@ -6,6 +6,7 @@ from django.db import models
 
 
 class Migration(DataMigration):
+    no_dry_run = True
 
     mapping = (
         ('BlogTagsPlugin', 'NewsBlogTagsPlugin', ),
@@ -17,20 +18,26 @@ class Migration(DataMigration):
     )
 
     def forwards(self, orm):
-        for plugin in orm['cms.CMSPlugin'].objects.all():
-            for m in self.mapping:
-                if plugin.plugin_type == m[0]:
-                    plugin.plugin_type = m[1]
-                    plugin.save()
-                    break
+        try:
+            for plugin in orm['cms.CMSPlugin'].objects.all():
+                for m in self.mapping:
+                    if plugin.plugin_type == m[0]:
+                        plugin.plugin_type = m[1]
+                        plugin.save()
+                        break
+        except:
+            pass
 
     def backwards(self, orm):
-        for plugin in orm['cms.CMSPlugin'].objects.all():
-            for m in self.mapping:
-                if plugin.plugin_type == m[1]:
-                    plugin.plugin_type = m[0]
-                    plugin.save()
-                    break
+        try:
+            for plugin in orm['cms.CMSPlugin'].objects.all():
+                for m in self.mapping:
+                    if plugin.plugin_type == m[1]:
+                        plugin.plugin_type = m[0]
+                        plugin.save()
+                        break
+        except:
+            pass
 
     models = {
         u'aldryn_categories.category': {
