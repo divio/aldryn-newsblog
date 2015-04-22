@@ -75,12 +75,11 @@ class NewsBlogToolbar(CMSToolbar):
             kwargs = self.request.resolver_match.kwargs
             articles = Article.objects
             if hasattr(kwargs, 'slug'):
-                slug = kwargs['slug']
-                articles = articles.translated(slug=slug)
+                articles = articles.translated(slug=kwargs['slug'])
             elif hasattr(kwargs, 'pk'):
-                pk = kwargs['pk']
-                articles = articles.filter(pk=pk)
-            if articles.count() == 1:
+                articles = articles.filter(pk=kwargs['pk'])
+            articles = articles.all()
+            if articles.count():
                 menu.add_modal_item(_('Edit article'), admin_reverse(
                     'aldryn_newsblog_article_change', args=(
                         articles[0].pk,)), active=True,)
