@@ -29,10 +29,9 @@ NON_PERMALINK_HANDLING = (
     (404, _('Return 404: Not Found')),
 )
 
-# TODO ovveride default if support for Django 1.6 will be dropped
+# TODO override default if support for Django 1.6 will be dropped
 TEMPLATE_PREFIX_CHOICES = getattr(
-    settings, 'ALDRYN_NEWSBLOG_TEMPLATE_PREFIXES',
-    [])
+    settings, 'ALDRYN_NEWSBLOG_TEMPLATE_PREFIXES', [])
 
 
 class NewsBlogConfig(TranslatableModel, AppHookConfig):
@@ -43,9 +42,11 @@ class NewsBlogConfig(TranslatableModel, AppHookConfig):
 
     permalink_type = models.CharField(_('permalink type'), max_length=8,
         blank=False, default='slug', choices=PERMALINK_CHOICES,
-        help_text=_('Choose the style of urls to use from the examples. (Note, all types are relative to apphook)'))
+        help_text=_('Choose the style of urls to use from the examples. '
+                    '(Note, all types are relative to apphook)'))
 
-    non_permalink_handling = models.SmallIntegerField(_('non-permalink handling'),
+    non_permalink_handling = models.SmallIntegerField(
+        _('non-permalink handling'),
         blank=False, default=302,
         choices=NON_PERMALINK_HANDLING,
         help_text=_('How to handle non-permalink urls?'))
@@ -118,6 +119,7 @@ class NewsBlogConfig(TranslatableModel, AppHookConfig):
 
 
 class NewsBlogConfigForm(AppDataForm):
-    default_published = forms.BooleanField(label=_(u'Post published by default'), required=False,
-                                           initial=getattr(settings, 'ALDRYN_NEWSBLOG_DEFAULT_PUBLISHED', True))
+    default_published = forms.BooleanField(
+        label=_(u'Post published by default'), required=False,
+        initial=getattr(settings, 'ALDRYN_NEWSBLOG_DEFAULT_PUBLISHED', True))
 setup_config(NewsBlogConfigForm, NewsBlogConfig)
