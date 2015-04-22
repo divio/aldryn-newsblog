@@ -25,6 +25,34 @@ TESTS_STATIC_ROOT = os.path.abspath(os.path.join(TESTS_ROOT, 'static'))
 
 class NewsBlogTestsMixin(object):
 
+    NO_REDIRECT_CMS_SETTINGS =  {
+        1: [
+            {
+                'code': 'de',
+                'name': 'Deutsche',
+                'fallbacks': ['en', ]  # FOR TESTING DO NOT ADD 'fr' HERE
+            },
+            {
+                'code': 'fr',
+                'name': 'Française',
+                'fallbacks': ['en', ]  # FOR TESTING DO NOT ADD 'de' HERE
+            },
+            {
+                'code': 'en',
+                'name': 'English',
+                'fallbacks': ['de', 'fr', ]
+            },
+            {
+                'code': 'it',
+                'name': 'Italiano',
+                'fallbacks': ['fr', ]  # FOR TESTING, LEAVE AS ONLY 'fr'
+            },
+        ],
+        'default': {
+            'redirect_on_fallback': False,
+        }
+    }
+
     @staticmethod
     def reload(node):
         """NOTE: django-treebeard requires nodes to be reloaded via the Django
