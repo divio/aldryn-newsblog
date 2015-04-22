@@ -3,7 +3,6 @@
 from __future__ import unicode_literals
 
 from django.conf import settings
-from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse
@@ -29,7 +28,7 @@ from aldryn_translation_tools.models import TranslationHelperMixin
 
 from cms.models.fields import PlaceholderField
 from cms.models.pluginmodel import CMSPlugin
-from cms.utils.i18n import get_current_language
+from cms.utils.i18n import get_current_language, get_redirect_on_fallback
 from djangocms_text_ckeditor.fields import HTMLField
 from filer.fields.image import FilerImageField
 from parler.models import TranslatableModel, TranslatedFields
@@ -159,7 +158,9 @@ class Article(TranslationHelperMixin, TranslatableModel):
             slug, lang = self.known_translation_getter(
                 'slug', default=None, language_code=language)
             if slug and lang:
-                language = lang
+                site_id = getattr(settings, 'SITE_ID', None)
+                if get_redirect_on_fallback(language, site_id):
+                    language = lang
                 kwargs.update(slug=slug)
 
         if self.app_config and self.app_config.namespace:
