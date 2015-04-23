@@ -23,6 +23,10 @@ class Migration(DataMigration):
         """
         We've opted to prefix all plugins with the addon name: "NewsBlog"
         """
+        # NOTE: We're accessing the model directly rather than going through the
+        # orm['cms.CMSPlugin'] because the model is different in CMS 3.1+ from
+        # what is serialized below. This should work on both CMS 3.1 and older
+        # installs.
         for plugin in CMSPlugin.objects.all():
             for m in self.mapping:
                 if plugin.plugin_type == m[0]:
