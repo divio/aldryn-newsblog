@@ -4,6 +4,8 @@ from south.db import db
 from south.v2 import DataMigration
 from django.db import models
 
+from cms.models import CMSPlugin
+
 
 class Migration(DataMigration):
     no_dry_run = True
@@ -18,26 +20,27 @@ class Migration(DataMigration):
     )
 
     def forwards(self, orm):
-        try:
-            for plugin in orm['cms.CMSPlugin'].objects.all():
-                for m in self.mapping:
-                    if plugin.plugin_type == m[0]:
-                        plugin.plugin_type = m[1]
-                        plugin.save()
-                        break
-        except:
-            pass
+        """
+        We've opted to prefix all plugins with the addon name: "NewsBlog"
+        """
+        # NOTE: We're accessing the model directly rather than going through the
+        # orm['cms.CMSPlugin'] because the model is different in CMS 3.1+ from
+        # what is serialized below. This should work on both CMS 3.1 and older
+        # installs.
+        for plugin in CMSPlugin.objects.all():
+            for m in self.mapping:
+                if plugin.plugin_type == m[0]:
+                    plugin.plugin_type = m[1]
+                    plugin.save()
+                    break
 
     def backwards(self, orm):
-        try:
-            for plugin in orm['cms.CMSPlugin'].objects.all():
-                for m in self.mapping:
-                    if plugin.plugin_type == m[1]:
-                        plugin.plugin_type = m[0]
-                        plugin.save()
-                        break
-        except:
-            pass
+        for plugin in CMSPlugin.objects.all():
+            for m in self.mapping:
+                if plugin.plugin_type == m[1]:
+                    plugin.plugin_type = m[0]
+                    plugin.save()
+                    break
 
     models = {
         u'aldryn_categories.category': {
