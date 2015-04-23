@@ -4,7 +4,7 @@ CHANGELOG
 0.9.3 (2015-04-23)
 ------------------
 
-* Add missing Django migration
+* Add missing Django migration from previous release
 * Fixes older South migration (0028) for CMS 3.1
 * Add "magic" migrations to move from old-style CMS plugin table naming to new
   for users using older versions of CMS.
