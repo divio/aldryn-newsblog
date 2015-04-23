@@ -4,10 +4,13 @@ from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
+from aldryn_newsblog.utils.migration import rename_tables_old_to_new, rename_tables_new_to_old
+
 
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        rename_tables_old_to_new(db)
         # Renaming model 'TagsPlugin'
         db.rename_table(u'aldryn_newsblog_tagsplugin', u'aldryn_newsblog_newsblogtagsplugin')
         if not db.dry_run:
@@ -53,6 +56,7 @@ class Migration(SchemaMigration):
                 app_label='aldryn_newsblog', model='archiveplugin').update(model='newsblogarchiveplugin')
 
     def backwards(self, orm):
+        rename_tables_new_to_old(db)
 
         # Renaming model 'TagsPlugin'
         db.rename_table(u'aldryn_newsblog_newsblogtagsplugin', u'aldryn_newsblog_tagsplugin')

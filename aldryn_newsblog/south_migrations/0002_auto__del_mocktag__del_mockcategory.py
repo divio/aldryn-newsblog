@@ -4,10 +4,14 @@ from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
+from aldryn_newsblog.utils.migration import rename_tables_old_to_new, rename_tables_new_to_old
+
 
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        rename_tables_old_to_new(db)
+
         # Deleting model 'MockTag'
         db.delete_table(u'aldryn_newsblog_mocktag')
 
@@ -20,8 +24,9 @@ class Migration(SchemaMigration):
         # Removing M2M table for field categories on 'Article'
         db.delete_table(db.shorten_name(u'aldryn_newsblog_article_categories'))
 
-
     def backwards(self, orm):
+        rename_tables_new_to_old(db)
+
         # Adding model 'MockTag'
         db.create_table(u'aldryn_newsblog_mocktag', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),

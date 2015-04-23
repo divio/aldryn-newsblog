@@ -6,6 +6,14 @@ Aldryn Newsblog
 
 NOTICE: ::
 
+    *FROM VERSION 1.0.0, ALDRYN_NEWSBLOG WILL REQUIRE CMS 3.0 OR LATER*
+
+    If you intend to migration from a 2.x project, please make sure you first
+    upgrade your project to the latest CMS 3.0.x, run all South migrations,
+    then, you can upgrade to futher CMS releases (3.1.x, etc.)
+
+NOTICE: ::
+
     *IF YOU'RE UPGRADING FROM A VERSION EARLIER THAN 0.5.0, PLEASE READ THIS.*
 
     In this version 0.5.0, we're deprecating all of the static placeholders and
@@ -160,8 +168,8 @@ Related Articles Plugin
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 The Related Articles plugin is only appropriate for use only on the article
-detail view. If the plugin in placed on any other page, it will render and empty
-DIV.
+detail view. If the plugin in placed on any other page, it will render an empty
+<DIV></DIV>.
 
 
 Known Issues

@@ -37,7 +37,7 @@ def default_reverse(*args, **kwargs):
         default = kwargs.pop('default', None)
         try:
             return reverse(*args, **kwargs)
-        except Exception:
+        except NoReverseMatch:
             return default
 
 

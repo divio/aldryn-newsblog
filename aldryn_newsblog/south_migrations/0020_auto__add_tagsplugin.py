@@ -4,10 +4,13 @@ from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
+from aldryn_newsblog.utils.migration import rename_tables_old_to_new, rename_tables_new_to_old
+
 
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        rename_tables_old_to_new(db)
         # Adding model 'TagsPlugin'
         db.create_table(u'aldryn_newsblog_tagsplugin', (
             (u'cmsplugin_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['cms.CMSPlugin'], unique=True, primary_key=True)),
@@ -17,6 +20,7 @@ class Migration(SchemaMigration):
 
 
     def backwards(self, orm):
+        rename_tables_new_to_old(db)
         # Deleting model 'TagsPlugin'
         db.delete_table(u'aldryn_newsblog_tagsplugin')
 

@@ -4,6 +4,8 @@ from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
+from aldryn_newsblog.utils.migration import rename_tables_old_to_new, rename_tables_new_to_old
+
 
 class Migration(SchemaMigration):
 
@@ -12,6 +14,7 @@ class Migration(SchemaMigration):
     ]
 
     def forwards(self, orm):
+        rename_tables_old_to_new(db)
         # Adding M2M table for field categories on 'Article'
         m2m_table_name = db.shorten_name(u'aldryn_newsblog_article_categories')
         db.create_table(m2m_table_name, (
@@ -23,6 +26,7 @@ class Migration(SchemaMigration):
 
 
     def backwards(self, orm):
+        rename_tables_new_to_old(db)
         # Removing M2M table for field categories on 'Article'
         db.delete_table(db.shorten_name(u'aldryn_newsblog_article_categories'))
 

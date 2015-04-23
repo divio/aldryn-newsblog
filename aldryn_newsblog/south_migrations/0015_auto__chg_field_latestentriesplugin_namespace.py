@@ -4,15 +4,19 @@ from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
+from aldryn_newsblog.utils.migration import rename_tables_old_to_new, rename_tables_new_to_old
+
 
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        rename_tables_old_to_new(db)
 
         # Changing field 'LatestEntriesPlugin.namespace'
         db.alter_column(u'aldryn_newsblog_latestentriesplugin', 'namespace_id', self.gf('django.db.models.fields.related.ForeignKey')(default=1, to=orm['aldryn_newsblog.NewsBlogConfig']))
 
     def backwards(self, orm):
+        rename_tables_new_to_old(db)
 
         # Changing field 'LatestEntriesPlugin.namespace'
         db.alter_column(u'aldryn_newsblog_latestentriesplugin', 'namespace_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['aldryn_newsblog.NewsBlogConfig'], null=True))

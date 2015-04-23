@@ -5,17 +5,18 @@ from south.v2 import DataMigration
 from django.db import models, connection
 from django.db.transaction import set_autocommit
 
+from aldryn_newsblog.utils.migration import rename_tables_old_to_new, rename_tables_new_to_old
+
 
 class Migration(DataMigration):
 
     def forwards(self, orm):
         """
-        This was used to make a default namespace, but now its just a
-        null migration.
+        Used to create a default namespace, but we no longer want that.
         """
 
     def backwards(self, orm):
-        "Write your backwards methods here."
+        pass
 
     models = {
         u'aldryn_categories.category': {
