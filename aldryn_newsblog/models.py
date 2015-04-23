@@ -220,6 +220,19 @@ class Article(TranslationHelperMixin, TranslatableModel):
         if not self.slug:
             self.slug = default_slugify(self.title)
 
+        # NOTE: It is very important that we never allow a blank slug to be
+        # saved to the database. If we do, then subsequent attempts to create an
+        # article will fail Django validation on the form, since we are asking
+        # it to enforce uniqueness for (language, slug) pairs, and the slug in
+        # the form starts out empty. When Django tries to validate, it finds
+        # that the (language, slug) pair already exists, and we never even get
+        # here.
+        #
+        # Since the slug is derived from the title of the article, if the slug
+        # is still empty, then the title must be /effectively/ untitled.
+        if not self.slug:
+            self.slug = _('untitled-article')
+
         # Ensure we aren't colliding with an existing slug *for this language*.
         if not Article.objects.translated(
                 slug=self.slug).exclude(pk=self.pk).exists():
@@ -232,7 +245,7 @@ class Article(TranslationHelperMixin, TranslatableModel):
             # slug__startswith=self.slug)
             # But sadly, this isn't supported by Parler/Django, see:
             # http://django-parler.readthedocs.org/en/latest/api/\
-            # parler.managers.html#the-translatablequeryset-class
+            #     parler.managers.html#the-translatablequeryset-class
             #
             slugs = []
             all_slugs = Article.objects.language(lang).exclude(
