@@ -4,10 +4,13 @@ from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
+from aldryn_newsblog.utils.migration import rename_tables_old_to_new, rename_tables_new_to_old
+
 
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        rename_tables_old_to_new(db)
         # Removing unique constraint on 'NewsBlogConfig', fields ['type', 'namespace']
         db.delete_unique(u'aldryn_newsblog_newsblogconfig', ['type', 'namespace'])
 
@@ -25,6 +28,7 @@ class Migration(SchemaMigration):
 
 
     def backwards(self, orm):
+        rename_tables_new_to_old(db)
         # Removing unique constraint on 'NewsBlogConfigTranslation', fields ['language_code', u'master']
         db.delete_unique(u'aldryn_newsblog_newsblogconfig_translation', ['language_code', u'master_id'])
 

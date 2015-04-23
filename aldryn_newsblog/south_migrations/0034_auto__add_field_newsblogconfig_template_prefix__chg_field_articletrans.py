@@ -4,10 +4,13 @@ from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
+from aldryn_newsblog.utils.migration import rename_tables_old_to_new, rename_tables_new_to_old
+
 
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        rename_tables_old_to_new(db)
         # Adding field 'NewsBlogConfig.template_prefix'
         db.add_column(u'aldryn_newsblog_newsblogconfig', 'template_prefix',
                       self.gf('django.db.models.fields.CharField')(max_length=20, null=True, blank=True),
@@ -21,6 +24,7 @@ class Migration(SchemaMigration):
         db.alter_column(u'aldryn_newsblog_newsblogconfig_translation', 'language_code', self.gf('parler.utils.compat.HideChoicesCharField')(max_length=15))
 
     def backwards(self, orm):
+        rename_tables_new_to_old(db)
         # Deleting field 'NewsBlogConfig.template_prefix'
         db.delete_column(u'aldryn_newsblog_newsblogconfig', 'template_prefix')
 

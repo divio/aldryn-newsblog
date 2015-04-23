@@ -4,15 +4,19 @@ from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
+from aldryn_newsblog.utils.migration import rename_tables_old_to_new, rename_tables_new_to_old
+
 
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        rename_tables_old_to_new(db)
         # Adding unique constraint on 'Article', fields ['content']
         db.create_unique(u'aldryn_newsblog_article', ['content_id'])
 
 
     def backwards(self, orm):
+        rename_tables_new_to_old(db)
         # Removing unique constraint on 'Article', fields ['content']
         db.delete_unique(u'aldryn_newsblog_article', ['content_id'])
 

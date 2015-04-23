@@ -4,10 +4,13 @@ from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models, connection
 
+from aldryn_newsblog.utils.migration import rename_tables_old_to_new, rename_tables_new_to_old
+
 
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        rename_tables_old_to_new(db)
         # SQLite3 and MySQL NOTE: Altering FK constraints are broken this
         # backend, but, its OK to just rename the columns here, because
         # constraints are disabled anyway.
@@ -26,7 +29,7 @@ class Migration(SchemaMigration):
                             models.ForeignKey(orm['aldryn_newsblog.NewsBlogConfig']))
 
     def backwards(self, orm):
-        "Write your backwards methods here."
+        rename_tables_new_to_old(db)
         # User chose to not deal with backwards NULL issues for 'LatestEntriesPlugin.namespace'
         raise RuntimeError("Cannot reverse this migration. 'LatestEntriesPlugin.namespace' and its values cannot be restored.")
 

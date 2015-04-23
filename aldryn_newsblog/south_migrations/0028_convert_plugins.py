@@ -18,26 +18,23 @@ class Migration(DataMigration):
     )
 
     def forwards(self, orm):
-        try:
-            for plugin in orm['cms.CMSPlugin'].objects.all():
-                for m in self.mapping:
-                    if plugin.plugin_type == m[0]:
-                        plugin.plugin_type = m[1]
-                        plugin.save()
-                        break
-        except:
-            pass
+        """
+        We've opted to prefix all plugins with the addon name: "NewsBlog"
+        """
+        for plugin in orm['cms.CMSPlugin'].objects.all():
+            for m in self.mapping:
+                if plugin.plugin_type == m[0]:
+                    plugin.plugin_type = m[1]
+                    plugin.save()
+                    break
 
     def backwards(self, orm):
-        try:
-            for plugin in orm['cms.CMSPlugin'].objects.all():
-                for m in self.mapping:
-                    if plugin.plugin_type == m[1]:
-                        plugin.plugin_type = m[0]
-                        plugin.save()
-                        break
-        except:
-            pass
+        for plugin in orm['cms.CMSPlugin'].objects.all():
+            for m in self.mapping:
+                if plugin.plugin_type == m[1]:
+                    plugin.plugin_type = m[0]
+                    plugin.save()
+                    break
 
     models = {
         u'aldryn_categories.category': {

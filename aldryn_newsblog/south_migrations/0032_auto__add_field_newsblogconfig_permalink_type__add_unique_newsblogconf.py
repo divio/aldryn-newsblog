@@ -4,10 +4,13 @@ from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
+from aldryn_newsblog.utils.migration import rename_tables_old_to_new, rename_tables_new_to_old
+
 
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        rename_tables_old_to_new(db)
         # Adding field 'NewsBlogConfig.permalink_type'
         db.add_column(u'aldryn_newsblog_newsblogconfig', 'permalink_type',
                       self.gf('django.db.models.fields.CharField')(default=u'slug', max_length=8),
@@ -21,6 +24,7 @@ class Migration(SchemaMigration):
         db.alter_column(u'aldryn_newsblog_article', 'app_config_id', self.gf('aldryn_apphooks_config.fields.AppHookConfigField')(to=orm['aldryn_newsblog.NewsBlogConfig']))
 
     def backwards(self, orm):
+        rename_tables_new_to_old(db)
         # Removing unique constraint on 'NewsBlogConfig', fields ['namespace']
         db.delete_unique(u'aldryn_newsblog_newsblogconfig', ['namespace'])
 

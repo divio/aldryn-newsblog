@@ -4,10 +4,13 @@ from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
+from aldryn_newsblog.utils.migration import rename_tables_old_to_new, rename_tables_new_to_old
+
 
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        rename_tables_old_to_new(db)
         # Adding field 'ArticleTranslation.meta_title'
         db.add_column(u'aldryn_newsblog_article_translation', 'meta_title',
                       self.gf('django.db.models.fields.CharField')(default='', max_length=255, blank=True),
@@ -25,6 +28,7 @@ class Migration(SchemaMigration):
 
 
     def backwards(self, orm):
+        rename_tables_new_to_old(db)
         # Deleting field 'ArticleTranslation.meta_title'
         db.delete_column(u'aldryn_newsblog_article_translation', 'meta_title')
 

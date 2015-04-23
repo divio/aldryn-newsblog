@@ -4,10 +4,13 @@ from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
+from aldryn_newsblog.utils.migration import rename_tables_old_to_new, rename_tables_new_to_old
+
 
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        rename_tables_old_to_new(db)
         # Adding field 'NewsBlogConfig.list_view_placeholder'
         db.add_column(u'aldryn_newsblog_newsblogconfig', 'list_view_placeholder',
                       self.gf('django.db.models.fields.related.ForeignKey')(to=orm['cms.Placeholder'], null=True),
@@ -15,6 +18,7 @@ class Migration(SchemaMigration):
 
 
     def backwards(self, orm):
+        rename_tables_new_to_old(db)
         # Deleting field 'NewsBlogConfig.list_view_placeholder'
         db.delete_column(u'aldryn_newsblog_newsblogconfig', 'list_view_placeholder_id')
 

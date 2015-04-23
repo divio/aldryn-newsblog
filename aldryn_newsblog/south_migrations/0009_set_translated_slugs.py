@@ -5,10 +5,14 @@ from south.v2 import DataMigration
 from django.db import models
 from django.conf import settings
 
+from aldryn_newsblog.utils.migration import rename_tables_old_to_new, rename_tables_new_to_old
+
+
 class Migration(DataMigration):
 
     def forwards(self, orm):
         "Write your forwards methods here."
+        rename_tables_old_to_new(db)
         # Note: Don't use "from appname.models import ModelName". 
         # Use orm.ModelName to refer to models in this application,
         # and orm['appname.ModelName'] for models in other applications.
@@ -20,6 +24,7 @@ class Migration(DataMigration):
 
     def backwards(self, orm):
         "Write your backwards methods here."
+        rename_tables_new_to_old(db)
         raise NotImplementedError(
             "I am unable te reliably restore original slugs. "
             "Please, read the code, comment out this line and rerun migration.")
