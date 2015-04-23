@@ -8,7 +8,7 @@ NOTICE: ::
 
     *FROM VERSION 1.0.0, ALDRYN_NEWSBLOG WILL REQUIRE CMS 3.0 OR LATER*
 
-    If you intend to migration from a 2.x project, please make sure you first
+    If you intend to migrate from a 2.x project, please make sure you first
     upgrade your project to the latest CMS 3.0.x, run all South migrations,
     then, you can upgrade to futher CMS releases (3.1.x, etc.)
 
