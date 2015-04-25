@@ -15,7 +15,7 @@ from aldryn_newsblog.models import Article, NewsBlogConfig
 from aldryn_people.models import Person
 from aldryn_search.helpers import get_request
 from cms import api
-from cms.test_utils.testcases import CMSTestCase
+from cms.test_utils.testcases import CMSTestCase, TransactionCMSTestCase
 from cms.utils import get_cms_setting
 from parler.utils.context import switch_language
 
@@ -163,6 +163,9 @@ class NewsBlogTestsMixin(object):
             parent=self.root_page,
             apphook='NewsBlogApp',
             apphook_namespace=self.app_config.namespace)
+        self.plugin_page = api.create_page(
+            title="plugin_page", template=self.template, language=self.language,
+            parent=self.root_page, published=True)
         self.placeholder = self.page.placeholders.all()[0]
         self.request = get_request('en')
 
@@ -175,4 +178,8 @@ class NewsBlogTestsMixin(object):
 
 
 class NewsBlogTestCase(NewsBlogTestsMixin, CMSTestCase):
+    pass
+
+
+class NewsBlogTransactionTestCase(NewsBlogTestsMixin, TransactionCMSTestCase):
     pass
