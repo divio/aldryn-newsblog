@@ -1,8 +1,8 @@
 aldryn-apphooks-config
--e git+https://github.com/aldryn/aldryn-boilerplates.git#egg=aldryn-boilerplates
+aldryn-boilerplates
 aldryn-categories
-aldryn-common
-aldryn-people
+aldryn-common>=0.1.3
+aldryn-people>=0.5.2
 aldryn-reversion>=0.0.2
 aldryn-search
 aldryn-translation-tools
