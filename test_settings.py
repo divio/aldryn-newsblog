@@ -27,7 +27,7 @@ HELPER_SETTINGS = {
         'taggit',
     ],
     'MIGRATION_MODULES': {
-        'cms': 'cms.migrations_django',
+        # 'cms': 'cms.migrations_django',
         'djangocms_text_ckeditor': 'djangocms_text_ckeditor.migrations_django',
         'filer': 'filer.migrations_django',
     },

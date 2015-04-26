@@ -2,7 +2,7 @@
 
 from __future__ import unicode_literals
 
-from datetime import datetime, date, timedelta
+from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
 
 from django.db.models import Q
@@ -13,7 +13,6 @@ from django.http import (
 )
 from django.shortcuts import get_object_or_404
 from django.utils import translation
-from django.utils.translation import ugettext as _
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView
 
@@ -32,7 +31,8 @@ from .utils import add_prefix_to_path
 class TemplatePrefixMixin(object):
 
     def prefix_template_names(self, template_names):
-        if self.config.template_prefix:
+        if (hasattr(self.config, 'template_prefix') and
+                self.config.template_prefix):
             prefix = self.config.template_prefix
             return [
                 add_prefix_to_path(template, prefix)
