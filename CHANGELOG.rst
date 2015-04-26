@@ -1,10 +1,19 @@
 CHANGELOG
 =========
 
+0.9.4 (2015-04-26)
+------------------
+
+* Now requires v0.1.3+ of aldryn-common
+* Now requires v0.5.2+ of aldryn-people
+* Fixes a bad migration
+* Tested to work in django CMS 3.0.x and 3.1.x
+* Other minor refactoring
+
+
 0.9.3 (2015-04-23)
 ------------------
 
-* Add missing Django migration from previous release
 * Fixes older South migration (0028) for CMS 3.1
 * Add "magic" migrations to move from old-style CMS plugin table naming to new
   for users using older versions of CMS.
