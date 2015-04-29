@@ -120,7 +120,8 @@ class TestViews(NewsBlogTestCase):
                         app_config=self.app_config,
                         author=author, owner=author.user,
                         publishing_date=now())
-                    # Make sure there are translations in place for the articles.
+                    # Make sure there are translations in place for the
+                    # articles.
                     for language, _ in settings.LANGUAGES[1:]:
                         with switch_language(article, language):
                             code = "{0}-".format(language)
@@ -132,8 +133,9 @@ class TestViews(NewsBlogTestCase):
 
                 for language, _ in settings.LANGUAGES:
                     with switch_language(category, language):
-                        url = reverse('aldryn_newsblog:article-list-by-category',
-                                      kwargs={'category': category.slug})
+                        url = reverse(
+                            'aldryn_newsblog:article-list-by-category',
+                            kwargs={'category': category.slug})
                         response = self.client.get(url)
                     for article in articles:
                         if language in article.get_available_languages():
@@ -224,7 +226,6 @@ class TestTranslationFallbacks(NewsBlogTestCase):
                     response = self.client.get(url)
                     # This is a redirect to the new language
                     self.assertEquals(response.status_code, 200)
-
 
     def test_article_detail_not_translated_no_fallback(self):
         """
@@ -342,10 +343,9 @@ class TestVariousViews(NewsBlogTestCase):
 
         self.assertEquals(
             sorted(
-                Article.objects.get_months(request=None,
-                    namespace=self.app_config.namespace),
-                key=itemgetter('num_articles')),
-            months)
+                Article.objects.get_months(
+                    request=None, namespace=self.app_config.namespace
+                ), key=itemgetter('num_articles')), months)
 
     def test_articles_count_by_author(self):
         authors = []
@@ -374,7 +374,8 @@ class TestVariousViews(NewsBlogTestCase):
             authors)
 
     def test_articles_count_by_tags(self):
-        tags = Article.objects.get_tags(request=None, namespace=self.app_config.namespace)
+        tags = Article.objects.get_tags(
+            request=None, namespace=self.app_config.namespace)
         self.assertEquals(tags, [])
 
         untagged_articles = []
@@ -396,7 +397,8 @@ class TestVariousViews(NewsBlogTestCase):
             (tag_slug3, 5),
             (tag_slug2, 3),
         ]
-        tags = Article.objects.get_tags(request=None, namespace=self.app_config.namespace)
+        tags = Article.objects.get_tags(
+            request=None, namespace=self.app_config.namespace)
         tags = map(lambda x: (x.slug, x.num_articles), tags)
         self.assertEquals(tags, tags_expected)
 
@@ -498,10 +500,10 @@ class TestIndex(NewsBlogTestCase):
         content0 = self.rand_str(prefix='content0_')
         self.setup_categories()
 
-        article_1 = self.create_article(content=content0, lead_in=u'lead in text',
-                                        title=u'a title')
-        article_2 = self.create_article(content=content0, lead_in=u'lead in text',
-                                        title=u'second title')
+        article_1 = self.create_article(
+            content=content0, lead_in=u'lead in text', title=u'a title')
+        article_2 = self.create_article(
+            content=content0, lead_in=u'lead in text', title=u'second title')
         for article in (article_1, article_2):
             for tag_name in ('tag 1', 'tag2'):
                 article.tags.add(tag_name)
@@ -519,8 +521,13 @@ class TestIndex(NewsBlogTestCase):
                 # english-only article is excluded
                 qs = self.index.index_queryset(language)
                 self.assertEqual(qs.count(), 1)
-                self.assertEqual(qs.translated(language, title__icontains='title').count(), 1)
+                self.assertEqual(
+                    qs.translated(language, title__icontains='title').count(),
+                    1
+                )
                 # the language is correctly setup
                 for article_de in qs:
-                    self.assertEqual(self.index.get_title(article_de), 'de title')
-                    self.assertEqual(self.index.get_description(article_de), 'de lead in')
+                    self.assertEqual(
+                        self.index.get_title(article_de), 'de title')
+                    self.assertEqual(
+                        self.index.get_description(article_de), 'de lead in')

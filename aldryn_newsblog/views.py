@@ -127,8 +127,10 @@ class ArticleDetail(PreviewModeMixin, TranslatableSlugMixin, AppConfigMixin,
 
     def get_context_data(self, **kwargs):
         context = super(ArticleDetail, self).get_context_data(**kwargs)
-        context['prev_article'] = self.get_prev_object(self.queryset, self.object)
-        context['next_article'] = self.get_next_object(self.queryset, self.object)
+        context['prev_article'] = self.get_prev_object(
+            self.queryset, self.object)
+        context['next_article'] = self.get_next_object(
+            self.queryset, self.object)
         return context
 
     def get_prev_object(self, queryset=None, object=None):

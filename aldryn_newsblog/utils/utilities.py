@@ -125,7 +125,8 @@ def get_plugin_index_data(base_plugin, request):
         search_contents = not bool(search_fields)
 
     if search_contents:
-        plugin_contents = instance.render_plugin(context=RequestContext(request))
+        plugin_contents = instance.render_plugin(
+            context=RequestContext(request))
 
         if plugin_contents:
             text_bits = get_cleaned_bits(plugin_contents)

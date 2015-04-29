@@ -10,7 +10,6 @@ from django.core.urlresolvers import reverse
 
 from aldryn_newsblog.models import NewsBlogConfig
 from cms import api
-from cms.models import Page
 
 from . import NewsBlogTestCase
 
@@ -22,7 +21,8 @@ class TestAppConfigPluginsBase(NewsBlogTestCase):
     def setUp(self):
         super(TestAppConfigPluginsBase, self).setUp()
         self.placeholder = self.plugin_page.placeholders.all()[0]
-        api.add_plugin(self.placeholder, self.plugin_to_test, self.language,
+        api.add_plugin(
+            self.placeholder, self.plugin_to_test, self.language,
             app_config=self.app_config, **self.plugin_params)
         self.plugin = self.placeholder.get_plugins()[0].get_plugin_instance()[0]
         self.plugin.save()
@@ -49,7 +49,8 @@ class TestArchivePlugin(TestAppConfigPluginsBase):
             articles.append(article)
 
         response = self.client.get(self.plugin_page.get_absolute_url())
-        needle = '<a href="/en/page/{year}/{month}/"[^>]*>[^<]*<span class="badge">{num}</span>'
+        needle = '<a href="/en/page/{year}/{month}/"[^>]*>'
+        '[^<]*<span class="badge">{num}</span>'
         month1 = needle.format(year=2014, month=11, num=2)
         month2 = needle.format(year=2015, month=2, num=1)
         month3 = needle.format(year=2015, month=1, num=3)
