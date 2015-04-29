@@ -1,4 +1,4 @@
-|PyPI Version| |Build Status| |Coverage Status|
+|codeclimate| |PyPI Version| |Build Status| |Coverage Status|
 
 ===============
 Aldryn Newsblog
@@ -182,6 +182,9 @@ For more information, see the `documentation for django CMS`__.
 __ https://django-cms.readthedocs.org/en/support-3.0.x/how_to/apphooks.html#apphooks
 
 
+.. |codeclimate| image:: https://codeclimate.com/github/aldryn/aldryn-newsblog/badges/gpa.svg
+   :target: https://codeclimate.com/github/aldryn/aldryn-newsblog
+   :alt: Code Climate
 .. |PyPI Version| image:: http://img.shields.io/pypi/v/aldryn-newsblog.svg
    :target: https://pypi.python.org/pypi/aldryn-newsblog
 .. |Build Status| image:: http://img.shields.io/travis/aldryn/aldryn-newsblog/master.svg
