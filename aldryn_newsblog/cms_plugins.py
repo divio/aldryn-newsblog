@@ -14,7 +14,8 @@ from .utils import add_prefix_to_path, default_reverse
 class TemplatePrefixMixin(object):
 
     def get_render_template(self, context, instance, placeholder):
-        if hasattr(instance, 'app_config') and instance.app_config.template_prefix:
+        if (hasattr(instance, 'app_config') and
+                instance.app_config.template_prefix):
             return add_prefix_to_path(
                 self.render_template,
                 instance.app_config.template_prefix

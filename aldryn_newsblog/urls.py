@@ -37,7 +37,7 @@ urlpatterns = patterns(
         ArticleDetail.as_view(), name='article-detail'),
     url(r'^(?P<year>\d{4})/(?P<month>\d{1,2})/(?P<slug>\w[-\w]*)/$',
         ArticleDetail.as_view(), name='article-detail'),
-    url(r'^(?P<year>\d{4})/(?P<month>\d{1,2})/(?P<day>\d{1,2})/(?P<slug>\w[-\w]*)/$',
+    url(r'^(?P<year>\d{4})/(?P<month>\d{1,2})/(?P<day>\d{1,2})/(?P<slug>\w[-\w]*)/$',  # flake8: NOQA
         ArticleDetail.as_view(), name='article-detail'),
 
     url(r'^author/(?P<author>\w[-\w]*)/$',

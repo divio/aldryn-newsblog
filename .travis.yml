@@ -5,44 +5,29 @@ language: python
 # Use container based infrastructure
 sudo: false
 
-python:
-  - 2.6
-  - 2.7
-  - 3.3
-  - 3.4
-
 env:
-  matrix:
-  - DJANGO=1.6 CMD=./test
-  - DJANGO=1.7 CMD=./test
-  # Uncomment when CMS supports 1.8
-  # - DJANGO=1.8 CMD=./test
-
-matrix:
-  allow_failures:
-    - python: 3.3
-    - python: 3.4
-    - env: DJANGO=1.8 CMD=./test
-  exclude:
-    - python: 2.6
-      env: DJANGO=1.7 CMD=./test
-    # Uncomment when CMS supports 1.8
-    # - python: 2.6
-    #   env: DJANGO=1.8 CMD=./test
-  fast_finish: true
-  include:
-    - python: 2.7
-      env: DJANGO=1.7 CMD="flake8 aldryn_newsblog"
+  - TOXENV=py26-dj16-cms30-sqlite
+  - TOXENV=py27-dj16-cms30-sqlite
+  - TOXENV=py27-dj17-cms30-sqlite
+  - TOXENV=py27-dj17-cms30-mysql
+  - TOXENV=py27-dj17-cms30-postgres
+  - TOXENV=py26-dj16-cms31-sqlite
+  - TOXENV=py27-dj16-cms31-sqlite
+  - TOXENV=py27-dj17-cms31-sqlite
+  - TOXENV=py27-dj17-cms31-mysql
+  - TOXENV=py27-dj17-cms31-postgres
+  - TOXENV=flake8
 
 cache:
   directories:
     - $HOME/.wheelhouse
 
 install:
+  - pip install tox
   - pip install coveralls
-  - pip install -r "test_requirements/django-$DJANGO.txt"
 
-script: coverage run test_settings.py
+script:
+  - tox
 
 after_success: coveralls
 

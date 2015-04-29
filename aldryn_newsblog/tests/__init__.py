@@ -25,7 +25,7 @@ TESTS_STATIC_ROOT = os.path.abspath(os.path.join(TESTS_ROOT, 'static'))
 
 class NewsBlogTestsMixin(object):
 
-    NO_REDIRECT_CMS_SETTINGS =  {
+    NO_REDIRECT_CMS_SETTINGS = {
         1: [
             {
                 'code': 'de',
@@ -69,11 +69,13 @@ class NewsBlogTestsMixin(object):
 
     @classmethod
     def create_user(cls):
-        return User.objects.create(username=cls.rand_str(), first_name=cls.rand_str(),
-                                   last_name=cls.rand_str())
+        return User.objects.create(
+            username=cls.rand_str(), first_name=cls.rand_str(),
+            last_name=cls.rand_str())
 
     def create_person(self):
-        return Person.objects.create(user=self.create_user(), slug=self.rand_str())
+        return Person.objects.create(
+            user=self.create_user(), slug=self.rand_str())
 
     def create_article(self, content=None, **kwargs):
         try:

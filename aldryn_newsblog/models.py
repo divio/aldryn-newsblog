@@ -142,7 +142,7 @@ class Article(TranslationHelperMixin, TranslatableModel):
 
     def get_absolute_url(self, language=None):
         """Returns the url for this Article in the selected permalink format."""
-        if language is None:
+        if not language:
             language = get_current_language()
         kwargs = {}
         permalink_type = self.app_config.permalink_type
