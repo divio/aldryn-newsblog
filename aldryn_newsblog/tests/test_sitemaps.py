@@ -8,6 +8,7 @@ from aldryn_newsblog.sitemaps import NewsBlogSitemap
 from django.contrib.sites.models import get_current_site
 from django.utils.translation import override
 
+
 class TestSitemaps(NewsBlogTestCase):
 
     def _sitemap_urls(self, sitemap):
@@ -80,7 +81,10 @@ class TestSitemaps(NewsBlogTestCase):
             de_article = self.create_article()
 
         multilingual_sitemap = NewsBlogSitemap()
-        self.assertArticlesIn([multilanguage_article, en_article, de_article], multilingual_sitemap)
+        self.assertArticlesIn(
+            [multilanguage_article, en_article, de_article],
+            multilingual_sitemap
+        )
 
         en_sitemap = NewsBlogSitemap(language='en')
         self.assertArticlesIn([multilanguage_article, en_article], en_sitemap)

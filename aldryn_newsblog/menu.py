@@ -38,7 +38,8 @@ class NewsBlogMenu(CMSAttachMenu):
 
         for article in articles:
             node = NavigationNode(
-                article.safe_translation_getter('title', language_code=language),
+                article.safe_translation_getter('title',
+                    language_code=language),
                 article.get_absolute_url(language=language),
                 article.pk,
             )

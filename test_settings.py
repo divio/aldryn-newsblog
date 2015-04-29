@@ -37,13 +37,15 @@ HELPER_SETTINGS = {
             'aldryn_newsblog', 'tests', 'templates'), ),
     'STATICFILES_FINDERS': [
         'django.contrib.staticfiles.finders.FileSystemFinder',
-        # important! place right before django.contrib.staticfiles.finders.AppDirectoriesFinder
+        # important! place right before:
+        #     django.contrib.staticfiles.finders.AppDirectoriesFinder
         'aldryn_boilerplates.staticfile_finders.AppDirectoriesFinder',
         'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     ],
     'TEMPLATE_LOADERS': [
         'django.template.loaders.filesystem.Loader',
-        # important! place right before django.template.loaders.app_directories.Loader
+        # important! place right before:
+        #     django.template.loaders.app_directories.Loader
         'aldryn_boilerplates.template_loaders.AppDirectoriesLoader',
         'django.template.loaders.app_directories.Loader',
     ],
@@ -57,7 +59,7 @@ HELPER_SETTINGS = {
             {'code': 'en', },
         ),
         'default': {
-            'hide_untranslated': True, # PLEASE DO NOT CHANGE THIS
+            'hide_untranslated': True,  # PLEASE DO NOT CHANGE THIS
         }
     },
     'SITE_ID': 1,

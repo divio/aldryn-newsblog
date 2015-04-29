@@ -8,13 +8,20 @@ from __future__ import unicode_literals
 #
 default_cms_plugin_table_mapping = (
     # (old_name, new_name),
-    ('cmsplugin_newsblogarchiveplugin', 'aldryn_newsblog_newsblogarchiveplugin'),
-    ('cmsplugin_newsblogarticlesearchplugin', 'aldryn_newsblog_newsblogarticlesearchplugin'),
-    ('cmsplugin_newsblogauthorsplugin', 'aldryn_newsblog_newsblogauthorsplugin'),
-    ('cmsplugin_newsblogcategoriesplugin', 'aldryn_newsblog_newsblogcategoriesplugin'),
-    ('cmsplugin_newsblogfeaturedarticlesplugin', 'aldryn_newsblog_newsblogfeaturedarticlesplugin'),
-    ('cmsplugin_newsbloglatestarticlesplugin', 'aldryn_newsblog_newsbloglatestarticlesplugin'),
-    ('cmsplugin_newsblogrelatedplugin', 'aldryn_newsblog_newsblogrelatedplugin'),
+    ('cmsplugin_newsblogarchiveplugin',
+        'aldryn_newsblog_newsblogarchiveplugin'),
+    ('cmsplugin_newsblogarticlesearchplugin',
+        'aldryn_newsblog_newsblogarticlesearchplugin'),
+    ('cmsplugin_newsblogauthorsplugin',
+        'aldryn_newsblog_newsblogauthorsplugin'),
+    ('cmsplugin_newsblogcategoriesplugin',
+        'aldryn_newsblog_newsblogcategoriesplugin'),
+    ('cmsplugin_newsblogfeaturedarticlesplugin',
+        'aldryn_newsblog_newsblogfeaturedarticlesplugin'),
+    ('cmsplugin_newsbloglatestarticlesplugin',
+        'aldryn_newsblog_newsbloglatestarticlesplugin'),
+    ('cmsplugin_newsblogrelatedplugin',
+        'aldryn_newsblog_newsblogrelatedplugin'),
     ('cmsplugin_newsblogtagsplugin', 'aldryn_newsblog_newsblogtagsplugin'),
 )
 
