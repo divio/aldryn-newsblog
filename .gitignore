@@ -9,6 +9,7 @@ cms/django
 .*
 !.travis.yml
 !.coveragerc
+!.codeclimate.yml
 *.xml
 /*env*/
 *.sqlite
