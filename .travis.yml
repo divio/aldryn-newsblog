@@ -6,11 +6,16 @@ language: python
 sudo: false
 
 env:
-  - TOXENV=py26-dj16-sqlite
-  - TOXENV=py27-dj16-sqlite
-  - TOXENV=py27-dj17-sqlite
-  - TOXENV=py27-dj17-mysql
-  - TOXENV=py27-dj17-postgres
+  - TOXENV=py26-dj16-cms30-sqlite
+  - TOXENV=py27-dj16-cms30-sqlite
+  - TOXENV=py27-dj17-cms30-sqlite
+  - TOXENV=py27-dj17-cms30-mysql
+  - TOXENV=py27-dj17-cms30-postgres
+  - TOXENV=py26-dj16-cms31-sqlite
+  - TOXENV=py27-dj16-cms31-sqlite
+  - TOXENV=py27-dj17-cms31-sqlite
+  - TOXENV=py27-dj17-cms31-mysql
+  - TOXENV=py27-dj17-cms31-postgres
   - TOXENV=flake8
 
 cache:
