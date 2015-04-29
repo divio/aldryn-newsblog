@@ -6,9 +6,9 @@ language: python
 sudo: false
 
 env:
-  - TOXENV=py16-dj16
-  - TOXENV=py17-dj16
-  - TOXENV=py17-dj17
+  - TOXENV=py26-dj16
+  - TOXENV=py27-dj16
+  - TOXENV=py27-dj17
   - TOXENV=flake8
 
 cache:
