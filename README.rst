@@ -1,4 +1,4 @@
-|codeclimate| |PyPI Version| |Build Status| |Coverage Status|
+|PyPI Version| |Build Status| |Coverage Status| |codeclimate| |requires_io|
 
 ===============
 Aldryn Newsblog
@@ -182,12 +182,15 @@ For more information, see the `documentation for django CMS`__.
 __ https://django-cms.readthedocs.org/en/support-3.0.x/how_to/apphooks.html#apphooks
 
 
-.. |codeclimate| image:: https://codeclimate.com/github/aldryn/aldryn-newsblog/badges/gpa.svg
-   :target: https://codeclimate.com/github/aldryn/aldryn-newsblog
-   :alt: Code Climate
 .. |PyPI Version| image:: http://img.shields.io/pypi/v/aldryn-newsblog.svg
    :target: https://pypi.python.org/pypi/aldryn-newsblog
 .. |Build Status| image:: http://img.shields.io/travis/aldryn/aldryn-newsblog/master.svg
    :target: https://travis-ci.org/aldryn/aldryn-newsblog
 .. |Coverage Status| image:: http://img.shields.io/coveralls/aldryn/aldryn-newsblog/master.svg
    :target: https://coveralls.io/r/aldryn/aldryn-newsblog?branch=master
+.. |codeclimate| image:: https://codeclimate.com/github/aldryn/aldryn-newsblog/badges/gpa.svg
+   :target: https://codeclimate.com/github/aldryn/aldryn-newsblog
+   :alt: Code Climate
+.. |requires_io| image:: https://requires.io/github/aldryn/aldryn-newsblog/requirements.svg?branch=master
+   :target: https://requires.io/github/aldryn/aldryn-newsblog/requirements/?branch=master
+   :alt: Requirements Status
