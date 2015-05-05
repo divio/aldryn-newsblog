@@ -60,6 +60,7 @@ def strip_tags(value):
     We use lxml to strip all js tags and then hand the result to django's
     strip tags.
     """
+    # strip any new lines
     if value:
         value = value.strip()
 
