@@ -218,7 +218,7 @@ class Article(TranslationHelperMixin, TranslatableModel):
 
         # Start with a naïve approach, if none provided.
         if not self.slug:
-            self.slug = default_slugify(self.title)
+            self.slug = force_unicode(default_slugify(self.title))
 
         # NOTE: It is very important that we never allow a blank slug to be
         # saved to the database. If we do, then subsequent attempts to create an
@@ -231,11 +231,11 @@ class Article(TranslationHelperMixin, TranslatableModel):
         # Since the slug is derived from the title of the article, if the slug
         # is still empty, then the title must be /effectively/ untitled.
         if not self.slug:
-            self.slug = _('untitled-article')
+            self.slug = 'untitled-article'
 
         # Ensure we aren't colliding with an existing slug *for this language*.
         if not Article.objects.translated(
-                slug=force_unicode(self.slug)).exclude(pk=self.pk).exists():
+                slug=self.slug).exclude(pk=self.pk).exists():
             return super(Article, self).save(*args, **kwargs)
 
         for lang in LANGUAGE_CODES:
