@@ -61,7 +61,8 @@ def strip_tags(value):
     strip tags.
     """
     # strip any new lines
-    value = value.strip()
+    if value:
+        value = value.strip()
 
     if value:
         partial_strip = LxmlCleaner().clean_html(value)
