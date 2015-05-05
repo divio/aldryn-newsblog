@@ -188,7 +188,7 @@ class Article(TranslationHelperMixin, TranslatableModel):
             language = get_current_language()
         if request is None:
             request = get_request(language=language)
-        description = self.safe_translation_getter('lead_in')
+        description = self.safe_translation_getter('lead_in', '')
         text_bits = [strip_tags(description)]
         for category in self.categories.all():
             text_bits.append(
@@ -235,7 +235,7 @@ class Article(TranslationHelperMixin, TranslatableModel):
 
         # Ensure we aren't colliding with an existing slug *for this language*.
         if not Article.objects.translated(
-                slug=self.slug).exclude(pk=self.pk).exists():
+                slug=force_unicode(self.slug)).exclude(pk=self.pk).exists():
             return super(Article, self).save(*args, **kwargs)
 
         for lang in LANGUAGE_CODES:
