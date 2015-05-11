@@ -251,7 +251,7 @@ class Article(TranslationHelperMixin, TranslatableModel):
             all_slugs = Article.objects.language(lang).exclude(
                 pk=self.pk).values_list('translations__slug', flat=True)
             for slug in all_slugs:
-                if slug and slug.startswith(self.title) or slug.startswith(self.slug):
+                if slug and slug.startswith((self.title, self.slug)):
                     slugs.append(slug)
             i = 1
             while True:
