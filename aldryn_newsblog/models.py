@@ -17,7 +17,7 @@ except ImportError:
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.text import slugify as default_slugify
 from django.utils.timezone import now
-from django.utils.translation import ugettext_lazy as _, override
+from django.utils.translation import ugettext_lazy as _, ugettext, override
 
 from aldryn_apphooks_config.fields import AppHookConfigField
 from aldryn_categories.fields import CategoryManyToManyField
@@ -231,7 +231,7 @@ class Article(TranslationHelperMixin, TranslatableModel):
         # Since the slug is derived from the title of the article, if the slug
         # is still empty, then the title must be /effectively/ untitled.
         if not self.slug:
-            self.slug = 'untitled-article'
+            self.slug = ugettext('untitled-article')
 
         # Ensure we aren't colliding with an existing slug *for this language*.
         if not Article.objects.translated(
