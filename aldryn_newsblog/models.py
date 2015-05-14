@@ -59,7 +59,7 @@ SQL_NOW_FUNC = {
 }[connection.vendor]
 
 SQL_IS_TRUE = {
-    'mssql': '== TRUE', 'mysql': '== 1', 'postgresql': 'IS TRUE',
+    'mssql': '== TRUE', 'mysql': '= 1', 'postgresql': 'IS TRUE',
     'sqlite': '== 1', 'oracle': 'IS TRUE'
 }[connection.vendor]
 
