@@ -9,6 +9,10 @@ from aldryn_newsblog.utils.migration import rename_tables_old_to_new, rename_tab
 
 class Migration(SchemaMigration):
 
+    depends_on = (
+        ('filer', '0001_initial'),
+    )
+
     def forwards(self, orm):
         rename_tables_old_to_new(db)
         # Adding field 'Article.featured_image'
