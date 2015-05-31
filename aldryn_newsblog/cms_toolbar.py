@@ -16,7 +16,9 @@ from .cms_appconfig import NewsBlogConfig
 
 @toolbar_pool.register
 class NewsBlogToolbar(CMSToolbar):
-    watch_models = (Article, )
+    # watch_models must be a list, not a tuple
+    # see https://github.com/divio/django-cms/issues/4135
+    watch_models = [Article, ]
     supported_apps = ('aldryn_newsblog',)
 
     def __get_newsblog_config(self):
