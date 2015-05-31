@@ -520,7 +520,8 @@ def update_seach_index(sender, instance, **kwargs):
     perform simple searches even without Haystack, etc.
     """
     if issubclass(instance.__class__, CMSPlugin):
-        placeholder = getattr(instance, '_placeholder_cache', None) or instance.placeholder
+        placeholder = (getattr(instance, '_placeholder_cache', None)
+                       or instance.placeholder)
         if hasattr(placeholder, '_attached_model_cache'):
             if placeholder._attached_model_cache == Article:
                 article = placeholder._attached_model_cache.objects.get(
