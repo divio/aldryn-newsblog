@@ -29,7 +29,6 @@ HELPER_SETTINGS = {
     'MIGRATION_MODULES': {
         # 'cms': 'cms.migrations_django',
         'djangocms_text_ckeditor': 'djangocms_text_ckeditor.migrations_django',
-        'filer': 'filer.migrations_django',
     },
     'TEMPLATE_DIRS': (
         os.path.join(
