@@ -1,6 +1,13 @@
 CHANGELOG
 =========
 
+0.9.6 (2015-05-31)
+------------------
+
+* Fixes search index bug
+* Fixes testsuite issue with django-filer>=0.9.10
+* Fixes bug with toolbar
+
 0.9.5 (2015-05-21)
 ------------------
 
