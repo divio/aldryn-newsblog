@@ -119,5 +119,6 @@ class TestModels(NewsBlogTestCase):
         new_title = "This is the new title"
         article.title = new_title
         article.save()
+        article = self.reload(article)
         self.assertEquals(article.title, new_title)
         self.assertEquals(article.slug, initial_slug)
