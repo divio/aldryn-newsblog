@@ -98,3 +98,47 @@ class TestModels(NewsBlogTestCase):
         response = self.client.get(article.get_absolute_url())
         self.assertContains(response, title)
         self.assertContains(response, content)
+
+    def test_change_title(self):
+        """
+        Test that we can change the title of an existing, published article
+        without issue. Also ensure that the slug does NOT change when changing
+        the title alone.
+        """
+        activate(self.language)
+        initial_title = "This is the initial title"
+        initial_slug = "this-is-the-initial-title"
+        author = self.create_person()
+        article = Article.objects.create(
+            title=initial_title, author=author, owner=author.user,
+            app_config=self.app_config, publishing_date=now())
+        article.save()
+        self.assertEquals(article.title, initial_title)
+        self.assertEquals(article.slug, initial_slug)
+        # Now, let's try to change the title
+        new_title = "This is the new title"
+        article.title = new_title
+        article.save()
+        self.assertEquals(article.title, new_title)
+        self.assertEquals(article.slug, initial_slug)
+
+    def test_duplicate_title_and_language(self):
+        """
+        Test that if user attempts to create an article with the same name and
+        in the same language as another, it will not raise exceptions.
+        """
+        activate(self.language)
+        author = self.create_person()
+        article1 = Article.objects.create(
+            title="Sample Article", author=author, owner=author.user,
+            app_config=self.app_config, publishing_date=now()
+        )
+        article1.save()
+        try:
+            article2 = Article.objects.create(
+                title="Sample Article", author=author, owner=author.user,
+                app_config=self.app_config, publishing_date=now()
+            )
+            article2.save()
+        except:
+            self.fail('Creating article with identical name raises exception')
