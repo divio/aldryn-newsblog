@@ -110,13 +110,13 @@ class TestModelsTransactions(NewsBlogTransactionTestCase):
         """
         title = "Sample Article"
         author = self.create_person()
-        article1_lang = settings.LANGUAGES[0][0]
+        original_lang = settings.LANGUAGES[0][0]
         # Create an initial article in the first language
         article1 = Article(
             title=title, author=author, owner=author.user,
             app_config=self.app_config, publishing_date=now()
         )
-        article1.set_current_language(article1_lang)
+        article1.set_current_language(original_lang)
         article1.save()
 
         # Now try to create an article with the same title in every possible
@@ -136,5 +136,5 @@ class TestModelsTransactions(NewsBlogTransactionTestCase):
                             'as another "{2}" article raises exception'.format(
                                 context_lang,
                                 article_lang,
-                                article1_lang,
+                                original_lang,
                             ))
