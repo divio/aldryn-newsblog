@@ -127,10 +127,10 @@ class TestModels(NewsBlogTestCase):
         try:
             article3 = Article.objects.create(
                 title="Sample Article", author=author, owner=author.user,
-                app_config=self.app_config, published_date=now()
+                app_config=self.app_config, publishing_date=now()
             )
-            article3.set_language(language_one)
+            article3.set_current_language(language_one)
             article3.save()
-        except:
+        except Exception as exception:
             self.fail('Creating article with identical name in a language '
-                      'other than the current one, raises exception')
+                      'other than the current one, raises exception', exception)
