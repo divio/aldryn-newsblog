@@ -11,7 +11,7 @@ from django.utils.translation import activate, override
 from aldryn_newsblog.models import Article
 from cms import api
 
-from . import NewsBlogTestCase, TESTS_STATIC_ROOT
+from . import NewsBlogTestCase, NewsBlogTransactionTestCase, TESTS_STATIC_ROOT
 
 FEATURED_IMAGE_PATH = os.path.join(TESTS_STATIC_ROOT, 'featured_image.jpg')
 
@@ -100,26 +100,36 @@ class TestModels(NewsBlogTestCase):
         self.assertContains(response, title)
         self.assertContains(response, content)
 
+
+class TestModelsTransactions(NewsBlogTransactionTestCase):
+
     def test_duplicate_title_and_language(self):
         """
         Test that if user attempts to create an article with the same name and
         in the same language as another, it will not raise exceptions.
         """
+        title = "Sample Article"
         author = self.create_person()
-        article = Article.objects.create(
-            title="Sample Article", author=author, owner=author.user,
+        # Create an initial article in the first language
+        article = Article(
+            title=title, author=author, owner=author.user,
             app_config=self.app_config, publishing_date=now()
         )
+        article.set_current_language(settings.LANGUAGES[0][0])
         article.save()
-        # We want to try to create an article in all the other languages with
-        # the exact same title.
-        for language_code, language_name in settings.LANGUAGES:
-            try:
-                article = Article.objects.create(
-                    title="Sample Article", author=author, owner=author.user,
-                    app_config=self.app_config, publishing_date=now()
-                )
-                article.set_current_language(language_code)
-                article.save()
-            except:
-                self.fail('Creating article with identical name raises exception')
+
+        # Now try to create an article with the same title in every possible
+        # language and every possible language context.
+        for outer_lang, _ in settings.LANGUAGES:
+            with override(outer_lang):
+                for inner_lang, _ in settings.LANGUAGES:
+                    try:
+                        article = Article(
+                            title=title, author=author, owner=author.user,
+                            app_config=self.app_config, publishing_date=now()
+                        )
+                        article.set_current_language(inner_lang)
+                        article.save()
+                    except:
+                        self.fail('Creating article with identical name '
+                                  'raises exception')
