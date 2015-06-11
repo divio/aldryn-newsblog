@@ -110,26 +110,31 @@ class TestModelsTransactions(NewsBlogTransactionTestCase):
         """
         title = "Sample Article"
         author = self.create_person()
+        article1_lang = settings.LANGUAGES[0][0]
         # Create an initial article in the first language
-        article = Article(
+        article1 = Article(
             title=title, author=author, owner=author.user,
             app_config=self.app_config, publishing_date=now()
         )
-        article.set_current_language(settings.LANGUAGES[0][0])
-        article.save()
+        article1.set_current_language(article1_lang)
+        article1.save()
 
         # Now try to create an article with the same title in every possible
-        # language and every possible language context.
-        for outer_lang, _ in settings.LANGUAGES:
-            with override(outer_lang):
-                for inner_lang, _ in settings.LANGUAGES:
+        # language and every possible language contexts.
+        for context_lang, _ in settings.LANGUAGES:
+            with override(context_lang):
+                for article_lang, _ in settings.LANGUAGES:
                     try:
-                        article = Article(
-                            title=title, author=author, owner=author.user,
-                            app_config=self.app_config, publishing_date=now()
-                        )
-                        article.set_current_language(inner_lang)
+                        article = Article(author=author, owner=author.user,
+                            app_config=self.app_config, publishing_date=now())
+                        article.set_current_language(article_lang)
+                        article.title = title
                         article.save()
-                    except:
-                        self.fail('Creating article with identical name '
-                                  'raises exception')
+                    except Exception:
+                        self.fail('Creating article in process context "{0}" '
+                            'and article language "{1}" with identical name '
+                            'as another "{2}" article raises exception'.format(
+                                context_lang,
+                                article_lang,
+                                article1_lang,
+                            ))
