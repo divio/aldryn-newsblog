@@ -4,13 +4,14 @@ from __future__ import unicode_literals
 
 import os
 
+from django.conf import settings
 from django.utils.timezone import now
-from django.utils.translation import activate
+from django.utils.translation import activate, override
 
 from aldryn_newsblog.models import Article
 from cms import api
 
-from . import NewsBlogTestCase, TESTS_STATIC_ROOT
+from . import NewsBlogTestCase, NewsBlogTransactionTestCase, TESTS_STATIC_ROOT
 
 FEATURED_IMAGE_PATH = os.path.join(TESTS_STATIC_ROOT, 'featured_image.jpg')
 
@@ -98,3 +99,42 @@ class TestModels(NewsBlogTestCase):
         response = self.client.get(article.get_absolute_url())
         self.assertContains(response, title)
         self.assertContains(response, content)
+
+
+class TestModelsTransactions(NewsBlogTransactionTestCase):
+
+    def test_duplicate_title_and_language(self):
+        """
+        Test that if user attempts to create an article with the same name and
+        in the same language as another, it will not raise exceptions.
+        """
+        title = "Sample Article"
+        author = self.create_person()
+        original_lang = settings.LANGUAGES[0][0]
+        # Create an initial article in the first language
+        article1 = Article(
+            title=title, author=author, owner=author.user,
+            app_config=self.app_config, publishing_date=now()
+        )
+        article1.set_current_language(original_lang)
+        article1.save()
+
+        # Now try to create an article with the same title in every possible
+        # language and every possible language contexts.
+        for context_lang, _ in settings.LANGUAGES:
+            with override(context_lang):
+                for article_lang, _ in settings.LANGUAGES:
+                    try:
+                        article = Article(author=author, owner=author.user,
+                            app_config=self.app_config, publishing_date=now())
+                        article.set_current_language(article_lang)
+                        article.title = title
+                        article.save()
+                    except Exception:
+                        self.fail('Creating article in process context "{0}" '
+                            'and article language "{1}" with identical name '
+                            'as another "{2}" article raises exception'.format(
+                                context_lang,
+                                article_lang,
+                                original_lang,
+                            ))

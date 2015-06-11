@@ -26,10 +26,6 @@ HELPER_SETTINGS = {
         'sortedm2m',
         'taggit',
     ],
-    'MIGRATION_MODULES': {
-        # 'cms': 'cms.migrations_django',
-        'djangocms_text_ckeditor': 'djangocms_text_ckeditor.migrations_django',
-    },
     'TEMPLATE_DIRS': (
         os.path.join(
             os.path.dirname(__file__),
