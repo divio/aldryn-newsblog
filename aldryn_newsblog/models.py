@@ -234,8 +234,8 @@ class Article(TranslationHelperMixin, TranslatableModel):
             self.slug = ugettext('untitled-article')
 
         # Ensure we aren't colliding with an existing slug *for this language*.
-        if not Article.objects.translated(
-                slug=self.slug).exclude(pk=self.pk).exists():
+        if not Article.objects.language(self.get_current_language()).filter(
+                translations__slug=self.slug).exclude(pk=self.pk).exists():
             return super(Article, self).save(*args, **kwargs)
 
         for lang in LANGUAGE_CODES:
