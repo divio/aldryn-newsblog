@@ -2,8 +2,9 @@
 Basic usage
 ###########
 
-Aldryn NewsBlog works the way that many django-CMS-compatible applications to. It expects you to
-create a new page for it in django CMS, and then attach it to that page with an Apphook.
+Aldryn News & Blog works the way that many django-CMS-compatible applications to.
+It expects you to create a new page for it in django CMS, and then attach it to
+that page with an Apphook.
 
 ***************
 Getting started

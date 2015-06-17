@@ -11,8 +11,8 @@ or::
     pip install -e git+https://github.com/aldryn/aldryn-newsblog.git#egg=aldryn-newsblog
 
 If you need to start a new project, we recommend that first you use the `django CMS Installer
-<http://djangocms-installer.readthedocs.org>`_ to create it, and then install Aldryn NewsBlog on
-top of that.
+<http://djangocms-installer.readthedocs.org>`_ to create it, and then install
+Aldryn News & Blog on top of that.
 
 In your project's ``settings.py`` make sure you have all of::
 
