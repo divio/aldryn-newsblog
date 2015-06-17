@@ -33,7 +33,7 @@ CHANGELOG
 * Add "magic" migrations to move from old-style CMS plugin table naming to new
   for users using older versions of CMS.
 * Post a deprecation notice about supporting only CMS 3.0+ from version 1.0.0
-  of Aldryn NewsBlog.
+  of Aldryn News & Blog.
 
 
 0.9.2 (2015-04-21)

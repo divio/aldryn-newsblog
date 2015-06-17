@@ -1,10 +1,10 @@
-###############
-Aldryn NewsBlog
-###############
+##################
+Aldryn News & Blog
+##################
 
 
-Aldryn NewsBlog is an `Aldryn <http://aldryn.com>`_-compatible news and weblog application for
-`django CMS <http://django-cms.org>`_.
+Aldryn News & Blog is an `Aldryn <http://aldryn.com>`_-compatible news and
+weblog application for `django CMS <http://django-cms.org>`_.
 
 **Web content editors** looking for documentation on how to use the editing
 interface should refer to our :doc:`/user/index` section.

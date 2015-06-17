@@ -1,8 +1,8 @@
 |PyPI Version| |Build Status| |Coverage Status| |codeclimate| |requires_io|
 
-===============
-Aldryn Newsblog
-===============
+==================
+Aldryn News & Blog
+==================
 
 NOTICE: ::
 
@@ -41,8 +41,8 @@ Description
 
 A combined news/weblog application for Aldryn and django CMS.
 
-Aldryn NewsBlog is intended to serve as a model of good practice for development
-of django CMS and Aldryn applications.
+Aldryn News & Blog is intended to serve as a model of good practice for
+development of django CMS and Aldryn applications.
 
 
 --------------------
@@ -62,7 +62,7 @@ Aldryn Platform Users
 
 2) Go to **Apps** > **Install App**
 
-3) Click **Install** next to the **NewsBlog** app.
+3) Click **Install** next to the **News & Blog** app.
 
 4) Redeploy the site.
 
@@ -154,8 +154,8 @@ Settings
 ~~~~~~~~
 
 The flag `ALDRYN_NEWSBLOG_SEARCH` can be set to `False` in settings if indexing
-should be globally disabled for NewsBlog. When this is `False`, it overrides
-the setting in the application configuration on each apphook.
+should be globally disabled for Aldryn News & Blog. When this is `False`, it
+overrides the setting in the application configuration on each apphook.
 
 If aldryn-search, Haystack, et al, are not installed, this setting does nothing.
 
