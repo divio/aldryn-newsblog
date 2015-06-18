@@ -126,7 +126,7 @@ Manual Installation
        …
     }
 
-4) Add Required Easy Thumbnail setting
+5) Add Required Easy Thumbnail setting
 
    Aldryn News & Blog requires the use of the optional "subject location"
    processor from Django Filer for Easy Thumbnails. This requires setting the
@@ -147,7 +147,7 @@ Manual Installation
 
 .. _documentation for Django Filer: http://django-filer.readthedocs.org/en/latest/installation.html#subject-location-aware-cropping
 
-5) (Re-)Start your application server.
+6) (Re-)Start your application server.
 
 
 Settings
