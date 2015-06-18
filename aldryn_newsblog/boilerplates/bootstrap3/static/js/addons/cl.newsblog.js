@@ -43,8 +43,10 @@ var Cl = window.Cl || {};
     };
 
     // autoload
-    if ($('.js-aldryn-newsblog-article-search').length) {
-        Cl.newsBlog.init();
-    }
+    $(function () {
+        if ($('.js-aldryn-newsblog-article-search').length) {
+            Cl.newsBlog.init();
+        }
+    });
 
 })(jQuery);
