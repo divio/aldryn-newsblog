@@ -29,12 +29,12 @@ class ArticleQuerySet(QuerySetMixin, TranslatableQuerySet):
 
 
 class RelatedManager(ManagerMixin, TranslatableManager):
-    def get_query_set(self):
+    def get_queryset(self):
         qs = ArticleQuerySet(self.model, using=self.db)
         return qs.select_related('featured_image')
 
     def published(self):
-        return self.get_query_set().published()
+        return self.get_queryset().published()
 
     def get_months(self, request, namespace):
         """

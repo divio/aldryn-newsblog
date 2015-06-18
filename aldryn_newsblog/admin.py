@@ -45,6 +45,7 @@ class ArticleAdminForm(TranslatableModelForm):
 
     class Meta:
         model = models.Article
+        fields = '__all__'
 
     def __init__(self, *args, **kwargs):
         super(ArticleAdminForm, self).__init__(*args, **kwargs)
