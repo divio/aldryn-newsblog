@@ -24,7 +24,7 @@ class TemplatePrefixMixin(object):
 
 
 class NewsBlogPlugin(TemplatePrefixMixin, CMSPluginBase):
-    module = 'NewsBlog'
+    module = 'News & Blog'
 
 
 @plugin_pool.register_plugin
