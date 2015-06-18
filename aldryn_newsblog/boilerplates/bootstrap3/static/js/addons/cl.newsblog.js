@@ -31,9 +31,9 @@ var Cl = window.Cl || {};
                 e.preventDefault();
 
                 $.ajax({
-                    'type': 'get',
-                    'url': form.prop('action'),
-                    'data': form.serialize()
+                    type: 'GET',
+                    url: form.prop('action'),
+                    data: form.serialize()
                 }).always(function (data) {
                     form.siblings('.js-search-results').html(data);
                 });
