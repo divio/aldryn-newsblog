@@ -14,16 +14,15 @@ var Cl = window.Cl || {};
 
     Cl.newsBlog = {
 
-        // INFO: autoinit certain functionalities
         init: function () {
             var that = this;
 
+            // there might be more addons available within one page
             $('.js-aldryn-newsblog-article-search').each(function () {
                 that._search($(this));
             });
         },
 
-        // INFO: handles search form
         _search: function (container) {
             var form = container.find('form');
 
