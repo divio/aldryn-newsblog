@@ -70,8 +70,8 @@ Aldryn Platform Users
 Manual Installation
 ~~~~~~~~~~~~~~~~~~~
 
-1) Run `pip install aldryn-newsblog`. Also note that a number of other packages
-   may need to be installed if they are not already: ::
+1) Run ``pip install aldryn-newsblog``. Also note that a number of other
+   packages may need to be installed if they are not already: ::
 
       aldryn-apphooks-config
       aldryn-boilerplates
@@ -105,10 +105,9 @@ Manual Installation
         …
     ]
 
-   Please see notes regarding `Django CMS Requirements`_ and `Django Appdata`_
-   below, however.
+   Please see notes regarding `Django CMS Requirements`.
 
-3) Configure ``aldryn-boilerplates`` (https://pypi.python.org/pypi/aldryn-boilerplates/).
+3) Configure Aldryn Boilerplates (https://pypi.python.org/pypi/aldryn-boilerplates/).
 
    To use the old templates, set ``ALDRYN_BOILERPLATE_NAME='legacy'``.
    To use https://github.com/aldryn/aldryn-boilerplate-standard (recommended, will be renamed to
@@ -116,8 +115,8 @@ Manual Installation
 
 4) Run migrations: ``python manage.py migrate aldryn_newsblog``.
 
-   NOTE: aldryn_newsblog supports both South and Django 1.7 migrations. If using
-   Django 1.7, you may need to add the following to your settings: ::
+   NOTE: Aldryn News & Blog supports both South and Django 1.7 migrations. If
+   using Django 1.7, you may need to add the following to your settings: ::
 
     MIGRATION_MODULES = {
        …
@@ -129,9 +128,9 @@ Manual Installation
 
 4) Add Required Easy Thumbnail setting
 
-   aldryn-newsblog requires the use of the optional "subject location" processor
-   from Django Filer for Easy Thumbnails. This requires setting the
-   THUMBNAIL_PROCESSORS tuple in your project's settings and explicitly omitting
+   Aldryn News & Blog requires the use of the optional "subject location"
+   processor from Django Filer for Easy Thumbnails. This requires setting the
+   ``THUMBNAIL_PROCESSORS`` tuple in your project's settings and explicitly omitting
    the default processor ``scale_and_crop`` and including the optional
    ``scale_and_crop_with_subject_location`` processor. For example: ::
 
@@ -143,9 +142,10 @@ Manual Installation
         'easy_thumbnails.processors.filters',
     )
 
-   For more information on this optional processor, see the `documentation for Django Filer`__.
+   For more information on this optional processor, see the
+   `documentation for Django Filer`_.
 
-__ http://django-filer.readthedocs.org/en/latest/installation.html#subject-location-aware-cropping
+.. _documentation for Django Filer: http://django-filer.readthedocs.org/en/latest/installation.html#subject-location-aware-cropping
 
 5) (Re-)Start your application server.
 
@@ -153,11 +153,12 @@ __ http://django-filer.readthedocs.org/en/latest/installation.html#subject-locat
 Settings
 ~~~~~~~~
 
-The flag `ALDRYN_NEWSBLOG_SEARCH` can be set to `False` in settings if indexing
-should be globally disabled for Aldryn News & Blog. When this is `False`, it
-overrides the setting in the application configuration on each apphook.
+The flag ``ALDRYN_NEWSBLOG_SEARCH`` can be set to ``False`` in settings if
+indexing should be globally disabled for Aldryn News & Blog. When this is
+``False``, it overrides the setting in the application configuration on each
+apphook.
 
-If aldryn-search, Haystack, et al, are not installed, this setting does nothing.
+If Aldryn Search, Haystack, et al, are not installed, this setting does nothing.
 
 
 -----
@@ -169,7 +170,7 @@ Related Articles Plugin
 
 The Related Articles plugin is only appropriate for use only on the article
 detail view. If the plugin in placed on any other page, it will render an empty
-`<DIV></DIV>`.
+``<DIV></DIV>``.
 
 
 Known Issues
@@ -177,9 +178,21 @@ Known Issues
 
 Due to the way existing versions of Django work, after creating a new app-hook,
 django CMS requires that the server is restarted. This is a long-standing issue.
-For more information, see the `documentation for django CMS`__.
+For more information, see the `documentation for django CMS`_.
 
-__ https://django-cms.readthedocs.org/en/support-3.0.x/how_to/apphooks.html#apphooks
+.. _documentation for django CMS: https://django-cms.readthedocs.org/en/support-3.0.x/how_to/apphooks.html#apphooks
+
+
+Contributing
+~~~~~~~~~~~~
+
+This is a community project. We love to get any feedback on this project in the
+form of issues_ and `pull requests`_. Before submitting your pull request,
+please review our guidelines for `Aldryn Addons`_.
+
+.. _issues: https://github.com/aldryn/aldryn-newsblog/issues
+.. _pull requests: https://github.com/aldryn/aldryn-newsblog/pulls
+.. _Aldryn Addons: http://docs.aldryn.com/en/latest/reference/addons/index.html
 
 
 .. |PyPI Version| image:: http://img.shields.io/pypi/v/aldryn-newsblog.svg
