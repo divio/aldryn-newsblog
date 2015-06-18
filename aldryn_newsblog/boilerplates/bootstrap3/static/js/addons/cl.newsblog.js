@@ -35,6 +35,8 @@ var Cl = window.Cl || {};
                     data: form.serialize()
                 }).always(function (data) {
                     form.siblings('.js-search-results').html(data);
+                }).error(function () {
+                    alert('REQUEST TIMEOUT');
                 });
             });
         }
