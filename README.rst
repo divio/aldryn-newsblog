@@ -170,7 +170,7 @@ Related Articles Plugin
 
 The Related Articles plugin is only appropriate for use only on the article
 detail view. If the plugin in placed on any other page, it will render an empty
-``<DIV></DIV>``.
+``<div></div>``.
 
 
 Known Issues
