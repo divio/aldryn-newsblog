@@ -186,9 +186,9 @@ For more information, see the `documentation for django CMS`_.
 Contributing
 ~~~~~~~~~~~~
 
-This is a community project. We love to get any feedback on this project in the
-form of issues_ and `pull requests`_. Before submitting your pull request,
-please review our guidelines for `Aldryn Addons`_.
+This is a community project. We love to get any feedback in the form of issues_
+and `pull requests`_. Before submitting your pull request, please review our
+guidelines for `Aldryn Addons`_.
 
 .. _issues: https://github.com/aldryn/aldryn-newsblog/issues
 .. _pull requests: https://github.com/aldryn/aldryn-newsblog/pulls
