@@ -1,8 +1,6 @@
 {% load i18n sekizai_tags staticfiles %}
 
-{% addtoblock "css" %}<link rel="stylesheet" href="{% static "css/aldryn-newsblog/article.css" %}">{% endaddtoblock %}
-
-<div class="aldryn aldryn-newsblog aldryn-newsblog-article-search">
+<div class="aldryn aldryn-newsblog aldryn-newsblog-article-search js-aldryn-newsblog-article-search">
     <form action="{{ query_url }}" class="form-inline" method="get">
         {% csrf_token %}
         <input type="hidden" name="max_articles" value="{{ instance.max_articles }}">
@@ -18,21 +16,5 @@
     <div class="search-results js-search-results"></div>
 </div>
 
-{% addtoblock "js" %}
-<script>
-jQuery(document).ready(function () {
-    $('.aldryn-newsblog-article-search form').on('submit', function (e) {
-        e.preventDefault();
-        var form = $(this);
-
-        $.ajax({
-            'type': 'get',
-            'url': form.prop('action'),
-            'data': form.serialize()
-        }).always(function (data) {
-            form.siblings('.js-search-results').html(data);
-        });
-    });
-});
-</script>
-{% endaddtoblock %}
+{% addtoblock "css" %}<link rel="stylesheet" href="{% static 'css/aldryn-newsblog/article.css' %}">{% endaddtoblock %}
+{% addtoblock "js" %}<script src="{% static 'js/addons/cl.newsblog.js' %}"></script>{% endaddtoblock %}
