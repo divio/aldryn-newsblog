@@ -52,6 +52,7 @@ These include:
 Please familiarise yourself with this documentation if you'd like to contribute
 to Aldryn News & Blog.
 
+
 *************
 Running tests
 *************
