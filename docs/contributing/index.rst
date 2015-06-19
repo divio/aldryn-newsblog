@@ -13,8 +13,8 @@ guidelines.
 Divio AG
 ********
 
-Aldryn News & Blog was created at `Divio AG <https://divio.ch/>`_ of Zürich,
-Switzerland and is released under a BSD licence.
+Aldryn News & Blog is developed by `Divio AG <https://divio.ch/>`_
+and released under a BSD licence.
 
 Aldryn News & Blog is compatible with Divio's `Aldryn <http://aldryn.com>`_
 cloud-based `django CMS <http://django-cms.org>`_ hosting platform, and

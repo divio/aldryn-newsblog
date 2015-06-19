@@ -10,6 +10,12 @@ or by hand into your own project.
 Aldryn Platform Users
 *********************
 
+To install the addon on Aldryn, all you need to do is follow this
+`installation link <https://control.aldryn.com/control/?select_project_for_addon=aldryn-events>`_
+on the Aldryn Marketplace and follow the instructions.
+
+Manually you can:
+
 #. Choose a site you want to install the add-on to from the dashboard.
 #. Go to Apps > Install App
 #. Click Install next to the News & Blog app.
