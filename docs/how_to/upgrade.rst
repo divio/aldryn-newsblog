@@ -19,7 +19,7 @@ then, you can upgrade to futher CMS releases (3.1.x, etc.)
 
 
 ******************
-Upgrade from 1.0.0
+Upgrade from 0.5.0
 ******************
 
 .. node::
