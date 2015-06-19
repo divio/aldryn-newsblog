@@ -11,7 +11,7 @@ Upgrade from 1.0.0
 
 .. note::
 
-    FROM VERSION 1.0.0, ALDRYN_NEWSBLOG WILL REQUIRE CMS 3.0 OR LATER
+    From version 1.0.0, aldryn_newsblog will require django CMS 3.0 or later.
 
 If you intend to migrate from a 2.x project, please make sure you first
 upgrade your project to the latest CMS 3.0.x, run all South migrations,
@@ -22,9 +22,9 @@ then, you can upgrade to futher CMS releases (3.1.x, etc.)
 Upgrade from 0.5.0
 ******************
 
-.. node::
+.. note::
 
-    IF YOU'RE UPGRADING FROM A VERSION EARLIER THAN 0.5.0, PLEASE READ THIS.
+    If you're upgrading from a version earlier than 0.5.0.
 
 In this version 0.5.0, we're deprecating all of the static placeholders and
 instead making them PlaceholderFields on the app_config object. This means
