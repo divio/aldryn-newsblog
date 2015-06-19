@@ -130,8 +130,12 @@ If using Django 1.7, you may need to add the following to your settings: ::
     MIGRATION_MODULES = {
        ...
        # The following are for some of the dependencies.
-       'djangocms_text_ckeditor': 'djangocms_text_ckeditor.migrations_django',
-       'filer': 'filer.migrations_django',
+
+       # Use this if you're using a version of djangocms_text_ckeditor < 2.5.1
+       # 'djangocms_text_ckeditor': 'djangocms_text_ckeditor.migrations_django',
+
+       # Use this if you're using a version of Filer < 0.9.10
+       # 'filer': 'filer.migrations_django',
        ...
     }
 
