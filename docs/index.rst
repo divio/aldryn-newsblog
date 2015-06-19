@@ -13,10 +13,18 @@ how to install, configure and customize it for their own projects should
 refer to the :doc:`/introduction/index`, :doc:`/how_to/index`,
 :doc:`/topics/index` and :doc:`/reference/index` sections.
 
+Aldryn News & Blog is intended to serve as a model of good practice for
+development of django CMS and Aldryn applications.
+
+
+#############
+Documentation
+#############
+
+
 .. toctree::
    :maxdepth: 2
 
-   introduction/index
    how_to/index
    topics/index
    reference/index
