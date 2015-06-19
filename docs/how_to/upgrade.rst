@@ -2,7 +2,8 @@
 Upgrading
 #########
 
-Pleae mind the following upgrade notices:
+The `CHANGELOG <https://github.com/aldryn/aldryn-newsblog/blob/master/CHANGELOG.rst>`_
+is maintained and updated within the repository.
 
 
 ******************
