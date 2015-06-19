@@ -1,6 +1,6 @@
-#############################
-Installing Aldryn News & Blog
-#############################
+############
+Installation
+############
 
 You can install Aldryn News & Blog either on `Aldryn <http://www.aldryn.com>`_
 or by hand into your own project.
@@ -141,3 +141,5 @@ You also need to set the *Application configurations* and
 
 Finally you just need to **restart your local development server** and you are
 ready to go.
+
+This process is described in more depth within :doc:`/how_to/basic_usage`.

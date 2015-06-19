@@ -1,13 +1,13 @@
-############################
-Upgrading Aldryn News & Blog
-############################
+#########
+Upgrading
+#########
 
 Pleae mind the following upgrade notices:
 
 
-------------------
+******************
 Upgrade from 1.0.0
-------------------
+******************
 
 .. note::
 
@@ -18,9 +18,9 @@ upgrade your project to the latest CMS 3.0.x, run all South migrations,
 then, you can upgrade to futher CMS releases (3.1.x, etc.)
 
 
-------------------
+******************
 Upgrade from 1.0.0
-------------------
+******************
 
 .. node::
 
