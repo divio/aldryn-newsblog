@@ -8,4 +8,5 @@ These guides presuppose some familiarity with django CMS.
    :maxdepth: 2
 
    install
+   upgrade
    basic_usage
