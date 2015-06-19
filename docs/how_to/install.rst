@@ -11,7 +11,7 @@ Aldryn Platform Users
 *********************
 
 To install the addon on Aldryn, all you need to do is follow this
-`installation link <https://control.aldryn.com/control/?select_project_for_addon=aldryn-events>`_
+`installation link <https://control.aldryn.com/control/?select_project_for_addon=aldryn-newsblog>`_
 on the Aldryn Marketplace and follow the instructions.
 
 Manually you can:
