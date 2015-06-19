@@ -1,199 +1,49 @@
+##################
+Aldryn News & Blog
+##################
+
 |PyPI Version| |Build Status| |Coverage Status| |codeclimate| |requires_io|
 
-==================
-Aldryn News & Blog
-==================
+Aldryn News & Blog is an `Aldryn <http://aldryn.com>`_-compatible news and
+weblog application for `django CMS <http://django-cms.org>`_.
 
-NOTICE: ::
+**Content editors** looking for documentation on how to use the editing
+interface should refer to our `user manual`_ section.
 
-    *FROM VERSION 1.0.0, ALDRYN_NEWSBLOG WILL REQUIRE CMS 3.0 OR LATER*
-
-    If you intend to migrate from a 2.x project, please make sure you first
-    upgrade your project to the latest CMS 3.0.x, run all South migrations,
-    then, you can upgrade to futher CMS releases (3.1.x, etc.)
-
-NOTICE: ::
-
-    *IF YOU'RE UPGRADING FROM A VERSION EARLIER THAN 0.5.0, PLEASE READ THIS.*
-
-    In this version 0.5.0, we're deprecating all of the static placeholders and
-    instead making them PlaceholderFields on the app_config object. This means
-    that you'll be able to have content that is different in each instance of
-    the app, which was originally intended.
-
-    Because some may have already used these static placeholders, there will be
-    a (very) short deprecation cycle. 0.5.0 will introduce the new
-    PlaceholderFields whilst leaving the existing static placeholders intact.
-    This will allow developers and content managers to move plugins from the old
-    to the new.
-
-    Version 0.6.0 will remove the old static placeholders to avoid any further
-    confusion.
-
-    ALSO NOTE: The article's PlaceholderField has also had its visible name
-    updated. The old name will continue to be displayed in structure mode until
-    the article is saved. Similarly, the new app_config-based PlaceholderFields
-    will not actually appear in structure mode until the app_config is saved
-    again.
-
-Description
-~~~~~~~~~~~
-
-A combined news/weblog application for Aldryn and django CMS.
+**Django developers** who want to learn more about django CMS, as well as
+how to install, configure and customize it for their own projects should
+refer to the `documentation`_ sections.
 
 Aldryn News & Blog is intended to serve as a model of good practice for
 development of django CMS and Aldryn applications.
 
-
---------------------
-Installation & Usage
---------------------
-
-django CMS Requirements
-~~~~~~~~~~~~~~~~~~~~~~~
-
-This project requires django CMS 3.0.12 or later.
+.. _user manual: http://aldryn-newsblog.readthedocs.org/en/latest/user/index.html
 
 
-Aldryn Platform Users
-~~~~~~~~~~~~~~~~~~~~~
+======================
+Installation & Updates
+======================
 
-1) Choose a site you want to install the add-on to from the dashboard.
+Please head over to our `documentation`_ for all the details on how to install,
+configure and use Aldryn News & Blog.
 
-2) Go to **Apps** > **Install App**
+You can also find instructions on `how to upgrade`_ from earlier versions.
 
-3) Click **Install** next to the **News & Blog** app.
-
-4) Redeploy the site.
-
-
-Manual Installation
-~~~~~~~~~~~~~~~~~~~
-
-1) Run ``pip install aldryn-newsblog``. Also note that a number of other
-   packages may need to be installed if they are not already: ::
-
-      aldryn-apphooks-config
-      aldryn-boilerplates
-      aldryn-categories
-      aldryn-people
-      aldryn-reversion
-      djangocms-text-ckeditor
-      easy_thumbnails
-      django-filer
-      django-parler
-      django-reversion
-      django-taggit
-
-2) Add below apps to ``INSTALLED_APPS``: ::
-
-    INSTALLED_APPS = [
-        …
-        'aldryn_apphooks_config',
-        'aldryn_boilerplates',
-        'aldryn_categories',
-        'aldryn_newsblog',
-        'aldryn_people',
-        'aldryn_reversion',
-        'djangocms_text_ckeditor',
-        'easy_thumbnails',
-        'filer',
-        'parler',
-        'reversion',
-        'sortedm2m',
-        'taggit',
-        …
-    ]
-
-   Please see notes regarding `Django CMS Requirements`.
-
-3) Configure Aldryn Boilerplates (https://pypi.python.org/pypi/aldryn-boilerplates/).
-
-   To use the old templates, set ``ALDRYN_BOILERPLATE_NAME='legacy'``. To use
-   https://github.com/aldryn/aldryn-boilerplate-bootstrap3 (recommended) set
-   ``ALDRYN_BOILERPLATE_NAME='bootstrap3'``.
-
-4) Run migrations: ``python manage.py migrate aldryn_newsblog``.
-
-   NOTE: Aldryn News & Blog supports both South and Django 1.7 migrations. If
-   using Django 1.7, you may need to add the following to your settings: ::
-
-    MIGRATION_MODULES = {
-       …
-       # The following are for some of the dependencies.
-       'djangocms_text_ckeditor': 'djangocms_text_ckeditor.migrations_django',
-       'filer': 'filer.migrations_django',
-       …
-    }
-
-5) Add Required Easy Thumbnail setting
-
-   Aldryn News & Blog requires the use of the optional "subject location"
-   processor from Django Filer for Easy Thumbnails. This requires setting the
-   ``THUMBNAIL_PROCESSORS`` tuple in your project's settings and explicitly omitting
-   the default processor ``scale_and_crop`` and including the optional
-   ``scale_and_crop_with_subject_location`` processor. For example: ::
-
-    THUMBNAIL_PROCESSORS = (
-        'easy_thumbnails.processors.colorspace',
-        'easy_thumbnails.processors.autocrop',
-        # 'easy_thumbnails.processors.scale_and_crop',
-        'filer.thumbnail_processors.scale_and_crop_with_subject_location',
-        'easy_thumbnails.processors.filters',
-        'easy_thumbnails.processors.background',
-    )
-
-   For more information on this optional processor, see the
-   `documentation for Django Filer`_.
-
-.. _documentation for Django Filer: http://django-filer.readthedocs.org/en/latest/installation.html#subject-location-aware-cropping
-
-6) (Re-)Start your application server.
+.. _documentation: http://aldryn-newsblog.readthedocs.org/en/latest/how_to/index.html
+.. _how to upgrade: http://aldryn-newsblog.readthedocs.org/en/latest/how_to/upgrade.html
 
 
-Settings
-~~~~~~~~
-
-The flag ``ALDRYN_NEWSBLOG_SEARCH`` can be set to ``False`` in settings if
-indexing should be globally disabled for Aldryn News & Blog. When this is
-``False``, it overrides the setting in the application configuration on each
-apphook.
-
-If Aldryn Search, Haystack, et al, are not installed, this setting does nothing.
-
-
------
-Notes
------
-
-Related Articles Plugin
-~~~~~~~~~~~~~~~~~~~~~~~
-
-The Related Articles plugin is only appropriate for use only on the article
-detail view. If the plugin in placed on any other page, it will render an empty
-``<div></div>``.
-
-
-Known Issues
-~~~~~~~~~~~~
-
-Due to the way existing versions of Django work, after creating a new app-hook,
-django CMS requires that the server is restarted. This is a long-standing issue.
-For more information, see the `documentation for django CMS`_.
-
-.. _documentation for django CMS: https://django-cms.readthedocs.org/en/support-3.0.x/how_to/apphooks.html#apphooks
-
-
+============
 Contributing
-~~~~~~~~~~~~
+============
 
-This is a community project. We love to get any feedback in the form of issues_
-and `pull requests`_. Before submitting your pull request, please review our
-guidelines for `Aldryn Addons`_.
+This is a community project. We love to get any feedback in the form of
+`issues`_ and `pull requests`_. Before submitting your pull request, please
+review our guidelines for `Aldryn addons`_.
 
 .. _issues: https://github.com/aldryn/aldryn-newsblog/issues
 .. _pull requests: https://github.com/aldryn/aldryn-newsblog/pulls
-.. _Aldryn Addons: http://docs.aldryn.com/en/latest/reference/addons/index.html
+.. _Aldryn addons: http://docs.aldryn.com/en/latest/reference/addons/index.html
 
 
 .. |PyPI Version| image:: http://img.shields.io/pypi/v/aldryn-newsblog.svg
