@@ -83,3 +83,17 @@ There's more than one way to do this, but here's one to help you get started::
     # otherwise you'll get "Template not found" errors
     cd aldryn-newsblog
     ./test
+
+
+*************
+Documentation
+*************
+
+You can run the documentation locally for testing:
+
+#. navigate to the documentation ``cd /docs``
+#. run ``make install`` to install requirements
+#. run ``make run`` to run the server
+
+Now you can open **http://localhost:8000** on your favourite browser and start
+changing the rst files within ``docs/``.
