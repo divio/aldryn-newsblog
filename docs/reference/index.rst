@@ -3,8 +3,9 @@ Reference
 #########
 
 
+********
 Settings
-========
+********
 
 The flag ``ALDRYN_NEWSBLOG_SEARCH`` can be set to ``False`` in settings if
 indexing should be globally disabled for Aldryn News & Blog. When this is
@@ -12,6 +13,11 @@ indexing should be globally disabled for Aldryn News & Blog. When this is
 apphook.
 
 If Aldryn Search, Haystack, et al, are not installed, this setting does nothing.
+
+
+*******
+Plugins
+*******
 
 
 Related Articles Plugin

@@ -26,8 +26,6 @@ Documentation
    :maxdepth: 2
 
    how_to/index
-   topics/index
    reference/index
-   release/index
    user/index
-   development.rst
+   contributing/index
