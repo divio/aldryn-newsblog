@@ -253,7 +253,8 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [(
     'index', 'AldrynNewsblog', u'Aldryn News & Blog Documentation',
-    u'Divio AG', 'AldrynNewsblog', 'Aldryn News & Blog is an Aldryn-compatible news and weblog application for django CMS.',
+    u'Divio AG', 'AldrynNewsblog', 'Aldryn News & Blog is an Aldryn-compatible'
+    ' news and weblog application for django CMS.',
     'Miscellaneous'
 )]
 
