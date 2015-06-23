@@ -2,21 +2,21 @@
 {% load i18n cms_tags %}
 
 {% block content %}
-<div class="container">
-    <div class="row">
-        <div class="col-md-16 col-md-push-4">
-            {% if view.show_header %}
-            {% render_placeholder view.config.placeholder_base_top %}
-            {% endif %}
-            <div class="aldryn aldryn-newsblog">
-                {% block newsblog_title %}{% endblock %}
-                {% block newsblog_content %}{% endblock %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-16 col-md-push-4">
+                {% if view.show_header %}
+                    {% render_placeholder view.config.placeholder_base_top %}
+                {% endif %}
+                <div class="aldryn aldryn-newsblog">
+                    {% block newsblog_title %}{% endblock %}
+                    {% block newsblog_content %}{% endblock %}
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="aldryn aldryn-newsblog">
-        {% block newsblog_footer %}{% endblock %}
+        <div class="aldryn aldryn-newsblog">
+            {% block newsblog_footer %}{% endblock %}
+        </div>
     </div>
-</div>
 {% endblock content %}
