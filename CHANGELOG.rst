@@ -1,6 +1,14 @@
 CHANGELOG
 =========
 
+1.0.0 (2015-06-23)
+
+* First production release
+* i18n improvements
+* Spaces support fixes
+* Improve user documentation
+* Increase test coverage
+
 0.9.6 (2015-05-31)
 ------------------
 
