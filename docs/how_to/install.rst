@@ -117,7 +117,7 @@ Migrations
 ==========
 
 Now run ``python manage.py migrate`` if you have not already done so,
-foloowed by ``python manage.py migrate`` to prepare the database for the new applications.
+followed by ``python manage.py migrate`` to prepare the database for the new applications.
 
 Now run ``python manage.py migrate aldryn_newsblog``.
 
