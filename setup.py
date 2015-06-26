@@ -18,7 +18,7 @@ REQUIREMENTS = [
     'django-reversion>=1.8.2,<1.9',
     'django-sortedm2m',
     'django-taggit',
-    'django>=1.6,<1.8', # rq.filter: >=1.6,<1.8 | no support for django 1.8 yet
+    'django>=1.6,<1.8',  # rq.filter: >=1.6,<1.8 | not supporting django 1.8 yet
     'lxml',
     'pytz',
     'six',
