@@ -13,7 +13,7 @@ django-appdata>=0.1.4
 django-classy-tags
 # django-cms>=3.0.12
 django-filer
-django-mptt<0.7.0
+django-mptt<0.7.0 # rq.filter: <0.7.0 | needs to be pinned
 django-parler
 django-sekizai
 django-sortedm2m
