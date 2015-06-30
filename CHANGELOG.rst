@@ -1,7 +1,13 @@
 CHANGELOG
 =========
 
+1.0.1 (2015-06-30)
+------------------
+
+* Fixes an issue where unintended, empty translations are created
+
 1.0.0 (2015-06-23)
+------------------
 
 * First production release
 * i18n improvements
