@@ -524,7 +524,7 @@ def update_seach_index(sender, instance, **kwargs):
                        or instance.placeholder)
         if hasattr(placeholder, '_attached_model_cache'):
             if placeholder._attached_model_cache == Article:
-                article = placeholder._attached_model_cache.objects.get(
-                    content=placeholder.pk)
+                article = placeholder._attached_model_cache.objects.language(
+                    instance.language).get(content=placeholder.pk)
                 article.search_data = article.get_search_data(instance.language)
                 article.save()
