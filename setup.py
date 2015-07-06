@@ -3,6 +3,7 @@ from setuptools import setup, find_packages
 from aldryn_newsblog import __version__
 
 REQUIREMENTS = [
+    'Django>=1.6,<1.8',
     'aldryn-apphooks-config>=0.2.4',
     'aldryn-boilerplates',
     'aldryn-categories',
@@ -18,7 +19,6 @@ REQUIREMENTS = [
     'django-reversion>=1.8.2,<1.9',
     'django-sortedm2m',
     'django-taggit',
-    'django>=1.6,<1.8',
     'lxml',
     'pytz',
     'six',
