@@ -4,7 +4,6 @@ from __future__ import unicode_literals
 from django.conf import settings
 
 from aldryn_search.utils import get_index_base
-from parler.utils.context import switch_language
 
 from .models import Article
 
@@ -16,34 +15,27 @@ class ArticleIndex(get_index_base()):
     index_title = True
 
     def get_title(self, obj):
-        with switch_language(obj):
-            return obj.safe_translation_getter('title')
+        return obj.title
 
     def get_description(self, obj):
-        with switch_language(obj):
-            return obj.safe_translation_getter('lead_in')
+        return obj.lead_in
 
-    def index_queryset(self, using=None):
-        self._get_backend(using)
-        language = self.get_current_language(using)
-        filter_kwargs = self.get_index_kwargs(language)
-        qs = self.get_index_queryset(language)
-        if filter_kwargs:
-            return qs.translated(language, **filter_kwargs)
-        return qs
+    def get_index_kwargs(self, language):
+        """
+        This is called to filter the index queryset.
+        """
+        kwargs = {
+            'app_config__search_indexed': True,
+            'translations__language_code': language,
+        }
+        return kwargs
 
     def get_index_queryset(self, language):
-        return (
-            self.get_model().objects
-                            .published()
-                            .language(language)
-                            .active_translations(language_code=language)
-                            .filter(app_config__search_indexed=True)
-        )
+        queryset = super(ArticleIndex, self).get_index_queryset(language)
+        return queryset.published().language(language)
 
     def get_model(self):
         return Article
 
     def get_search_data(self, article, language, request):
-        with switch_language(article, language):
-            return article.safe_translation_getter('search_data')
+        return article.search_data
