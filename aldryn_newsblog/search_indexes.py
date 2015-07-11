@@ -14,6 +14,9 @@ class ArticleIndex(get_index_base()):
 
     index_title = True
 
+    def get_language(self, obj):
+        return getattr(obj, '_current_language', None)
+
     def get_title(self, obj):
         return obj.title
 
