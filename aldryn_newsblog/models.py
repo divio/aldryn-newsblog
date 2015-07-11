@@ -532,7 +532,7 @@ class NewsBlogTagsPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
         return _('%s tags') % (self.app_config.get_app_title(), )
 
 
-@receiver(post_save)
+@receiver(post_save, dispatch_uid='article_update_search_data')
 def update_seach_index(sender, instance, **kwargs):
     """
     Upon detecting changes in a plugin used in an Article's content
