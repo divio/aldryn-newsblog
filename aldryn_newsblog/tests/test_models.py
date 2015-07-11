@@ -82,6 +82,54 @@ class TestModels(NewsBlogTestCase):
         self.assertEquals(article.author.name,
                           u' '.join((user.first_name, user.last_name)))
 
+    def test_auto_search_data(self):
+        activate(self.language)
+
+        user = self.create_user()
+
+        lead_in = 'Hello! this text will be searchable.'
+
+        Article.update_search_on_save = True
+
+        article = Article.objects.create(
+            title=self.rand_str(),
+            owner=user,
+            lead_in=lead_in,
+            app_config=self.app_config,
+            publishing_date=now()
+        )
+        article.save()
+
+        search_data = article.get_search_data()
+
+        self.assertEquals(lead_in, search_data)
+        self.assertEquals(article.search_data, search_data)
+
+    def test_auto_search_data_off(self):
+        activate(self.language)
+        user = self.create_user()
+
+        lead_in = 'Hello! this text will not be searchable.'
+
+        Article.update_search_on_save = False
+
+        article = Article.objects.create(
+            title=self.rand_str(),
+            owner=user,
+            lead_in=lead_in,
+            app_config=self.app_config,
+            publishing_date=now()
+        )
+        article.save()
+
+        search_data = article.get_search_data()
+
+        # set it back to true
+        Article.update_search_on_save = True
+
+        self.assertEquals(lead_in, search_data)
+        self.assertNotEquals(article.search_data, search_data)
+
     def test_has_content(self):
         # Just make sure we have a known language
         activate(self.language)
