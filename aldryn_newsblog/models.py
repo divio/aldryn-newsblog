@@ -20,28 +20,19 @@ from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _, ugettext, override
 
 from aldryn_apphooks_config.fields import AppHookConfigField
-
 from aldryn_categories.fields import CategoryManyToManyField
 from aldryn_categories.models import Category
-
 from aldryn_people.models import Person
-
 from aldryn_reversion.core import version_controlled_content
-
 from aldryn_translation_tools.models import TranslationHelperMixin
 
 from cms.models.fields import PlaceholderField
 from cms.models.pluginmodel import CMSPlugin
 from cms.utils.i18n import get_current_language, get_redirect_on_fallback
-
 from djangocms_text_ckeditor.fields import HTMLField
-
 from filer.fields.image import FilerImageField
-
 from parler.models import TranslatableModel, TranslatedFields
-
 from sortedm2m.fields import SortedManyToManyField
-
 from taggit.managers import TaggableManager
 from taggit.models import Tag
 
