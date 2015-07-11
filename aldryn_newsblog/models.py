@@ -20,19 +20,28 @@ from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _, ugettext, override
 
 from aldryn_apphooks_config.fields import AppHookConfigField
+
 from aldryn_categories.fields import CategoryManyToManyField
 from aldryn_categories.models import Category
+
 from aldryn_people.models import Person
+
 from aldryn_reversion.core import version_controlled_content
+
 from aldryn_translation_tools.models import TranslationHelperMixin
 
 from cms.models.fields import PlaceholderField
 from cms.models.pluginmodel import CMSPlugin
 from cms.utils.i18n import get_current_language, get_redirect_on_fallback
+
 from djangocms_text_ckeditor.fields import HTMLField
+
 from filer.fields.image import FilerImageField
+
 from parler.models import TranslatableModel, TranslatedFields
+
 from sortedm2m.fields import SortedManyToManyField
+
 from taggit.managers import TaggableManager
 from taggit.models import Tag
 
@@ -49,6 +58,16 @@ elif settings.LANGUAGE:
 else:
     raise ImproperlyConfigured(
         'Neither LANGUAGES nor LANGUAGE was found in settings.')
+
+
+# when True, updates the article's search_data field
+# whenever the article is saved or a plugin is saved
+# on the article's content placeholder.
+UPDATE_SEARCH_DATA_ON_SAVE = getattr(
+    settings,
+    'ALDRYN_NEWSBLOG_UPDATE_SEARCH_DATA_ON_SAVE',
+    True
+)
 
 
 # At startup time, SQL_NOW_FUNC will contain the database-appropriate SQL to
@@ -205,7 +224,8 @@ class Article(TranslationHelperMixin, TranslatableModel):
 
     def save(self, *args, **kwargs):
         # Update the search index
-        self.search_data = self.get_search_data()
+        if UPDATE_SEARCH_DATA_ON_SAVE:
+            self.search_data = self.get_search_data()
 
         # Ensure there is an owner.
         if self.app_config.create_authors and self.author is None:
@@ -519,7 +539,9 @@ def update_seach_index(sender, instance, **kwargs):
     (PlaceholderField), update the article's search_index so that we can
     perform simple searches even without Haystack, etc.
     """
-    if issubclass(instance.__class__, CMSPlugin):
+    is_cms_plugin = issubclass(instance.__class__, CMSPlugin)
+
+    if UPDATE_SEARCH_DATA_ON_SAVE and is_cms_plugin:
         placeholder = (getattr(instance, '_placeholder_cache', None)
                        or instance.placeholder)
         if hasattr(placeholder, '_attached_model_cache'):
