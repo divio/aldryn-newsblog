@@ -60,16 +60,6 @@ else:
         'Neither LANGUAGES nor LANGUAGE was found in settings.')
 
 
-# when True, updates the article's search_data field
-# whenever the article is saved or a plugin is saved
-# on the article's content placeholder.
-UPDATE_SEARCH_DATA_ON_SAVE = getattr(
-    settings,
-    'ALDRYN_NEWSBLOG_UPDATE_SEARCH_DATA_ON_SAVE',
-    True
-)
-
-
 # At startup time, SQL_NOW_FUNC will contain the database-appropriate SQL to
 # obtain the CURRENT_TIMESTAMP.
 SQL_NOW_FUNC = {
@@ -86,6 +76,15 @@ SQL_IS_TRUE = {
 @python_2_unicode_compatible
 @version_controlled_content
 class Article(TranslationHelperMixin, TranslatableModel):
+    # when True, updates the article's search_data field
+    # whenever the article is saved or a plugin is saved
+    # on the article's content placeholder.
+    update_search_on_save = getattr(
+        settings,
+        'ALDRYN_NEWSBLOG_UPDATE_SEARCH_DATA_ON_SAVE',
+        True
+    )
+
     translations = TranslatedFields(
         title=models.CharField(_('title'), max_length=234),
         slug=models.SlugField(
@@ -224,7 +223,7 @@ class Article(TranslationHelperMixin, TranslatableModel):
 
     def save(self, *args, **kwargs):
         # Update the search index
-        if UPDATE_SEARCH_DATA_ON_SAVE:
+        if self.update_search_on_save:
             self.search_data = self.get_search_data()
 
         # Ensure there is an owner.
@@ -541,7 +540,7 @@ def update_search_data(sender, instance, **kwargs):
     """
     is_cms_plugin = issubclass(instance.__class__, CMSPlugin)
 
-    if UPDATE_SEARCH_DATA_ON_SAVE and is_cms_plugin:
+    if Article.update_search_on_save and is_cms_plugin:
         placeholder = (getattr(instance, '_placeholder_cache', None)
                        or instance.placeholder)
         if hasattr(placeholder, '_attached_model_cache'):
