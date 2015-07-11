@@ -33,12 +33,16 @@ class Command(BaseCommand):
         translation_model = Article._parler_meta.root_model
 
         for article in Article.objects.published():
-            translations = article.translations.filter(language_code__in=languages)
+            translations = article.translations.filter(
+                language_code__in=languages
+            )
 
             # build internal parler cache
-            parler_cache = dict((trans.language_code, trans) for trans in translations)
+            parler_cache = dict(
+                (trans.language_code, trans) for trans in translations)
 
-            # set internal parler cache to avoid parler hitting db for every language
+            # set internal parler cache
+            # to avoid parler hitting db for every language
             article._translations_cache[translation_model] = parler_cache
 
             for translation in translations:
