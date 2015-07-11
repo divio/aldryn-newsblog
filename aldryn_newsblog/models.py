@@ -533,7 +533,7 @@ class NewsBlogTagsPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
 
 
 @receiver(post_save, dispatch_uid='article_update_search_data')
-def update_seach_index(sender, instance, **kwargs):
+def update_search_data(sender, instance, **kwargs):
     """
     Upon detecting changes in a plugin used in an Article's content
     (PlaceholderField), update the article's search_index so that we can
