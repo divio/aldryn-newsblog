@@ -24,10 +24,10 @@ to disable this feature.
 Management Commands
 *******************
 
-The management command: ``rebuild_article_search_data`` can be used to index all
-articles for searching. It can accept a switch ``--language`` or the short-hand
-``-l`` to specify the translations to index. If this switch is not provided, all
-translations are indexed by default.
+The management command: ``rebuild_article_search_data`` can be used to update
+the search_data in all articles for searching. It can accept a switch
+``--language`` or the short-hand ``-l`` to specify the translations to process.
+If this switch is not provided, all translations are indexed by default.
 
 
 *******
