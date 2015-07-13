@@ -11,53 +11,34 @@ from . import NewsBlogTestCase
 class ArticleIndexingTests(NewsBlogTestCase):
 
     def get_index(self):
-        return ArticleIndex()
-
-    def test_article_is_indexed_using_prepare(self):
         from haystack.constants import DEFAULT_ALIAS
 
-        activate(self.language)
+        index = ArticleIndex()
+        index._backend_alias = DEFAULT_ALIAS
+        return index
 
-        user = self.create_user()
+    def test_article_is_indexed_using_prepare(self):
+        activate(self.language)
 
         lead_in = 'Hello! this text will be searchable.'
 
-        article = Article.objects.create(
-            title=self.rand_str(),
-            owner=user,
-            lead_in=lead_in,
-            app_config=self.app_config,
-            publishing_date=now()
-        )
-        article.save()
+        article = self.create_article(lead_in=lead_in)
 
         index = self.get_index()
-        index._backend_alias = DEFAULT_ALIAS
 
         data = index.prepare(article)
 
         count = data['text'].count(lead_in)
 
-        self.assertTrue(count != 0, "Couldn't find %s in response" % lead_in)
+        self.assertTrue(count != 0, "Couldn't find %s in text" % lead_in)
 
     def test_translated_article_is_indexed_using_prepare(self):
-        from haystack.constants import DEFAULT_ALIAS
-
         activate(self.language)
-
-        user = self.create_user()
 
         lead_in = 'Hello! this text will be searchable.'
 
         # create english article
-        article = Article.objects.create(
-            title=self.rand_str(),
-            owner=user,
-            lead_in=lead_in,
-            app_config=self.app_config,
-            publishing_date=now()
-        )
-        article.save()
+        article = self.create_article(lead_in=lead_in)
 
         # create german translation for article
         article.set_current_language('de')
@@ -65,7 +46,6 @@ class ArticleIndexingTests(NewsBlogTestCase):
         article.save()
 
         index = self.get_index()
-        index._backend_alias = DEFAULT_ALIAS
 
         data = index.prepare(article)
 

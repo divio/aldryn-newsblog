@@ -100,6 +100,8 @@ class NewsBlogTestsMixin(object):
         fields.update(kwargs)
 
         article = Article.objects.create(**fields)
+        # save again to calculate article search_data.
+        article.save()
 
         if content:
             api.add_plugin(article.content, 'TextPlugin',
