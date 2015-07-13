@@ -96,6 +96,7 @@ HELPER_SETTINGS = {
     # that were previously used, which reveals this issue.
     #
     'PARLER_ENABLE_CACHING': False,
+    'ALDRYN_SEARCH_DEFAULT_LANGUAGE': 'en',
     'HAYSTACK_CONNECTIONS': {
         'default': {
             'ENGINE': 'haystack.backends.simple_backend.SimpleEngine',
