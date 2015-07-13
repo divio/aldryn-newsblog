@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-import os
-import shutil
-
-from django.conf import settings
 from django.utils.timezone import now
 from django.utils.translation import activate
 
