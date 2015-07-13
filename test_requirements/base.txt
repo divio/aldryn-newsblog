@@ -3,6 +3,7 @@ coverage>=3.7.1
 dj-database-url
 django-classy-tags
 django-mptt<0.7.0  # rq.filter: <0.7.0
+django-haystack
 django-sekizai
 django-treebeard>=2.0
 djangocms-admin-style

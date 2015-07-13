@@ -67,6 +67,15 @@ SQL_IS_TRUE = {
 @python_2_unicode_compatible
 @version_controlled_content
 class Article(TranslationHelperMixin, TranslatableModel):
+    # when True, updates the article's search_data field
+    # whenever the article is saved or a plugin is saved
+    # on the article's content placeholder.
+    update_search_on_save = getattr(
+        settings,
+        'ALDRYN_NEWSBLOG_UPDATE_SEARCH_DATA_ON_SAVE',
+        True
+    )
+
     translations = TranslatedFields(
         title=models.CharField(_('title'), max_length=234),
         slug=models.SlugField(
@@ -205,7 +214,8 @@ class Article(TranslationHelperMixin, TranslatableModel):
 
     def save(self, *args, **kwargs):
         # Update the search index
-        self.search_data = self.get_search_data()
+        if self.update_search_on_save:
+            self.search_data = self.get_search_data()
 
         # Ensure there is an owner.
         if self.app_config.create_authors and self.author is None:
@@ -512,14 +522,16 @@ class NewsBlogTagsPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
         return _('%s tags') % (self.app_config.get_app_title(), )
 
 
-@receiver(post_save)
-def update_seach_index(sender, instance, **kwargs):
+@receiver(post_save, dispatch_uid='article_update_search_data')
+def update_search_data(sender, instance, **kwargs):
     """
     Upon detecting changes in a plugin used in an Article's content
     (PlaceholderField), update the article's search_index so that we can
     perform simple searches even without Haystack, etc.
     """
-    if issubclass(instance.__class__, CMSPlugin):
+    is_cms_plugin = issubclass(instance.__class__, CMSPlugin)
+
+    if Article.update_search_on_save and is_cms_plugin:
         placeholder = (getattr(instance, '_placeholder_cache', None)
                        or instance.placeholder)
         if hasattr(placeholder, '_attached_model_cache'):

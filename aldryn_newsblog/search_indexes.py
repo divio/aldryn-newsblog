@@ -3,6 +3,8 @@ from __future__ import unicode_literals
 
 from django.conf import settings
 
+from haystack.constants import DEFAULT_ALIAS
+
 from aldryn_search.utils import get_index_base
 
 from .models import Article
@@ -19,6 +21,11 @@ class ArticleIndex(get_index_base()):
 
     def get_title(self, obj):
         return obj.title
+
+    def get_url(self, obj):
+        using = getattr(self, '_backend_alias', DEFAULT_ALIAS)
+        language = self.get_current_language(using=using, obj=obj)
+        return obj.get_absolute_url(language)
 
     def get_description(self, obj):
         return obj.lead_in
