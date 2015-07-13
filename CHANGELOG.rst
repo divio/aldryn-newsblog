@@ -5,10 +5,10 @@ CHANGELOG
 ------------------
 
 * Adds a switch: ALDRYN_NEWSBLOG_UPDATE_SEARCH_DATA_ON_SAVE that when set to
-  False, prevents the indexing of Articles on save. This is useful in
-  environments which prefers to do all indexing in batches.
+  False, prevents article data from being saved into search_data. This is useful
+  in environments which prefers to do all indexing in batches.
 * Adds a management command: rebuild_article_search_data which can be used to
-  index all articles.
+  update search_data for all articles.
 
 
 1.0.1 (2015-06-30)
