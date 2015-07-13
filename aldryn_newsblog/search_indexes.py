@@ -21,7 +21,7 @@ class ArticleIndex(get_index_base()):
 
     def get_url(self, obj):
         using = getattr(self, '_backend_alias', DEFAULT_ALIAS)
-        language = self.get_current_language(obj, using=using)
+        language = self.get_current_language(using=using, obj=obj)
         return obj.get_absolute_url(language)
 
     def get_description(self, obj):
