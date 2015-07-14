@@ -10,6 +10,9 @@ cms/django
 !.travis.yml
 !.coveragerc
 !.codeclimate.yml
+!.editorconfig
+!.jshintrc
+!.jscsrc
 *.xml
 /*env*/
 *.sqlite
@@ -42,9 +45,10 @@ include/
 lib/
 man/
 share/
-.editorconfig
 cms/static/cms/compass_app_log.txt
 *.sublime-project
 *.sublime-workspace
 coverage-*.txt
 docs/env
+node_modules/
+aldryn_newsblog/tests/frontend/coverage/
