@@ -1,0 +1,28 @@
+{
+    "name": "package",
+    "private": true,
+    "engines": {
+        "node": "0.9.0"
+    },
+    "devDependencies": {
+        "browserslist-saucelabs": "0.1.2",
+        "gulp": "3.9.0",
+        "gulp-jscs": "1.6.0",
+        "gulp-jshint": "1.11.0",
+        "gulp-protractor": "1.0.0",
+        "gulp-util": "3.0.6",
+        "jasmine-core": "2.3.4",
+        "jshint-stylish": "2.0.0",
+        "karma": "0.12.37",
+        "karma-coverage": "0.4.2",
+        "karma-fixture": "0.2.5",
+        "karma-html2js-preprocessor": "0.1.0",
+        "karma-jasmine": "0.3.5",
+        "karma-json-fixtures-preprocessor": "0.0.4",
+        "karma-phantomjs-launcher": "0.2.0",
+        "karma-sauce-launcher": "0.2.14",
+        "phantomjs": "1.9.17",
+        "protractor": "2.1.0",
+        "sauce-tunnel": "2.2.3"
+    }
+}

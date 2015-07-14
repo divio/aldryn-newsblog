@@ -18,16 +18,32 @@ env:
   - TOXENV=py27-dj17-cms31-postgres
   - TOXENV=flake8
 
+ global:
+  - secure: dMNs8zHP+CRy7JeHy1x6YJHGfIeOLWFr04dMU/A/tP6D8zKOBiOybCiSdJTKdxXNTN3tyskjH/z1oZbeyFcsW4zUZWT5pa6aA+tc00z9CHrkHIdMyUQ1+FQmSU5AWYPjfuNL+h5LkYIoB7pP4jDPgMRxOz52yCUuhF/ICi85ccTnK94ul04vemyLzps7c3Ea5oWGt3BnsB3tiK1ZeSnFTRxTzDLmx+apWTEIQToqr3hDu0kgMi20d6XsHBMcb2jI9BPI7cSf8/NLqSoJfMPd9Yrfm7GHHzNT5+8RIqyGAsAUoOoJODwKs/LWoti2FOsfaKnUDIIhriP/5Exxr90hXmaMl5IIuJRn/EQ60Vq5RJfvSIbsTWvP/NU4U2+4BveN1D0i0DsLUNIjJ2oenBFAQ10itlrpgmVQSkC6AZhvBGaMK9g9EHkuCtmB7OxS3mj8ErcAlD1MKSy6kbpmKO7T1BojZM/PR+5501bQdWORB2oMA+YS7lFPXH/0GAh4WR7Dcy8W+TVBSuW7ATz6+UDivugqx0FAxITZamMVJz7neFT6cX3esyRj4H6oOlvwptpd/y8Cp0eeAnDMv2np23gkskUHxirVdBQ+DOpRMIWgZwvxwkuSDiJgbBdFrkWgWH+/PaCcsivg+IPUAQFHLAA2earf/i26sOKZVGSioEYpeE0=
+  - secure: ixXfxRCzSbp5gqgTeVavZIrJ6u/jHtIsANbZYmKtJFWNu68cG07NeUzFUNrZWj8eCM8MD09cMet2DWDC6oVj0oVv124WsJBTQu7KuzEZSWPyouPiM0PNDuunLm/HhAfZR3UTkjG6XznyI0R5JPdCg6zfDvt/twYRo9/hfMN07qk6ZWImuG8HsLvZn0/KHzVPXxIGue6UV8DRK4ZlQy4eIBRQtRgVvt1ZcoHU758/F4MAp3vGoSxjYI+8hAKfFAiOtdSC+GFGm/LcMPTO8Yxc/uUDque2Y4kyFDIRJjw4nq09Pj1/UZG7Ybpb0SHobE/gyMwBLgTPqqIbfgQhR1dX2rkcTuIxlSRlLpJ0q/x0XcjuTMqSmr3QJuQia25FSK0s8n63jCkHNW83tF1+434rckvzGFEmO2o03UDhx2p+zAHAbF91W1F+kNunoDiZyYsoh69foU6tOeVPEq1ilTSmhZWLYUp6yZ5BhY7vzBC8hiGaIQlPLS0+XvV/LeO+fkOEoq+QXp/wDQi9hPj7NQKdZ5LnKWeAxi+eBF7GnE6YpPaNS6cKXzNi6k1dGBopEUYujX2MpOrfin4OWrd6bB6g5HBr6lsGaFntWmusbNbrooau7YA0DkNv8q3jBj3yXewiBLrk2Cv3LQ/s5hYoThn/mq83Dhj90jFepekSBAC+E1Q=
+  - secure: rD+5DrqBv5NTkzbjmmh1ihs2lPnHlvdom6wU3m/tORYsn0eQvTS8zESGrTl72sP05g9z2y2+PbFQNaYtAkgTJn9Zw88pH0fvOdwN44ORA3L5hpsWRs2pYejTyKTsw+rQTQt1V3rODPhG23kBAKVDzT/3eruVBoBS4uusUA5h5W+cVvEkyZvvkqzhD/WYPtUYalq01DdUBn7FTxzycTfDOCFRVT5RW8cckIWiGJO1zcTorgN8uAlWYY5BV09VQ4Wdmxfa8+9UMrHqogJNI6KI2yVEXr+C9jFlMIvDQO18djLfXn6RuCINnWgJZitFY7Sf4F/IQmILBnOsPgfr+u1i9eR58LOYIS/JcxXkhASzeNsIHUSNzhY6m44Yk7b8P3X4bEXERw0jYAfonywaK6Pk1J4Yo9wFqZM00ueL8ym2hM48ijDPg7AyHviG6tdn7lRzT+yvk8Zmv1+5OWLsIu4MyqXqiN8/ZC7b2Qeio+yIStjfHZvychSLmdt8DbuNVuKHYh7auni5U3Rz1OcHFJ+rzordhp7X0Iq2O0UjMpRfev59bYGwRZMBwoNH43gHsWfHEAAPt7My49kUC66JTZOkFD+fZXBJh/0AjsMRJtahrbd9GQ7TP7MMqzUOiDsauB1rlyvcYPU+0esN8QKthZDedgcGLtzbmu7Y7Ujhc6RUw9g=
+
 cache:
   directories:
     - $HOME/.wheelhouse
+
+before_install:
+  - npm install -g npm
 
 install:
   - pip install tox
   - pip install coveralls
 
+before_script:
+  - npm install -g gulp
+  - npm install -g codeclimate-test-reporter
+  - npm install
+
+after_script:
+  - codeclimate < tests/coverage/**/lcov.info
+
 script:
-  - tox
+  - tox -e $TOXENV
 
 after_success: coveralls
 
