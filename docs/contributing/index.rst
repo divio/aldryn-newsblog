@@ -57,32 +57,37 @@ to Aldryn News & Blog.
 Running tests
 *************
 
-Aldryn News & Blog uses `django CMS Helper
-<https://github.com/nephila/djangocms-helper>`_ to run its test suite.
+Aldryn News & Blog uses `django CMS Helper <https://github.com/nephila/djangocms-helper>`_ to run its
+test suite.
 
-There's more than one way to do this, but here's one to help you get started::
+Backend Tests
+=============
 
-    # create a virtual environment
-    virtualenv test-aldryn-newsblog
+To run the tests, in the aldryn-newsblog directory::
 
-    # activate it
-    cd test-aldryn-newsblog/
-    source bin/activate
+    virtualenv env  # create a virtual environment
+    source env/bin/activate  # activate it
+    python setup.py install  # install the package requirements
+    pip install -r test_requirements/django-1.7.txt  # install the test requirements
+    python test_settings.py  # run the tests
 
-    # get Aldryn News & Blog from GitHub
-    git clone git@github.com:aldryn/aldryn-newsblog.git
+You can run the tests against a different version of Django by using the appropriate value in
+``django-x.x.txt`` when installing the test requirements.
 
-    # downgrade pip to a version < 6
-    pip install -U 'pip<6'
 
-    # install the dependencies for testing
-    pip install -Ur aldryn-newsblog/test_requirements.txt
+Frontend Tests
+==============
 
-    # run the test suite
-    # note that you must be in the aldryn-newsblog directory when you do this,
-    # otherwise you'll get "Template not found" errors
-    cd aldryn-newsblog
-    ./test
+Follow the instructions in the `aldryn-boilerplate-bootstrap3
+<https://aldryn-boilerplate-bootstrap3.readthedocs.org/en/latest/testing/index.html>`_
+documentation and setup the environment through the `Backend Tests` section.
+
+Instead of using ``python test_settings.py`` described above, you need to excecute
+``python test_settings.py server`` to get a running local server. You can open the
+development server locally through ``http://127.0.0.1:8000/``. The database is added
+within the root of this project ``local.sqlite``. You might want to delete the database
+from time to time to start with a fresh installation. Don't forget to restart the
+server if you do so.
 
 
 *************
