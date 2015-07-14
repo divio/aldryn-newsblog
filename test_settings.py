@@ -43,6 +43,7 @@ HELPER_SETTINGS = {
         #     django.template.loaders.app_directories.Loader
         'aldryn_boilerplates.template_loaders.AppDirectoriesLoader',
         'django.template.loaders.app_directories.Loader',
+        'django.template.loaders.eggs.Loader'
     ],
     'ALDRYN_NEWSBLOG_TEMPLATE_PREFIXES': [('dummy', 'dummy'), ],
     'ALDRYN_BOILERPLATE_NAME': 'bootstrap3',
@@ -67,7 +68,7 @@ HELPER_SETTINGS = {
             },
             {
                 'code': 'fr',
-                'name': 'Française',
+                'name': u'Française',
                 'fallbacks': ['en', ]  # FOR TESTING DO NOT ADD 'de' HERE
             },
             {
