@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
-from django.utils.timezone import now
 from django.utils.translation import activate
 
-from aldryn_newsblog.models import Article
 from aldryn_newsblog.search_indexes import ArticleIndex
 
 from . import NewsBlogTestCase
