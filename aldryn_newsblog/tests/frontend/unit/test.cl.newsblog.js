@@ -8,7 +8,7 @@
 
 // #############################################################################
 // UNIT TEST
-describe('cl.events.js:', function () {
+describe('cl.blognews.js:', function () {
     beforeEach(function () {
         fixture.setBase('frontend/fixtures');
         this.markup = fixture.load('search.html');

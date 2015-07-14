@@ -1,5 +1,6 @@
 {
     "browser": true,
+    "devel": true,
     "esnext": true,
     "expr": true,
     "bitwise": true,
@@ -16,5 +17,6 @@
     "quotmark": "single",
     "strict": true,
     "unused": true,
-    "trailing": true
+    "trailing": true,
+    "undef": true
 }
