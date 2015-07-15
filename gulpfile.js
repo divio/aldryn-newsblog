@@ -53,7 +53,7 @@ gulp.task('lint', function () {
         .pipe(jshint.reporter('jshint-stylish'));
 });
 
-// #########################################################
+// #############################################################################
 // TESTS
 gulp.task('tests', ['tests:unit', 'tests:lint', 'tests:integration']);
 gulp.task('tests:lint', ['lint']);

@@ -8,7 +8,7 @@
 
 // #############################################################################
 // UNIT TEST
-describe('cl.blognews.js:', function () {
+describe('cl.newsblog.js:', function () {
     beforeEach(function () {
         fixture.setBase('frontend/fixtures');
         this.markup = fixture.load('search.html');
@@ -21,6 +21,17 @@ describe('cl.blognews.js:', function () {
 
     it('has available Cl namespace', function () {
         expect(Cl).toBeDefined();
+    });
+
+    it('has a public method _search', function () {
+        expect(Cl.newsBlog._search).toBeDefined();
+    });
+
+    describe('Cl.newsBlog.init(): ', function () {
+        it('returns undefined', function () {
+            expect(Cl.newsBlog.init()).toEqual(undefined);
+        });
+
     });
 
 });
