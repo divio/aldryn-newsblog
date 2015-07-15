@@ -23,22 +23,27 @@ var Cl = window.Cl || {};
             });
         },
 
+        _handler: function (e) {
+            e.preventDefault();
+
+            var form = $(this);
+
+            $.ajax({
+                type: 'GET',
+                url: form.attr('action'),
+                data: form.serialize()
+            }).always(function (data) {
+                form.siblings('.js-search-results').html(data);
+            }).fail(function () {
+                alert('REQUEST TIMEOUT');
+            });
+        },
+
+        // container should be a jQuery object
         _search: function (container) {
             var form = container.find('form');
 
-            form.on('submit', function (e) {
-                e.preventDefault();
-
-                $.ajax({
-                    type: 'GET',
-                    url: form.prop('action'),
-                    data: form.serialize()
-                }).always(function (data) {
-                    form.siblings('.js-search-results').html(data);
-                }).fail(function () {
-                    alert('REQUEST TIMEOUT');
-                });
-            });
+            form.on('submit', this._handler);
         }
 
     };

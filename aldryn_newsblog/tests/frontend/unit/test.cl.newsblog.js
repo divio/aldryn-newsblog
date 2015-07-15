@@ -32,6 +32,39 @@ describe('cl.newsblog.js:', function () {
             expect(Cl.newsBlog.init()).toEqual(undefined);
         });
 
+        it('runs _search()', function () {
+            spyOn(Cl.newsBlog, '_search');
+            Cl.newsBlog.init();
+
+            // validate that _search was called inside Cl.newsBlog.init()
+            expect(Cl.newsBlog._search).toHaveBeenCalled();
+            // validate 2 call as 2 js-aldryn-newsblog-article-search is
+            // specified in search.html
+            expect(Cl.newsBlog._search.calls.count()).toEqual(2);
+        });
+    });
+
+    describe('Cl.newsBlog._search: ', function () {
+        it('returns undefined', function () {
+            // validate the return of undefined
+            expect(Cl.newsBlog._search(
+                $('.js-aldryn-newsblog-article-search').eq(1)))
+                    .toEqual(undefined);
+        });
+
+        it('has correct url in ajax request', function () {
+            spyOn($, 'ajax').and.callThrough();
+            Cl.newsBlog._handler.call(
+                $('.js-aldryn-newsblog-article-search .form-inline')[0],
+                    this.preventEvent);
+
+            var callArgs = $.ajax.calls.allArgs()[0][0];
+
+            // validate ajax request url
+            expect(callArgs.url).toEqual(
+                '/en/blog/search/'
+            );
+        });
     });
 
 });
