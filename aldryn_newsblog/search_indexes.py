@@ -49,3 +49,9 @@ class ArticleIndex(get_index_base()):
 
     def get_search_data(self, article, language, request):
         return article.search_data
+
+    def should_update(self, instance, **kwargs):
+        using = getattr(self, '_backend_alias', DEFAULT_ALIAS)
+        language = self.get_current_language(using=using, obj=instance)
+        translations = instance.get_available_languages()
+        return translations.filter(language_code=language).exists()
