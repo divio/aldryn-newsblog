@@ -26,8 +26,9 @@ describe('Aldryn Newsblog tests: ', function () {
             }
 
             // wait for username input to appear
-            browser.wait(browser.isElementPresent(newsBlogPage.usernameInput),
-                newsBlogPage.mainElementsWaitTime);
+            browser.wait(function () {
+                return browser.isElementPresent(newsBlogPage.usernameInput);
+            }, newsBlogPage.mainElementsWaitTime);
 
             // login to the site
             newsBlogPage.cmsLogin();
@@ -85,7 +86,7 @@ describe('Aldryn Newsblog tests: ', function () {
                             }, newsBlogPage.mainElementsWaitTime);
 
                             // wait till the editPageLink will become clickable
-                            browser.sleep(100);
+                            browser.sleep(500);
 
                             // validate/click edit page link
                             newsBlogPage.editPageLink.click();
@@ -104,6 +105,62 @@ describe('Aldryn Newsblog tests: ', function () {
                             });
                         }
                     });
+                });
+            }
+        });
+    });
+
+    it('creates a new apphook config', function () {
+        // check if the focus is on sidebar ifarme
+        newsBlogPage.editPageLink.isPresent().then(function (present) {
+            if (present === false) {
+                // wait for modal iframe to appear
+                browser.wait(function () {
+                    return browser.isElementPresent(newsBlogPage.sideMenuIframe);
+                }, newsBlogPage.iframeWaitTime);
+
+                // switch to sidebar menu iframe
+                browser.switchTo().frame(browser.findElement(By.css(
+                    '.cms_sideframe-frame iframe')));
+            }
+        }).then(function () {
+            browser.wait(function () {
+                return browser.isElementPresent(newsBlogPage.breadcrumbsLinks.first());
+            }, newsBlogPage.mainElementsWaitTime);
+
+            // click the Home link in breadcrumbs
+            newsBlogPage.breadcrumbsLinks.first().click();
+
+            browser.wait(function () {
+                return browser.isElementPresent(newsBlogPage.newsBlogConfigsLink);
+            }, newsBlogPage.mainElementsWaitTime);
+
+            newsBlogPage.newsBlogConfigsLink.click();
+
+            // check if the apphook config already exists and return the status
+            return newsBlogPage.editConfigsLink.isPresent();
+        }).then(function (present) {
+            if (present === false) {
+                // apphook config is absent - create new apphook config
+                browser.wait(function () {
+                    return browser.isElementPresent(newsBlogPage.addConfigsButton);
+                }, newsBlogPage.mainElementsWaitTime);
+
+                newsBlogPage.addConfigsButton.click();
+
+                browser.wait(function () {
+                    return browser.isElementPresent(newsBlogPage.namespaceInput);
+                }, newsBlogPage.mainElementsWaitTime);
+
+                newsBlogPage.namespaceInput.sendKeys('aldryn_newsblog')
+                    .then(function () {
+                    newsBlogPage.applicationTitleInput.sendKeys('Test title');
+                }).then(function () {
+                    newsBlogPage.saveButton.click();
+
+                    browser.wait(function () {
+                        return browser.isElementPresent(newsBlogPage.successNotification);
+                    }, newsBlogPage.mainElementsWaitTime);
                 });
             }
         });

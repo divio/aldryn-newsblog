@@ -35,6 +35,15 @@ var newsBlogPage = {
     saveButton: element(by.css('.submit-row [name="_save"]')),
     editPageLink: element(by.css('.col1 [href*="preview/"]')),
 
+    // adding new apphook config
+    breadcrumbsLinks: element.all(by.css('.breadcrumbs a')),
+    newsBlogConfigsLink: element(by.css('.model-newsblogconfig > th > a')),
+    editConfigsLink: element(by.css('.row1 > th > a')),
+    addConfigsButton: element(by.css('.object-tools .addlink')),
+    namespaceInput: element(by.id('id_namespace')),
+    applicationTitleInput: element(by.id('id_app_title')),
+    successNotification: element(by.css('.messagelist .success')),
+
     cmsLogin: function (credentials) {
         // object can contain username and password, if not set it will
         // fallback to 'admin'
