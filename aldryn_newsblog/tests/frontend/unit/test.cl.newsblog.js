@@ -74,8 +74,6 @@ describe('cl.newsblog.js:', function () {
 
             var callArgs = $.ajax.calls.allArgs()[0][0];
 
-            console.log(callArgs);
-
             // validate ajax request data
             expect(callArgs.data).toEqual(
                 'csrfmiddlewaretoken=Ui0tGBmn0Thq5LUeUS2m4zAF20H0M8up&' +
