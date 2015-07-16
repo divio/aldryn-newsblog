@@ -4,7 +4,7 @@
  */
 
 'use strict';
-/* global describe, it, browser */
+/* global describe, it, browser, By, expect */
 
 // #############################################################################
 // INTEGRATION TEST
@@ -31,6 +31,81 @@ describe('Aldryn Newsblog tests: ', function () {
 
             // login to the site
             newsBlogPage.cmsLogin();
+        });
+    });
+
+    it('creates a new test page', function () {
+        // click the example.com link in the top menu
+        newsBlogPage.userMenus.first().click().then(function () {
+            // wait for top menu dropdown options to appear
+            browser.wait(function () {
+                return browser.isElementPresent(newsBlogPage.userMenuDropdown);
+            }, newsBlogPage.mainElementsWaitTime);
+
+            newsBlogPage.administrationOptions.first().click();
+        }).then(function () {
+            // wait for modal iframe to appear
+            browser.wait(function () {
+                return browser.isElementPresent(newsBlogPage.sideMenuIframe);
+            }, newsBlogPage.iframeWaitTime);
+
+            // switch to sidebar menu iframe
+            browser.switchTo().frame(browser.findElement(
+                By.css('.cms_sideframe-frame iframe')));
+
+            browser.wait(function () {
+                return browser.isElementPresent(newsBlogPage.pagesLink);
+            }, newsBlogPage.mainElementsWaitTime);
+
+            newsBlogPage.pagesLink.click();
+
+            // check if the page already exists and return the status
+            return newsBlogPage.addPageLink.isPresent();
+        }).then(function (present) {
+            if (present === true) {
+                // page is absent - create new page
+                browser.wait(function () {
+                    return browser.isElementPresent(newsBlogPage.addPageLink);
+                }, newsBlogPage.mainElementsWaitTime);
+
+                newsBlogPage.addPageLink.click();
+
+                browser.wait(function () {
+                    return browser.isElementPresent(newsBlogPage.titleInput);
+                }, newsBlogPage.mainElementsWaitTime);
+
+                newsBlogPage.titleInput.sendKeys('Test').then(function () {
+                    newsBlogPage.saveButton.click();
+
+                    newsBlogPage.slugErrorNotification.isPresent()
+                        .then(function (present) {
+                        if (present === false) {
+                            browser.wait(function () {
+                                return browser.isElementPresent(newsBlogPage.editPageLink);
+                            }, newsBlogPage.mainElementsWaitTime);
+
+                            // wait till the editPageLink will become clickable
+                            browser.sleep(100);
+
+                            // validate/click edit page link
+                            newsBlogPage.editPageLink.click();
+
+                            // switch to default page content
+                            browser.switchTo().defaultContent();
+
+                            browser.wait(function () {
+                                return browser.isElementPresent(newsBlogPage.testLink);
+                            }, newsBlogPage.mainElementsWaitTime);
+
+                            // validate test link text
+                            newsBlogPage.testLink.getText()
+                                .then(function (title) {
+                                expect(title).toEqual('Test');
+                            });
+                        }
+                    });
+                });
+            }
         });
     });
 

@@ -22,6 +22,19 @@ var newsBlogPage = {
     userMenus: element.all(by.css('.cms_toolbar-item-navigation > li > a')),
     testLink: element(by.css('.selected a')),
 
+    // adding new page
+    userMenuDropdown: element(by.css(
+        '.cms_toolbar-item-navigation-hover')),
+    administrationOptions: element.all(by.css(
+        '.cms_toolbar-item-navigation a[href="/en/admin/"]')),
+    sideMenuIframe: element(by.css('.cms_sideframe-frame iframe')),
+    pagesLink: element(by.css('.model-page > th > a')),
+    addPageLink: element(by.css('.sitemap-noentry .addlink')),
+    titleInput: element(by.id('id_title')),
+    slugErrorNotification: element(by.css('.errors.slug')),
+    saveButton: element(by.css('.submit-row [name="_save"]')),
+    editPageLink: element(by.css('.col1 [href*="preview/"]')),
+
     cmsLogin: function (credentials) {
         // object can contain username and password, if not set it will
         // fallback to 'admin'
