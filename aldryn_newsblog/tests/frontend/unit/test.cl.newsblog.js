@@ -52,7 +52,7 @@ describe('cl.newsblog.js:', function () {
                     .toEqual(undefined);
         });
 
-        it('has correct url in ajax request', function () {
+        it('has correct url parameter in ajax request', function () {
             spyOn($, 'ajax').and.callThrough();
             Cl.newsBlog._handler.call(
                 $('.js-aldryn-newsblog-article-search .form-inline')[0],
@@ -64,6 +64,64 @@ describe('cl.newsblog.js:', function () {
             expect(callArgs.url).toEqual(
                 '/en/blog/search/'
             );
+        });
+
+        it('has correct data parameter in ajax request', function () {
+            spyOn($, 'ajax').and.callThrough();
+            Cl.newsBlog._handler.call(
+                $('.js-aldryn-newsblog-article-search .form-inline')[0],
+                    this.preventEvent);
+
+            var callArgs = $.ajax.calls.allArgs()[0][0];
+
+            console.log(callArgs);
+
+            // validate ajax request data
+            expect(callArgs.data).toEqual(
+                'csrfmiddlewaretoken=Ui0tGBmn0Thq5LUeUS2m4zAF20H0M8up&' +
+                'max_articles=10&q='
+            );
+        });
+
+        it('has ajax request with "always" function adding results data ' +
+            'correctly', function () {
+            // emulate always after ajax call
+            spyOn($, 'ajax').and.returnValue({
+                always: function (callback) {
+                    callback('<h2>Test results</h2>');
+
+                    return { fail: function () {} };
+                }
+            });
+
+            Cl.newsBlog._handler.call(
+                $('.js-aldryn-newsblog-article-search .form-inline')[0],
+                    this.preventEvent);
+
+            // validate search results got updated with new info
+            expect($('.js-search-results')[0].innerHTML).toEqual(
+                '<h2>Test results</h2>');
+        });
+
+        it('has ajax request with "fail" function alert working ' +
+            'correctly', function () {
+            // emulate fail after always after ajax call
+            spyOn($, 'ajax').and.returnValue({
+                always: function () {
+                    return { fail: function (callback) {
+                        callback();
+                    }};
+                }
+            });
+
+            spyOn(window, 'alert');
+
+            Cl.newsBlog._handler.call(
+                $('.js-aldryn-newsblog-article-search .form-inline')[0],
+                    this.preventEvent);
+
+            // validate alert text
+            expect(window.alert).toHaveBeenCalledWith('REQUEST TIMEOUT');
         });
     });
 
