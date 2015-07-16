@@ -49,3 +49,12 @@ class ArticleIndexingTests(NewsBlogTestCase):
 
         self.assertEquals(data['language'], 'de')
         self.assertEquals(data['url'], article.get_absolute_url('de'))
+
+    def test_article_not_indexed_if_no_translation(self):
+        # create english article
+        article = self.create_article()
+        # remove all translations for article
+        article.translations.all().delete()
+        index = self.get_index()
+        should_update = index.should_update(article)
+        self.assertEquals(should_update, False)
