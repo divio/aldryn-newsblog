@@ -22,6 +22,28 @@ var newsBlogPage = {
     userMenus: element.all(by.css('.cms_toolbar-item-navigation > li > a')),
     testLink: element(by.css('.selected a')),
 
+    // adding new page
+    userMenuDropdown: element(by.css(
+        '.cms_toolbar-item-navigation-hover')),
+    administrationOptions: element.all(by.css(
+        '.cms_toolbar-item-navigation a[href="/en/admin/"]')),
+    sideMenuIframe: element(by.css('.cms_sideframe-frame iframe')),
+    pagesLink: element(by.css('.model-page > th > a')),
+    addPageLink: element(by.css('.sitemap-noentry .addlink')),
+    titleInput: element(by.id('id_title')),
+    slugErrorNotification: element(by.css('.errors.slug')),
+    saveButton: element(by.css('.submit-row [name="_save"]')),
+    editPageLink: element(by.css('.col1 [href*="preview/"]')),
+
+    // adding new apphook config
+    breadcrumbsLinks: element.all(by.css('.breadcrumbs a')),
+    newsBlogConfigsLink: element(by.css('.model-newsblogconfig > th > a')),
+    editConfigsLink: element(by.css('.row1 > th > a')),
+    addConfigsButton: element(by.css('.object-tools .addlink')),
+    namespaceInput: element(by.id('id_namespace')),
+    applicationTitleInput: element(by.id('id_app_title')),
+    successNotification: element(by.css('.messagelist .success')),
+
     cmsLogin: function (credentials) {
         // object can contain username and password, if not set it will
         // fallback to 'admin'
