@@ -51,6 +51,16 @@ var newsBlogPage = {
     editArticleLinks: element.all(by.css(
         '.results [href*="/aldryn_newsblog/article/"]')),
 
+    // adding article to the page
+    aldrynNewsBlogBlock: element(by.css('.aldryn-newsblog-list')),
+    advancedSettingsOption: element(by.css(
+        '.cms_toolbar-item-navigation [href*="advanced-settings"]')),
+    modalIframe: element(by.css('.cms_modal-frame iframe')),
+    applicationSelect: element(by.id('application_urls')),
+    saveModalButton: element(by.css('.cms_modal-buttons .cms_btn-action')),
+    newsBlogMetaBlock: element(by.css('.aldryn-newsblog-meta')),
+    articleLink: element(by.css('.aldryn-newsblog-list h2 > a')),
+
     cmsLogin: function (credentials) {
         // object can contain username and password, if not set it will
         // fallback to 'admin'
