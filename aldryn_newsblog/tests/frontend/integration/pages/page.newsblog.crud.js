@@ -49,7 +49,7 @@ var newsBlogPage = {
     languageTabs: element.all(by.css('.parler-language-tabs > .empty > a')),
     saveAndContinueButton: element(by.css('.submit-row [name="_continue"]')),
     editArticleLinks: element.all(by.css(
-        '.results > [href*="/aldryn_newsblog/article/"]')),
+        '.results [href*="/aldryn_newsblog/article/"]')),
 
     cmsLogin: function (credentials) {
         // object can contain username and password, if not set it will
