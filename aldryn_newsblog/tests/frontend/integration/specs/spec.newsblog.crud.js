@@ -212,4 +212,71 @@ describe('Aldryn Newsblog tests: ', function () {
         });
     });
 
+    it('adds a new article on the page', function () {
+        // switch to default page content
+        browser.switchTo().defaultContent();
+
+        // add articles to the page only if they were not added before
+        newsBlogPage.aldrynNewsBlogBlock.isPresent().then(function (present) {
+            if (present === false) {
+                // click the Page link in the top menu
+                newsBlogPage.userMenus.get(1).click().then(function () {
+                    // wait for top menu dropdown options to appear
+                    browser.wait(function () {
+                        return browser.isElementPresent(newsBlogPage.userMenuDropdown);
+                    }, newsBlogPage.mainElementsWaitTime);
+
+                    newsBlogPage.advancedSettingsOption.click();
+
+                    // wait for modal iframe to appear
+                    browser.wait(function () {
+                        return browser.isElementPresent(newsBlogPage.modalIframe);
+                    }, newsBlogPage.iframeWaitTime);
+
+                    // switch to modal iframe
+                    browser.switchTo().frame(browser.findElement(By.css(
+                        '.cms_modal-frame iframe')));
+
+                    // wait for Application select to appear
+                    browser.wait(function () {
+                        return browser.isElementPresent(newsBlogPage.applicationSelect);
+                    }, newsBlogPage.mainElementsWaitTime);
+
+                    // set Application
+                    newsBlogPage.applicationSelect.click();
+                    newsBlogPage.applicationSelect.sendKeys('NewsBlog')
+                        .then(function () {
+                        newsBlogPage.applicationSelect.click();
+                    });
+
+                    // switch to default page content
+                    browser.switchTo().defaultContent();
+
+                    browser.wait(function () {
+                        return browser.isElementPresent(newsBlogPage.saveModalButton);
+                    }, newsBlogPage.mainElementsWaitTime);
+
+                    browser.actions().mouseMove(newsBlogPage.saveModalButton)
+                        .perform();
+                    newsBlogPage.saveModalButton.click();
+                }).then(function () {
+                    // wait for aldryn-newsblog block to appear
+                    browser.wait(function () {
+                        return browser.isElementPresent(newsBlogPage.aldrynNewsBlogBlock);
+                    }, newsBlogPage.mainElementsWaitTime);
+
+                    // validate aldryn-newsblog block
+                    expect(newsBlogPage.aldrynNewsBlogBlock.isDisplayed())
+                        .toBeTruthy();
+                    // validate aldryn-newsblog meta block
+                    expect(newsBlogPage.newsBlogMetaBlock.isDisplayed())
+                        .toBeTruthy();
+                    // validate article link
+                    expect(newsBlogPage.articleLink.isDisplayed())
+                        .toBeTruthy();
+                });
+            }
+        });
+    });
+
 });
