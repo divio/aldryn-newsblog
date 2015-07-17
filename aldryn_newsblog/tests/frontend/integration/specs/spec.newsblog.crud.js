@@ -334,7 +334,8 @@ describe('Aldryn Newsblog tests: ', function () {
             }, newsBlogPage.mainElementsWaitTime);
 
             // validate success notification
-            expect(newsBlogPage.successNotification.isDisplayed()).toBeTruthy();
+            expect(newsBlogPage.successNotification.isDisplayed())
+                .toBeTruthy();
 
             // switch to default page content
             browser.switchTo().defaultContent();
