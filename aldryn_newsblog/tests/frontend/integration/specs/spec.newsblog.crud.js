@@ -166,4 +166,50 @@ describe('Aldryn Newsblog tests: ', function () {
         });
     });
 
+    it('creates a new article', function () {
+        browser.wait(function () {
+            return browser.isElementPresent(newsBlogPage.breadcrumbsLinks.first());
+        }, newsBlogPage.mainElementsWaitTime);
+
+        // click the Home link in breadcrumbs
+        newsBlogPage.breadcrumbsLinks.first().click();
+
+        browser.wait(function () {
+            return browser.isElementPresent(newsBlogPage.addArticleButton);
+        }, newsBlogPage.mainElementsWaitTime);
+
+        newsBlogPage.addArticleButton.click();
+
+        browser.wait(function () {
+            return browser.isElementPresent(newsBlogPage.languageTabs.get(1));
+        }, newsBlogPage.mainElementsWaitTime);
+
+        newsBlogPage.languageTabs.get(1).click().then(function () {
+            browser.wait(function () {
+                return browser.isElementPresent(newsBlogPage.titleInput);
+            }, newsBlogPage.mainElementsWaitTime);
+
+            // create random article name
+            var articleName = 'Test article ' +
+                (Math.floor(Math.random() * 10001));
+
+            newsBlogPage.titleInput.sendKeys(articleName);
+        }).then(function () {
+            browser.actions().mouseMove(newsBlogPage.saveAndContinueButton)
+                .perform();
+            newsBlogPage.saveButton.click();
+
+            browser.wait(function () {
+                return browser.isElementPresent(newsBlogPage.successNotification);
+            }, newsBlogPage.mainElementsWaitTime);
+
+            // validate success notification
+            expect(newsBlogPage.successNotification.isDisplayed())
+                .toBeTruthy();
+            // validate edit article link
+            expect(newsBlogPage.editArticleLinks.first().isDisplayed())
+                .toBeTruthy();
+        });
+    });
+
 });

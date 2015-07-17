@@ -44,6 +44,13 @@ var newsBlogPage = {
     applicationTitleInput: element(by.id('id_app_title')),
     successNotification: element(by.css('.messagelist .success')),
 
+    // adding new article
+    addArticleButton: element(by.css('.model-article .addlink')),
+    languageTabs: element.all(by.css('.parler-language-tabs > .empty > a')),
+    saveAndContinueButton: element(by.css('.submit-row [name="_continue"]')),
+    editArticleLinks: element.all(by.css(
+        '.field-title > [href*="/aldryn_newsblog/article/"]')),
+
     cmsLogin: function (credentials) {
         // object can contain username and password, if not set it will
         // fallback to 'admin'
