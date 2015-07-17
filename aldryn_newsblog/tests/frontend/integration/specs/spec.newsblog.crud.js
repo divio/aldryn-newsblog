@@ -11,6 +11,9 @@
 var newsBlogPage = require('../pages/page.newsblog.crud.js');
 
 describe('Aldryn Newsblog tests: ', function () {
+    // create random article name
+    var articleName = 'Test article ' + (Math.floor(Math.random() * 10001));
+
     it('logs in to the site with valid username and password', function () {
         // go to the main page
         browser.get(newsBlogPage.site);
@@ -189,10 +192,6 @@ describe('Aldryn Newsblog tests: ', function () {
                 return browser.isElementPresent(newsBlogPage.titleInput);
             }, newsBlogPage.mainElementsWaitTime);
 
-            // create random article name
-            var articleName = 'Test article ' +
-                (Math.floor(Math.random() * 10001));
-
             newsBlogPage.titleInput.sendKeys(articleName);
         }).then(function () {
             browser.actions().mouseMove(newsBlogPage.saveAndContinueButton)
@@ -276,6 +275,72 @@ describe('Aldryn Newsblog tests: ', function () {
                         .toBeTruthy();
                 });
             }
+        });
+    });
+
+    it('deletes article', function () {
+        // wait for modal iframe to appear
+        browser.wait(function () {
+            return browser.isElementPresent(newsBlogPage.sideMenuIframe);
+        }, newsBlogPage.iframeWaitTime);
+
+        // switch to sidebar menu iframe
+        browser.switchTo()
+            .frame(browser.findElement(By.css('.cms_sideframe-frame iframe')));
+
+        // wait for edit event link to appear
+        browser.wait(function () {
+            return browser.isElementPresent(newsBlogPage.editArticleLinks.first());
+        }, newsBlogPage.mainElementsWaitTime);
+
+        // validate edit article links texts to delete proper article
+        newsBlogPage.editArticleLinks.first().getText().then(function (text) {
+            if (text === articleName) {
+                newsBlogPage.editArticleLinks.first().click();
+            } else {
+                newsBlogPage.editArticleLinks.get(1).getText()
+                    .then(function (text) {
+                    if (text === articleName) {
+                        newsBlogPage.editArticleLinks.get(1).click();
+                    } else {
+                        newsBlogPage.editArticleLinks.get(2).getText()
+                            .then(function (text) {
+                            if (text === articleName) {
+                                newsBlogPage.editArticleLinks.get(2).click();
+                            }
+                        });
+                    }
+                });
+            }
+        }).then(function () {
+            // wait for delete button to appear
+            browser.wait(function () {
+                return browser.isElementPresent(newsBlogPage.deleteButton);
+            }, newsBlogPage.mainElementsWaitTime);
+
+            browser.actions().mouseMove(newsBlogPage.saveAndContinueButton)
+                .perform();
+            newsBlogPage.deleteButton.click();
+        }).then(function () {
+            // wait for confirmation button to appear
+            browser.wait(function () {
+                return browser.isElementPresent(newsBlogPage.sidebarConfirmationButton);
+            }, newsBlogPage.mainElementsWaitTime);
+
+            newsBlogPage.sidebarConfirmationButton.click();
+
+            browser.wait(function () {
+                return browser.isElementPresent(newsBlogPage.successNotification);
+            }, newsBlogPage.mainElementsWaitTime);
+
+            // validate success notification
+            expect(newsBlogPage.successNotification.isDisplayed()).toBeTruthy();
+
+            // switch to default page content
+            browser.switchTo().defaultContent();
+
+            // refresh the page to see changes
+            browser.refresh();
         });
     });
 
