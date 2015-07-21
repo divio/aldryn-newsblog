@@ -81,33 +81,32 @@ describe('Aldryn Newsblog tests: ', function () {
                 newsBlogPage.titleInput.sendKeys('Test').then(function () {
                     newsBlogPage.saveButton.click();
 
-                    newsBlogPage.slugErrorNotification.isPresent()
-                        .then(function (present) {
-                        if (present === false) {
-                            browser.wait(function () {
-                                return browser.isElementPresent(newsBlogPage.editPageLink);
-                            }, newsBlogPage.mainElementsWaitTime);
+                    newsBlogPage.slugErrorNotification.isPresent();
+                }).then(function (present) {
+                    if (present === false) {
+                        browser.wait(function () {
+                            return browser.isElementPresent(newsBlogPage.editPageLink);
+                        }, newsBlogPage.mainElementsWaitTime);
 
-                            // wait till the editPageLink will become clickable
-                            browser.sleep(500);
+                        // wait till the editPageLink will become clickable
+                        browser.sleep(500);
 
-                            // validate/click edit page link
-                            newsBlogPage.editPageLink.click();
+                        // validate/click edit page link
+                        newsBlogPage.editPageLink.click();
 
-                            // switch to default page content
-                            browser.switchTo().defaultContent();
+                        // switch to default page content
+                        browser.switchTo().defaultContent();
 
-                            browser.wait(function () {
-                                return browser.isElementPresent(newsBlogPage.testLink);
-                            }, newsBlogPage.mainElementsWaitTime);
+                        browser.wait(function () {
+                            return browser.isElementPresent(newsBlogPage.testLink);
+                        }, newsBlogPage.mainElementsWaitTime);
 
-                            // validate test link text
-                            newsBlogPage.testLink.getText()
-                                .then(function (title) {
-                                expect(title).toEqual('Test');
-                            });
-                        }
-                    });
+                        // validate test link text
+                        newsBlogPage.testLink.getText()
+                            .then(function (title) {
+                            expect(title).toEqual('Test');
+                        });
+                    }
                 });
             }
         });
