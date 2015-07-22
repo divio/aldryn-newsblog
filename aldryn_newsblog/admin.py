@@ -13,6 +13,7 @@ from parler.admin import TranslatableAdmin
 from aldryn_apphooks_config.admin import BaseAppHookConfig, ModelAppHookConfig
 from aldryn_people.models import Person
 from aldryn_reversion.admin import VersionedPlaceholderAdminMixin
+from aldryn_translation_tools.admin import AllTranslationsMixin
 
 from . import models
 
@@ -86,6 +87,7 @@ class ArticleAdminForm(TranslatableModelForm):
 
 
 class ArticleAdmin(
+    AllTranslationsMixin,
     VersionedPlaceholderAdminMixin,
     FrontendEditableAdminMixin,
     ModelAppHookConfig,
@@ -149,6 +151,7 @@ admin.site.register(models.Article, ArticleAdmin)
 
 
 class NewsBlogConfigAdmin(
+    AllTranslationsMixin,
     PlaceholderAdminMixin,
     BaseAppHookConfig,
     TranslatableAdmin
