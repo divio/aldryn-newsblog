@@ -28,9 +28,8 @@ var PROJECT_PATH = {
 var PROJECT_PATTERNS = {
     'lint': [
         PROJECT_PATH.js + '/addons/*.js',
-        PROJECT_PATH.tests + '/*.js',
-        PROJECT_PATH.tests + '/unit/*.js',
-        PROJECT_PATH.tests + '/integration/*.js',
+        PROJECT_PATH.tests + '/**/*.js',
+        '!' + PROJECT_PATH.tests + '/coverage/**/*.js',
         PROJECT_ROOT + '/gulpfile.js'
     ]
 };
