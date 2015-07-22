@@ -1,6 +1,13 @@
 CHANGELOG
 =========
 
+1.0.3 (2015-07-22)
+------------------
+
+* Adds frontend testing configuration and tests
+* Restricts Aldryn Reversion to <0.1.0
+
+
 1.0.2 (2015-07-13)
 ------------------
 
