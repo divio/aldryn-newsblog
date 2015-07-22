@@ -4,8 +4,6 @@ CHANGELOG
 1.0.3 (2015-07-22)
 ------------------
 
-* Numerous fixes for search indexing support including a switch to disable the
-  auto-generation of search "pre-indexing".
 * Adds frontend testing configuration and tests
 * Restricts Aldryn Reversion to <0.1.0
 
