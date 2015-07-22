@@ -81,7 +81,7 @@ describe('Aldryn Newsblog tests: ', function () {
                 newsBlogPage.titleInput.sendKeys('Test').then(function () {
                     newsBlogPage.saveButton.click();
 
-                    newsBlogPage.slugErrorNotification.isPresent();
+                    return newsBlogPage.slugErrorNotification.isPresent();
                 }).then(function (present) {
                     if (present === false) {
                         browser.wait(function () {
