@@ -46,7 +46,7 @@ describe('Aldryn Newsblog tests: ', function () {
                 return browser.isElementPresent(newsBlogPage.userMenuDropdown);
             }, newsBlogPage.mainElementsWaitTime);
 
-            newsBlogPage.administrationOptions.first().click();
+            return newsBlogPage.administrationOptions.first().click();
         }).then(function () {
             // wait for modal iframe to appear
             browser.wait(function () {
@@ -62,6 +62,11 @@ describe('Aldryn Newsblog tests: ', function () {
             }, newsBlogPage.mainElementsWaitTime);
 
             newsBlogPage.pagesLink.click();
+
+            // wait for iframe side menu to reload
+            browser.wait(function () {
+                return browser.isElementPresent(newsBlogPage.addConfigsButton);
+            }, newsBlogPage.mainElementsWaitTime);
 
             // check if the page already exists and return the status
             return newsBlogPage.addPageLink.isPresent();
@@ -156,7 +161,7 @@ describe('Aldryn Newsblog tests: ', function () {
 
                 newsBlogPage.namespaceInput.sendKeys('aldryn_newsblog')
                     .then(function () {
-                    newsBlogPage.applicationTitleInput.sendKeys('Test title');
+                    return newsBlogPage.applicationTitleInput.sendKeys('Test title');
                 }).then(function () {
                     newsBlogPage.saveButton.click();
 
@@ -191,7 +196,7 @@ describe('Aldryn Newsblog tests: ', function () {
                 return browser.isElementPresent(newsBlogPage.titleInput);
             }, newsBlogPage.mainElementsWaitTime);
 
-            newsBlogPage.titleInput.sendKeys(articleName);
+            return newsBlogPage.titleInput.sendKeys(articleName);
         }).then(function () {
             browser.actions().mouseMove(newsBlogPage.saveAndContinueButton)
                 .perform();
@@ -256,7 +261,7 @@ describe('Aldryn Newsblog tests: ', function () {
 
                     browser.actions().mouseMove(newsBlogPage.saveModalButton)
                         .perform();
-                    newsBlogPage.saveModalButton.click();
+                    return newsBlogPage.saveModalButton.click();
                 }).then(function () {
                     // wait for aldryn-newsblog block to appear
                     browser.wait(function () {
@@ -319,7 +324,7 @@ describe('Aldryn Newsblog tests: ', function () {
 
             browser.actions().mouseMove(newsBlogPage.saveAndContinueButton)
                 .perform();
-            newsBlogPage.deleteButton.click();
+            return newsBlogPage.deleteButton.click();
         }).then(function () {
             // wait for confirmation button to appear
             browser.wait(function () {
