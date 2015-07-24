@@ -127,7 +127,7 @@ describe('Aldryn Newsblog tests: ', function () {
                 }, newsBlogPage.iframeWaitTime);
 
                 // switch to sidebar menu iframe
-                browser.switchTo().frame(browser.findElement(By.css(
+                return browser.switchTo().frame(browser.findElement(By.css(
                     '.cms_sideframe-frame iframe')));
             }
         }).then(function () {
@@ -300,17 +300,17 @@ describe('Aldryn Newsblog tests: ', function () {
         // validate edit article links texts to delete proper article
         newsBlogPage.editArticleLinks.first().getText().then(function (text) {
             if (text === articleName) {
-                newsBlogPage.editArticleLinks.first().click();
+                return newsBlogPage.editArticleLinks.first().click();
             } else {
                 newsBlogPage.editArticleLinks.get(1).getText()
                     .then(function (text) {
                     if (text === articleName) {
-                        newsBlogPage.editArticleLinks.get(1).click();
+                        return newsBlogPage.editArticleLinks.get(1).click();
                     } else {
                         newsBlogPage.editArticleLinks.get(2).getText()
                             .then(function (text) {
                             if (text === articleName) {
-                                newsBlogPage.editArticleLinks.get(2).click();
+                                return newsBlogPage.editArticleLinks.get(2).click();
                             }
                         });
                     }
