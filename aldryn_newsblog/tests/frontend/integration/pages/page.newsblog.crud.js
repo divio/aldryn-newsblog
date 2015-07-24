@@ -49,7 +49,7 @@ var newsBlogPage = {
     languageTabs: element.all(by.css('.parler-language-tabs > .empty > a')),
     saveAndContinueButton: element(by.css('.submit-row [name="_continue"]')),
     editArticleLinks: element.all(by.css(
-        '.results [href*="/aldryn_newsblog/article/"]')),
+        '.results th > [href*="/aldryn_newsblog/article/"]')),
 
     // adding article to the page
     aldrynNewsBlogBlock: element(by.css('.aldryn-newsblog-list')),

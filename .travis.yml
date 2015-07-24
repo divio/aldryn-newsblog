@@ -17,8 +17,11 @@ env:
     - TOXENV=py27-dj17-cms31-postgres
     - TOXENV=flake8
   global:
+    # encrypted Sauce Labs sub-account user name
     - secure: RGXS2qmljsyLVGEifz9yvLwdg33KxPDeuwHx0QFmjSkQuJZP92Xxl36qr6rNel52L+39oya8BGD/ddB6RNI6R5TsoOvQGMlrVZmYy4d8EPA7J8u3+Mpp1zQGK1ACmcnVm+5h8dbHeWtZW/1SovnclUYem16KUmQf35l9G9tKc/I=
+    # encrypted Sauce Labs sub-account token
     - secure: Lt1n+6a4hj7BuShOufWfiAF3aTC4B6xpHwwcbklVy+fdy4pkY3okXO9CFtWkOTBRrFrgc8R+PL9dZ6ObK3SE1w7LU3dur89uIvJ4RXQ1uROr40PXAxD8RO+/2wp7nhh6CmG7GEKpuKt5QHbgdFVrJtmyoPp4vco1pU86njtEico=
+    # encrypted Code Climate token
     - secure: Jq2JBTBMYLpnrwk6uuAWGOX4y+TEVkBuwSZywSrlKb9sW77DloxRfGXH81Q9juvaAy4KqtcGY6HE5vqJSo77MS/cmbtmZe4ypPKgVFy2YDDUGdLi65vEjkerjAmtS7bYBVur+fWG0mpYAmnfj06d0MgkBgwgCr4yLbJFtW8ElAM=
 
 cache:
