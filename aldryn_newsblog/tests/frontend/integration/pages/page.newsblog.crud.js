@@ -79,7 +79,7 @@ var newsBlogPage = {
             newsBlogPage.passwordInput.clear();
 
             // fill in password field
-            newsBlogPage.passwordInput.sendKeys(
+            return newsBlogPage.passwordInput.sendKeys(
                 credentials.password);
         }).then(function () {
             newsBlogPage.loginButton.click();
