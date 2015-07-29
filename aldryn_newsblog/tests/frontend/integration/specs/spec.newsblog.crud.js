@@ -302,15 +302,15 @@ describe('Aldryn Newsblog tests: ', function () {
             if (text === articleName) {
                 return newsBlogPage.editArticleLinks.first().click();
             } else {
-                newsBlogPage.editArticleLinks.get(1).getText()
+                return newsBlogPage.editArticleLinks.get(1).getText()
                     .then(function (text) {
                     if (text === articleName) {
-                        return newsBlogPage.editArticleLinks.get(1).click();
+                        newsBlogPage.editArticleLinks.get(1).click();
                     } else {
-                        newsBlogPage.editArticleLinks.get(2).getText()
+                        return newsBlogPage.editArticleLinks.get(2).getText()
                             .then(function (text) {
                             if (text === articleName) {
-                                return newsBlogPage.editArticleLinks.get(2).click();
+                                newsBlogPage.editArticleLinks.get(2).click();
                             }
                         });
                     }
