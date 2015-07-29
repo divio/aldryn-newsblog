@@ -2,7 +2,7 @@
     "preset": "crockford",
 
     "maximumLineLength": {
-        "value": 80,
+        "value": 120,
         "allowRegex": true,
         "allowUrlComments": true
     },
