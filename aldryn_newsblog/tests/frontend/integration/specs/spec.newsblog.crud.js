@@ -305,12 +305,12 @@ describe('Aldryn Newsblog tests: ', function () {
                 return newsBlogPage.editArticleLinks.get(1).getText()
                     .then(function (text) {
                     if (text === articleName) {
-                        newsBlogPage.editArticleLinks.get(1).click();
+                        return newsBlogPage.editArticleLinks.get(1).click();
                     } else {
                         return newsBlogPage.editArticleLinks.get(2).getText()
                             .then(function (text) {
                             if (text === articleName) {
-                                newsBlogPage.editArticleLinks.get(2).click();
+                                return newsBlogPage.editArticleLinks.get(2).click();
                             }
                         });
                     }
