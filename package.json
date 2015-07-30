@@ -5,7 +5,7 @@
         "node": "0.9.0"
     },
     "devDependencies": {
-        "browserslist-saucelabs": "0.1.2",
+        "browserslist-saucelabs": "^0.1.4",
         "gulp": "3.9.0",
         "gulp-jscs": "1.6.0",
         "gulp-jshint": "1.11.0",
