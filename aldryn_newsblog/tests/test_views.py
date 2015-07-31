@@ -205,9 +205,11 @@ class TestTranslationFallbacks(NewsBlogTestCase):
             # it is the wrong language.
             language = settings.LANGUAGES[1][0]
             with switch_language(article, language):
+                slug = article.safe_translation_getter(
+                    'slug', None, language_code=language, any_language=True)
                 url = reverse(
                     'aldryn_newsblog:article-detail',
-                    kwargs={'slug': article.slug, }
+                    kwargs={'slug': slug}
                 )
                 self.assertNotEquals(url, url_one)
                 response = self.client.get(url)
@@ -218,9 +220,12 @@ class TestTranslationFallbacks(NewsBlogTestCase):
             with self.settings(CMS_LANGUAGES=self.NO_REDIRECT_CMS_SETTINGS):
                 language = settings.LANGUAGES[1][0]
                 with switch_language(article, language):
+                    slug = article.safe_translation_getter(
+                        'slug', None, language_code=language, any_language=True
+                    )
                     url = reverse(
                         'aldryn_newsblog:article-detail',
-                        kwargs={'slug': article.slug, }
+                        kwargs={'slug': slug, }
                     )
                     self.assertNotEquals(url, url_one)
                     response = self.client.get(url)
