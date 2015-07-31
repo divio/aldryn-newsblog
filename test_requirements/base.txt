@@ -1,4 +1,5 @@
 aldryn-search
+aldryn-apphook-reload
 coverage>=3.7.1
 dj-database-url
 django-classy-tags

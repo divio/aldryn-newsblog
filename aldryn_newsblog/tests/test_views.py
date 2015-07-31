@@ -203,8 +203,8 @@ class TestTranslationFallbacks(NewsBlogTestCase):
         with override_parler_settings(PARLER_LANGUAGES=LANGUAGES):
             language = settings.LANGUAGES[1][0]
             with switch_language(article, language):
-                slug = article.safe_translation_getter(
-                    'slug', None, language_code=language, any_language=True)
+                slug = article.safe_translation_getter('slug', None,
+                    language_code=language, any_language=True)
                 url = reverse(
                     'aldryn_newsblog:article-detail',
                     kwargs={'slug': slug}
@@ -217,16 +217,14 @@ class TestTranslationFallbacks(NewsBlogTestCase):
             with self.settings(CMS_LANGUAGES=self.NO_REDIRECT_CMS_SETTINGS):
                 language = settings.LANGUAGES[1][0]
                 with switch_language(article, language):
-                    slug = article.safe_translation_getter(
-                        'slug', None, language_code=language, any_language=True
-                    )
+                    slug = article.safe_translation_getter('slug', None)
                     url = reverse(
                         'aldryn_newsblog:article-detail',
                         kwargs={'slug': slug, }
                     )
                     self.assertNotEquals(url, url_one)
                     response = self.client.get(url)
-                    self.assertEquals(response.status_code, 200)
+                    self.assertEquals(response.status_code, 404)
 
     def test_article_detail_not_translated_no_fallback(self):
         """
