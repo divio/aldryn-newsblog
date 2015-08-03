@@ -201,31 +201,30 @@ class TestTranslationFallbacks(NewsBlogTestCase):
 
         LANGUAGES = add_default_language_settings(PARLER_LANGUAGES_SHOW)
         with override_parler_settings(PARLER_LANGUAGES=LANGUAGES):
-            # Non-existing language - an article will be returned, even though
-            # it is the wrong language.
             language = settings.LANGUAGES[1][0]
             with switch_language(article, language):
+                slug = article.safe_translation_getter('slug', None,
+                    language_code=language, any_language=True)
                 url = reverse(
                     'aldryn_newsblog:article-detail',
-                    kwargs={'slug': article.slug, }
+                    kwargs={'slug': slug}
                 )
                 self.assertNotEquals(url, url_one)
                 response = self.client.get(url)
-                # This is a redirect to the new language
-                self.assertEquals(response.status_code, 302)
+                self.assertEquals(response.status_code, 404)
 
             # Test again with redirect_on_fallback = False
             with self.settings(CMS_LANGUAGES=self.NO_REDIRECT_CMS_SETTINGS):
                 language = settings.LANGUAGES[1][0]
                 with switch_language(article, language):
+                    slug = article.safe_translation_getter('slug', None)
                     url = reverse(
                         'aldryn_newsblog:article-detail',
-                        kwargs={'slug': article.slug, }
+                        kwargs={'slug': slug, }
                     )
                     self.assertNotEquals(url, url_one)
                     response = self.client.get(url)
-                    # This is a redirect to the new language
-                    self.assertEquals(response.status_code, 200)
+                    self.assertEquals(response.status_code, 404)
 
     def test_article_detail_not_translated_no_fallback(self):
         """

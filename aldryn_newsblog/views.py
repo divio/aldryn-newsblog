@@ -241,7 +241,12 @@ class AuthorArticleList(ArticleListBase):
         )
 
     def get(self, request, author):
-        self.author = get_object_or_404(Person, slug=author)
+        language = translation.get_language_from_request(
+            request, check_path=True)
+        self.author = Person.objects.language(language).active_translations(
+            language, slug=author).first()
+        if not self.author:
+            raise Http404('Author not found')
         return super(AuthorArticleList, self).get(request)
 
     def get_context_data(self, **kwargs):

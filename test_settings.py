@@ -3,6 +3,7 @@
 
 import os
 
+
 HELPER_SETTINGS = {
     'TIME_ZONE': 'Europe/Zurich',
     'LANGUAGES': (
@@ -11,6 +12,7 @@ HELPER_SETTINGS = {
         ('fr', 'French'),
     ),
     'INSTALLED_APPS': [
+        'aldryn_apphook_reload',
         'aldryn_apphooks_config',
         'aldryn_boilerplates',
         'aldryn_categories',
@@ -137,6 +139,24 @@ HELPER_SETTINGS = {
     #     }
     # }
 }
+
+# This set of MW classes should work for Django 1.6 and 1.7.
+MIDDLEWARE_CLASSES_17 = [
+    'aldryn_apphook_reload.middleware.ApphookReloadMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'cms.middleware.user.CurrentUserMiddleware',
+    'cms.middleware.page.CurrentPageMiddleware',
+    'cms.middleware.toolbar.ToolbarMiddleware',
+    'cms.middleware.language.LanguageCookieMiddleware'
+]
+
+HELPER_SETTINGS['MIDDLEWARE_CLASSES'] = MIDDLEWARE_CLASSES_17
 
 
 def run():
