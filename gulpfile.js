@@ -53,7 +53,7 @@ gulp.task('lint', function () {
         .pipe(jshint.reporter('jshint-stylish'));
 });
 
-// #############################################################################
+// #########################################################
 // TESTS
 gulp.task('tests', ['tests:unit', 'tests:lint', 'tests:integration']);
 gulp.task('tests:lint', ['lint']);
@@ -79,6 +79,7 @@ gulp.task('tests:sauce:start', function (done) {
     tunnel.start(function (isCreated) {
         isTunnelCreated = isCreated;
         if (!isCreated) {
+            console.log('Failed to create Sauce tunnel, skipping tests');
             done();
             return false;
         }
