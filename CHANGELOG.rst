@@ -8,6 +8,7 @@ CHANGELOG
 * Pins Aldryn Translation Tools to >=0.1.0
 * Pins Aldryn Reversion to >=0.1.0
 * Pins Aldryn Boilerplates to >=0.6.0
+* Documentation improvements
 
 1.0.5 (2015-07-22)
 ------------------

@@ -57,6 +57,7 @@ In your project's ``settings.py`` make sure you have all of::
     'aldryn_apphooks_config',
     'aldryn_boilerplates',
     'aldryn_categories',
+    'aldryn_common',
     'aldryn_newsblog',
     'aldryn_people',
     'aldryn_reversion',
@@ -117,28 +118,12 @@ For more information on this optional processor, see the
 Migrations
 ==========
 
-Now run ``python manage.py migrate`` if you have not already done so,
+Now run ``python manage.py syncdb`` if you have not already done so,
 followed by ``python manage.py migrate`` to prepare the database for the new applications.
-
-Now run ``python manage.py migrate aldryn_newsblog``.
 
 .. note::
 
     Aldryn News & Blog supports both South and Django 1.7 migrations.
-
-If using Django 1.7, you may need to add the following to your settings: ::
-
-    MIGRATION_MODULES = {
-       ...
-       # The following are for some of the dependencies.
-
-       # Use this if you're using a version of djangocms_text_ckeditor < 2.5.1
-       # 'djangocms_text_ckeditor': 'djangocms_text_ckeditor.migrations_django',
-
-       # Use this if you're using a version of Filer < 0.9.10
-       # 'filer': 'filer.migrations_django',
-       ...
-    }
 
 
 Server
