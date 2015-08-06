@@ -3,6 +3,8 @@ CHANGELOG
 
 1.0.6 (2015-08-06)
 ------------------
+
+* Overhaul the News & Blog CMS Toolbar
 * Pins Aldryn Translation Tools to >=0.1.0
 * Pins Aldryn Reversion to >=0.1.0
 * Pins Aldryn Boilerplates to >=0.6.0
