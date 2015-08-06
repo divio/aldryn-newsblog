@@ -79,7 +79,7 @@ class NewsBlogToolbar(CMSToolbar):
 
     def get_on_delete_redirect_url(self, article):
         url = reverse('{0}:article-list'.format(article.app_config.namespace))
-        return '/en/'
+        return url
 
     def __get_newsblog_config(self):
         try:
