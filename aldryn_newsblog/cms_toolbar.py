@@ -134,7 +134,7 @@ class NewsBlogToolbar(CMSToolbar):
                     url_args = {'language': language, }
                 url = get_admin_url('aldryn_newsblog_newsblogconfig_change',
                                     [config.pk, ], **url_args)
-                menu.add_modal_item(_('Configure application'), url=url)
+                menu.add_modal_item(_('Configure addon'), url=url)
 
             if any(config_perms) and any(article_perms):
                 menu.add_break()
