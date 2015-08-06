@@ -96,6 +96,7 @@ class ArticleAdmin(
     form = ArticleAdminForm
     list_display = ('title', 'app_config', 'slug', 'is_featured',
                     'is_published')
+    list_filter = ['app_config', ]
     actions = (
         make_featured, make_not_featured,
         make_published, make_unpublished,
