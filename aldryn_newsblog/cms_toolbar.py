@@ -102,8 +102,11 @@ class NewsBlogToolbar(CMSToolbar):
             # Do nothing if there is no NewsBlog app_config to work with
             return
 
-        view_name = getattr(self.request.resolver_match, 'view_name', None)
         user = getattr(self.request, 'user', None)
+        try:
+            view_name = self.request.resolver_match.view_name
+        except AttributeError:
+            view_name = None
 
         if user and view_name:
             language = get_language_from_request(self.request, check_path=True)
