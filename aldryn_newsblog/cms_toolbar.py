@@ -2,7 +2,10 @@
 
 from __future__ import unicode_literals
 
-import urllib
+try:
+    from urllib import urlencode
+except ImportError:
+    from urllib.parse import urlencode
 
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse
@@ -63,7 +66,7 @@ def get_admin_url(action, action_args=[], **url_args):
     """
     base_url = admin_reverse(action, args=action_args)
     # Converts [{key: value}, …] => ["key=value", …]
-    params = urllib.urlencode(url_args)
+    params = urlencode(url_args)
     if params:
         return "?".join([base_url, params])
     else:
