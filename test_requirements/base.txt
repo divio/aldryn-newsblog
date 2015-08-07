@@ -15,3 +15,7 @@ flake8
 html5lib
 pyflakes
 selenium
+
+# docs
+sphinx
+sphinx-rtd-theme
