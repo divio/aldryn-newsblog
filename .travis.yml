@@ -6,10 +6,12 @@ sudo: false
 env:
   matrix:
     - TOXENV=flake8
-    - TOXENV=py27-dj17-cms31-postgres
-    - TOXENV=py27-dj17-cms30-postgres
-    - TOXENV=py27-dj17-cms31-mysql
-    - TOXENV=py27-dj17-cms30-mysql
+    - TOXENV=py27-dj18-cms31-postgres
+    - TOXENV=py27-dj18-cms30-postgres
+    - TOXENV=py27-dj18-cms31-mysql
+    - TOXENV=py27-dj18-cms30-mysql
+    - TOXENV=py27-dj18-cms31-sqlite
+    - TOXENV=py27-dj18-cms30-sqlite
     - TOXENV=py27-dj17-cms31-sqlite
     - TOXENV=py27-dj17-cms30-sqlite
     - TOXENV=py27-dj16-cms31-sqlite
