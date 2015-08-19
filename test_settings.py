@@ -176,7 +176,7 @@ elif django_version >= LooseVersion('1.8.0'):
                     ],
                     'loaders': [
                         'django.template.loaders.filesystem.Loader',
-                        'aldryn_boilerplates.template_loaders.AppDirectoriesLoader',
+                        'aldryn_boilerplates.template_loaders.AppDirectoriesLoader',  # flake8: noqa
                         'django.template.loaders.app_directories.Loader',
                         'django.template.loaders.eggs.Loader',
                     ],
