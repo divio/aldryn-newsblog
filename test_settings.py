@@ -1,8 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from distutils.version import LooseVersion
+from django import get_version
 
 import os
 
+django_version = LooseVersion(get_version())
 
 HELPER_SETTINGS = {
     'TIME_ZONE': 'Europe/Zurich',
@@ -28,24 +31,12 @@ HELPER_SETTINGS = {
         'sortedm2m',
         'taggit',
     ],
-    'TEMPLATE_DIRS': (
-        os.path.join(
-            os.path.dirname(__file__),
-            'aldryn_newsblog', 'tests', 'templates'), ),
     'STATICFILES_FINDERS': [
         'django.contrib.staticfiles.finders.FileSystemFinder',
         # important! place right before:
         #     django.contrib.staticfiles.finders.AppDirectoriesFinder
         'aldryn_boilerplates.staticfile_finders.AppDirectoriesFinder',
         'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    ],
-    'TEMPLATE_LOADERS': [
-        'django.template.loaders.filesystem.Loader',
-        # important! place right before:
-        #     django.template.loaders.app_directories.Loader
-        'aldryn_boilerplates.template_loaders.AppDirectoriesLoader',
-        'django.template.loaders.app_directories.Loader',
-        'django.template.loaders.eggs.Loader',
     ],
     'ALDRYN_NEWSBLOG_TEMPLATE_PREFIXES': [('dummy', 'dummy'), ],
     'ALDRYN_BOILERPLATE_NAME': 'bootstrap3',
@@ -139,6 +130,61 @@ HELPER_SETTINGS = {
     #     }
     # }
 }
+
+if django_version < LooseVersion('1.8.0'):
+    HELPER_SETTINGS.update({
+        'CONTEXT_PROCESSORS': [
+            'aldryn_boilerplates.context_processors.boilerplate',
+        ],
+        'TEMPLATE_DIRS': (
+            os.path.join(
+                os.path.dirname(__file__),
+                'aldryn_newsblog', 'tests', 'templates'), ),
+        'TEMPLATE_LOADERS': [
+            'django.template.loaders.filesystem.Loader',
+            # important! place right before:
+            #     django.template.loaders.app_directories.Loader
+            'aldryn_boilerplates.template_loaders.AppDirectoriesLoader',
+            'django.template.loaders.app_directories.Loader',
+            'django.template.loaders.eggs.Loader',
+        ],
+    })
+elif django_version >= LooseVersion('1.8.0'):
+    HELPER_SETTINGS.update({
+        'TEMPLATES': [
+            {
+                'BACKEND': 'django.template.backends.django.DjangoTemplates',
+                'DIRS': [
+                    os.path.join(
+                        os.path.dirname(__file__),
+                        'aldryn_newsblog', 'tests', 'templates'),
+                ],
+                'OPTIONS': {
+                    'context_processors': [
+                        'django.contrib.auth.context_processors.auth',
+                        'django.contrib.messages.context_processors.messages',
+                        'django.core.context_processors.i18n',
+                        'django.core.context_processors.debug',
+                        'django.core.context_processors.request',
+                        'django.core.context_processors.media',
+                        'django.core.context_processors.csrf',
+                        'django.core.context_processors.tz',
+                        'sekizai.context_processors.sekizai',
+                        'django.core.context_processors.static',
+                        'cms.context_processors.cms_settings',
+                        'aldryn_boilerplates.context_processors.boilerplate',
+                    ],
+                    'loaders': [
+                        'django.template.loaders.filesystem.Loader',
+                        'aldryn_boilerplates.template_loaders.AppDirectoriesLoader',  # flake8: noqa
+                        'django.template.loaders.app_directories.Loader',
+                        'django.template.loaders.eggs.Loader',
+                    ],
+                },
+            },
+        ]
+    })
+
 
 # This set of MW classes should work for Django 1.6 and 1.7.
 MIDDLEWARE_CLASSES_17 = [
