@@ -2,6 +2,7 @@
 
 from __future__ import unicode_literals
 
+from django.core.urlresolvers import NoReverseMatch
 from django.utils.translation import (
     get_language_from_request,
     ugettext_lazy as _,
@@ -37,13 +38,15 @@ class NewsBlogMenu(CMSAttachMenu):
                 articles = articles.filter(app_config=config)
 
         for article in articles:
-            node = NavigationNode(
-                article.safe_translation_getter('title',
-                    language_code=language),
-                article.get_absolute_url(language=language),
-                article.pk,
-            )
-            nodes.append(node)
+            try:
+                url = article.get_absolute_url(language=language)
+            except NoReverseMatch:
+                url = None
+
+            if url:
+                node = NavigationNode(article.safe_translation_getter(
+                    'title', language_code=language), url, article.pk)
+                nodes.append(node)
         return nodes
 
 menu_pool.register_menu(NewsBlogMenu)
