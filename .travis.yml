@@ -6,18 +6,18 @@ sudo: false
 env:
   matrix:
     - TOXENV=flake8
-    - TOXENV=py27-dj18-cms31-postgres
-    - TOXENV=py27-dj18-cms30-postgres
-    - TOXENV=py27-dj18-cms31-mysql
-    - TOXENV=py27-dj18-cms30-mysql
-    - TOXENV=py27-dj18-cms31-sqlite
-    - TOXENV=py27-dj18-cms30-sqlite
-    - TOXENV=py27-dj17-cms31-sqlite
-    - TOXENV=py27-dj17-cms30-sqlite
-    - TOXENV=py27-dj16-cms31-sqlite
-    - TOXENV=py27-dj16-cms30-sqlite
-    - TOXENV=py26-dj16-cms31-sqlite
-    - TOXENV=py26-dj16-cms30-sqlite
+    - TOXENV=py27-dj18-postgres-cms31
+    - TOXENV=py27-dj18-postgres-cms30
+    - TOXENV=py27-dj18-mysql-cms31
+    - TOXENV=py27-dj18-mysql-cms30
+    - TOXENV=py27-dj18-sqlite-cms31
+    - TOXENV=py27-dj18-sqlite-cms30
+    - TOXENV=py27-dj17-sqlite-cms31
+    - TOXENV=py27-dj17-sqlite-cms30
+    - TOXENV=py27-dj16-sqlite-cms31
+    - TOXENV=py27-dj16-sqlite-cms30
+    - TOXENV=py26-dj16-sqlite-cms31
+    - TOXENV=py26-dj16-sqlite-cms30
   global:
     # encrypted Sauce Labs sub-account user name
     - secure: RGXS2qmljsyLVGEifz9yvLwdg33KxPDeuwHx0QFmjSkQuJZP92Xxl36qr6rNel52L+39oya8BGD/ddB6RNI6R5TsoOvQGMlrVZmYy4d8EPA7J8u3+Mpp1zQGK1ACmcnVm+5h8dbHeWtZW/1SovnclUYem16KUmQf35l9G9tKc/I=
