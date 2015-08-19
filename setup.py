@@ -5,10 +5,7 @@ from aldryn_newsblog import __version__
 REQUIREMENTS = [
     'Django>=1.6,<1.9',
     'aldryn-apphooks-config>=0.2.4',
-    # please uncomment and update to latest aldryn-boilerplates
-    # which has 1.8 support (currently not released on pipi)
-    # instead setup direct install it is included in test_requirements/base.txt
-    # 'aldryn-boilerplates>=0.6.0',
+    'aldryn-boilerplates>=0.7.2',
     'aldryn-categories',
     'aldryn-common>=0.1.3',
     'aldryn-people>=0.5.2',
