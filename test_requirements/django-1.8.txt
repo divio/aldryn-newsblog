@@ -1,4 +1,4 @@
 django>=1.8,<1.9
 django-reversion>=1.8.2,<1.9
-
+https://github.com/aldryn/aldryn-boilerplates/archive/master.zip
 -r base.txt
