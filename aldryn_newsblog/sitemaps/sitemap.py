@@ -1,17 +1,19 @@
 # -*- coding: utf-8 -*-
-from django.contrib.sitemaps import Sitemap
+
+from __future__ import unicode_literals
+
+from aldryn_translation_tools.sitemaps import I18NSitemap
 
 from ..models import Article
 
 
-class NewsBlogSitemap(Sitemap):
+class NewsBlogSitemap(I18NSitemap):
 
     changefreq = "never"
     priority = 0.5
 
     def __init__(self, *args, **kwargs):
         self.namespace = kwargs.pop('namespace', None)
-        self.language = kwargs.pop('language', None)
         super(NewsBlogSitemap, self).__init__(*args, **kwargs)
 
     def items(self):
@@ -21,9 +23,6 @@ class NewsBlogSitemap(Sitemap):
         if self.namespace is not None:
             qs = qs.filter(app_config__namespace=self.namespace)
         return qs
-
-    def location(self, item):
-        return item.get_absolute_url(self.language)
 
     def lastmod(self, obj):
         return obj.publishing_date
