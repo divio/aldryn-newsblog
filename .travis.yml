@@ -7,11 +7,8 @@ env:
   matrix:
     - TOXENV=flake8
     - TOXENV=py27-dj18-postgres-cms31
-    - TOXENV=py27-dj18-postgres-cms30
     - TOXENV=py27-dj18-mysql-cms31
-    - TOXENV=py27-dj18-mysql-cms30
     - TOXENV=py27-dj18-sqlite-cms31
-    - TOXENV=py27-dj18-sqlite-cms30
     - TOXENV=py27-dj17-sqlite-cms31
     - TOXENV=py27-dj17-sqlite-cms30
     - TOXENV=py27-dj16-sqlite-cms31
