@@ -1,5 +1,5 @@
 aldryn-search
-aldryn-apphook-reload
+https://github.com/aldryn/aldryn-apphook-reload/archive/develop.zip#egg=aldryn_apphook_reload
 coverage>=3.7.1
 dj-database-url
 django-classy-tags

@@ -107,6 +107,9 @@ HELPER_SETTINGS = {
         'filer.thumbnail_processors.scale_and_crop_with_subject_location',
         'easy_thumbnails.processors.filters',
     ),
+    # NOTE: Please retain these DB settings intact but commented out as it helps
+    # developers when testing the raw SQL queries locally.
+    # -------------------------------------------------------------------------
     # 'DATABASES': {
     #     'default': {
     #         'ENGINE': 'django.db.backends.sqlite3',
@@ -128,7 +131,21 @@ HELPER_SETTINGS = {
     #         'HOST': '127.0.0.1',
     #         'PORT': '5432',
     #     }
-    # }
+    # },
+    'MIDDLEWARE_CLASSES': [
+        'aldryn_apphook_reload.middleware.ApphookReloadMiddleware',
+        'django.contrib.sessions.middleware.SessionMiddleware',
+        'django.middleware.csrf.CsrfViewMiddleware',
+        'django.contrib.auth.middleware.AuthenticationMiddleware',
+        'django.contrib.messages.middleware.MessageMiddleware',
+        'django.middleware.locale.LocaleMiddleware',
+        'django.middleware.common.CommonMiddleware',
+        'django.middleware.clickjacking.XFrameOptionsMiddleware',
+        'cms.middleware.user.CurrentUserMiddleware',
+        'cms.middleware.page.CurrentPageMiddleware',
+        'cms.middleware.toolbar.ToolbarMiddleware',
+        'cms.middleware.language.LanguageCookieMiddleware'
+    ]
 }
 
 if django_version < LooseVersion('1.8.0'):
@@ -182,27 +199,8 @@ elif django_version >= LooseVersion('1.8.0'):
                     ],
                 },
             },
-        ]
+        ],
     })
-
-
-# This set of MW classes should work for Django 1.6 and 1.7.
-MIDDLEWARE_CLASSES_17 = [
-    'aldryn_apphook_reload.middleware.ApphookReloadMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.locale.LocaleMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'cms.middleware.user.CurrentUserMiddleware',
-    'cms.middleware.page.CurrentPageMiddleware',
-    'cms.middleware.toolbar.ToolbarMiddleware',
-    'cms.middleware.language.LanguageCookieMiddleware'
-]
-
-HELPER_SETTINGS['MIDDLEWARE_CLASSES'] = MIDDLEWARE_CLASSES_17
 
 
 def run():
