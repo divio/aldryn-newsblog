@@ -1,6 +1,14 @@
 CHANGELOG
 =========
 
+1.0.7 (2015-08-20)
+------------------
+
+* Adds Django 1.8 support
+* Pins Aldryn Translation Tools to >= 0.1.2
+* Pins Aldryn Boilerplates to >=0.7.2
+* Menu (CMSAttachMenu) is no longer automatically added
+
 1.0.6 (2015-08-06)
 ------------------
 
