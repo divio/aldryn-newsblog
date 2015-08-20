@@ -8,7 +8,7 @@ django-haystack
 django-sekizai
 django-treebeard>=2.0
 djangocms-admin-style
-https://github.com/nephila/djangocms-helper/tree/2e48ef23ee8c8b9fe74220113195aa188f604d9b#egg=djangocms_helper
+git+git://github.com/nephila/djangocms-helper.git@2e48ef23ee8c8b9fe74220113195aa188f604d9b
 djangocms_text_ckeditor
 docopt
 flake8
