@@ -17,9 +17,7 @@ HELPER_SETTINGS = {
     'INSTALLED_APPS': [
         'aldryn_apphook_reload',
         'aldryn_apphooks_config',
-        'aldryn_boilerplates',
         'aldryn_categories',
-        'aldryn_newsblog',
         'aldryn_people',
         'aldryn_reversion',
         'djangocms_text_ckeditor',
@@ -31,13 +29,11 @@ HELPER_SETTINGS = {
         'sortedm2m',
         'taggit',
     ],
-    'STATICFILES_FINDERS': [
-        'django.contrib.staticfiles.finders.FileSystemFinder',
-        # important! place right before:
-        #     django.contrib.staticfiles.finders.AppDirectoriesFinder
-        'aldryn_boilerplates.staticfile_finders.AppDirectoriesFinder',
-        'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    ],
+    'TEMPLATE_DIRS': (
+        os.path.join(
+            os.path.dirname(__file__),
+            'aldryn_newsblog', 'tests', 'templates'),
+    ),
     'ALDRYN_NEWSBLOG_TEMPLATE_PREFIXES': [('dummy', 'dummy'), ],
     'ALDRYN_BOILERPLATE_NAME': 'bootstrap3',
     # app-specific
@@ -131,60 +127,6 @@ HELPER_SETTINGS = {
     # }
 }
 
-if django_version < LooseVersion('1.8.0'):
-    HELPER_SETTINGS.update({
-        'CONTEXT_PROCESSORS': [
-            'aldryn_boilerplates.context_processors.boilerplate',
-        ],
-        'TEMPLATE_DIRS': (
-            os.path.join(
-                os.path.dirname(__file__),
-                'aldryn_newsblog', 'tests', 'templates'), ),
-        'TEMPLATE_LOADERS': [
-            'django.template.loaders.filesystem.Loader',
-            # important! place right before:
-            #     django.template.loaders.app_directories.Loader
-            'aldryn_boilerplates.template_loaders.AppDirectoriesLoader',
-            'django.template.loaders.app_directories.Loader',
-            'django.template.loaders.eggs.Loader',
-        ],
-    })
-elif django_version >= LooseVersion('1.8.0'):
-    HELPER_SETTINGS.update({
-        'TEMPLATES': [
-            {
-                'BACKEND': 'django.template.backends.django.DjangoTemplates',
-                'DIRS': [
-                    os.path.join(
-                        os.path.dirname(__file__),
-                        'aldryn_newsblog', 'tests', 'templates'),
-                ],
-                'OPTIONS': {
-                    'context_processors': [
-                        'django.contrib.auth.context_processors.auth',
-                        'django.contrib.messages.context_processors.messages',
-                        'django.core.context_processors.i18n',
-                        'django.core.context_processors.debug',
-                        'django.core.context_processors.request',
-                        'django.core.context_processors.media',
-                        'django.core.context_processors.csrf',
-                        'django.core.context_processors.tz',
-                        'sekizai.context_processors.sekizai',
-                        'django.core.context_processors.static',
-                        'cms.context_processors.cms_settings',
-                        'aldryn_boilerplates.context_processors.boilerplate',
-                    ],
-                    'loaders': [
-                        'django.template.loaders.filesystem.Loader',
-                        'aldryn_boilerplates.template_loaders.AppDirectoriesLoader',  # flake8: noqa
-                        'django.template.loaders.app_directories.Loader',
-                        'django.template.loaders.eggs.Loader',
-                    ],
-                },
-            },
-        ]
-    })
-
 
 # This set of MW classes should work for Django 1.6 and 1.7.
 MIDDLEWARE_CLASSES_17 = [
@@ -207,7 +149,9 @@ HELPER_SETTINGS['MIDDLEWARE_CLASSES'] = MIDDLEWARE_CLASSES_17
 
 def run():
     from djangocms_helper import runner
-    runner.cms('aldryn_newsblog')
+    # --boilerplate option will ensure correct boilerplate settings are
+    # added to settings
+    runner.cms('aldryn_newsblog', extra_args=['--boilerplate'])
 
 if __name__ == "__main__":
     run()
