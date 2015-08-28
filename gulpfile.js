@@ -114,6 +114,8 @@ gulp.task('tests:integration', ['tests:webdriver', 'tests:sauce:start'], functio
             gutil.log(gutil.colors.red(
                 'Error (' + error.plugin + '): ' + error.message
             ));
+            // Skipping tests if any plugin returned an error.
+            return false;
         })
         .on('end', function () {
             gulp.run('tests:sauce:end');
