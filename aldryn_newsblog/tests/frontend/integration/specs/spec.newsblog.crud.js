@@ -246,11 +246,11 @@ describe('Aldryn Newsblog tests: ', function () {
                     }, newsBlogPage.mainElementsWaitTime);
 
                     // set Application
+                    return newsBlogPage.applicationSelect.click();
+                }).then(function () {
+                    return newsBlogPage.applicationSelect.sendKeys('NewsBlog');
+                }).then(function () {
                     newsBlogPage.applicationSelect.click();
-                    newsBlogPage.applicationSelect.sendKeys('NewsBlog')
-                        .then(function () {
-                        newsBlogPage.applicationSelect.click();
-                    });
 
                     // switch to default page content
                     browser.switchTo().defaultContent();
