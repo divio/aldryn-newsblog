@@ -248,7 +248,8 @@ describe('Aldryn Newsblog tests: ', function () {
                     // set Application
                     return newsBlogPage.applicationSelect.click();
                 }).then(function () {
-                    return newsBlogPage.applicationSelect.sendKeys('NewsBlog');
+                    newsBlogPage.applicationSelect.sendKeys('NewsBlog');
+                    return newsBlogPage.newsBlogOption.click();
                 }).then(function () {
                     newsBlogPage.applicationSelect.click();
 
