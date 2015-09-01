@@ -8,7 +8,10 @@ django-haystack
 django-sekizai
 django-treebeard>=2.0
 djangocms-admin-style
-djangocms-helper>=0.7
+# djangocms-helper has issues with management command which is fixed but
+# not released yet, so use develop branch temporary.
+# TODO: please replace with a release >0.9.0
+https://github.com/nephila/djangocms-helper/archive/develop.zip
 djangocms_text_ckeditor
 docopt
 flake8

@@ -7,16 +7,13 @@ env:
   matrix:
     - TOXENV=flake8
     - TOXENV=py27-dj18-postgres-cms31
-    - TOXENV=py27-dj18-postgres-cms30
     - TOXENV=py27-dj18-mysql-cms31
-    - TOXENV=py27-dj18-mysql-cms30
-    - TOXENV=py27-dj18-sqlite-cms31
-    - TOXENV=py27-dj18-sqlite-cms30
-    - TOXENV=py27-dj17-sqlite-cms31
+    - TOXENV=py27-dj18-sqlite-cms31-fe
+    - TOXENV=py27-dj17-sqlite-cms31-fe
     - TOXENV=py27-dj17-sqlite-cms30
     - TOXENV=py27-dj16-sqlite-cms31
-    - TOXENV=py27-dj16-sqlite-cms30
-    - TOXENV=py26-dj16-sqlite-cms31
+    - TOXENV=py27-dj16-sqlite-cms30-fe
+    - TOXENV=py26-dj16-sqlite-cms31-fe
     - TOXENV=py26-dj16-sqlite-cms30
   global:
     # encrypted Sauce Labs sub-account user name

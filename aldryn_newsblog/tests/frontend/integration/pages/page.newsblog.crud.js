@@ -41,6 +41,7 @@ var newsBlogPage = {
     editConfigsLink: element(by.css('.row1 > th > a')),
     addConfigsButton: element(by.css('.object-tools .addlink')),
     namespaceInput: element(by.id('id_namespace')),
+    newsBlogOption: element(by.css('option[value="NewsBlogApp"]')),
     applicationTitleInput: element(by.id('id_app_title')),
     successNotification: element(by.css('.messagelist .success')),
 
