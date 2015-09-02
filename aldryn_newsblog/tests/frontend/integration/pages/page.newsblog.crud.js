@@ -41,13 +41,13 @@ var newsBlogPage = {
     editConfigsLink: element(by.css('.row1 > th > a')),
     addConfigsButton: element(by.css('.object-tools .addlink')),
     namespaceInput: element(by.id('id_namespace')),
-    newsBlogOption: element(by.css('option[value="NewsBlogApp"]')),
     applicationTitleInput: element(by.id('id_app_title')),
     successNotification: element(by.css('.messagelist .success')),
 
     // adding new article
     addArticleButton: element(by.css('.model-article .addlink')),
-    languageTabs: element.all(by.css('.parler-language-tabs > .empty > a')),
+    englishLanguageTab: element(by.css(
+        '.parler-language-tabs > .empty > a[href*="language=en"]')),
     saveAndContinueButton: element(by.css('.submit-row [name="_continue"]')),
     editArticleLinks: element.all(by.css(
         '.results th > [href*="/aldryn_newsblog/article/"]')),
@@ -58,6 +58,7 @@ var newsBlogPage = {
         '.cms_toolbar-item-navigation [href*="advanced-settings"]')),
     modalIframe: element(by.css('.cms_modal-frame iframe')),
     applicationSelect: element(by.id('application_urls')),
+    newsBlogOption: element(by.css('option[value="NewsBlogApp"]')),
     saveModalButton: element(by.css('.cms_modal-buttons .cms_btn-action')),
     newsBlogMetaBlock: element(by.css('.aldryn-newsblog-meta')),
     articleLink: element(by.css('.aldryn-newsblog-list h2 > a')),

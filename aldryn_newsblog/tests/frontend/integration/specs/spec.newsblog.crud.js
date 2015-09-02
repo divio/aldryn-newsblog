@@ -9,6 +9,7 @@
 // #############################################################################
 // INTEGRATION TEST
 var newsBlogPage = require('../pages/page.newsblog.crud.js');
+var cmsProtractorHelper = require('cms-protractor-helper');
 
 describe('Aldryn Newsblog tests: ', function () {
     // create random article name
@@ -188,10 +189,10 @@ describe('Aldryn Newsblog tests: ', function () {
         newsBlogPage.addArticleButton.click();
 
         browser.wait(function () {
-            return browser.isElementPresent(newsBlogPage.languageTabs.get(1));
+            return browser.isElementPresent(newsBlogPage.englishLanguageTab);
         }, newsBlogPage.mainElementsWaitTime);
 
-        newsBlogPage.languageTabs.get(1).click().then(function () {
+        newsBlogPage.englishLanguageTab.click().then(function () {
             browser.wait(function () {
                 return browser.isElementPresent(newsBlogPage.titleInput);
             }, newsBlogPage.mainElementsWaitTime);
@@ -240,18 +241,8 @@ describe('Aldryn Newsblog tests: ', function () {
                     browser.switchTo().frame(browser.findElement(By.css(
                         '.cms_modal-frame iframe')));
 
-                    // wait for Application select to appear
-                    browser.wait(function () {
-                        return browser.isElementPresent(newsBlogPage.applicationSelect);
-                    }, newsBlogPage.mainElementsWaitTime);
-
-                    // set Application
-                    return newsBlogPage.applicationSelect.click();
-                }).then(function () {
-                    newsBlogPage.applicationSelect.sendKeys('NewsBlog');
-                    return newsBlogPage.newsBlogOption.click();
-                }).then(function () {
-                    newsBlogPage.applicationSelect.click();
+                    cmsProtractorHelper.selectOption(newsBlogPage.applicationSelect,
+                        'NewsBlog', newsBlogPage.newsBlogOption);
 
                     // switch to default page content
                     browser.switchTo().defaultContent();
