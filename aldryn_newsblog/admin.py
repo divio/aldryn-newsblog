@@ -154,7 +154,6 @@ admin.site.register(models.Article, ArticleAdmin)
 class NewsBlogConfigAdmin(
     AllTranslationsMixin,
     VersionedPlaceholderAdminMixin,
-    PlaceholderAdminMixin,
     BaseAppHookConfig,
     TranslatableAdmin
 ):
