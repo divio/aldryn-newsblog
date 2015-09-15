@@ -119,6 +119,10 @@ class NewsBlogConfig(TranslatableModel, AppHookConfig):
     def get_app_title(self):
         return getattr(self, 'app_title', _('untitled'))
 
+    class Meta:
+        verbose_name = 'config'
+        verbose_name_plural = 'configs'
+
 
 class NewsBlogConfigForm(AppDataForm):
     default_published = forms.BooleanField(
