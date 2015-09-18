@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import unicode_literals
+from django.core.urlresolvers import reverse
 
 import reversion
 import six
@@ -12,6 +13,7 @@ from aldryn_reversion.core import create_revision_with_placeholders
 from parler.utils.context import switch_language
 
 from . import NewsBlogTestCase
+from aldryn_newsblog.cms_appconfig import NewsBlogConfig
 
 
 class TestVersioning(NewsBlogTestCase):
@@ -173,3 +175,31 @@ class TestVersioning(NewsBlogTestCase):
         response = self.client.get(article.get_absolute_url())
         self.assertContains(response, content1)
         self.assertNotContains(response, content2)
+
+    def test_blog_config_recovery_accessible(self):
+        with transaction.atomic():
+            with reversion.create_revision():
+                new_conf = NewsBlogConfig(
+                    namespace='test_revocery_admin_url', paginate_by=15)
+                new_conf.save()
+        new_config_version = reversion.get_for_object(new_conf)[0]
+        new_config_pk = new_conf.pk
+        self.assertEqual(NewsBlogConfig.objects.filter(
+            pk=new_config_pk).count(), 1)
+        new_conf.delete()
+        self.assertEqual(NewsBlogConfig.objects.filter(
+            pk=new_config_pk).count(), 0)
+
+        # check that there is a a way to access recovery view
+        obj = new_config_version.object_version.object
+        opts = obj._meta
+        url = reverse(
+            'admin:{0}_{1}_{2}'.format(
+                opts.app_label,
+                obj._meta.model_name,
+                'recover'),
+            args=[new_config_version.pk])
+        # ust in case check the length, but at this step either a
+        # NoReverseMatch should occur or other error,
+        # if no exception is raised, it is a good sign
+        self.assertGreater(len(url), 4)
