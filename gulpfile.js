@@ -46,7 +46,7 @@ gulp.task('lint', function () {
         .on('error', function (error) {
             gutil.log('\n' + error.message);
             if (process.env.CI) {
-                // Force the process to exit with error code
+                // force the process to exit with error code
                 process.exit(1);
             }
         })
@@ -80,7 +80,7 @@ gulp.task('tests:sauce:start', function (done) {
         isTunnelCreated = isCreated;
         if (!isCreated) {
             console.log('Failed to create Sauce tunnel, returning error code');
-            // Force the process to exit with error code if couldn't create the tunnel
+            // force the process to exit with error code if couldn't create the tunnel
             process.exit(1);
             return false;
         }
@@ -103,7 +103,7 @@ gulp.task('tests:sauce:end', function (done) {
 gulp.task('tests:webdriver', webdriverUpdate);
 gulp.task('tests:integration', ['tests:webdriver', 'tests:sauce:start'], function () {
     if (process.env.CI && !isTunnelCreated) {
-        // Force the process to exit with error code if couldn't create the tunnel
+        // force the process to exit with error code if couldn't create the tunnel
         process.exit(1);
         return false;
     }
@@ -116,7 +116,7 @@ gulp.task('tests:integration', ['tests:webdriver', 'tests:sauce:start'], functio
             gutil.log(gutil.colors.red(
                 'Error (' + error.plugin + '): ' + error.message
             ));
-            // Force the process to exit with error code
+            // force the process to exit with error code
             process.exit(1);
         })
         .on('end', function () {
