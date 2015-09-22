@@ -79,8 +79,9 @@ gulp.task('tests:sauce:start', function (done) {
     tunnel.start(function (isCreated) {
         isTunnelCreated = isCreated;
         if (!isCreated) {
-            console.log('Failed to create Sauce tunnel, skipping tests');
-            done();
+            console.log('Failed to create Sauce tunnel, returning error code');
+            // Force the process to exit with error code
+            process.exit(1);
             return false;
         }
         console.log('Connected to Sauce Labs.');
@@ -102,7 +103,8 @@ gulp.task('tests:sauce:end', function (done) {
 gulp.task('tests:webdriver', webdriverUpdate);
 gulp.task('tests:integration', ['tests:webdriver', 'tests:sauce:start'], function () {
     if (process.env.CI && !isTunnelCreated) {
-        // Skipping tests if couldn't create the tunnel.
+        // Force the process to exit with error code if couldn't create the tunnel
+        process.exit(1);
         return false;
     }
     return gulp.src([PROJECT_PATH.tests + '/integration/specs/*.js'])
