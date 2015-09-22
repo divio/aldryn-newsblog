@@ -80,7 +80,7 @@ gulp.task('tests:sauce:start', function (done) {
         isTunnelCreated = isCreated;
         if (!isCreated) {
             console.log('Failed to create Sauce tunnel, returning error code');
-            // Force the process to exit with error code
+            // Force the process to exit with error code if couldn't create the tunnel
             process.exit(1);
             return false;
         }
