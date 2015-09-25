@@ -13,7 +13,7 @@ var cmsProtractorHelper = require('cms-protractor-helper');
 
 describe('Aldryn Newsblog tests: ', function () {
     // create random article name
-    var articleName = 'Test article ' + (Math.floor(Math.random() * 10001));
+    var articleName = 'Test article ' + cmsProtractorHelper.randomDigits(4);
 
     it('logs in to the site with valid username and password', function () {
         // go to the main page
