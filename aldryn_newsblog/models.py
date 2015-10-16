@@ -65,7 +65,7 @@ SQL_IS_TRUE = {
 
 
 @python_2_unicode_compatible
-@version_controlled_content
+@version_controlled_content(follow=['app_config'])
 class Article(TranslationHelperMixin, TranslatableModel):
     # when True, updates the article's search_data field
     # whenever the article is saved or a plugin is saved
