@@ -398,7 +398,7 @@ class TestVariousViews(NewsBlogTestCase):
         ]
         tags = Article.objects.get_tags(
             request=None, namespace=self.app_config.namespace)
-        tags = [tag for tag in map(lambda x: (x.slug, x.num_articles), tags)]
+        tags = [(tag.slug, tag.num_articles) for tag in tags]
         self.assertEquals(tags, tags_expected)
 
     def test_articles_by_date(self):
