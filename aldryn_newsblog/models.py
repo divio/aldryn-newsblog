@@ -88,9 +88,9 @@ class Article(TranslationHelperMixin, TranslatableModel):
                 'Clear it to have it re-created automatically.'),
         ),
         lead_in=HTMLField(
-            verbose_name=_('Optional lead-in'), default='',
-            help_text=_('Will be displayed in lists, and at the start of the '
-                        'detail page (in bold)'),
+            verbose_name=_('lead-in'), default='',
+            help_text=_('Optional. Will be displayed in lists, and at the '
+                        'start of the detail page (in bold)'),
             blank=True,
         ),
         meta_title=models.CharField(
