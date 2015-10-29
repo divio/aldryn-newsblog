@@ -10,6 +10,7 @@ from cms.wizards.wizard_base import Wizard
 
 from parler.forms import TranslatableModelForm
 
+from .cms_appconfig import NewsBlogConfig
 from .models import Article
 
 
@@ -22,16 +23,28 @@ class NewsBlogArticleWizard(Wizard):
         :param kwargs: Ignored here
         :return: True if user has add permission, else False
         """
+        num_configs = NewsBlogConfig.objects.count()
+        if not num_configs:
+            return False
         if user.is_superuser or user.has_perm("aldryn_newsblog.add_article"):
             return True
         return False
 
 
 class CreateNewsBlogArticleForm(TranslatableModelForm):
-    model = Article
-    fields = ['title', 'app_config', 'is_featured', 'is_published', 'lead_in',
-              'content', ]
 
+    content = forms.CharField(
+        label="Content", help_text="The main body of the article", widget=forms.Textarea())
+
+    class Meta:
+        model = Article
+        fields = ['title', 'app_config', 'is_published', 'lead_in', 'content', ]
+
+    def __init__(self, **kwargs):
+        app_configs = NewsBlogConfig.objects.all()
+        if app_configs.count() < 2:
+            self.fields['app_config'].widget = forms.HiddenInput()
+        super(CreateNewsBlogArticleForm, self).__init__(**kwargs)
 
 
 newsblog_article_wizard = NewsBlogArticleWizard(
