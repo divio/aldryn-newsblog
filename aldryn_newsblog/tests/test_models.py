@@ -43,15 +43,23 @@ class TestModels(NewsBlogTestCase):
         article.save()
         self.assertEquals(article.slug, 'this-is-a-title')
         # Now, let's try another with the same title
-        article_1 = Article(title=title.lower(), author=author, owner=author.user,
-            app_config=self.app_config, publishing_date=now())
+        article_1 = Article(
+            title=title.lower(),
+            author=author,
+            owner=author.user,
+            app_config=self.app_config,
+            publishing_date=now())
         # Note, it cannot be the exact same title, else we'll fail the unique
         # constraint on the field.
         article_1.save()
         # Note that this should be "incremented" slug here.
         self.assertEquals(article_1.slug, 'this-is-a-title-1')
-        article_2 = Article(title=title.upper(), author=author, owner=author.user,
-            app_config=self.app_config, publishing_date=now())
+        article_2 = Article(
+            title=title.upper(),
+            author=author,
+            owner=author.user,
+            app_config=self.app_config,
+            publishing_date=now())
         article_2.save()
         self.assertEquals(article_2.slug, 'this-is-a-title-2')
 

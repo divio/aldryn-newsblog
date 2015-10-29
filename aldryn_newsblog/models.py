@@ -15,9 +15,8 @@ except ImportError:
     from django.utils.encoding import force_text as force_unicode
 
 from django.utils.encoding import python_2_unicode_compatible
-from django.utils.text import slugify as default_slugify
 from django.utils.timezone import now
-from django.utils.translation import ugettext_lazy as _, ugettext, override
+from django.utils.translation import ugettext_lazy as _, override
 
 from aldryn_apphooks_config.fields import AppHookConfigField
 from aldryn_categories.fields import CategoryManyToManyField
