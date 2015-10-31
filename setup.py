@@ -22,6 +22,7 @@ REQUIREMENTS = [
     'lxml',
     'pytz',
     'six',
+    'python-dateutil',
 ]
 
 # https://pypi.python.org/pypi?%3Aaction=list_classifiers
