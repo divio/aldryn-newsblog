@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+1.0.7 (2015-10-31)
+------------------
+
+* Add missing requirement python-dateutil
+
 1.0.6 (2015-08-06)
 ------------------
 
