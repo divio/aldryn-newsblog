@@ -8,6 +8,7 @@ CHANGELOG
 * Pins Aldryn Translation Tools to >= 0.1.2
 * Pins Aldryn Boilerplates to >=0.7.2
 * Menu (CMSAttachMenu) is no longer automatically added
+* Adds a CMS 3.2 wizard for creating articles
 
 1.0.7 (2015-10-31)
 ------------------
