@@ -9,7 +9,7 @@ REQUIREMENTS = [
     'aldryn-boilerplates>=0.7.2',
     'aldryn-categories',
     'aldryn-common>=0.1.3',
-    'aldryn-people>=0.5.2',
+    'aldryn-people>=1.1.0',
     'aldryn-reversion>=0.1.0',
     'aldryn-translation-tools>=0.1.0',
     'backport_collections==0.1',
