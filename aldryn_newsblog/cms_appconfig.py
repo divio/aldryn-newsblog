@@ -9,6 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from aldryn_apphooks_config.utils import setup_config
 from aldryn_apphooks_config.models import AppHookConfig
+from aldryn_reversion.core import version_controlled_content
 from app_data import AppDataForm
 from cms.models.fields import PlaceholderField
 from parler.models import TranslatableModel
@@ -34,6 +35,7 @@ TEMPLATE_PREFIX_CHOICES = getattr(
     settings, 'ALDRYN_NEWSBLOG_TEMPLATE_PREFIXES', [])
 
 
+@version_controlled_content
 class NewsBlogConfig(TranslatableModel, AppHookConfig):
     """Adds some translatable, per-app-instance fields."""
     translations = TranslatedFields(
@@ -116,6 +118,10 @@ class NewsBlogConfig(TranslatableModel, AppHookConfig):
 
     def get_app_title(self):
         return getattr(self, 'app_title', _('untitled'))
+
+    class Meta:
+        verbose_name = 'config'
+        verbose_name_plural = 'configs'
 
 
 class NewsBlogConfigForm(AppDataForm):

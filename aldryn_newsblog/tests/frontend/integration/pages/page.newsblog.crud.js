@@ -4,15 +4,15 @@
  */
 
 'use strict';
-/* global by, element, browser, expect */
+/* global by, element, expect */
 
 // #############################################################################
 // INTEGRATION TEST PAGE OBJECT
 
+var cmsProtractorHelper = require('cms-protractor-helper');
+
 var newsBlogPage = {
     site: 'http://127.0.0.1:8000/en/',
-    mainElementsWaitTime: 12000,
-    iframeWaitTime: 15000,
 
     // log in, log out
     editModeLink: element(by.css('.inner a[href="/?edit"]')),
@@ -46,7 +46,8 @@ var newsBlogPage = {
 
     // adding new article
     addArticleButton: element(by.css('.model-article .addlink')),
-    languageTabs: element.all(by.css('.parler-language-tabs > .empty > a')),
+    englishLanguageTab: element(by.css(
+        '.parler-language-tabs > .empty > a[href*="language=en"]')),
     saveAndContinueButton: element(by.css('.submit-row [name="_continue"]')),
     editArticleLinks: element.all(by.css(
         '.results th > [href*="/aldryn_newsblog/article/"]')),
@@ -57,6 +58,7 @@ var newsBlogPage = {
         '.cms_toolbar-item-navigation [href*="advanced-settings"]')),
     modalIframe: element(by.css('.cms_modal-frame iframe')),
     applicationSelect: element(by.id('application_urls')),
+    newsBlogOption: element(by.css('option[value="NewsBlogApp"]')),
     saveModalButton: element(by.css('.cms_modal-buttons .cms_btn-action')),
     newsBlogMetaBlock: element(by.css('.aldryn-newsblog-meta')),
     articleLink: element(by.css('.aldryn-newsblog-list h2 > a')),
@@ -74,24 +76,20 @@ var newsBlogPage = {
         newsBlogPage.usernameInput.clear();
 
         // fill in email field
-        newsBlogPage.usernameInput.sendKeys(
-            credentials.username).then(function () {
+        return newsBlogPage.usernameInput.sendKeys(credentials.username)
+            .then(function () {
             newsBlogPage.passwordInput.clear();
 
             // fill in password field
-            return newsBlogPage.passwordInput.sendKeys(
-                credentials.password);
+            return newsBlogPage.passwordInput.sendKeys(credentials.password);
         }).then(function () {
             newsBlogPage.loginButton.click();
 
             // wait for user menu to appear
-            browser.wait(browser.isElementPresent(
-                newsBlogPage.userMenus.first()),
-                newsBlogPage.mainElementsWaitTime);
+            cmsProtractorHelper.waitFor(newsBlogPage.userMenus.first());
 
             // validate user menu
-            expect(newsBlogPage.userMenus.first().isDisplayed())
-                .toBeTruthy();
+            expect(newsBlogPage.userMenus.first().isDisplayed()).toBeTruthy();
         });
     }
 

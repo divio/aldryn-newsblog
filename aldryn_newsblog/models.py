@@ -15,16 +15,17 @@ except ImportError:
     from django.utils.encoding import force_text as force_unicode
 
 from django.utils.encoding import python_2_unicode_compatible
-from django.utils.text import slugify as default_slugify
 from django.utils.timezone import now
-from django.utils.translation import ugettext_lazy as _, ugettext, override
+from django.utils.translation import ugettext_lazy as _, override
 
 from aldryn_apphooks_config.fields import AppHookConfigField
 from aldryn_categories.fields import CategoryManyToManyField
 from aldryn_categories.models import Category
 from aldryn_people.models import Person
 from aldryn_reversion.core import version_controlled_content
-from aldryn_translation_tools.models import TranslationHelperMixin
+from aldryn_translation_tools.models import (
+    TranslationHelperMixin, TranslatedAutoSlugifyMixin,
+)
 
 from cms.models.fields import PlaceholderField
 from cms.models.pluginmodel import CMSPlugin
@@ -65,8 +66,14 @@ SQL_IS_TRUE = {
 
 
 @python_2_unicode_compatible
-@version_controlled_content
-class Article(TranslationHelperMixin, TranslatableModel):
+@version_controlled_content(follow=['app_config'])
+class Article(TranslatedAutoSlugifyMixin,
+              TranslationHelperMixin,
+              TranslatableModel):
+
+    # TranslatedAutoSlugifyMixin options
+    slug_source_field_name = 'title'
+    slug_default = _('untitled-article')
     # when True, updates the article's search_data field
     # whenever the article is saved or a plugin is saved
     # on the article's content placeholder.
@@ -88,9 +95,9 @@ class Article(TranslationHelperMixin, TranslatableModel):
                 'Clear it to have it re-created automatically.'),
         ),
         lead_in=HTMLField(
-            verbose_name=_('Optional lead-in'), default='',
-            help_text=_('Will be displayed in lists, and at the start of the '
-                        'detail page (in bold)'),
+            verbose_name=_('lead-in'), default='',
+            help_text=_('Optional. Will be displayed in lists, and at the '
+                        'start of the detail page (in bold)'),
             blank=True,
         ),
         meta_title=models.CharField(
@@ -180,12 +187,6 @@ class Article(TranslationHelperMixin, TranslatableModel):
         with override(language):
             return reverse('{0}article-detail'.format(namespace), kwargs=kwargs)
 
-    def slugify(self, source_text, i=None):
-        slug = default_slugify(source_text)
-        if i is not None:
-            slug += "_%d" % i
-        return slug
-
     def get_search_data(self, language=None, request=None):
         """
         Provides an index for use with Haystack, or, for populating
@@ -225,51 +226,8 @@ class Article(TranslationHelperMixin, TranslatableModel):
                     'name': u' '.join((self.owner.first_name,
                                        self.owner.last_name))
                 })[0]
-
-        # Start with a naïve approach, if none provided.
-        if not self.slug:
-            self.slug = force_unicode(default_slugify(self.title))
-
-        # NOTE: It is very important that we never allow a blank slug to be
-        # saved to the database. If we do, then subsequent attempts to create an
-        # article will fail Django validation on the form, since we are asking
-        # it to enforce uniqueness for (language, slug) pairs, and the slug in
-        # the form starts out empty. When Django tries to validate, it finds
-        # that the (language, slug) pair already exists, and we never even get
-        # here.
-        #
-        # Since the slug is derived from the title of the article, if the slug
-        # is still empty, then the title must be /effectively/ untitled.
-        if not self.slug:
-            self.slug = ugettext('untitled-article')
-
-        # Ensure we aren't colliding with an existing slug *for this language*.
-        if not Article.objects.language(self.get_current_language()).filter(
-                translations__slug=self.slug).exclude(pk=self.pk).exists():
-            return super(Article, self).save(*args, **kwargs)
-
-        for lang in LANGUAGE_CODES:
-            #
-            # We'd much rather just do something like:
-            # Article.objects.translated(lang,
-            # slug__startswith=self.slug)
-            # But sadly, this isn't supported by Parler/Django, see:
-            # http://django-parler.readthedocs.org/en/latest/api/\
-            #     parler.managers.html#the-translatablequeryset-class
-            #
-            slugs = []
-            all_slugs = Article.objects.language(lang).exclude(
-                pk=self.pk).values_list('translations__slug', flat=True)
-            for slug in all_slugs:
-                if slug and slug.startswith((self.title, self.slug)):
-                    slugs.append(slug)
-            i = 1
-            while True:
-                slug = self.slugify(self.title or self.slug, i)
-                if slug not in slugs:
-                    self.slug = slug
-                    return super(Article, self).save(*args, **kwargs)
-                i += 1
+        # slug would be generated by TranslatedAutoSlugifyMixin
+        super(Article, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.safe_translation_getter('title', any_language=True)

@@ -6,7 +6,6 @@ from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 from cms.admin.placeholderadmin import (
     FrontendEditableAdminMixin,
-    PlaceholderAdminMixin,
 )
 from parler.forms import TranslatableModelForm
 from parler.admin import TranslatableAdmin
@@ -153,7 +152,7 @@ admin.site.register(models.Article, ArticleAdmin)
 
 class NewsBlogConfigAdmin(
     AllTranslationsMixin,
-    PlaceholderAdminMixin,
+    VersionedPlaceholderAdminMixin,
     BaseAppHookConfig,
     TranslatableAdmin
 ):

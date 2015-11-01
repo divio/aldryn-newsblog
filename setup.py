@@ -10,7 +10,7 @@ REQUIREMENTS = [
     'aldryn-common>=0.1.3',
     'aldryn-people>=0.5.2',
     'aldryn-reversion>=0.1.0',
-    'aldryn-translation-tools>=0.1.2',
+    'aldryn-translation-tools>=0.2.0',
     'backport_collections==0.1',
     'django-appdata>=0.1.4',
     'django-cms>=3.0.12',
@@ -22,6 +22,7 @@ REQUIREMENTS = [
     'lxml',
     'pytz',
     'six',
+    'python-dateutil',
 ]
 
 # https://pypi.python.org/pypi?%3Aaction=list_classifiers

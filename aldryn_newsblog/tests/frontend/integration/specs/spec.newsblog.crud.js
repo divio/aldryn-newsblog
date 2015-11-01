@@ -9,17 +9,18 @@
 // #############################################################################
 // INTEGRATION TEST
 var newsBlogPage = require('../pages/page.newsblog.crud.js');
+var cmsProtractorHelper = require('cms-protractor-helper');
 
 describe('Aldryn Newsblog tests: ', function () {
     // create random article name
-    var articleName = 'Test article ' + (Math.floor(Math.random() * 10001));
+    var articleName = 'Test article ' + cmsProtractorHelper.randomDigits(4);
 
     it('logs in to the site with valid username and password', function () {
         // go to the main page
         browser.get(newsBlogPage.site);
 
         // check if the page already exists
-        newsBlogPage.testLink.isPresent().then(function (present) {
+        return newsBlogPage.testLink.isPresent().then(function (present) {
             if (present === true) {
                 // go to the main page
                 browser.get(newsBlogPage.site + '?edit');
@@ -29,9 +30,7 @@ describe('Aldryn Newsblog tests: ', function () {
             }
 
             // wait for username input to appear
-            browser.wait(function () {
-                return browser.isElementPresent(newsBlogPage.usernameInput);
-            }, newsBlogPage.mainElementsWaitTime);
+            cmsProtractorHelper.waitFor(newsBlogPage.usernameInput);
 
             // login to the site
             newsBlogPage.cmsLogin();
@@ -40,58 +39,44 @@ describe('Aldryn Newsblog tests: ', function () {
 
     it('creates a new test page', function () {
         // click the example.com link in the top menu
-        newsBlogPage.userMenus.first().click().then(function () {
+        return newsBlogPage.userMenus.first().click().then(function () {
             // wait for top menu dropdown options to appear
-            browser.wait(function () {
-                return browser.isElementPresent(newsBlogPage.userMenuDropdown);
-            }, newsBlogPage.mainElementsWaitTime);
+            cmsProtractorHelper.waitFor(newsBlogPage.userMenuDropdown);
 
             return newsBlogPage.administrationOptions.first().click();
         }).then(function () {
             // wait for modal iframe to appear
-            browser.wait(function () {
-                return browser.isElementPresent(newsBlogPage.sideMenuIframe);
-            }, newsBlogPage.iframeWaitTime);
+            cmsProtractorHelper.waitFor(newsBlogPage.sideMenuIframe);
 
             // switch to sidebar menu iframe
             browser.switchTo().frame(browser.findElement(
                 By.css('.cms_sideframe-frame iframe')));
 
-            browser.wait(function () {
-                return browser.isElementPresent(newsBlogPage.pagesLink);
-            }, newsBlogPage.mainElementsWaitTime);
+            cmsProtractorHelper.waitFor(newsBlogPage.pagesLink);
 
             newsBlogPage.pagesLink.click();
 
             // wait for iframe side menu to reload
-            browser.wait(function () {
-                return browser.isElementPresent(newsBlogPage.addConfigsButton);
-            }, newsBlogPage.mainElementsWaitTime);
+            cmsProtractorHelper.waitFor(newsBlogPage.addConfigsButton);
 
             // check if the page already exists and return the status
             return newsBlogPage.addPageLink.isPresent();
         }).then(function (present) {
             if (present === true) {
                 // page is absent - create new page
-                browser.wait(function () {
-                    return browser.isElementPresent(newsBlogPage.addPageLink);
-                }, newsBlogPage.mainElementsWaitTime);
+                cmsProtractorHelper.waitFor(newsBlogPage.addPageLink);
 
                 newsBlogPage.addPageLink.click();
 
-                browser.wait(function () {
-                    return browser.isElementPresent(newsBlogPage.titleInput);
-                }, newsBlogPage.mainElementsWaitTime);
+                cmsProtractorHelper.waitFor(newsBlogPage.titleInput);
 
-                newsBlogPage.titleInput.sendKeys('Test').then(function () {
+                return newsBlogPage.titleInput.sendKeys('Test').then(function () {
                     newsBlogPage.saveButton.click();
 
                     return newsBlogPage.slugErrorNotification.isPresent();
                 }).then(function (present) {
                     if (present === false) {
-                        browser.wait(function () {
-                            return browser.isElementPresent(newsBlogPage.editPageLink);
-                        }, newsBlogPage.mainElementsWaitTime);
+                        cmsProtractorHelper.waitFor(newsBlogPage.editPageLink);
 
                         // wait till the editPageLink will become clickable
                         browser.sleep(500);
@@ -102,13 +87,10 @@ describe('Aldryn Newsblog tests: ', function () {
                         // switch to default page content
                         browser.switchTo().defaultContent();
 
-                        browser.wait(function () {
-                            return browser.isElementPresent(newsBlogPage.testLink);
-                        }, newsBlogPage.mainElementsWaitTime);
+                        cmsProtractorHelper.waitFor(newsBlogPage.testLink);
 
                         // validate test link text
-                        newsBlogPage.testLink.getText()
-                            .then(function (title) {
+                        return newsBlogPage.testLink.getText().then(function (title) {
                             expect(title).toEqual('Test');
                         });
                     }
@@ -119,28 +101,22 @@ describe('Aldryn Newsblog tests: ', function () {
 
     it('creates a new apphook config', function () {
         // check if the focus is on sidebar ifarme
-        newsBlogPage.editPageLink.isPresent().then(function (present) {
+        return newsBlogPage.editPageLink.isPresent().then(function (present) {
             if (present === false) {
                 // wait for modal iframe to appear
-                browser.wait(function () {
-                    return browser.isElementPresent(newsBlogPage.sideMenuIframe);
-                }, newsBlogPage.iframeWaitTime);
+                cmsProtractorHelper.waitFor(newsBlogPage.sideMenuIframe);
 
                 // switch to sidebar menu iframe
                 return browser.switchTo().frame(browser.findElement(By.css(
                     '.cms_sideframe-frame iframe')));
             }
         }).then(function () {
-            browser.wait(function () {
-                return browser.isElementPresent(newsBlogPage.breadcrumbsLinks.first());
-            }, newsBlogPage.mainElementsWaitTime);
+            cmsProtractorHelper.waitFor(newsBlogPage.breadcrumbsLinks.first());
 
             // click the Home link in breadcrumbs
             newsBlogPage.breadcrumbsLinks.first().click();
 
-            browser.wait(function () {
-                return browser.isElementPresent(newsBlogPage.newsBlogConfigsLink);
-            }, newsBlogPage.mainElementsWaitTime);
+            cmsProtractorHelper.waitFor(newsBlogPage.newsBlogConfigsLink);
 
             newsBlogPage.newsBlogConfigsLink.click();
 
@@ -149,52 +125,38 @@ describe('Aldryn Newsblog tests: ', function () {
         }).then(function (present) {
             if (present === false) {
                 // apphook config is absent - create new apphook config
-                browser.wait(function () {
-                    return browser.isElementPresent(newsBlogPage.addConfigsButton);
-                }, newsBlogPage.mainElementsWaitTime);
+                cmsProtractorHelper.waitFor(newsBlogPage.addConfigsButton);
 
                 newsBlogPage.addConfigsButton.click();
 
-                browser.wait(function () {
-                    return browser.isElementPresent(newsBlogPage.namespaceInput);
-                }, newsBlogPage.mainElementsWaitTime);
+                cmsProtractorHelper.waitFor(newsBlogPage.namespaceInput);
 
-                newsBlogPage.namespaceInput.sendKeys('aldryn_newsblog')
+                return newsBlogPage.namespaceInput.sendKeys('aldryn_newsblog')
                     .then(function () {
                     return newsBlogPage.applicationTitleInput.sendKeys('Test title');
                 }).then(function () {
                     newsBlogPage.saveButton.click();
 
-                    browser.wait(function () {
-                        return browser.isElementPresent(newsBlogPage.successNotification);
-                    }, newsBlogPage.mainElementsWaitTime);
+                    cmsProtractorHelper.waitFor(newsBlogPage.successNotification);
                 });
             }
         });
     });
 
     it('creates a new article', function () {
-        browser.wait(function () {
-            return browser.isElementPresent(newsBlogPage.breadcrumbsLinks.first());
-        }, newsBlogPage.mainElementsWaitTime);
+        cmsProtractorHelper.waitFor(newsBlogPage.breadcrumbsLinks.first());
 
         // click the Home link in breadcrumbs
         newsBlogPage.breadcrumbsLinks.first().click();
 
-        browser.wait(function () {
-            return browser.isElementPresent(newsBlogPage.addArticleButton);
-        }, newsBlogPage.mainElementsWaitTime);
+        cmsProtractorHelper.waitFor(newsBlogPage.addArticleButton);
 
         newsBlogPage.addArticleButton.click();
 
-        browser.wait(function () {
-            return browser.isElementPresent(newsBlogPage.languageTabs.get(1));
-        }, newsBlogPage.mainElementsWaitTime);
+        cmsProtractorHelper.waitFor(newsBlogPage.englishLanguageTab);
 
-        newsBlogPage.languageTabs.get(1).click().then(function () {
-            browser.wait(function () {
-                return browser.isElementPresent(newsBlogPage.titleInput);
-            }, newsBlogPage.mainElementsWaitTime);
+        return newsBlogPage.englishLanguageTab.click().then(function () {
+            cmsProtractorHelper.waitFor(newsBlogPage.titleInput);
 
             return newsBlogPage.titleInput.sendKeys(articleName);
         }).then(function () {
@@ -202,9 +164,7 @@ describe('Aldryn Newsblog tests: ', function () {
                 .perform();
             newsBlogPage.saveButton.click();
 
-            browser.wait(function () {
-                return browser.isElementPresent(newsBlogPage.successNotification);
-            }, newsBlogPage.mainElementsWaitTime);
+            cmsProtractorHelper.waitFor(newsBlogPage.successNotification);
 
             // validate success notification
             expect(newsBlogPage.successNotification.isDisplayed())
@@ -220,53 +180,36 @@ describe('Aldryn Newsblog tests: ', function () {
         browser.switchTo().defaultContent();
 
         // add articles to the page only if they were not added before
-        newsBlogPage.aldrynNewsBlogBlock.isPresent().then(function (present) {
+        return newsBlogPage.aldrynNewsBlogBlock.isPresent().then(function (present) {
             if (present === false) {
                 // click the Page link in the top menu
-                newsBlogPage.userMenus.get(1).click().then(function () {
+                return newsBlogPage.userMenus.get(1).click().then(function () {
                     // wait for top menu dropdown options to appear
-                    browser.wait(function () {
-                        return browser.isElementPresent(newsBlogPage.userMenuDropdown);
-                    }, newsBlogPage.mainElementsWaitTime);
+                    cmsProtractorHelper.waitFor(newsBlogPage.userMenuDropdown);
 
                     newsBlogPage.advancedSettingsOption.click();
 
                     // wait for modal iframe to appear
-                    browser.wait(function () {
-                        return browser.isElementPresent(newsBlogPage.modalIframe);
-                    }, newsBlogPage.iframeWaitTime);
+                    cmsProtractorHelper.waitFor(newsBlogPage.modalIframe);
 
                     // switch to modal iframe
                     browser.switchTo().frame(browser.findElement(By.css(
                         '.cms_modal-frame iframe')));
 
-                    // wait for Application select to appear
-                    browser.wait(function () {
-                        return browser.isElementPresent(newsBlogPage.applicationSelect);
-                    }, newsBlogPage.mainElementsWaitTime);
-
-                    // set Application
-                    newsBlogPage.applicationSelect.click();
-                    newsBlogPage.applicationSelect.sendKeys('NewsBlog')
-                        .then(function () {
-                        newsBlogPage.applicationSelect.click();
-                    });
+                    cmsProtractorHelper.selectOption(newsBlogPage.applicationSelect,
+                        'NewsBlog', newsBlogPage.newsBlogOption);
 
                     // switch to default page content
                     browser.switchTo().defaultContent();
 
-                    browser.wait(function () {
-                        return browser.isElementPresent(newsBlogPage.saveModalButton);
-                    }, newsBlogPage.mainElementsWaitTime);
+                    cmsProtractorHelper.waitFor(newsBlogPage.saveModalButton);
 
                     browser.actions().mouseMove(newsBlogPage.saveModalButton)
                         .perform();
                     return newsBlogPage.saveModalButton.click();
                 }).then(function () {
                     // wait for aldryn-newsblog block to appear
-                    browser.wait(function () {
-                        return browser.isElementPresent(newsBlogPage.aldrynNewsBlogBlock);
-                    }, newsBlogPage.mainElementsWaitTime);
+                    cmsProtractorHelper.waitFor(newsBlogPage.aldrynNewsBlogBlock);
 
                     // validate aldryn-newsblog block
                     expect(newsBlogPage.aldrynNewsBlogBlock.isDisplayed())
@@ -284,21 +227,17 @@ describe('Aldryn Newsblog tests: ', function () {
 
     it('deletes article', function () {
         // wait for modal iframe to appear
-        browser.wait(function () {
-            return browser.isElementPresent(newsBlogPage.sideMenuIframe);
-        }, newsBlogPage.iframeWaitTime);
+        cmsProtractorHelper.waitFor(newsBlogPage.sideMenuIframe);
 
         // switch to sidebar menu iframe
         browser.switchTo()
             .frame(browser.findElement(By.css('.cms_sideframe-frame iframe')));
 
         // wait for edit event link to appear
-        browser.wait(function () {
-            return browser.isElementPresent(newsBlogPage.editArticleLinks.first());
-        }, newsBlogPage.mainElementsWaitTime);
+        cmsProtractorHelper.waitFor(newsBlogPage.editArticleLinks.first());
 
         // validate edit article links texts to delete proper article
-        newsBlogPage.editArticleLinks.first().getText().then(function (text) {
+        return newsBlogPage.editArticleLinks.first().getText().then(function (text) {
             if (text === articleName) {
                 return newsBlogPage.editArticleLinks.first().click();
             } else {
@@ -318,28 +257,21 @@ describe('Aldryn Newsblog tests: ', function () {
             }
         }).then(function () {
             // wait for delete button to appear
-            browser.wait(function () {
-                return browser.isElementPresent(newsBlogPage.deleteButton);
-            }, newsBlogPage.mainElementsWaitTime);
+            cmsProtractorHelper.waitFor(newsBlogPage.deleteButton);
 
             browser.actions().mouseMove(newsBlogPage.saveAndContinueButton)
                 .perform();
             return newsBlogPage.deleteButton.click();
         }).then(function () {
             // wait for confirmation button to appear
-            browser.wait(function () {
-                return browser.isElementPresent(newsBlogPage.sidebarConfirmationButton);
-            }, newsBlogPage.mainElementsWaitTime);
+            cmsProtractorHelper.waitFor(newsBlogPage.sidebarConfirmationButton);
 
             newsBlogPage.sidebarConfirmationButton.click();
 
-            browser.wait(function () {
-                return browser.isElementPresent(newsBlogPage.successNotification);
-            }, newsBlogPage.mainElementsWaitTime);
+            cmsProtractorHelper.waitFor(newsBlogPage.successNotification);
 
             // validate success notification
-            expect(newsBlogPage.successNotification.isDisplayed())
-                .toBeTruthy();
+            expect(newsBlogPage.successNotification.isDisplayed()).toBeTruthy();
 
             // switch to default page content
             browser.switchTo().defaultContent();
