@@ -7,6 +7,7 @@ import datetime
 import pytz
 
 from django.core.urlresolvers import reverse
+from django.utils.translation import force_text
 
 from aldryn_newsblog.models import NewsBlogConfig
 from cms import api
@@ -47,16 +48,16 @@ class TestArchivePlugin(TestAppConfigPluginsBase):
         for d in dates:
             article = self.create_article(publishing_date=d)
             articles.append(article)
-
         response = self.client.get(self.plugin_page.get_absolute_url())
+        response_content = force_text(response.content)
         needle = '<a href="/en/page/{year}/{month}/"[^>]*>'
         '[^<]*<span class="badge">{num}</span>'
         month1 = needle.format(year=2014, month=11, num=2)
         month2 = needle.format(year=2015, month=2, num=1)
         month3 = needle.format(year=2015, month=1, num=3)
-        self.assertRegexpMatches(str(response), month1)
-        self.assertRegexpMatches(str(response), month2)
-        self.assertRegexpMatches(str(response), month3)
+        self.assertRegexpMatches(response_content, month1)
+        self.assertRegexpMatches(response_content, month2)
+        self.assertRegexpMatches(response_content, month3)
 
 
 class TestArticleSearchPlugin(TestAppConfigPluginsBase):
@@ -110,6 +111,7 @@ class TestAuthorsPlugin(TestAppConfigPluginsBase):
         time.sleep(1)
 
         response = self.client.get(self.plugin_page.get_absolute_url())
+        response_content = force_text(response.content)
         pattern = '<p class="author"><a href="{url}"></a>'
         pattern += '</p>\s*<p[^>]*></p>\s*<p class="badge">{num}</p>'
         author1_pattern = pattern.format(
@@ -126,8 +128,8 @@ class TestAuthorsPlugin(TestAppConfigPluginsBase):
                 args=[author2.slug]
             )
         )
-        self.assertRegexpMatches(str(response), author1_pattern)
-        self.assertRegexpMatches(str(response), author2_pattern)
+        self.assertRegexpMatches(response_content, author1_pattern)
+        self.assertRegexpMatches(response_content, author2_pattern)
 
 
 class TestCategoriesPlugin(TestAppConfigPluginsBase):
@@ -164,11 +166,12 @@ class TestCategoriesPlugin(TestAppConfigPluginsBase):
         time.sleep(1)
 
         response = self.client.get(self.plugin_page.get_absolute_url())
+        response_content = force_text(response.content)
         pattern = '<span[^>]*>{num}</span>\s*<a href=[^>]*>{name}</a>'
         needle1 = pattern.format(num=3, name=self.category1.name)
         needle2 = pattern.format(num=5, name=self.category2.name)
-        self.assertRegexpMatches(str(response), needle1)
-        self.assertRegexpMatches(str(response), needle2)
+        self.assertRegexpMatches(response_content, needle1)
+        self.assertRegexpMatches(response_content, needle2)
 
 
 class TestFeaturedArticlesPlugin(TestAppConfigPluginsBase):
@@ -281,5 +284,6 @@ class TestTagsPlugin(TestAppConfigPluginsBase):
         time.sleep(1)
 
         response = self.client.get(self.plugin_page.get_absolute_url())
-        self.assertRegexpMatches(str(response), 'tag1\s*<span[^>]*>3</span>')
-        self.assertRegexpMatches(str(response), 'tag2\s*<span[^>]*>5</span>')
+        response_content = force_text(response.content)
+        self.assertRegexpMatches(response_content, 'tag1\s*<span[^>]*>3</span>')
+        self.assertRegexpMatches(response_content, 'tag2\s*<span[^>]*>5</span>')

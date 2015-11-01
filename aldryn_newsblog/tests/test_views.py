@@ -388,17 +388,17 @@ class TestVariousViews(NewsBlogTestCase):
         # create unpublished article to test that it is not counted
         self.create_tagged_articles(
             1, tags=(tag_names[0],), is_published=False)
-        tag_slug2 = self.create_tagged_articles(
-            3, tags=(tag_names[1],)).keys()[0]
-        tag_slug3 = self.create_tagged_articles(
-            5, tags=(tag_names[2],)).keys()[0]
+        tag_slug2 = list(self.create_tagged_articles(
+            3, tags=(tag_names[1],)).keys())[0]
+        tag_slug3 = list(self.create_tagged_articles(
+            5, tags=(tag_names[2],)).keys())[0]
         tags_expected = [
             (tag_slug3, 5),
             (tag_slug2, 3),
         ]
         tags = Article.objects.get_tags(
             request=None, namespace=self.app_config.namespace)
-        tags = map(lambda x: (x.slug, x.num_articles), tags)
+        tags = [(tag.slug, tag.num_articles) for tag in tags]
         self.assertEquals(tags, tags_expected)
 
     def test_articles_by_date(self):

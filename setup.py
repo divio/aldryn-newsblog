@@ -4,11 +4,12 @@ from aldryn_newsblog import __version__
 
 REQUIREMENTS = [
     'Django>=1.6,<1.9',
+    'python-dateutil',
     'aldryn-apphooks-config>=0.2.4',
     'aldryn-boilerplates>=0.7.2',
     'aldryn-categories',
     'aldryn-common>=0.1.3',
-    'aldryn-people>=0.5.2',
+    'aldryn-people>=1.1.0',
     'aldryn-reversion>=0.1.0',
     'aldryn-translation-tools>=0.2.0',
     'backport_collections==0.1',
