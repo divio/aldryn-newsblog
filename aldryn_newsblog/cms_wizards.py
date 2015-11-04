@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 
 from django.utils.translation import ugettext_lazy as _
 from django import forms
+from django.core.urlresolvers import reverse, NoReverseMatch
 
 from cms.api import add_plugin
 from cms.utils import permissions
@@ -17,6 +18,22 @@ from .cms_appconfig import NewsBlogConfig
 from .models import Article
 
 
+def get_published_app_configs():
+    """
+    Returns a list of app_configs that are attached to a published page.
+    """
+    published_configs = []
+    for config in NewsBlogConfig.objects.all():
+        try:
+            reverse('{0}:article-list'.format(config.namespace))
+            published_configs.append(config)
+        except NoReverseMatch:
+            # We don't want to let people try to create Articles here, as
+            # they'll just 404 on arrival because the apphook isn't active.
+            pass
+    return published_configs
+
+
 class NewsBlogArticleWizard(Wizard):
 
     def user_has_add_permission(self, user, **kwargs):
@@ -27,7 +44,7 @@ class NewsBlogArticleWizard(Wizard):
         :return: True if user has add permission, else False
         """
         # No one can create an Article, if there is no app_config yet.
-        num_configs = NewsBlogConfig.objects.count()
+        num_configs = get_published_app_configs()
         if not num_configs:
             return False
 
@@ -60,8 +77,8 @@ class CreateNewsBlogArticleForm(BaseFormMixin, TranslatableModelForm):
 
         # If there's only 1 (or zero) app_configs, don't bother show the
         # app_config choice field, we'll choose the option for the user.
-        app_configs = NewsBlogConfig.objects.all()
-        if app_configs.count() < 2:
+        app_configs = get_published_app_configs()
+        if len(app_configs) < 2:
             self.fields['app_config'].widget = forms.HiddenInput()
             self.fields['app_config'].initial = app_configs[0].pk
 
