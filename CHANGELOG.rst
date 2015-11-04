@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+1.0.9 (2015-11-04)
+------------------
+
+* Fixes restrictive django-filer dependency (<0.10)
+
 1.0.8 (2015-11-01)
 ------------------
 
