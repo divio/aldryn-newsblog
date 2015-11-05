@@ -23,7 +23,7 @@ def get_published_app_configs():
     Returns a list of app_configs that are attached to a published page.
     """
     published_configs = []
-    for config in NewsBlogConfig.objects.all():
+    for config in NewsBlogConfig.objects.iterator():
         try:
             reverse('{0}:article-list'.format(config.namespace))
             published_configs.append(config)
