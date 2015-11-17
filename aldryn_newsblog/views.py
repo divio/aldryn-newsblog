@@ -65,7 +65,11 @@ class PreviewModeMixin(EditModeMixin):
     def get_queryset(self):
         qs = super(PreviewModeMixin, self).get_queryset()
         if not self.edit_mode:
-            qs = qs.published()
+
+            if not getattr(self, 'archive_only', False):
+                qs = qs.published()
+            else:
+                qs = qs.archived()
         language = translation.get_language()
         qs = qs.active_translations(language).namespace(self.namespace)
         return qs
@@ -183,6 +187,15 @@ class ArticleListBase(
 class ArticleList(ArticleListBase):
     """A complete list of articles."""
     show_header = True
+
+
+class ArticleArchiveList(ArticleListBase):
+    """
+    A complete list of archived articles (e.g.: has an
+    end_publishing_date in the past.
+    """
+    show_header = True
+    archive_only = True
 
 
 class ArticleSearchResultsList(ArticleListBase):

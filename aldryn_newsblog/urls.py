@@ -1,9 +1,9 @@
 from django.conf.urls import patterns, url
 
 from aldryn_newsblog.views import (
-    ArticleDetail, ArticleList, AuthorArticleList, CategoryArticleList,
-    YearArticleList, MonthArticleList, DayArticleList, TagArticleList,
-    ArticleSearchResultsList)
+    ArticleArchiveList, ArticleDetail, ArticleList, AuthorArticleList,
+    CategoryArticleList, YearArticleList, MonthArticleList, DayArticleList,
+    TagArticleList, ArticleSearchResultsList)
 from aldryn_newsblog.feeds import LatestArticlesFeed, TagFeed, CategoryFeed
 
 urlpatterns = patterns(
@@ -14,6 +14,9 @@ urlpatterns = patterns(
 
     url(r'^search/$',
         ArticleSearchResultsList.as_view(), name='article-search'),
+
+    url(r'^archive/$',
+        ArticleArchiveList.as_view(), name='article-archive'),
 
     url(r'^(?P<year>\d{4})/$',
         YearArticleList.as_view(), name='article-list-by-year'),

@@ -23,9 +23,37 @@ class ArticleQuerySet(QuerySetMixin, TranslatableQuerySet):
     def published(self):
         """
         Returns articles that are published AND have a publishing_date that
-        has actually passed.
+        has actually passed AND has a non passed end_publishing_date or no
+        end_publishing_date.
         """
-        return self.filter(is_published=True, publishing_date__lte=now)
+        filters = (
+            models.Q(
+                **{'end_publishing_date__gte': now()}
+            ) | models.Q(
+                **{'end_publishing_date__isnull': True}
+            ),
+            models.Q(
+                **{'is_published': True, 'publishing_date__lte': now}
+            )
+        )
+        return self.filter(*filters)
+
+    def archived(self):
+        """
+        Returns articles that are published AND have a publishing_date that
+        has actually passed AND has a passed end_publishing_date.
+        """
+        filters = (
+            models.Q(
+                **{'end_publishing_date__lt': now()}
+            ) | models.Q(
+                **{'end_publishing_date__isnull': False}
+            ),
+            models.Q(
+                **{'is_published': True, 'publishing_date__lte': now}
+            )
+        )
+        return self.filter(*filters)
 
 
 class RelatedManager(ManagerMixin, TranslatableManager):
@@ -35,6 +63,9 @@ class RelatedManager(ManagerMixin, TranslatableManager):
 
     def published(self):
         return self.get_queryset().published()
+
+    def archived(self):
+        return self.get_queryset().archived()
 
     def get_months(self, request, namespace):
         """

@@ -111,7 +111,7 @@ class ArticleAdmin(
         }),
         ('Details', {
             'fields': (
-                ('is_published', 'publishing_date', ),
+                ('is_published', 'publishing_date', 'end_publishing_date'),
                 'is_featured',
                 'tags',
                 'categories',
