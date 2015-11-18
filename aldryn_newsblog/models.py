@@ -125,7 +125,7 @@ class Article(TranslatedAutoSlugifyMixin,
     publishing_date = models.DateTimeField(_('publishing date'),
                                            default=now)
     end_publishing_date = models.DateTimeField(_('end publishing date'),
-                                               null=True)
+                                               null=True, blank=False)
     is_published = models.BooleanField(_('is published'), default=True,
                                        db_index=True)
     is_featured = models.BooleanField(_('is featured'), default=False,

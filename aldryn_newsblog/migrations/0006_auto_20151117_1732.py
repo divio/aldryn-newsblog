@@ -23,7 +23,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='article',
             name='end_publishing_date',
-            field=models.DateTimeField(null=True, verbose_name='end publishing date'),
+            field=models.DateTimeField(null=True, verbose_name='end publishing date', blank=False),
         ),
         migrations.AlterField(
             model_name='articletranslation',
