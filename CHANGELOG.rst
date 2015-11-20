@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+1.0.10 (2015-11-20)
+-------------------
+
+* Fixes CMS 3.2 wizard
+* Fixes issue with lazy translations
+
 1.0.9 (2015-11-04)
 ------------------
 
