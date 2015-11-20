@@ -16,7 +16,7 @@ except ImportError:
 
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.timezone import now
-from django.utils.translation import ugettext_lazy as _, override
+from django.utils.translation import ugettext_lazy as _, override, ugettext
 
 from aldryn_apphooks_config.fields import AppHookConfigField
 from aldryn_categories.fields import CategoryManyToManyField
@@ -263,7 +263,7 @@ class NewsBlogArchivePlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
     # NOTE: the PluginEditModeMixin is eventually used in the cmsplugin, not
     # here in the model.
     def __str__(self):
-        return _('%s archive') % (self.app_config.get_app_title(), )
+        return ugettext('%s archive') % (self.app_config.get_app_title(), )
 
 
 class NewsBlogArticleSearchPlugin(NewsBlogCMSPlugin):
@@ -274,7 +274,7 @@ class NewsBlogArticleSearchPlugin(NewsBlogCMSPlugin):
     )
 
     def __str__(self):
-        return _('%s archive') % (self.app_config.get_app_title(), )
+        return ugettext('%s archive') % (self.app_config.get_app_title(), )
 
 
 @python_2_unicode_compatible
@@ -315,13 +315,13 @@ class NewsBlogAuthorsPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
         return sorted(authors, key=lambda x: x.article_count, reverse=True)
 
     def __str__(self):
-        return _('%s authors') % (self.app_config.get_app_title(), )
+        return ugettext('%s authors') % (self.app_config.get_app_title(), )
 
 
 @python_2_unicode_compatible
 class NewsBlogCategoriesPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
     def __str__(self):
-        return _('%s categories') % (self.app_config.get_app_title(), )
+        return ugettext('%s categories') % (self.app_config.get_app_title(), )
 
     def get_categories(self, request):
         """
@@ -385,9 +385,9 @@ class NewsBlogFeaturedArticlesPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
             return 'featured articles'
         prefix = self.app_config.get_app_title()
         if self.article_count == 1:
-            title = _('featured article')
+            title = ugettext('featured article')
         else:
-            title = _('featured articles: %(count)s') % {
+            title = ugettext('featured articles: %(count)s') % {
                 'count': self.article_count,
             }
         return '{0} {1}'.format(prefix, title)
@@ -414,7 +414,7 @@ class NewsBlogLatestArticlesPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
         return queryset[:self.latest_articles]
 
     def __str__(self):
-        return _('%s latest articles: %s') % (
+        return ugettext('%s latest articles: %s') % (
             self.app_config.get_app_title(), self.latest_articles, )
 
 
@@ -435,7 +435,7 @@ class NewsBlogRelatedPlugin(PluginEditModeMixin, CMSPlugin):
         return qs
 
     def __str__(self):
-        return _('Related articles')
+        return ugettext('Related articles')
 
 
 @python_2_unicode_compatible
@@ -477,7 +477,7 @@ class NewsBlogTagsPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
         return sorted(tags, key=lambda x: x.article_count, reverse=True)
 
     def __str__(self):
-        return _('%s tags') % (self.app_config.get_app_title(), )
+        return ugettext('%s tags') % (self.app_config.get_app_title(), )
 
 
 @receiver(post_save, dispatch_uid='article_update_search_data')
