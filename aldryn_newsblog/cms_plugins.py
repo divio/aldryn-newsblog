@@ -7,7 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
 
-from . import models
+from . import models, forms
 from .utils import add_prefix_to_path, default_reverse
 
 
@@ -33,6 +33,7 @@ class NewsBlogArchivePlugin(NewsBlogPlugin):
     name = _('Archive')
     cache = False
     model = models.NewsBlogArchivePlugin
+    form = forms.NewsBlogArchivePluginForm
 
     def render(self, context, instance, placeholder):
         request = context.get('request')
@@ -52,6 +53,7 @@ class NewsBlogArticleSearchPlugin(NewsBlogPlugin):
     render_template = 'aldryn_newsblog/plugins/article_search.html'
     name = _('Article Search')
     model = models.NewsBlogArticleSearchPlugin
+    form = forms.NewsBlogArticleSearchPluginForm
 
     def render(self, context, instance, placeholder):
         context['instance'] = instance
@@ -65,6 +67,7 @@ class NewsBlogAuthorsPlugin(NewsBlogPlugin):
     render_template = 'aldryn_newsblog/plugins/authors.html'
     name = _('Authors')
     model = models.NewsBlogAuthorsPlugin
+    form = forms.NewsBlogAuthorsPluginForm
 
     def render(self, context, instance, placeholder):
         request = context.get('request')
@@ -82,6 +85,7 @@ class NewsBlogCategoriesPlugin(NewsBlogPlugin):
     render_template = 'aldryn_newsblog/plugins/categories.html'
     name = _('Categories')
     model = models.NewsBlogCategoriesPlugin
+    form = forms.NewsBlogCategoriesPluginForm
 
     def render(self, context, instance, placeholder):
         request = context.get('request')
@@ -98,6 +102,7 @@ class NewsBlogFeaturedArticlesPlugin(NewsBlogPlugin):
     render_template = 'aldryn_newsblog/plugins/featured_articles.html'
     name = _('Featured Articles')
     model = models.NewsBlogFeaturedArticlesPlugin
+    form = forms.NewsBlogFeaturedArticlesPluginForm
 
     def render(self, context, instance, placeholder):
         request = context.get('request')
@@ -112,6 +117,7 @@ class NewsBlogLatestArticlesPlugin(NewsBlogPlugin):
     name = _('Latest Articles')
     cache = False
     model = models.NewsBlogLatestArticlesPlugin
+    form = forms.NewsBlogLatestArticlesPluginForm
 
     def render(self, context, instance, placeholder):
         request = context.get('request')
@@ -153,6 +159,7 @@ class NewsBlogTagsPlugin(NewsBlogPlugin):
     render_template = 'aldryn_newsblog/plugins/tags.html'
     name = _('Tags')
     model = models.NewsBlogTagsPlugin
+    form = forms.NewsBlogTagsPluginForm
 
     def render(self, context, instance, placeholder):
         request = context.get('request')
