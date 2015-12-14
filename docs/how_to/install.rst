@@ -88,8 +88,8 @@ You need set additional configurations to ``settings.py`` for `Aldryn
 Boilerplates  <https://github.com/aldryn/aldryn-boilerplates#configuration>`_.
 
 To use the old templates, set ``ALDRYN_BOILERPLATE_NAME='legacy'``.
-To use https://github.com/aldryn/aldryn-boilerplate-bootstrap3 (recommended)
-``set ALDRYN_BOILERPLATE_NAME='bootstrap3'``.
+To use https://github.com/aldryn/aldryn-boilerplate-bootstrap3 (recommended),
+set ``ALDRYN_BOILERPLATE_NAME='bootstrap3'``.
 
 
 2. Django-Filer
