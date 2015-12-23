@@ -38,14 +38,22 @@ HELPER_SETTINGS = {
     'ALDRYN_BOILERPLATE_NAME': 'bootstrap3',
     # app-specific
     'PARLER_LANGUAGES': {
-        1: (
-            {'code': 'de', },
-            {'code': 'fr', },
-            {'code': 'en', },
-        ),
+        1: [
+            {
+                'code': u'en',
+                'fallbacks': [u'de'],
+                'hide_untranslated': False
+            },
+            {
+                'code': u'de',
+                'fallbacks': [u'en'],
+                'hide_untranslated': False
+            }
+        ],
         'default': {
-            'hide_untranslated': True,  # PLEASE DO NOT CHANGE THIS
-        }
+            'code': u'en',
+            'fallbacks': [u'en'],
+            'hide_untranslated': False}
     },
     'SITE_ID': 1,
     'CMS_LANGUAGES': {

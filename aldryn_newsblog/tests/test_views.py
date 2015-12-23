@@ -16,7 +16,7 @@ from django.utils.translation import override
 
 from aldryn_newsblog.models import Article, NewsBlogConfig
 from aldryn_newsblog.search_indexes import ArticleIndex
-from cms.utils.i18n import get_current_language
+from cms.utils.i18n import get_current_language, force_language
 from easy_thumbnails.files import get_thumbnailer
 from filer.models.imagemodels import Image
 from parler.tests.utils import override_parler_settings
@@ -530,3 +530,212 @@ class TestIndex(NewsBlogTestCase):
                         self.index.get_title(article_de), 'de title')
                     self.assertEqual(
                         self.index.get_description(article_de), 'de lead in')
+
+
+class ViewLanguageFallbackMixin(object):
+    view_name = None
+    view_kwargs = {}
+
+    def get_view_kwargs(self):
+        """
+        Prepare and return kwargs to resolve view
+        :return: dict
+        """
+        return {}.update(self.view_kwargs)
+
+    def create_authors(self):
+        self.author = self.create_person()
+        self.owner = self.author.user
+        return self.author, self.owner
+
+    def create_de_article(self, author=None, owner=None, app_config=None,
+                          categories=None):
+        if author is None:
+            author = self.author
+        if owner is None:
+            owner = self.owner
+        if app_config is None:
+            app_config = self.app_config
+
+        with force_language('de'):
+            de_article = Article.objects.create(
+                title='a DE title',
+                slug='a-de-title',
+                lead_in='DE lead in text',
+                author=author,
+                owner=owner,
+                app_config=app_config,
+                publishing_date=now(),
+                is_published=True)
+        if categories:
+            de_article.categories = categories
+        de_article.tags.add('tag1')
+        de_article.save()
+        return de_article
+
+    def create_en_articles(self, author=None, owner=None, app_config=None,
+                           amount=3, categories=None):
+        if author is None:
+            author = self.author
+        if owner is None:
+            owner = self.owner
+        if app_config is None:
+            app_config = self.app_config
+
+        with force_language('en'):
+            articles = []
+            for _ in range(amount):
+                article = self.create_article(author=author,
+                                              owner=owner,
+                                              app_config=app_config)
+                if categories:
+                    article.categories = categories
+                article.tags.add('tag1')
+                article.save()
+                articles.append(article)
+        return articles
+
+    def test_a0_en_only(self):
+        namespace = self.app_config.namespace
+        self.page.unpublish('de')
+        author, owner = self.create_authors()
+        author.translations.create(
+            slug='{0}-de'.format(author.slug),
+            language_code='de')
+        de_article = self.create_de_article(
+            author=author,
+            owner=owner,
+            categories=[self.category1],
+        )
+        articles = self.create_en_articles(categories=[self.category1])
+        with force_language('en'):
+            response = self.client.get(
+                reverse(
+                    '{0}:{1}'.format(namespace, self.view_name),
+                    kwargs=self.get_view_kwargs()
+                )
+            )
+        for article in articles:
+            self.assertContains(response, article.title)
+        self.assertNotContains(response, de_article.title)
+
+    def test_a1_en_de(self):
+        namespace = self.app_config.namespace
+        author, owner = self.create_authors()
+        author.translations.create(
+            slug='{0}-de'.format(author.slug),
+            language_code='de')
+        de_article = self.create_de_article(
+            author=author,
+            owner=owner,
+            categories=[self.category1]
+        )
+        articles = self.create_en_articles(categories=[self.category1])
+        with force_language('en'):
+            response = self.client.get(
+                reverse(
+                    '{0}:{1}'.format(namespace, self.view_name),
+                    kwargs=self.get_view_kwargs()
+                )
+            )
+        for article in articles:
+            self.assertContains(response, article.title)
+        self.assertContains(response, de_article.title)
+
+
+class ArticleListViewLanguageFallback(ViewLanguageFallbackMixin,
+                                      NewsBlogTestCase):
+    view_name = 'article-list'
+
+
+class LatestArticlesFeedLanguageFallback(ViewLanguageFallbackMixin,
+                                         NewsBlogTestCase):
+    view_name = 'article-list-feed'
+
+
+class YearArticleListLanguageFallback(ViewLanguageFallbackMixin,
+                                      NewsBlogTestCase):
+    view_name = 'article-list-by-year'
+
+    def get_view_kwargs(self):
+        return {'year': now().year}
+
+
+class MonthArticleListLanguageFallback(ViewLanguageFallbackMixin,
+                                       NewsBlogTestCase):
+    view_name = 'article-list-by-month'
+
+    def get_view_kwargs(self):
+        kwargs = {
+            'year': now().year,
+            'month': now().month,
+        }
+        return kwargs
+
+
+class DayArticleListLanguageFallback(ViewLanguageFallbackMixin,
+                                     NewsBlogTestCase):
+    view_name = 'article-list-by-day'
+
+    def get_view_kwargs(self):
+        kwargs = {
+            'year': now().year,
+            'month': now().month,
+            'day': now().day,
+        }
+        return kwargs
+
+
+class AuthorArticleListLanguageFallback(ViewLanguageFallbackMixin,
+                                        NewsBlogTestCase):
+    view_name = 'article-list-by-author'
+
+    def get_view_kwargs(self):
+        kwargs = {
+            'author': self.author.slug
+        }
+        return kwargs
+
+
+class CategoryArticleListLanguageFallback(ViewLanguageFallbackMixin,
+                                          NewsBlogTestCase):
+    view_name = 'article-list-by-category'
+
+    def get_view_kwargs(self):
+        kwargs = {
+            'category': self.category1.slug
+        }
+        return kwargs
+
+
+class CategoryFeedListLanguageFallback(ViewLanguageFallbackMixin,
+                                       NewsBlogTestCase):
+    view_name = 'article-list-by-category-feed'
+
+    def get_view_kwargs(self):
+        kwargs = {
+            'category': self.category1.slug
+        }
+        return kwargs
+
+
+class TagArticleListLanguageFallback(ViewLanguageFallbackMixin,
+                                     NewsBlogTestCase):
+    view_name = 'article-list-by-tag'
+
+    def get_view_kwargs(self):
+        kwargs = {
+            'tag': 'tag1'
+        }
+        return kwargs
+
+
+class TagFeedLanguageFallback(ViewLanguageFallbackMixin,
+                              NewsBlogTestCase):
+    view_name = 'article-list-by-tag-feed'
+
+    def get_view_kwargs(self):
+        kwargs = {
+            'tag': 'tag1'
+        }
+        return kwargs

@@ -4,7 +4,6 @@ from __future__ import unicode_literals
 
 from django.utils.translation import ugettext_lazy as _
 from django import forms
-from django.core.urlresolvers import reverse, NoReverseMatch
 
 from cms.api import add_plugin
 from cms.utils import permissions
@@ -16,6 +15,7 @@ from parler.forms import TranslatableModelForm
 
 from .cms_appconfig import NewsBlogConfig
 from .models import Article
+from .utils.utilities import is_valid_namespace
 
 
 def get_published_app_configs():
@@ -24,13 +24,10 @@ def get_published_app_configs():
     """
     published_configs = []
     for config in NewsBlogConfig.objects.iterator():
-        try:
-            reverse('{0}:article-list'.format(config.namespace))
+        # We don't want to let people try to create Articles here, as
+        # they'll just 404 on arrival because the apphook isn't active.
+        if is_valid_namespace(config.namespace):
             published_configs.append(config)
-        except NoReverseMatch:
-            # We don't want to let people try to create Articles here, as
-            # they'll just 404 on arrival because the apphook isn't active.
-            pass
     return published_configs
 
 
