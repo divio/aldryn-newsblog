@@ -92,13 +92,16 @@ class AppHookCheckMixin(object):
 
     def get_queryset(self):
         # filter available objects to contain only resolvable for current
-        # language
+        # language. IMPORTANT: after .translated - we cannot use .filter
+        # on translated fields (parler/django limitation).
+        # if your mixin contains filtering after super call - please place it
+        # after this mixin.
         qs = super(AppHookCheckMixin, self).get_queryset()
         return qs.translated(*self.valid_languages)
 
 
-class ArticleDetail(PreviewModeMixin, TranslatableSlugMixin, AppConfigMixin,
-                    AppHookCheckMixin, TemplatePrefixMixin, DetailView):
+class ArticleDetail(AppConfigMixin, AppHookCheckMixin, PreviewModeMixin,
+                    TranslatableSlugMixin, TemplatePrefixMixin, DetailView):
     model = Article
     slug_field = 'slug'
     year_url_kwarg = 'year'
@@ -190,9 +193,8 @@ class ArticleDetail(PreviewModeMixin, TranslatableSlugMixin, AppConfigMixin,
             return None
 
 
-class ArticleListBase(
-        TemplatePrefixMixin, PreviewModeMixin,
-        ViewUrlMixin, AppConfigMixin, AppHookCheckMixin, ListView):
+class ArticleListBase(AppConfigMixin, AppHookCheckMixin, TemplatePrefixMixin,
+                      PreviewModeMixin, ViewUrlMixin, ListView):
     model = Article
     show_header = False
 
