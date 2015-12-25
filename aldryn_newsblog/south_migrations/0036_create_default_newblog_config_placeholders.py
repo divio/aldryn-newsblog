@@ -3,41 +3,52 @@ from south.utils import datetime_utils as datetime
 from south.db import db
 from south.v2 import DataMigration
 from django.db import models, connection, transaction
-from django.db.transaction import set_autocommit
-
-from aldryn_newsblog.utils.migration import rename_tables_old_to_new, rename_tables_new_to_old
-
 
 class Migration(DataMigration):
 
     def forwards(self, orm):
-        """
-        Used to create a default namespace, but we no longer want that.
-        """
+        "Write your forwards methods here."
+        # Note: Don't use "from appname.models import ModelName".
+        # Use orm.ModelName to refer to models in this application,
+        # and orm['appname.ModelName'] for models in other applications.
+
+        from cms.models import Placeholder
+        # in order to fix this migration for sqlite3 we need to enable
+        # transaction autocommit, otherwise it is broken
         if connection.vendor == 'sqlite':
             transaction.set_autocommit(True)
         NewsBlogConfig = orm.NewsBlogConfig
-        Article = orm.Article
-        LatestEntriesPlugin = orm.LatestEntriesPlugin
-        models_list = [
-            Article,
-            LatestEntriesPlugin,
-        ]
-        app_config, created = NewsBlogConfig.objects.get_or_create(
-            namespace='aldryn_newsblog_default',
-        )
-        if created:
-            app_config_translation = app_config.translations.create()
-            app_config_translation.language_code = 'en'
-            app_config_translation.app_title = 'Default NewsBlog'
-            app_config_translation.save()
 
-        for model in models_list:
-            for entry in model.objects.filter(namespace__isnull=True):
-                entry.namespace = app_config
-                entry.save()
+        for cfg in NewsBlogConfig.objects.all():
+            for field in cfg._meta.fields:
+                if field.__class__ != models.fields.related.ForeignKey:
+                    # skip not FK fields
+                    continue
+
+                if not (field.rel.to == Placeholder or
+                        field.rel.to == orm['cms.Placeholder']):
+                    # skip other fields.
+                    continue
+
+                placeholder_name = field.name
+                placeholder_id_name = '{0}_id'.format(placeholder_name)
+                placeholder_id = getattr(cfg, placeholder_id_name, None)
+
+                if placeholder_id is not None:
+                    # do not process if it has a reference to placeholder field.
+                    continue
+
+                # since there is no placeholder - create it, we cannot use
+                # get_or_create because it can get placeholder from other config
+                new_placeholder = Placeholder.objects.create(
+                    slot=placeholder_name)
+                setattr(cfg, placeholder_id_name, new_placeholder.pk)
+            # after we process all placeholder fields - save config,
+            # so that django can pick up them.
+            cfg.save()
 
     def backwards(self, orm):
+        "Write your backwards methods here."
         pass
 
     models = {
@@ -51,38 +62,70 @@ class Migration(DataMigration):
         },
         u'aldryn_newsblog.article': {
             'Meta': {'ordering': "[u'-publishing_date']", 'object_name': 'Article'},
+            'app_config': ('aldryn_apphooks_config.fields.AppHookConfigField', [], {'to': u"orm['aldryn_newsblog.NewsBlogConfig']"}),
             'author': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['aldryn_people.Person']", 'null': 'True', 'blank': 'True'}),
             'categories': ('aldryn_categories.fields.CategoryManyToManyField', [], {'to': u"orm['aldryn_categories.Category']", 'symmetrical': 'False', 'blank': 'True'}),
-            'content': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "u'aldryn_newsblog_articles'", 'unique': 'True', 'null': 'True', 'to': "orm['cms.Placeholder']"}),
+            'content': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "u'newsblog_article_content'", 'null': 'True', 'to': "orm['cms.Placeholder']"}),
             'featured_image': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['filer.Image']", 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'namespace': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['aldryn_newsblog.NewsBlogConfig']"}),
+            'is_featured': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'db_index': 'True'}),
+            'is_published': ('django.db.models.fields.BooleanField', [], {'default': 'True', 'db_index': 'True'}),
             'owner': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"}),
-            'publishing_date': ('django.db.models.fields.DateTimeField', [], {})
+            'publishing_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
+            'related': ('sortedm2m.fields.SortedManyToManyField', [], {'related_name': "'related_rel_+'", 'blank': 'True', 'to': u"orm['aldryn_newsblog.Article']"})
         },
         u'aldryn_newsblog.articletranslation': {
             'Meta': {'unique_together': "[(u'language_code', u'slug'), (u'language_code', u'master')]", 'object_name': 'ArticleTranslation', 'db_table': "u'aldryn_newsblog_article_translation'"},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'language_code': ('django.db.models.fields.CharField', [], {'max_length': '15', 'db_index': 'True'}),
-            'lead_in': ('djangocms_text_ckeditor.fields.HTMLField', [], {'default': "u''"}),
+            'lead_in': ('djangocms_text_ckeditor.fields.HTMLField', [], {'default': "u''", 'blank': 'True'}),
             u'master': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'translations'", 'null': 'True', 'to': u"orm['aldryn_newsblog.Article']"}),
             'meta_description': ('django.db.models.fields.TextField', [], {'default': "u''", 'blank': 'True'}),
             'meta_keywords': ('django.db.models.fields.TextField', [], {'default': "u''", 'blank': 'True'}),
             'meta_title': ('django.db.models.fields.CharField', [], {'default': "u''", 'max_length': '255', 'blank': 'True'}),
+            'search_data': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '255', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '234'})
         },
-        u'aldryn_newsblog.latestentriesplugin': {
-            'Meta': {'object_name': 'LatestEntriesPlugin', '_ormbases': ['cms.CMSPlugin']},
-            u'cmsplugin_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['cms.CMSPlugin']", 'unique': 'True', 'primary_key': 'True'}),
-            'latest_entries': ('django.db.models.fields.IntegerField', [], {'default': '5'}),
-            'namespace': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['aldryn_newsblog.NewsBlogConfig']", 'null': 'True'})
+        u'aldryn_newsblog.newsblogarchiveplugin': {
+            'Meta': {'object_name': 'NewsBlogArchivePlugin'},
+            'app_config': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['aldryn_newsblog.NewsBlogConfig']"}),
+            'cmsplugin_ptr': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "u'+'", 'unique': 'True', 'primary_key': 'True', 'to': "orm['cms.CMSPlugin']"})
+        },
+        u'aldryn_newsblog.newsblogarticlesearchplugin': {
+            'Meta': {'object_name': 'NewsBlogArticleSearchPlugin'},
+            'app_config': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['aldryn_newsblog.NewsBlogConfig']"}),
+            'cmsplugin_ptr': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "u'+'", 'unique': 'True', 'primary_key': 'True', 'to': "orm['cms.CMSPlugin']"}),
+            'max_articles': ('django.db.models.fields.PositiveIntegerField', [], {'default': '10'})
+        },
+        u'aldryn_newsblog.newsblogauthorsplugin': {
+            'Meta': {'object_name': 'NewsBlogAuthorsPlugin'},
+            'app_config': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['aldryn_newsblog.NewsBlogConfig']"}),
+            'cmsplugin_ptr': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "u'+'", 'unique': 'True', 'primary_key': 'True', 'to': "orm['cms.CMSPlugin']"})
+        },
+        u'aldryn_newsblog.newsblogcategoriesplugin': {
+            'Meta': {'object_name': 'NewsBlogCategoriesPlugin'},
+            'app_config': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['aldryn_newsblog.NewsBlogConfig']"}),
+            'cmsplugin_ptr': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "u'+'", 'unique': 'True', 'primary_key': 'True', 'to': "orm['cms.CMSPlugin']"})
         },
         u'aldryn_newsblog.newsblogconfig': {
             'Meta': {'object_name': 'NewsBlogConfig'},
             'app_data': ('app_data.fields.AppDataField', [], {'default': "'{}'"}),
+            'create_authors': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'namespace': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '100'}),
+            'namespace': ('django.db.models.fields.CharField', [], {'default': 'None', 'unique': 'True', 'max_length': '100'}),
+            'non_permalink_handling': ('django.db.models.fields.SmallIntegerField', [], {'default': '302'}),
+            'paginate_by': ('django.db.models.fields.PositiveIntegerField', [], {'default': '5'}),
+            'permalink_type': ('django.db.models.fields.CharField', [], {'default': "u'slug'", 'max_length': '8'}),
+            'placeholder_base_sidebar': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "u'aldryn_newsblog_base_sidebar'", 'null': 'True', 'to': "orm['cms.Placeholder']"}),
+            'placeholder_base_top': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "u'aldryn_newsblog_base_top'", 'null': 'True', 'to': "orm['cms.Placeholder']"}),
+            'placeholder_detail_bottom': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "u'aldryn_newsblog_detail_bottom'", 'null': 'True', 'to': "orm['cms.Placeholder']"}),
+            'placeholder_detail_footer': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "u'aldryn_newsblog_detail_footer'", 'null': 'True', 'to': "orm['cms.Placeholder']"}),
+            'placeholder_detail_top': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "u'aldryn_newsblog_detail_top'", 'null': 'True', 'to': "orm['cms.Placeholder']"}),
+            'placeholder_list_footer': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "u'aldryn_newsblog_list_footer'", 'null': 'True', 'to': "orm['cms.Placeholder']"}),
+            'placeholder_list_top': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "u'aldryn_newsblog_list_top'", 'null': 'True', 'to': "orm['cms.Placeholder']"}),
+            'search_indexed': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            'template_prefix': ('django.db.models.fields.CharField', [], {'max_length': '20', 'null': 'True', 'blank': 'True'}),
             'type': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
         u'aldryn_newsblog.newsblogconfigtranslation': {
@@ -92,11 +135,32 @@ class Migration(DataMigration):
             'language_code': ('django.db.models.fields.CharField', [], {'max_length': '15', 'db_index': 'True'}),
             u'master': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'translations'", 'null': 'True', 'to': u"orm['aldryn_newsblog.NewsBlogConfig']"})
         },
+        u'aldryn_newsblog.newsblogfeaturedarticlesplugin': {
+            'Meta': {'object_name': 'NewsBlogFeaturedArticlesPlugin'},
+            'app_config': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['aldryn_newsblog.NewsBlogConfig']"}),
+            'article_count': ('django.db.models.fields.PositiveIntegerField', [], {'default': '1'}),
+            'cmsplugin_ptr': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "u'+'", 'unique': 'True', 'primary_key': 'True', 'to': "orm['cms.CMSPlugin']"})
+        },
+        u'aldryn_newsblog.newsbloglatestarticlesplugin': {
+            'Meta': {'object_name': 'NewsBlogLatestArticlesPlugin'},
+            'app_config': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['aldryn_newsblog.NewsBlogConfig']"}),
+            'cmsplugin_ptr': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "u'+'", 'unique': 'True', 'primary_key': 'True', 'to': "orm['cms.CMSPlugin']"}),
+            'latest_articles': ('django.db.models.fields.IntegerField', [], {'default': '5'})
+        },
+        u'aldryn_newsblog.newsblogrelatedplugin': {
+            'Meta': {'object_name': 'NewsBlogRelatedPlugin', '_ormbases': ['cms.CMSPlugin']},
+            'cmsplugin_ptr': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "u'+'", 'unique': 'True', 'primary_key': 'True', 'to': "orm['cms.CMSPlugin']"})
+        },
+        u'aldryn_newsblog.newsblogtagsplugin': {
+            'Meta': {'object_name': 'NewsBlogTagsPlugin'},
+            'app_config': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['aldryn_newsblog.NewsBlogConfig']"}),
+            'cmsplugin_ptr': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "u'+'", 'unique': 'True', 'primary_key': 'True', 'to': "orm['cms.CMSPlugin']"})
+        },
         u'aldryn_people.group': {
             'Meta': {'object_name': 'Group'},
             'address': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'city': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
-            'email': ('django.db.models.fields.EmailField', [], {'default': "''", 'max_length': '75', 'blank': 'True'}),
+            'email': ('django.db.models.fields.EmailField', [], {'default': "u''", 'max_length': '75', 'blank': 'True'}),
             'fax': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'phone': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
@@ -105,15 +169,13 @@ class Migration(DataMigration):
         },
         u'aldryn_people.person': {
             'Meta': {'object_name': 'Person'},
-            'email': ('django.db.models.fields.EmailField', [], {'default': "''", 'max_length': '75', 'blank': 'True'}),
+            'email': ('django.db.models.fields.EmailField', [], {'default': "u''", 'max_length': '75', 'blank': 'True'}),
             'fax': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
-            'group': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['aldryn_people.Group']", 'null': 'True', 'blank': 'True'}),
+            'groups': ('aldryn_common.admin_fields.sortedm2m.SortedM2MModelField', [], {'default': 'None', 'related_name': "u'people'", 'blank': 'True', 'symmetrical': 'False', 'to': u"orm['aldryn_people.Group']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'mobile': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'phone': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
-            'slug': ('django.db.models.fields.CharField', [], {'max_length': '255', 'unique': 'True', 'null': 'True', 'blank': 'True'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']", 'unique': 'True', 'null': 'True', 'blank': 'True'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "u'persons'", 'unique': 'True', 'null': 'True', 'to': u"orm['auth.User']"}),
             'vcard_enabled': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'visual': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'to': "orm['filer.Image']", 'null': 'True', 'on_delete': 'models.SET_NULL', 'blank': 'True'}),
             'website': ('django.db.models.fields.URLField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'})
@@ -188,7 +250,7 @@ class Migration(DataMigration):
             'name': ('django.db.models.fields.CharField', [], {'default': "u''", 'max_length': '255', 'blank': 'True'}),
             'original_filename': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'owner': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "u'owned_files'", 'null': 'True', 'to': u"orm['auth.User']"}),
-            'polymorphic_ctype': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "u'polymorphic_filer.file_set'", 'null': 'True', 'to': u"orm['contenttypes.ContentType']"}),
+            'polymorphic_ctype': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "u'polymorphic_filer.file_set+'", 'null': 'True', 'to': u"orm['contenttypes.ContentType']"}),
             'sha1': ('django.db.models.fields.CharField', [], {'default': "u''", 'max_length': '40', 'blank': 'True'}),
             'uploaded_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'})
         },
@@ -207,7 +269,7 @@ class Migration(DataMigration):
             'uploaded_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'})
         },
         'filer.image': {
-            'Meta': {'object_name': 'Image', '_ormbases': [u'filer.File']},
+            'Meta': {'object_name': 'Image'},
             '_height': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             '_width': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'author': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
