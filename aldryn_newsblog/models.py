@@ -239,7 +239,9 @@ class PluginEditModeMixin(object):
         Returns True only if an operator is logged-into the CMS and is in
         edit mode.
         """
-        return (hasattr(request, 'toolbar') and request.toolbar and request.toolbar.edit_mode)
+        return (
+            hasattr(request, 'toolbar') and request.toolbar and
+            request.toolbar.edit_mode)
 
 
 class NewsBlogCMSPlugin(CMSPlugin):
