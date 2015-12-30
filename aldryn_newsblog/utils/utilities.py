@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 
 from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
+from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse, NoReverseMatch
 from django.db import models
 from django.template import RequestContext
@@ -14,6 +15,8 @@ except ImportError:
     from django.utils.encoding import force_text as force_unicode
 from django.utils.html import strip_tags as _strip_tags
 from django.utils.text import smart_split
+
+from cms.utils.i18n import force_language, get_language_object
 
 from lxml.html.clean import Cleaner as LxmlCleaner
 
@@ -148,3 +151,38 @@ def add_prefix_to_path(path, prefix):
         return "{0}/{1}".format(prefix, splitted_path[0])
     # directory/template.html => directory/prefix/template.html
     return "{0}/{1}/{2}".format(splitted_path[0], prefix, splitted_path[1])
+
+
+def is_valid_namespace(namespace):
+    """
+    Check if provided namespace has an app-hooked page.
+    Returns True or False.
+    """
+    try:
+        reverse('{0}:article-list'.format(namespace))
+    except NoReverseMatch:
+        return False
+    return True
+
+
+def is_valid_namespace_for_language(namespace, language_code):
+    """
+    Check if provided namespace has an app-hooked page for given language_code.
+    Returns True or False.
+    """
+    with force_language(language_code):
+        return is_valid_namespace(namespace)
+
+
+def get_valid_languages(namespace, language_code, site_id=None):
+    langs = [language_code]
+    if site_id is None:
+        site_id = getattr(Site.objects.get_current(), 'pk', None)
+    current_language = get_language_object(language_code, site_id)
+    fallbacks = current_language.get('fallbacks', None)
+    if fallbacks:
+        langs += list(fallbacks)
+    valid_translations = [
+        lang_code for lang_code in langs
+        if is_valid_namespace_for_language(namespace, lang_code)]
+    return valid_translations

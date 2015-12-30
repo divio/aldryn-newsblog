@@ -2,19 +2,30 @@
 
 from django.contrib.sites.models import Site
 from django.contrib.syndication.views import Feed
+try:
+    from django.contrib.sites.shortcuts import get_current_site
+except ImportError:
+    # Django 1.6
+    from django.contrib.sites.models import get_current_site
 from django.core.urlresolvers import reverse
 from django.utils.translation import get_language_from_request, ugettext as _
 
 from aldryn_apphooks_config.utils import get_app_instance
 from aldryn_categories.models import Category
 from aldryn_newsblog.models import Article
-from cms.utils.i18n import get_current_language
+from aldryn_newsblog.utils.utilities import get_valid_languages
 
 
 class LatestArticlesFeed(Feed):
 
     def __call__(self, request, *args, **kwargs):
         self.namespace, self.config = get_app_instance(request)
+        language = get_language_from_request(request)
+        site_id = getattr(get_current_site(request), 'id', None)
+        self.valid_languages = get_valid_languages(
+            self.namespace,
+            language_code=language,
+            site_id=site_id)
         return super(LatestArticlesFeed, self).__call__(
             request, *args, **kwargs)
 
@@ -25,10 +36,9 @@ class LatestArticlesFeed(Feed):
         return _('Articles on {0}').format(Site.objects.get_current().name)
 
     def get_queryset(self):
-        language = get_current_language()
-        return Article.objects.published().active_translations(
-            language
-        ).namespace(self.namespace)
+        qs = Article.objects.published().namespace(self.namespace).translated(
+            *self.valid_languages)
+        return qs
 
     def items(self, obj):
         qs = self.get_queryset()
@@ -58,7 +68,7 @@ class CategoryFeed(LatestArticlesFeed):
     def get_object(self, request, category):
         language = get_language_from_request(request, check_path=True)
         return Category.objects.language(language).translated(
-            slug=category).get()
+            *self.valid_languages, slug=category).get()
 
     def items(self, obj):
         return self.get_queryset().filter(categories=obj)[:10]
