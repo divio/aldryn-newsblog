@@ -28,24 +28,52 @@ from . import NewsBlogTestCase, TESTS_STATIC_ROOT
 FEATURED_IMAGE_PATH = os.path.join(TESTS_STATIC_ROOT, 'featured_image.jpg')
 
 PARLER_LANGUAGES_HIDE = {
-    1: (
-        {'code': 'de'},
-        {'code': 'fr'},
-        {'code': 'en'},
-    ),
+    1: [
+        {
+            'code': u'en',
+            'fallbacks': [u'de'],
+            'hide_untranslated': True
+        },
+        {
+            'code': u'de',
+            'fallbacks': [u'en'],
+            'hide_untranslated': True
+        },
+        {
+            'code': u'fr',
+            'fallbacks': [u'en'],
+            'hide_untranslated': True
+        },
+    ],
     'default': {
-        'hide_untranslated': True,
+        'code': u'en',
+        'fallbacks': [u'en'],
+        'hide_untranslated': True
     }
 }
 
 PARLER_LANGUAGES_SHOW = {
-    1: (
-        {'code': 'de'},
-        {'code': 'fr'},
-        {'code': 'en'},
-    ),
+    1: [
+        {
+            'code': u'en',
+            'fallbacks': [u'de'],
+            'hide_untranslated': False
+        },
+        {
+            'code': u'de',
+            'fallbacks': [u'en'],
+            'hide_untranslated': False
+        },
+        {
+            'code': u'fr',
+            'fallbacks': [u'en'],
+            'hide_untranslated': False
+        },
+    ],
     'default': {
-        'hide_untranslated': False,
+        'code': u'en',
+        'fallbacks': [u'en'],
+        'hide_untranslated': False
     }
 }
 
@@ -198,8 +226,10 @@ class TestTranslationFallbacks(NewsBlogTestCase):
                 'aldryn_newsblog:article-detail',
                 kwargs={'slug': article.slug}
             )
-
-        LANGUAGES = add_default_language_settings(PARLER_LANGUAGES_SHOW)
+        # Parler settings should be same as cms settings and vice versa
+        # ensure that if hide_untranslated = True we don't have a fallback
+        # redirect.
+        LANGUAGES = add_default_language_settings(PARLER_LANGUAGES_HIDE)
         with override_parler_settings(PARLER_LANGUAGES=LANGUAGES):
             language = settings.LANGUAGES[1][0]
             with switch_language(article, language):

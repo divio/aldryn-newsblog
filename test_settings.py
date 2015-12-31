@@ -13,6 +13,7 @@ HELPER_SETTINGS = {
         ('en', 'English'),
         ('de', 'German'),
         ('fr', 'French'),
+        ('it', 'Italian'),
     ),
     'INSTALLED_APPS': [
         'aldryn_apphook_reload',
@@ -48,7 +49,17 @@ HELPER_SETTINGS = {
                 'code': u'de',
                 'fallbacks': [u'en'],
                 'hide_untranslated': False
-            }
+            },
+            {
+                'code': u'fr',
+                'fallbacks': [u'en'],
+                'hide_untranslated': False
+            },
+            {
+                'code': u'it',
+                'fallbacks': [u'fr'],
+                'hide_untranslated': False
+            },
         ],
         'default': {
             'code': u'en',

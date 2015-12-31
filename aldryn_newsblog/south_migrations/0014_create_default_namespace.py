@@ -2,10 +2,8 @@
 from south.utils import datetime_utils as datetime
 from south.db import db
 from south.v2 import DataMigration
+from django.conf import settings
 from django.db import models, connection, transaction
-from django.db.transaction import set_autocommit
-
-from aldryn_newsblog.utils.migration import rename_tables_old_to_new, rename_tables_new_to_old
 
 
 class Migration(DataMigration):
@@ -28,7 +26,7 @@ class Migration(DataMigration):
         )
         if created:
             app_config_translation = app_config.translations.create()
-            app_config_translation.language_code = 'en'
+            app_config_translation.language_code = settings.LANGUAGES[0][0]
             app_config_translation.app_title = 'Default NewsBlog'
             app_config_translation.save()
 

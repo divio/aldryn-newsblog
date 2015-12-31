@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 
 from django.test import TransactionTestCase
 
+from aldryn_newsblog.cms_appconfig import NewsBlogConfig
 from aldryn_newsblog.models import Article
 from aldryn_people.models import Person
 
@@ -15,7 +16,13 @@ class AdminTest(NewsBlogTestsMixin, TransactionTestCase):
     def test_admin_owner_default(self):
         from django.contrib import admin
         admin.autodiscover()
-
+        # since we now have data migration to create the default
+        # NewsBlogConfig (if migrations were not faked, django >1.7)
+        # we need to delete one of configs to be sure that it is pre selected
+        # in the admin view.
+        if NewsBlogConfig.objects.count() > 1:
+            # delete the app config that was created during test set up.
+            NewsBlogConfig.objects.filter(namespace='NBNS').delete()
         user = self.create_user()
         user.is_superuser = True
         user.save()
