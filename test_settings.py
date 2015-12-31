@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 from distutils.version import LooseVersion
 from django import get_version
 
@@ -41,29 +42,29 @@ HELPER_SETTINGS = {
     'PARLER_LANGUAGES': {
         1: [
             {
-                'code': u'en',
-                'fallbacks': [u'de'],
+                'code': 'en',
+                'fallbacks': ['de'],
                 'hide_untranslated': False
             },
             {
-                'code': u'de',
-                'fallbacks': [u'en'],
+                'code': 'de',
+                'fallbacks': ['en'],
                 'hide_untranslated': False
             },
             {
-                'code': u'fr',
-                'fallbacks': [u'en'],
+                'code': 'fr',
+                'fallbacks': ['en'],
                 'hide_untranslated': False
             },
             {
-                'code': u'it',
-                'fallbacks': [u'fr'],
+                'code': 'it',
+                'fallbacks': ['fr'],
                 'hide_untranslated': False
             },
         ],
         'default': {
-            'code': u'en',
-            'fallbacks': [u'en'],
+            'code': 'en',
+            'fallbacks': ['en'],
             'hide_untranslated': False}
     },
     'SITE_ID': 1,
@@ -76,7 +77,7 @@ HELPER_SETTINGS = {
             },
             {
                 'code': 'fr',
-                'name': u'Française',
+                'name': 'French',
                 'fallbacks': ['en', ]  # FOR TESTING DO NOT ADD 'de' HERE
             },
             {

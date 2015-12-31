@@ -41,7 +41,9 @@ def create_default_newsblog_config(apps, schema_editor):
     # create only if there is no configs because user may already have
     # existing and configured config.
     app_config = NewsBlogConfig(namespace='aldryn_newsblog_default')
-
+    # usually generated in aldryn_apphooks_config.models.AppHookConfig
+    # but in migrations we don't have real class with correct parents.
+    app_config.type = 'aldryn_newsblog.cms_appconfig.NewsBlogConfig'
     # placeholders
     # cms checks if instance.pk is set, and if it isn't cms creates a new
     # placeholder but it does that with real models, and fields on instance
