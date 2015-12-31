@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from django.conf import settings
 from django.db import models, migrations, transaction
 from django.db.models import get_model
 from django.db.utils import ProgrammingError, OperationalError
@@ -68,7 +69,7 @@ def create_default_newsblog_config(apps, schema_editor):
 
     # translations
     app_config_translation = app_config.translations.create()
-    app_config_translation.language_code = 'en'
+    app_config_translation.language_code = settings.LANGUAGES[0][0]
     app_config_translation.app_title = 'Default NewsBlog'
     app_config_translation.save()
 
