@@ -111,7 +111,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('type', models.CharField(max_length=100, verbose_name='type')),
                 ('namespace', models.CharField(default=None, unique=True, max_length=100, verbose_name='instance namespace')),
-                ('app_data', app_data.fields.AppDataField(default=b'{}', editable=False)),
+                ('app_data', app_data.fields.AppDataField(default=dict, editable=False)),
                 ('permalink_type', models.CharField(default='slug', help_text='Choose the style of urls to use from the examples. (Note, all types are relative to apphook)', max_length=8, verbose_name='permalink type', choices=[('s', 'the-eagle-has-landed/'), ('ys', '1969/the-eagle-has-landed/'), ('yms', '1969/07/the-eagle-has-landed/'), ('ymds', '1969/07/16/the-eagle-has-landed/'), ('ymdi', '1969/07/16/11/')])),
                 ('non_permalink_handling', models.SmallIntegerField(default=302, help_text='How to handle non-permalink urls?', verbose_name='non-permalink handling', choices=[(200, 'Allow'), (302, 'Redirect to permalink (default)'), (301, 'Permanent redirect to permalink'), (404, 'Return 404: Not Found')])),
                 ('paginate_by', models.PositiveIntegerField(default=5, help_text='When paginating list views, how many articles per page?', verbose_name='Paginate size')),
