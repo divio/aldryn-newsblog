@@ -1,0 +1,8 @@
+Django>=1.8,<1.9
+aldryn-apphook-reload
+aldryn-search
+coverage>=3.7.1
+djangocms-helper
+django-mptt>=0.7
+django-polymorphic>=0.7
+tox
