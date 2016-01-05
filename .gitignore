@@ -52,3 +52,4 @@ coverage-*.txt
 docs/env
 node_modules/
 aldryn_newsblog/tests/frontend/coverage/
+requirements.txt
