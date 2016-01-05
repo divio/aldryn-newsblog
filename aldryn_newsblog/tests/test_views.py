@@ -35,6 +35,7 @@ PARLER_LANGUAGES_HIDE = {
     ),
     'default': {
         'hide_untranslated': True,
+        'fallbacks': []
     }
 }
 
@@ -46,6 +47,7 @@ PARLER_LANGUAGES_SHOW = {
     ),
     'default': {
         'hide_untranslated': False,
+        'fallbacks': []
     }
 }
 
