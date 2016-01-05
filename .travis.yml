@@ -23,18 +23,18 @@ env:
     - TOXENV=flake8
     - TOXENV=py34-dj18-sqlite-cms32
     - TOXENV=py34-dj18-mysql-cms32
-    - TOXENV=py34-dj18-postgress-cms32
+    - TOXENV=py34-dj18-postgres-cms32
     - TOXENV=py34-dj18-sqlite-cms31
     - TOXENV=py27-dj18-sqlite-cms32
     - TOXENV=py27-dj18-sqlite-cms31
     - TOXENV=py34-dj17-sqlite-cms32
     - TOXENV=py34-dj17-mysql-cms32
-    - TOXENV=py34-dj17-postgress-cms32
+    - TOXENV=py34-dj17-postgres-cms32
     - TOXENV=py34-dj17-sqlite-cms31
     - TOXENV=py34-dj17-sqlite-cms30
     - TOXENV=py27-dj17-sqlite-cms32
     - TOXENV=py27-dj17-mysql-cms32
-    - TOXENV=py27-dj17-postgress-cms32
+    - TOXENV=py27-dj17-postgres-cms32
     - TOXENV=py27-dj17-sqlite-cms31
     - TOXENV=py27-dj17-sqlite-cms30
     - TOXENV=py27-dj16-sqlite-cms32
@@ -42,7 +42,7 @@ env:
     - TOXENV=py27-dj16-sqlite-cms30
     - TOXENV=py26-dj16-sqlite-cms32
     - TOXENV=py26-dj16-oldmysql-cms32
-    - TOXENV=py26-dj16-postgress-cms32
+    - TOXENV=py26-dj16-postgres-cms32
     - TOXENV=py26-dj16-sqlite-cms31
     - TOXENV=py26-dj16-sqlite-cms30
 
