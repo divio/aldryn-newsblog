@@ -17,7 +17,7 @@ REQUIREMENTS = [
     'django-cms>=3.0.12',
     'djangocms-text-ckeditor',
     'django-filer>=0.9.9',
-    'django-parler>=1.4',
+    'django-parler>=1.4,<=1.5.9',
     'django-reversion>=1.8.2,<1.9',
     'django-sortedm2m',
     'django-taggit',

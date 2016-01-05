@@ -1,4 +1,8 @@
 django>=1.8,<1.9
 django-reversion>=1.8.2,<1.9
 
+# NOTE: These are for Filer
+django-mptt>=0.7
+django-polymorphic>=0.7
+
 -r base.txt
