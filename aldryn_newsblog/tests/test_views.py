@@ -28,52 +28,26 @@ from . import NewsBlogTestCase, TESTS_STATIC_ROOT
 FEATURED_IMAGE_PATH = os.path.join(TESTS_STATIC_ROOT, 'featured_image.jpg')
 
 PARLER_LANGUAGES_HIDE = {
-    1: [
-        {
-            'code': u'en',
-            'fallbacks': [u'de'],
-            'hide_untranslated': True
-        },
-        {
-            'code': u'de',
-            'fallbacks': [u'en'],
-            'hide_untranslated': True
-        },
-        {
-            'code': u'fr',
-            'fallbacks': [u'en'],
-            'hide_untranslated': True
-        },
-    ],
+    1: (
+        {'code': 'de'},
+        {'code': 'fr'},
+        {'code': 'en'},
+    ),
     'default': {
-        'code': u'en',
-        'fallbacks': [u'en'],
-        'hide_untranslated': True
+        'hide_untranslated': True,
+        'fallbacks': []
     }
 }
 
 PARLER_LANGUAGES_SHOW = {
-    1: [
-        {
-            'code': u'en',
-            'fallbacks': [u'de'],
-            'hide_untranslated': False
-        },
-        {
-            'code': u'de',
-            'fallbacks': [u'en'],
-            'hide_untranslated': False
-        },
-        {
-            'code': u'fr',
-            'fallbacks': [u'en'],
-            'hide_untranslated': False
-        },
-    ],
+    1: (
+        {'code': 'de'},
+        {'code': 'fr'},
+        {'code': 'en'},
+    ),
     'default': {
-        'code': u'en',
-        'fallbacks': [u'en'],
-        'hide_untranslated': False
+        'hide_untranslated': False,
+        'fallbacks': []
     }
 }
 

@@ -1,21 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+
 from distutils.version import LooseVersion
 from django import get_version
+from cms import __version__ as cms_string_version
 
 import os
 
 django_version = LooseVersion(get_version())
+cms_version = LooseVersion(cms_string_version)
 
 HELPER_SETTINGS = {
     'TIME_ZONE': 'Europe/Zurich',
-    'LANGUAGES': (
-        ('en', 'English'),
-        ('de', 'German'),
-        ('fr', 'French'),
-        ('it', 'Italian'),
-    ),
     'INSTALLED_APPS': [
         'aldryn_apphook_reload',
         'aldryn_apphooks_config',
@@ -38,38 +35,19 @@ HELPER_SETTINGS = {
     ),
     'ALDRYN_NEWSBLOG_TEMPLATE_PREFIXES': [('dummy', 'dummy'), ],
     'ALDRYN_BOILERPLATE_NAME': 'bootstrap3',
-    # app-specific
-    'PARLER_LANGUAGES': {
+    'SITE_ID': 1,
+    'LANGUAGES': (
+        ('en', 'English'),
+        ('de', 'German'),
+        ('fr', 'French'),
+    ),
+    'CMS_LANGUAGES': {
         1: [
             {
                 'code': 'en',
-                'fallbacks': ['de'],
-                'hide_untranslated': False
+                'name': 'English',
+                'fallbacks': ['de', 'fr', ]
             },
-            {
-                'code': 'de',
-                'fallbacks': ['en'],
-                'hide_untranslated': False
-            },
-            {
-                'code': 'fr',
-                'fallbacks': ['en'],
-                'hide_untranslated': False
-            },
-            {
-                'code': 'it',
-                'fallbacks': ['fr'],
-                'hide_untranslated': False
-            },
-        ],
-        'default': {
-            'code': 'en',
-            'fallbacks': ['en'],
-            'hide_untranslated': False}
-    },
-    'SITE_ID': 1,
-    'CMS_LANGUAGES': {
-        1: [
             {
                 'code': 'de',
                 'name': 'Deutsche',
@@ -77,13 +55,8 @@ HELPER_SETTINGS = {
             },
             {
                 'code': 'fr',
-                'name': 'French',
+                'name': 'Française',
                 'fallbacks': ['en', ]  # FOR TESTING DO NOT ADD 'de' HERE
-            },
-            {
-                'code': 'en',
-                'name': 'English',
-                'fallbacks': ['de', 'fr', ]
             },
             {
                 'code': 'it',
@@ -93,6 +66,24 @@ HELPER_SETTINGS = {
         ],
         'default': {
             'redirect_on_fallback': True,  # PLEASE DO NOT CHANGE THIS
+        }
+    },
+    # app-specific
+    'PARLER_LANGUAGES': {
+        1: [
+            {
+                'code': 'en',
+                'fallbacks': ['de', ],
+            },
+            {
+                'code': 'de',
+                'fallbacks': ['en', ],
+            },
+        ],
+        'default': {
+            'code': 'en',
+            'fallbacks': ['en'],
+            'hide_untranslated': False
         }
     },
     #
@@ -145,22 +136,29 @@ HELPER_SETTINGS = {
     #         'PORT': '5432',
     #     }
     # }
+    # This set of MW classes should work for Django 1.6 and 1.7.
+    'MIDDLEWARE_CLASSES': [
+        'django.contrib.sessions.middleware.SessionMiddleware',
+        'django.contrib.messages.middleware.MessageMiddleware',
+        'django.middleware.locale.LocaleMiddleware',
+        'django.middleware.common.CommonMiddleware',
+        'django.middleware.clickjacking.XFrameOptionsMiddleware',
+        # NOTE: This will actually be removed below in CMS<3.2 installs.
+        'cms.middleware.utils.ApphookReloadMiddleware',
+        'cms.middleware.user.CurrentUserMiddleware',
+        'cms.middleware.page.CurrentPageMiddleware',
+        'cms.middleware.toolbar.ToolbarMiddleware',
+        'cms.middleware.language.LanguageCookieMiddleware'
+    ]
 }
 
-
-# This set of MW classes should work for Django 1.6 and 1.7.
-HELPER_SETTINGS['MIDDLEWARE_CLASSES'] = [
-    'aldryn_apphook_reload.middleware.ApphookReloadMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.locale.LocaleMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'cms.middleware.user.CurrentUserMiddleware',
-    'cms.middleware.page.CurrentPageMiddleware',
-    'cms.middleware.toolbar.ToolbarMiddleware',
-    'cms.middleware.language.LanguageCookieMiddleware'
-]
+# If using CMS 3.2+, use the CMS middleware for ApphookReloading, otherwise,
+# use aldryn_apphook_reload's.
+if cms_version < LooseVersion('3.2.0'):
+    HELPER_SETTINGS['MIDDLEWARE_CLASSES'].remove(
+        'cms.middleware.utils.ApphookReloadMiddleware')
+    HELPER_SETTINGS['MIDDLEWARE_CLASSES'].insert(
+        0, 'aldryn_apphook_reload.middleware.ApphookReloadMiddleware')
 
 
 def run():
