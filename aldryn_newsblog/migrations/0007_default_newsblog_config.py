@@ -80,7 +80,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('cms', '0003_auto_20140926_2347'),
-        ('aldryn_newsblog', '0005_auto_20150807_0207'),
+        ('aldryn_newsblog', '0006_auto_20160105_1013'),
     ]
 
     operations = [
