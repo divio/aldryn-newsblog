@@ -20,29 +20,30 @@ env:
     #                different Python ENVs if possible. Also, test against all
     #                DB backends
     # NOTE: FE-TESTS ARE DISABLED UNTIL THEY ARE FIXED FOR CMS 3.2
+    # NOTE: MYSQL AND POSTGRES TESTS ARE DISABLED UNTIL #339 IS MERGED.
     - TOXENV=flake8
     - TOXENV=py34-dj18-sqlite-cms32
-    - TOXENV=py34-dj18-mysql-cms32
-    - TOXENV=py34-dj18-postgres-cms32
+#    - TOXENV=py34-dj18-mysql-cms32
+#    - TOXENV=py34-dj18-postgres-cms32
     - TOXENV=py34-dj18-sqlite-cms31
     - TOXENV=py27-dj18-sqlite-cms32
     - TOXENV=py27-dj18-sqlite-cms31
     - TOXENV=py34-dj17-sqlite-cms32
-    - TOXENV=py34-dj17-mysql-cms32
-    - TOXENV=py34-dj17-postgres-cms32
+#    - TOXENV=py34-dj17-mysql-cms32
+#    - TOXENV=py34-dj17-postgres-cms32
     - TOXENV=py34-dj17-sqlite-cms31
     - TOXENV=py34-dj17-sqlite-cms30
     - TOXENV=py27-dj17-sqlite-cms32
-    - TOXENV=py27-dj17-mysql-cms32
-    - TOXENV=py27-dj17-postgres-cms32
+#    - TOXENV=py27-dj17-mysql-cms32
+#    - TOXENV=py27-dj17-postgres-cms32
     - TOXENV=py27-dj17-sqlite-cms31
     - TOXENV=py27-dj17-sqlite-cms30
     - TOXENV=py27-dj16-sqlite-cms32
     - TOXENV=py27-dj16-sqlite-cms31
     - TOXENV=py27-dj16-sqlite-cms30
     - TOXENV=py26-dj16-sqlite-cms32
-    - TOXENV=py26-dj16-oldmysql-cms32
-    - TOXENV=py26-dj16-postgres-cms32
+#    - TOXENV=py26-dj16-oldmysql-cms32
+#    - TOXENV=py26-dj16-postgres-cms32
     - TOXENV=py26-dj16-sqlite-cms31
     - TOXENV=py26-dj16-sqlite-cms30
 
