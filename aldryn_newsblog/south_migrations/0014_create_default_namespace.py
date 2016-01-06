@@ -9,9 +9,6 @@ from django.db import models, connection, transaction
 class Migration(DataMigration):
 
     def forwards(self, orm):
-        """
-        Used to create a default namespace, but we no longer want that.
-        """
         if connection.vendor == 'sqlite':
             transaction.set_autocommit(True)
         NewsBlogConfig = orm.NewsBlogConfig
