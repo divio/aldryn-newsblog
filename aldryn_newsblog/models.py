@@ -128,8 +128,8 @@ class Article(TranslatedAutoSlugifyMixin,
                                        db_index=True)
     is_featured = models.BooleanField(_('is featured'), default=False,
                                       db_index=True)
-    featured_image = FilerImageField(null=True, blank=True)
-
+    featured_image = FilerImageField(null=True, blank=True,
+                                     on_delete=models.SET_NULL)
     tags = TaggableManager(blank=True)
 
     related = SortedManyToManyField('self', verbose_name=_('related articles'),
