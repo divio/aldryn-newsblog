@@ -2,8 +2,9 @@
 
 from __future__ import unicode_literals
 
-from django.utils.translation import ugettext_lazy as _
 from django import forms
+from django.db import transaction
+from django.utils.translation import ugettext_lazy as _, ugettext
 
 from cms.api import add_plugin
 from cms.utils import permissions
@@ -14,6 +15,7 @@ from cms.wizards.forms import BaseFormMixin
 from djangocms_text_ckeditor.widgets import TextEditorWidget
 from djangocms_text_ckeditor.html import clean_html
 from parler.forms import TranslatableModelForm
+from reversion import create_revision, set_user, set_comment
 
 from .cms_appconfig import NewsBlogConfig
 from .models import Article
@@ -107,8 +109,12 @@ class CreateNewsBlogArticleForm(BaseFormMixin, TranslatableModelForm):
                     body=content,
                 )
 
-        if commit:
-            article.save()
+        with transaction.atomic():
+            with create_revision():
+                article.save()
+                if self.user:
+                    set_user(self.user)
+                set_comment(ugettext("Initial version."))
 
         return article
 
