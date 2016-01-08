@@ -72,6 +72,9 @@ class CreateNewsBlogArticleForm(BaseFormMixin, TranslatableModelForm):
     class Meta:
         model = Article
         fields = ['title', 'app_config', 'is_published', 'lead_in', 'content', ]
+        # The natural widget for app_config is meant for normal Admin views and
+        # contains JS to refresh the page on change. This is not wanted here.
+        widgets = {'app_config': forms.Select()}
 
     def __init__(self, **kwargs):
         super(CreateNewsBlogArticleForm, self).__init__(**kwargs)
