@@ -70,6 +70,7 @@ class CreateNewsBlogArticleForm(BaseFormMixin, TranslatableModelForm):
     class Meta:
         model = Article
         fields = ['title', 'app_config', 'is_published', 'lead_in', 'content', ]
+        widgets = {'app_config': forms.Select()}
 
     def __init__(self, **kwargs):
         super(CreateNewsBlogArticleForm, self).__init__(**kwargs)
