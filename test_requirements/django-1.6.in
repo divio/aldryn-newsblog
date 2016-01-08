@@ -1,5 +1,9 @@
 Django>=1.6,<1.7
 aldryn-apphook-reload
+
+# Requires 1.0.4+, just running can use earlier versions of aldryn-reversion.
+aldryn-reversion>=1.0.4
+
 aldryn-search
 coverage>=3.7.1
 djangocms-helper
