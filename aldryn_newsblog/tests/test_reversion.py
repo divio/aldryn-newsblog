@@ -8,7 +8,7 @@ import six
 
 from django.db import transaction
 
-from aldryn_reversion.core import create_revision_with_placeholders
+from aldryn_reversion.core import create_revision
 
 from parler.utils.context import switch_language
 
@@ -155,12 +155,11 @@ class TestVersioning(NewsBlogTestCase):
 
         # Revision 2
         with transaction.atomic():
-            with reversion.create_revision():
-                plugins = article.content.get_plugins()
-                plugin = plugins[0].get_plugin_instance()[0]
-                plugin.body = content2
-                plugin.save()
-                create_revision_with_placeholders(article)
+            plugins = article.content.get_plugins()
+            plugin = plugins[0].get_plugin_instance()[0]
+            plugin.body = content2
+            plugin.save()
+            create_revision(article)
 
         self.assertEqual(
             len(reversion.get_for_object(article)), 2)
