@@ -35,6 +35,7 @@ HELPER_SETTINGS = {
     ),
     'ALDRYN_NEWSBLOG_TEMPLATE_PREFIXES': [('dummy', 'dummy'), ],
     'ALDRYN_BOILERPLATE_NAME': 'bootstrap3',
+    'CMS_PERMISSION': True,
     'SITE_ID': 1,
     'LANGUAGES': (
         ('en', 'English'),

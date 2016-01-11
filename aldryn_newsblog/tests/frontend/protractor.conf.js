@@ -20,8 +20,7 @@ var config = {
 
     // Capabilities to be passed to the webdriver instance
     capabilities: {
-        'browserName': 'phantomjs',
-        'phantomjs.binary.path': require('phantomjs').path
+        'browserName': 'chrome'
     },
 
     onPrepare: function () {
@@ -36,7 +35,8 @@ var config = {
 
     jasmineNodeOpts: {
         showColors: true,
-        defaultTimeoutInterval: 240000
+        defaultTimeoutInterval: 240000,
+        realtimeFailure: true
     }
 
 };

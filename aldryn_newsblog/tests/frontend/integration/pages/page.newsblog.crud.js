@@ -4,38 +4,39 @@
  */
 
 'use strict';
-/* global by, element, expect */
+/* global browser, by, element, expect */
 
 // #############################################################################
 // INTEGRATION TEST PAGE OBJECT
 
-var cmsProtractorHelper = require('cms-protractor-helper');
-
-var newsBlogPage = {
+var page = {
     site: 'http://127.0.0.1:8000/en/',
 
     // log in, log out
     editModeLink: element(by.css('.inner a[href="/?edit"]')),
-    usernameInput: element(by.id('id_cms-username')),
-    passwordInput: element(by.id('id_cms-password')),
-    loginButton: element(by.css('.cms_form-login input[type="submit"]')),
-    userMenus: element.all(by.css('.cms_toolbar-item-navigation > li > a')),
-    testLink: element(by.css('.selected a')),
+    usernameInput: element(by.id('id_username')),
+    passwordInput: element(by.id('id_password')),
+    loginButton: element(by.css('input[type="submit"]')),
+    userMenus: element.all(by.css('.cms-toolbar-item-navigation > li > a')),
 
     // adding new page
+    modalCloseButton: element(by.css('.cms-modal-close')),
     userMenuDropdown: element(by.css(
-        '.cms_toolbar-item-navigation-hover')),
+        '.cms-toolbar-item-navigation-hover')),
     administrationOptions: element.all(by.css(
-        '.cms_toolbar-item-navigation a[href="/en/admin/"]')),
-    sideMenuIframe: element(by.css('.cms_sideframe-frame iframe')),
+        '.cms-toolbar-item-navigation a[href="/en/admin/"]')),
+    sideMenuIframe: element(by.css('.cms-sideframe-frame iframe')),
     pagesLink: element(by.css('.model-page > th > a')),
     addPageLink: element(by.css('.sitemap-noentry .addlink')),
     titleInput: element(by.id('id_title')),
     slugErrorNotification: element(by.css('.errors.slug')),
     saveButton: element(by.css('.submit-row [name="_save"]')),
-    editPageLink: element(by.css('.col1 [href*="preview/"]')),
+    editPageLink: element(by.css('.col-preview [href*="preview/"]')),
+    testLink: element(by.cssContainingText('a', 'Test')),
+    sideFrameClose: element(by.css('.cms-sideframe-close')),
 
     // adding new apphook config
+    breadcrumbs: element(by.css('.breadcrumbs')),
     breadcrumbsLinks: element.all(by.css('.breadcrumbs a')),
     newsBlogConfigsLink: element(by.css('.model-newsblogconfig > th > a')),
     editConfigsLink: element(by.css('.row1 > th > a')),
@@ -46,20 +47,22 @@ var newsBlogPage = {
 
     // adding new article
     addArticleButton: element(by.css('.model-article .addlink')),
+    editArticlesLink: element(by.css('.model-article .changelink')),
     englishLanguageTab: element(by.css(
         '.parler-language-tabs > .empty > a[href*="language=en"]')),
     saveAndContinueButton: element(by.css('.submit-row [name="_continue"]')),
+    editArticleLinksTable: element(by.css('.results')),
     editArticleLinks: element.all(by.css(
         '.results th > [href*="/aldryn_newsblog/article/"]')),
 
     // adding article to the page
     aldrynNewsBlogBlock: element(by.css('.aldryn-newsblog-list')),
     advancedSettingsOption: element(by.css(
-        '.cms_toolbar-item-navigation [href*="advanced-settings"]')),
-    modalIframe: element(by.css('.cms_modal-frame iframe')),
+        '.cms-toolbar-item-navigation [href*="advanced-settings"]')),
+    modalIframe: element(by.css('.cms-modal-frame iframe')),
     applicationSelect: element(by.id('application_urls')),
     newsBlogOption: element(by.css('option[value="NewsBlogApp"]')),
-    saveModalButton: element(by.css('.cms_modal-buttons .cms_btn-action')),
+    saveModalButton: element(by.css('.cms-modal-buttons .cms-btn-action')),
     newsBlogMetaBlock: element(by.css('.aldryn-newsblog-meta')),
     articleLink: element(by.css('.aldryn-newsblog-list h2 > a')),
 
@@ -73,26 +76,34 @@ var newsBlogPage = {
         credentials = credentials ||
             { username: 'admin', password: 'admin' };
 
-        newsBlogPage.usernameInput.clear();
+        page.usernameInput.clear();
 
         // fill in email field
-        return newsBlogPage.usernameInput.sendKeys(credentials.username)
-            .then(function () {
-            newsBlogPage.passwordInput.clear();
+        page.usernameInput.sendKeys(
+            credentials.username).then(function () {
+            page.passwordInput.clear();
 
             // fill in password field
-            return newsBlogPage.passwordInput.sendKeys(credentials.password);
+            return page.passwordInput.sendKeys(
+                credentials.password);
         }).then(function () {
-            newsBlogPage.loginButton.click();
+            return page.loginButton.click();
+        }).then(function () {
+            // this is required for django1.6, because it doesn't redirect
+            // correctly from admin
+            browser.get(page.site);
 
             // wait for user menu to appear
-            cmsProtractorHelper.waitFor(newsBlogPage.userMenus.first());
+            browser.wait(browser.isElementPresent(
+                page.userMenus.first()),
+                page.mainElementsWaitTime);
 
             // validate user menu
-            expect(newsBlogPage.userMenus.first().isDisplayed()).toBeTruthy();
+            expect(page.userMenus.first().isDisplayed())
+                .toBeTruthy();
         });
     }
 
 };
 
-module.exports = newsBlogPage;
+module.exports = page;
