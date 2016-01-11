@@ -20,17 +20,13 @@ describe('Aldryn Newsblog tests: ', function () {
         browser.get(newsBlogPage.site);
 
         // check if the page already exists
-        return newsBlogPage.testLink.isPresent().then(function (present) {
+        newsBlogPage.testLink.isPresent().then(function (present) {
             if (present === true) {
                 // go to the main page
                 browser.get(newsBlogPage.site + '?edit');
-            } else {
-                // click edit mode link
-                newsBlogPage.editModeLink.click();
+                browser.sleep(1000);
+                cmsProtractorHelper.waitForDisplayed(newsBlogPage.usernameInput);
             }
-
-            // wait for username input to appear
-            cmsProtractorHelper.waitFor(newsBlogPage.usernameInput);
 
             // login to the site
             newsBlogPage.cmsLogin();
@@ -38,6 +34,17 @@ describe('Aldryn Newsblog tests: ', function () {
     });
 
     it('creates a new test page', function () {
+        // close the wizard if necessary
+        newsBlogPage.modalCloseButton.isDisplayed().then(function (displayed) {
+            if (displayed) {
+                newsBlogPage.modalCloseButton.click();
+            }
+        });
+
+        cmsProtractorHelper.waitForDisplayed(newsBlogPage.userMenus.first());
+        // have to wait till animation finished
+        browser.sleep(300);
+
         // click the example.com link in the top menu
         return newsBlogPage.userMenus.first().click().then(function () {
             // wait for top menu dropdown options to appear
@@ -50,7 +57,7 @@ describe('Aldryn Newsblog tests: ', function () {
 
             // switch to sidebar menu iframe
             browser.switchTo().frame(browser.findElement(
-                By.css('.cms_sideframe-frame iframe')));
+                By.css('.cms-sideframe-frame iframe')));
 
             cmsProtractorHelper.waitFor(newsBlogPage.pagesLink);
 
@@ -108,13 +115,18 @@ describe('Aldryn Newsblog tests: ', function () {
 
                 // switch to sidebar menu iframe
                 return browser.switchTo().frame(browser.findElement(By.css(
-                    '.cms_sideframe-frame iframe')));
+                    '.cms-sideframe-frame iframe')));
             }
         }).then(function () {
-            cmsProtractorHelper.waitFor(newsBlogPage.breadcrumbsLinks.first());
+            browser.sleep(1000);
 
-            // click the Home link in breadcrumbs
-            newsBlogPage.breadcrumbsLinks.first().click();
+            newsBlogPage.breadcrumbs.isPresent().then(function (present) {
+                if (present) {
+                    // click the Home link in breadcrumbs
+                    cmsProtractorHelper.waitFor(newsBlogPage.breadcrumbsLinks.first());
+                    newsBlogPage.breadcrumbsLinks.first().click();
+                }
+            });
 
             cmsProtractorHelper.waitFor(newsBlogPage.newsBlogConfigsLink);
 
@@ -153,13 +165,9 @@ describe('Aldryn Newsblog tests: ', function () {
 
         newsBlogPage.addArticleButton.click();
 
-        cmsProtractorHelper.waitFor(newsBlogPage.englishLanguageTab);
+        cmsProtractorHelper.waitFor(newsBlogPage.titleInput);
 
-        return newsBlogPage.englishLanguageTab.click().then(function () {
-            cmsProtractorHelper.waitFor(newsBlogPage.titleInput);
-
-            return newsBlogPage.titleInput.sendKeys(articleName);
-        }).then(function () {
+        newsBlogPage.titleInput.sendKeys(articleName).then(function () {
             browser.actions().mouseMove(newsBlogPage.saveAndContinueButton)
                 .perform();
             newsBlogPage.saveButton.click();
@@ -194,7 +202,7 @@ describe('Aldryn Newsblog tests: ', function () {
 
                     // switch to modal iframe
                     browser.switchTo().frame(browser.findElement(By.css(
-                        '.cms_modal-frame iframe')));
+                        '.cms-modal-frame iframe')));
 
                     cmsProtractorHelper.selectOption(newsBlogPage.applicationSelect,
                         'NewsBlog', newsBlogPage.newsBlogOption);
@@ -226,18 +234,32 @@ describe('Aldryn Newsblog tests: ', function () {
     });
 
     it('deletes article', function () {
-        // wait for modal iframe to appear
-        cmsProtractorHelper.waitFor(newsBlogPage.sideMenuIframe);
+        // have to wait till animation finished
+        browser.sleep(300);
+        // click the example.com link in the top menu
+        newsBlogPage.userMenus.first().click().then(function () {
+            // wait for top menu dropdown options to appear
+            cmsProtractorHelper.waitForDisplayed(newsBlogPage.userMenuDropdown);
+
+            return newsBlogPage.administrationOptions.first().click();
+        }).then(function () {
+            // wait for modal iframe to appear
+            cmsProtractorHelper.waitFor(newsBlogPage.sideMenuIframe);
+        });
 
         // switch to sidebar menu iframe
         browser.switchTo()
-            .frame(browser.findElement(By.css('.cms_sideframe-frame iframe')));
+            .frame(browser.findElement(By.css('.cms-sideframe-frame iframe')));
 
-        // wait for edit event link to appear
-        cmsProtractorHelper.waitFor(newsBlogPage.editArticleLinks.first());
-
-        // validate edit article links texts to delete proper article
-        return newsBlogPage.editArticleLinks.first().getText().then(function (text) {
+        cmsProtractorHelper.waitFor(newsBlogPage.editArticlesLink);
+        browser.sleep(100);
+        newsBlogPage.editArticlesLink.click().then(function () {
+            // wait for edit event link to appear
+            return cmsProtractorHelper.waitFor(newsBlogPage.editArticleLinksTable);
+        }).then(function () {
+            // validate edit article links texts to delete proper article
+            return newsBlogPage.editArticleLinks.first().getText();
+        }).then(function (text) {
             if (text === articleName) {
                 return newsBlogPage.editArticleLinks.first().click();
             } else {
