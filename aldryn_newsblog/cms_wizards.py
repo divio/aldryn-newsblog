@@ -15,7 +15,7 @@ from cms.wizards.forms import BaseFormMixin
 from djangocms_text_ckeditor.widgets import TextEditorWidget
 from djangocms_text_ckeditor.html import clean_html
 from parler.forms import TranslatableModelForm
-from reversion import create_revision, set_user, set_comment
+from reversion.revisions import default_revision_manager
 
 from .cms_appconfig import NewsBlogConfig
 from .models import Article
@@ -113,11 +113,11 @@ class CreateNewsBlogArticleForm(BaseFormMixin, TranslatableModelForm):
                 )
 
         with transaction.atomic():
-            with create_revision():
+            with default_revision_manager.create_revision():
                 article.save()
                 if self.user:
-                    set_user(self.user)
-                set_comment(ugettext("Initial version."))
+                    default_revision_manager.set_user(self.user)
+                default_revision_manager.set_comment(ugettext("Initial version."))
 
         return article
 
