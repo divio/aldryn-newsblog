@@ -492,8 +492,8 @@ def update_search_data(sender, instance, **kwargs):
     is_cms_plugin = issubclass(instance.__class__, CMSPlugin)
 
     if Article.update_search_on_save and is_cms_plugin:
-        placeholder = (getattr(instance, '_placeholder_cache', None)
-                       or instance.placeholder)
+        placeholder = (getattr(instance, '_placeholder_cache', None) or
+                       instance.placeholder)
         if hasattr(placeholder, '_attached_model_cache'):
             if placeholder._attached_model_cache == Article:
                 article = placeholder._attached_model_cache.objects.language(
