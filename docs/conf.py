@@ -14,6 +14,7 @@
 
 # import sys
 import os
+import aldryn_newsblog
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -50,7 +51,6 @@ copyright = u'2014, Divio AG'
 # |version| and |release|, also used in various other places throughout the
 # built documents.
 #
-import aldryn_newsblog
 # The short X.Y version.
 version = aldryn_newsblog.__version__
 # The full version, including alpha/beta/rc tags.
