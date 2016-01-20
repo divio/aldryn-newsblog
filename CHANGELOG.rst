@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+1.0.13.dev
+----------
+
+* Fixes an issue where NewsBlog prevents a project from loading in some circumstances.
+
 1.0.12 (2016-01-12)
 -------------------
 
