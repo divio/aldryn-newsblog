@@ -1,5 +1,4 @@
 aldryn-search
-https://github.com/aldryn/aldryn-apphook-reload/archive/develop.zip#egg=aldryn_apphook_reload
 coverage>=3.7.1
 dj-database-url
 django-classy-tags
@@ -21,3 +20,5 @@ selenium
 # docs
 sphinx
 sphinx-rtd-theme
+
+https://github.com/aldryn/aldryn-people/archive/feature/future-release-1-2-0.zip

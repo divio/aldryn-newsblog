@@ -1,29 +1,32 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import unicode_literals
-
 import os
 import random
 import string
 import sys
 
 from django.conf import settings
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AnonymousUser, User
 from django.core.urlresolvers import clear_url_caches
 from django.core.cache import cache
+from django.test import RequestFactory
 from django.utils.timezone import now
 from django.utils.translation import override
 from aldryn_categories.models import Category
 from aldryn_newsblog.cms_app import NewsBlogApp
 from aldryn_newsblog.models import Article, NewsBlogConfig
 from aldryn_people.models import Person
-from aldryn_search.helpers import get_request
 from cms import api
 from cms.apphook_pool import apphook_pool
 from cms.appresolver import clear_app_resolvers
 from cms.exceptions import AppAlreadyRegistered
 from cms.test_utils.testcases import CMSTestCase, TransactionCMSTestCase
 from cms.utils import get_cms_setting
+
+from cms.toolbar.toolbar import CMSToolbar
+
+
 from parler.utils.context import switch_language
 
 TESTS_ROOT = os.path.abspath(os.path.dirname(__file__))
@@ -162,6 +165,21 @@ class NewsBlogTestsMixin(object):
                     category.name = self.rand_str(prefix=code, length=8)
                     category.save()
 
+    @staticmethod
+    def get_request(language=None, url="/"):
+        """
+        Returns a Request instance populated with cms specific attributes.
+        """
+        request_factory = RequestFactory(HTTP_HOST=settings.ALLOWED_HOSTS[0])
+        request = request_factory.get(url)
+        request.session = {}
+        request.LANGUAGE_CODE = language or settings.LANGUAGE_CODE
+        # Needed for plugin rendering.
+        request.current_page = None
+        request.user = AnonymousUser()
+        request.toolbar = CMSToolbar(request)
+        return request
+
     def setUp(self):
         self.template = get_cms_setting('TEMPLATES')[0][0]
         self.language = settings.LANGUAGES[0][0]
@@ -178,7 +196,6 @@ class NewsBlogTestsMixin(object):
             title="plugin_page", template=self.template, language=self.language,
             parent=self.root_page, published=True)
         self.placeholder = self.page.placeholders.all()[0]
-        self.request = get_request('en')
 
         self.setup_categories()
 

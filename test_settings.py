@@ -14,7 +14,6 @@ cms_version = LooseVersion(cms_string_version)
 HELPER_SETTINGS = {
     'TIME_ZONE': 'Europe/Zurich',
     'INSTALLED_APPS': [
-        'aldryn_apphook_reload',
         'aldryn_apphooks_config',
         'aldryn_categories',
         'aldryn_people',
@@ -160,6 +159,8 @@ if cms_version < LooseVersion('3.2.0'):
         'cms.middleware.utils.ApphookReloadMiddleware')
     HELPER_SETTINGS['MIDDLEWARE_CLASSES'].insert(
         0, 'aldryn_apphook_reload.middleware.ApphookReloadMiddleware')
+    HELPER_SETTINGS['INSTALLED_APPS'].insert(
+        0, 'aldryn_apphook_reload')
 
 
 def run():

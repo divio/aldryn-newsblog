@@ -1,5 +1,5 @@
 django>=1.8,<1.9
-django-reversion>=1.9.4,<1.11
+django-reversion>=1.9.3,<1.10
 
 # Requires 1.0.4+, just running can use earlier versions of aldryn-reversion.
 aldryn-reversion>=1.0.4

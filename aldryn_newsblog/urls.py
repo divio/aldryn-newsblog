@@ -6,8 +6,7 @@ from aldryn_newsblog.views import (
     ArticleSearchResultsList)
 from aldryn_newsblog.feeds import LatestArticlesFeed, TagFeed, CategoryFeed
 
-urlpatterns = patterns(
-    '',
+urlpatterns = [
     url(r'^$',
         ArticleList.as_view(), name='article-list'),
     url(r'^feed/$', LatestArticlesFeed(), name='article-list-feed'),
@@ -53,4 +52,4 @@ urlpatterns = patterns(
     url(r'^tag/(?P<tag>\w[-\w]*)/feed/$',
         TagFeed(), name='article-list-by-tag-feed'),
 
-)
+]

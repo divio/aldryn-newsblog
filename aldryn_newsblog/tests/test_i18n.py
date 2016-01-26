@@ -25,7 +25,6 @@ class TestI18N(NewsBlogTestCase):
 
         self.assertEquals(article.get_absolute_url(language='en'),
             '/en/page/god-save-queen/')
-
         # Test that we can request the other defined language too
         self.assertEquals(article.get_absolute_url(language='de'),
             '/de/page/einigkeit-und-recht-und-freiheit/')

@@ -22,10 +22,13 @@ env:
     # NOTE: FE-TESTS ARE DISABLED UNTIL THEY ARE FIXED FOR CMS 3.2
     # NOTE: MYSQL AND POSTGRES TESTS ARE DISABLED UNTIL #339 IS MERGED.
     - TOXENV=flake8
+    - TOXENV=py34-dj19-sqlite-cms32-fe
+    - TOXENV=py34-dj19-sqlite-cms32
     - TOXENV=py34-dj18-sqlite-cms32-fe
 #    - TOXENV=py34-dj18-mysql-cms32
 #    - TOXENV=py34-dj18-postgres-cms32
     - TOXENV=py34-dj18-sqlite-cms31
+    - TOXENV=py27-dj19-sqlite-cms32
     - TOXENV=py27-dj18-sqlite-cms32
     - TOXENV=py27-dj18-sqlite-cms31
     - TOXENV=py34-dj17-sqlite-cms32

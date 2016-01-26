@@ -31,6 +31,7 @@ class AdminTest(NewsBlogTestsMixin, TransactionTestCase):
             (user.first_name, user.last_name)))
 
         admin_inst = admin.site._registry[Article]
+        self.request = self.get_request('en')
         self.request.user = user
         self.request.META['HTTP_HOST'] = 'example.com'
         response = admin_inst.add_view(self.request)

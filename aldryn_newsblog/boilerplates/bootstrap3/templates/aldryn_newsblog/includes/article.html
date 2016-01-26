@@ -1,5 +1,4 @@
 {% load i18n apphooks_config_tags cms_tags sekizai_tags staticfiles thumbnail %}
-{% load url from future %}
 
 <article class="aldryn-newsblog-article{% if article.is_featured %} aldryn-newsblog-featured{% endif %}{% if not article.published %} unpublished{% endif %}{% if article.future %} future{% endif %}">
     {% block newsblog_visual %}
