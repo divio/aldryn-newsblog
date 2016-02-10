@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+1.1.0 (UNRELEASED)
+-------------------
+
+* Add stripped default django templates to `/aldryn_newsblog/templates`
+
 1.0.12 (2016-01-12)
 -------------------
 

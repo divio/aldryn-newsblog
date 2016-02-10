@@ -1,0 +1,48 @@
+{% load i18n staticfiles thumbnail cms_tags apphooks_config_tags %}
+
+<article class="article
+    {% if article.is_featured %} featured{% endif %}
+    {% if not article.published %} unpublished{% endif %}">
+
+    {# The image is only shown on the detail view by using the condition "and detail_view" #}
+    {% if article.featured_image_id and detail_view %}
+        <p>
+            <img src="{% thumbnail article.featured_image.image 800x450 crop subject_location=article.featured_image.subject_location %}" alt="{{ article.featured_image.alt }}">
+        </p>
+    {% endif %}
+
+    {% if article.categories %}
+        <p>
+            {% for category in article.categories.all %}
+                <a href="{% namespace_url 'article-list-by-category' category.slug namespace=namespace default='' %}">{{ category.name }}</a>
+                {% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        </p>
+    {% endif %}
+
+    <h2>
+        {% if not detail_view %}
+            <a href="{% namespace_url 'article-detail' article.slug namespace=namespace default='' %}">{% render_model article "title" %}</a>
+        {% else %}
+            {% render_model article "title" %}
+        {% endif %}
+    </h2>
+
+    <p>{{ article.publishing_date|date }}</p>
+
+    {% include "aldryn_newsblog/includes/author.html" with author=article.author %}
+
+    {% if article.tags %}
+        <p>
+            {% for tag in article.tags.all %}
+                <a href="{% namespace_url 'article-list-by-tag' tag=tag.slug namespace=namespace default='' %}">{{ tag.name }}</a>
+            {% endfor %}
+        </p>
+    {% endif %}
+
+    {% render_model article "lead_in" %}
+
+    {% if detail_view %}
+        {% render_placeholder article.content language placeholder_language %}
+    {% endif %}
+</article>
