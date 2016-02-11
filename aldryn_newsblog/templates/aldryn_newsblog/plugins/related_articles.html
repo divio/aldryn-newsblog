@@ -1,0 +1,12 @@
+{% load i18n %}
+
+<ul>
+    {% for article in article_list %}
+        <li>
+            <h3><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></h3>
+            <p>{% trans "by" %} <a href="#">{{ article.author }}</a> {{ article.publishing_date|date }}</p>
+        </li>
+    {% empty %}
+        <li>{% trans "No items available" %}</li>
+    {% endfor %}
+</ul>

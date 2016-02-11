@@ -1,0 +1,20 @@
+{% extends "aldryn_newsblog/base.html" %}
+{% load i18n apphooks_config_tags %}
+
+{% block title %}
+    {{ article.title }} - {{ block.super }}
+{% endblock %}
+
+{% block newsblog_content %}
+    {% include "aldryn_newsblog/includes/article.html" with detail_view="true" %}
+
+    <ul>
+        {% if prev_article %}
+            <li><a href="{{ prev_article.get_absolute_url }}">{% trans "Previous Article" %}</a></li>
+        {% endif %}
+        <li><a href="{% namespace_url "article-list" %}">{% trans "Back to Overview" %}</a></li>
+        {% if next_article %}
+            <li><a href="{{ next_article.get_absolute_url }}">{% trans "Next Article" %}</a></li>
+        {% endif %}
+    </ul>
+{% endblock %}

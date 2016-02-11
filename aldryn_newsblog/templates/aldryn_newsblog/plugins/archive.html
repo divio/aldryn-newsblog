@@ -1,0 +1,26 @@
+{% load i18n apphooks_config_tags %}
+
+{% regroup dates by date.year as years %}
+{% with current_year=year current_month=month %}
+
+<ul>
+    {% for year in years %}
+        <li>
+            <a href="{% namespace_url 'article-list-by-year' year=year.grouper namespace=instance.app_config.namespace default='' %}">{{ year.grouper }}</a>
+            <ul>
+                {% for month in year.list %}
+                    <li>
+                        <a href="{% namespace_url 'article-list-by-month' year=year.grouper month=month.date|date:"n" namespace=instance.app_config.namespace default='' %}"
+                            {% if year.grouper == current_year and month.date.month == current_month %} class="active"{% endif %}>
+                                {{ month.date|date:"F" }} <span>{{ month.num_articles }}</span>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </li>
+    {% empty %}
+        <li>{% trans "No items available" %}</li>
+    {% endfor %}
+</ul>
+
+{% endwith %}

@@ -1,0 +1,27 @@
+{% extends "aldryn_newsblog/base.html" %}
+{% load i18n apphooks_config_tags %}
+
+{% block newsblog_content %}
+    <ul>
+        <h3>{% blocktrans with query=query %}Most recent articles containing "<strong>{{ query }}</strong>"{% endblocktrans %}</h3>
+        {% for article in object_list %}
+            <li{% if not article.is_published %} class="unpublished"{% endif %}>
+                <a href="{% namespace_url "article-detail" article.slug namespace=view.app_config.namespace default='' %}">
+                    <strong>
+                        {% for category in article.categories.all %}
+                            {{ category.name }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </strong>
+                    {{ article.title }}<br />
+                    {{ article.lead_in|striptags|truncatewords:"10"|safe }}
+                </a>
+            </li>
+        {% empty %}
+            {% if query %}
+                <p>{% blocktrans with query=query %}No articles found{% endblocktrans %}</p>
+            {% else %}
+                <p>{% trans "Enter a query above" %}</p>
+            {% endif %}
+        {% endfor %}
+    </ul>
+{% endblock %}
