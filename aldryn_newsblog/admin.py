@@ -99,7 +99,7 @@ class ArticleAdmin(
         make_featured, make_not_featured,
         make_published, make_unpublished,
     )
-    fieldsets = (
+    _fieldsets = (
         (None, {
             'fields': (
                 'title',
@@ -130,6 +130,13 @@ class ArticleAdmin(
             )
         }),
     )
+
+    _publish_fieldsets = (
+        (None, {
+            'fields': ('publishing_date', 'is_published')
+        }),
+    )
+
     app_config_values = {
         'default_published': 'is_published'
     }
@@ -147,6 +154,10 @@ class ArticleAdmin(
         request.GET = data
         return super(ArticleAdmin, self).add_view(request, *args, **kwargs)
 
+    def get_fieldsets(self, request, obj=None):
+        if 'publish' in request.GET:
+            return self._publish_fieldsets
+        return self._fieldsets
 
 admin.site.register(models.Article, ArticleAdmin)
 

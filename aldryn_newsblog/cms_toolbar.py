@@ -115,8 +115,22 @@ class NewsBlogToolbar(CMSToolbar):
                     url_args = {'language': language, }
                 url = get_admin_url('aldryn_newsblog_article_change',
                                     [article.pk, ], **url_args)
-                menu.add_modal_item(_('Edit this article'), url=url,
-                                    active=True)
+                menu.add_modal_item(
+                    _('Edit this article'),
+                    url=url, active=True
+                )
+                if article.published:
+                    title = _('Unpublish this article')
+                else:
+                    title = _('Publish this article')
+
+                url_args['publish'] = 1
+                url = get_admin_url(
+                    'aldryn_newsblog_article_change',
+                    [article.pk, ],
+                    **url_args
+                )
+                menu.add_modal_item(title, url=url)
 
             if delete_article_perm and article:
                 redirect_url = self.get_on_delete_redirect_url(
