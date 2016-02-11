@@ -103,29 +103,31 @@ class ArticleAdmin(
     fieldsets = (
         (None, {
             'fields': (
-                'app_config',
                 'title',
+                'author',
+                ('publishing_date', 'is_published'),
                 'featured_image',
-                ('owner', 'author', ),
-            )
-        }),
-        ('Details', {
-            'fields': (
-                ('is_published', 'publishing_date', ),
                 'is_featured',
-                'tags',
-                'categories',
-                'lead_in',
-                'related',
             )
         }),
-        ('Meta options', {
+        ('Meta Options', {
             'classes': ('collapse',),
             'fields': (
                 'slug',
                 'meta_title',
                 'meta_description',
                 'meta_keywords',
+            )
+        }),
+        ('Advanced Settings', {
+            'classes': ('collapse',),
+            'fields': (
+                'lead_in',
+                'tags',
+                'categories',
+                'related',
+                'owner',
+                'app_config',
             )
         }),
     )

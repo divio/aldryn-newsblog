@@ -95,9 +95,12 @@ class Article(TranslatedAutoSlugifyMixin,
                 'Clear it to have it re-created automatically.'),
         ),
         lead_in=HTMLField(
-            verbose_name=_('lead-in'), default='',
-            help_text=_('Optional. Will be displayed in lists, and at the '
-                        'start of the detail page (in bold)'),
+            verbose_name=_('lead'), default='',
+            help_text=_(
+                'The lead gives the reader the main idea of the story, this '
+                'is useful in overviews, lists or as an introduction to your '
+                'article.'
+            ),
             blank=True,
         ),
         meta_title=models.CharField(
@@ -124,7 +127,7 @@ class Article(TranslatedAutoSlugifyMixin,
                                          blank=True)
     publishing_date = models.DateTimeField(_('publishing date'),
                                            default=now)
-    is_published = models.BooleanField(_('is published'), default=True,
+    is_published = models.BooleanField(_('is published'), default=False,
                                        db_index=True)
     is_featured = models.BooleanField(_('is featured'), default=False,
                                       db_index=True)
