@@ -19,7 +19,9 @@ class TestFeeds(NewsBlogTestsMixin, TransactionTestCase):
     def test_latest_feeds(self):
         article = self.create_article()
         future_article = self.create_article(
-            publishing_date=now() + timedelta(days=3))
+            publishing_date=now() + timedelta(days=3),
+            is_published=True,
+        )
         url = reverse(
             '{0}:article-list-feed'.format(self.app_config.namespace)
         )
