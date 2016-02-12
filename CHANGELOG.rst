@@ -1,10 +1,14 @@
 CHANGELOG
 =========
 
-1.1.0 (UNRELEASED)
+1.1 (2016-02-12)
 -------------------
 
+* Add Django 1.9 compatibility
 * Add stripped default django templates to `/aldryn_newsblog/templates`
+* Newly created articles are not published by default
+* UX admin interface improvements
+
 
 1.0.12 (2016-01-12)
 -------------------
