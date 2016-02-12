@@ -24,7 +24,7 @@ class Migration(DataMigration):
         if created:
             app_config_translation = app_config.translations.create()
             app_config_translation.language_code = settings.LANGUAGES[0][0]
-            app_config_translation.app_title = 'Default NewsBlog'
+            app_config_translation.app_title = 'News & Blog'
             app_config_translation.save()
 
         for model in models_list:
