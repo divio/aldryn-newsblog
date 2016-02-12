@@ -39,7 +39,9 @@ class TestModels(NewsBlogTestCase):
         author = self.create_person()
         article = Article.objects.create(
             title=title, author=author, owner=author.user,
-            app_config=self.app_config, publishing_date=now())
+            app_config=self.app_config, publishing_date=now(),
+            is_published=True,
+        )
         article.save()
         self.assertEquals(article.slug, 'this-is-a-title')
         # Now, let's try another with the same title
@@ -48,7 +50,9 @@ class TestModels(NewsBlogTestCase):
             author=author,
             owner=author.user,
             app_config=self.app_config,
-            publishing_date=now())
+            publishing_date=now(),
+            is_published=True,
+        )
         # Note, it cannot be the exact same title, else we'll fail the unique
         # constraint on the field.
         article_1.save()
@@ -59,7 +63,9 @@ class TestModels(NewsBlogTestCase):
             author=author,
             owner=author.user,
             app_config=self.app_config,
-            publishing_date=now())
+            publishing_date=now(),
+            is_published=True,
+        )
         article_2.save()
         self.assertEquals(article_2.slug, 'this-is-a-title-2')
 
@@ -67,7 +73,9 @@ class TestModels(NewsBlogTestCase):
         author = self.create_person()
         article = Article.objects.create(
             title=self.rand_str(), owner=author.user,
-            app_config=self.app_config, publishing_date=now())
+            app_config=self.app_config, publishing_date=now(),
+            is_published=True,
+        )
         article.save()
         self.assertEquals(article.author.user, article.owner)
 
@@ -76,7 +84,9 @@ class TestModels(NewsBlogTestCase):
         self.app_config.save()
         article = Article.objects.create(
             title=self.rand_str(), owner=author.user,
-            app_config=self.app_config, publishing_date=now())
+            app_config=self.app_config, publishing_date=now(),
+            is_published=True,
+        )
         self.app_config.create_authors = old
         self.app_config.save()
         self.assertEquals(article.author, None)
@@ -85,7 +95,9 @@ class TestModels(NewsBlogTestCase):
         user = self.create_user()
         article = Article.objects.create(
             title=self.rand_str(), owner=user,
-            app_config=self.app_config, publishing_date=now())
+            app_config=self.app_config, publishing_date=now(),
+            is_published=True,
+        )
         article.save()
         self.assertEquals(article.author.name,
                           u' '.join((user.first_name, user.last_name)))
@@ -104,7 +116,8 @@ class TestModels(NewsBlogTestCase):
             owner=user,
             lead_in=lead_in,
             app_config=self.app_config,
-            publishing_date=now()
+            publishing_date=now(),
+            is_published=True,
         )
         article.save()
 
@@ -126,7 +139,8 @@ class TestModels(NewsBlogTestCase):
             owner=user,
             lead_in=lead_in,
             app_config=self.app_config,
-            publishing_date=now()
+            publishing_date=now(),
+            is_published=True,
         )
         article.save()
 
@@ -146,7 +160,9 @@ class TestModels(NewsBlogTestCase):
         author = self.create_person()
         article = Article.objects.create(
             title=title, slug=self.rand_str(), author=author, owner=author.user,
-            app_config=self.app_config, publishing_date=now())
+            app_config=self.app_config, publishing_date=now(),
+            is_published=True,
+        )
         article.save()
         api.add_plugin(article.content, 'TextPlugin', self.language)
         plugin = article.content.get_plugins()[0].get_plugin_instance()[0]
@@ -168,7 +184,9 @@ class TestModels(NewsBlogTestCase):
         author = self.create_person()
         article = Article.objects.create(
             title=initial_title, author=author, owner=author.user,
-            app_config=self.app_config, publishing_date=now())
+            app_config=self.app_config, publishing_date=now(),
+            is_published=True,
+        )
         article.save()
         self.assertEquals(article.title, initial_title)
         self.assertEquals(article.slug, initial_slug)
@@ -194,7 +212,8 @@ class TestModelsTransactions(NewsBlogTransactionTestCase):
         # Create an initial article in the first language
         article1 = Article(
             title=title, author=author, owner=author.user,
-            app_config=self.app_config, publishing_date=now()
+            app_config=self.app_config, publishing_date=now(),
+            is_published=True,
         )
         article1.set_current_language(original_lang)
         article1.save()
@@ -205,8 +224,11 @@ class TestModelsTransactions(NewsBlogTransactionTestCase):
             with override(context_lang):
                 for article_lang, _ in settings.LANGUAGES:
                     try:
-                        article = Article(author=author, owner=author.user,
-                            app_config=self.app_config, publishing_date=now())
+                        article = Article(
+                            author=author, owner=author.user,
+                            app_config=self.app_config, publishing_date=now(),
+                            is_published=True,
+                        )
                         article.set_current_language(article_lang)
                         article.title = title
                         article.save()

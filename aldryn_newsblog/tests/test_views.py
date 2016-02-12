@@ -142,10 +142,14 @@ class TestViews(NewsBlogTestCase):
                 code = "{0}-".format(self.language)
                 for _ in range(11):
                     article = Article.objects.create(
-                        title=self.rand_str(), slug=self.rand_str(prefix=code),
+                        title=self.rand_str(),
+                        slug=self.rand_str(prefix=code),
                         app_config=self.app_config,
-                        author=author, owner=author.user,
-                        publishing_date=now())
+                        author=author,
+                        owner=author.user,
+                        publishing_date=now(),
+                        is_published=True,
+                    )
                     # Make sure there are translations in place for the
                     # articles.
                     for language, _ in settings.LANGUAGES[1:]:
@@ -217,7 +221,9 @@ class TestTranslationFallbacks(NewsBlogTestCase):
                 slug=self.rand_str(prefix=code),
                 app_config=self.app_config,
                 author=author, owner=author.user,
-                publishing_date=now())
+                publishing_date=now(),
+                is_published=True,
+            )
             article.save()
             article.categories.add(self.category1)
             url_one = reverse(
@@ -265,7 +271,9 @@ class TestTranslationFallbacks(NewsBlogTestCase):
             title=self.rand_str(), slug=self.rand_str(prefix=code),
             app_config=self.app_config,
             author=author, owner=author.user,
-            publishing_date=now())
+            publishing_date=now(),
+            is_published=True,
+        )
         article.save()
         article.categories.add(self.category1)
 
@@ -595,7 +603,8 @@ class ViewLanguageFallbackMixin(object):
                 owner=owner,
                 app_config=app_config,
                 publishing_date=now(),
-                is_published=True)
+                is_published=True,
+            )
         if categories:
             de_article.categories = categories
         de_article.tags.add('tag1')
