@@ -66,8 +66,7 @@ class ArticleAdminForm(TranslatableModelForm):
         super(ArticleAdminForm, self).__init__(*args, **kwargs)
 
         qs = models.Article.objects
-
-        if hasattr(self.instance, 'app_config'):
+        if self.instance.app_config_id:
             qs = models.Article.objects.filter(
                 app_config=self.instance.app_config)
         elif 'initial' in kwargs and 'app_config' in kwargs['initial']:

@@ -498,6 +498,7 @@ class TestVariousViews(NewsBlogTestCase):
 
 class TestIndex(NewsBlogTestCase):
     def test_index_simple(self):
+        self.request = self.get_request('en')
         self.index = ArticleIndex()
         content0 = self.rand_str(prefix='content0_')
         self.setup_categories()

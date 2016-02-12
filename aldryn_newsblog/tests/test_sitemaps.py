@@ -5,7 +5,11 @@ from __future__ import unicode_literals
 from . import NewsBlogTestCase
 from aldryn_newsblog.sitemaps import NewsBlogSitemap
 
-from django.contrib.sites.models import get_current_site
+try:
+    from django.contrib.sites.shortcuts import get_current_site
+except ImportError:
+    # Django 1.6
+    from django.contrib.sites.models import get_current_site
 from django.utils.translation import override
 
 
@@ -17,6 +21,7 @@ class TestSitemaps(NewsBlogTestCase):
         return urls
 
     def _article_urls(self, articles, lang):
+        self.request = self.get_request(lang)
         host = 'http://' + get_current_site(self.request).domain
         return [host + article.get_absolute_url(lang) for article in articles]
 
@@ -35,6 +40,7 @@ class TestSitemaps(NewsBlogTestCase):
             self.assertNotIn(url, urls)
 
     def assertSitemapLanguage(self, sitemap, lang):
+        self.request = self.get_request(lang)
         urls = self._sitemap_urls(sitemap)
         host = 'http://' + get_current_site(self.request).domain
         url_start = "{0}/{1}".format(host, lang)

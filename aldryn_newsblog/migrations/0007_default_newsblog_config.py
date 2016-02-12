@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from django.apps import apps as django_apps
 from django.conf import settings
 from django.db import models, migrations, transaction
-from django.db.models import get_model
 from django.db.utils import ProgrammingError, OperationalError
 
 
@@ -33,7 +33,7 @@ def create_default_newsblog_config(apps, schema_editor):
         # we need to cleanup or avoid that by making transaction atomic.
         count = get_config_count_count(NewsBlogConfig)
     except (ProgrammingError, OperationalError):
-        NewsBlogConfig = get_model('aldryn_newsblog.NewsBlogConfig')
+        NewsBlogConfig = django_apps.get_model('aldryn_newsblog.NewsBlogConfig')
         count = get_config_count_count(NewsBlogConfig)
 
     if not count == 0:

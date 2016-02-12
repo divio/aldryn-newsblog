@@ -3,12 +3,18 @@
 from __future__ import unicode_literals
 from django.core.urlresolvers import reverse
 
-import reversion
+from reversion.revisions import default_revision_manager
+try:
+    from reversion import create_revision
+except ImportError:
+    # django-reversion >=1.9
+    from reversion.revisions import create_revision
+
 import six
 
 from django.db import transaction
 
-from aldryn_reversion.core import create_revision
+from aldryn_reversion.core import create_revision as aldryn_create_revision
 
 from parler.utils.context import switch_language
 
@@ -19,7 +25,7 @@ from aldryn_newsblog.cms_appconfig import NewsBlogConfig
 class TestVersioning(NewsBlogTestCase):
     def create_revision(self, article, content=None, language=None, **kwargs):
         with transaction.atomic():
-            with reversion.create_revision():
+            with create_revision():
                 for k, v in six.iteritems(kwargs):
                     setattr(article, k, v)
                 if content:
@@ -35,7 +41,8 @@ class TestVersioning(NewsBlogTestCase):
                 article.save()
 
     def revert_to(self, article, revision):
-        reversion.get_for_object(article)[revision].revision.revert()
+        (default_revision_manager.get_for_object(article)[revision]
+                                 .revision.revert())
 
     def test_revert_revision(self):
         title1 = self.rand_str(prefix='title1_')
@@ -151,7 +158,7 @@ class TestVersioning(NewsBlogTestCase):
         self.create_revision(article, content=content1)
 
         self.assertEqual(
-            len(reversion.get_for_object(article)), 1)
+            len(default_revision_manager.get_for_object(article)), 1)
 
         # Revision 2
         with transaction.atomic():
@@ -159,10 +166,10 @@ class TestVersioning(NewsBlogTestCase):
             plugin = plugins[0].get_plugin_instance()[0]
             plugin.body = content2
             plugin.save()
-            create_revision(article)
+            aldryn_create_revision(article)
 
         self.assertEqual(
-            len(reversion.get_for_object(article)), 2)
+            len(default_revision_manager.get_for_object(article)), 2)
 
         response = self.client.get(article.get_absolute_url())
         self.assertContains(response, content2)
@@ -177,11 +184,12 @@ class TestVersioning(NewsBlogTestCase):
 
     def test_blog_config_recovery_accessible(self):
         with transaction.atomic():
-            with reversion.create_revision():
+            with create_revision():
                 new_conf = NewsBlogConfig(
                     namespace='test_revocery_admin_url', paginate_by=15)
                 new_conf.save()
-        new_config_version = reversion.get_for_object(new_conf)[0]
+        new_config_version = (default_revision_manager
+                              .get_for_object(new_conf)[0])
         new_config_pk = new_conf.pk
         self.assertEqual(NewsBlogConfig.objects.filter(
             pk=new_config_pk).count(), 1)
