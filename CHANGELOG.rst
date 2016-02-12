@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+1.1.1 (2016-02-12)
+-------------------
+
+* Change default for app config setting ``default_published`` to False
+
+
 1.1 (2016-02-12)
 -------------------
 
