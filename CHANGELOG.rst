@@ -1,6 +1,15 @@
 CHANGELOG
 =========
 
+
+1.2.0 (UNRELEASED)
+-------------------
+
+* Remove unused render_placeholder configs
+* Add static_placeholders where necessary
+* Simplify templates
+
+
 1.1.1 (2016-02-12)
 -------------------
 
