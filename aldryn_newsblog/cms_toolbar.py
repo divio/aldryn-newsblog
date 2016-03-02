@@ -4,7 +4,8 @@ from __future__ import unicode_literals
 
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse
-from django.utils.translation import ugettext as _, get_language_from_request
+from django.utils.translation import (
+    ugettext as _, get_language_from_request, override)
 
 from cms.toolbar_base import CMSToolbar
 from cms.toolbar_pool import toolbar_pool
@@ -26,8 +27,10 @@ class NewsBlogToolbar(CMSToolbar):
     watch_models = [Article, ]
     supported_apps = ('aldryn_newsblog',)
 
-    def get_on_delete_redirect_url(self, article):
-        url = reverse('{0}:article-list'.format(article.app_config.namespace))
+    def get_on_delete_redirect_url(self, article, language):
+        with override(language):
+            url = reverse(
+                '{0}:article-list'.format(article.app_config.namespace))
         return url
 
     def __get_newsblog_config(self):
@@ -116,7 +119,8 @@ class NewsBlogToolbar(CMSToolbar):
                                     active=True)
 
             if delete_article_perm and article:
-                redirect_url = self.get_on_delete_redirect_url(article)
+                redirect_url = self.get_on_delete_redirect_url(
+                    article, language=language)
                 url = get_admin_url('aldryn_newsblog_article_delete',
                                     [article.pk, ])
                 menu.add_modal_item(_('Delete this article'), url=url,
