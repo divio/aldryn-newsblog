@@ -27,7 +27,7 @@ class NewsBlogToolbar(CMSToolbar):
     watch_models = [Article, ]
     supported_apps = ('aldryn_newsblog',)
 
-    def get_on_delete_redirect_url(self, article, language=None):
+    def get_on_delete_redirect_url(self, article, language):
         with override(language):
             url = reverse(
                 '{0}:article-list'.format(article.app_config.namespace))
