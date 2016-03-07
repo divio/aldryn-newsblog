@@ -33,7 +33,6 @@ HELPER_SETTINGS = {
             'aldryn_newsblog', 'tests', 'templates'),
     ),
     'ALDRYN_NEWSBLOG_TEMPLATE_PREFIXES': [('dummy', 'dummy'), ],
-    'ALDRYN_BOILERPLATE_NAME': 'bootstrap3',
     'CMS_PERMISSION': True,
     'SITE_ID': 1,
     'LANGUAGES': (
@@ -167,7 +166,7 @@ def run():
     from djangocms_helper import runner
     # --boilerplate option will ensure correct boilerplate settings are
     # added to settings
-    runner.cms('aldryn_newsblog', extra_args=['--boilerplate'])
+    runner.cms('aldryn_newsblog', extra_args=[])
 
 if __name__ == "__main__":
     run()

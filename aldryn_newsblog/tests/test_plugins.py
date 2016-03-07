@@ -11,6 +11,7 @@ from django.utils.translation import force_text
 
 from aldryn_newsblog.models import NewsBlogConfig
 from cms import api
+from cms.models import StaticPlaceholder
 
 from . import NewsBlogTestCase
 
@@ -243,7 +244,8 @@ class TestRelatedArticlesPlugin(NewsBlogTestCase):
 
     def test_related_articles_plugin(self):
         main_article = self.create_article(app_config=self.app_config)
-        self.placeholder = self.app_config.placeholder_detail_top
+        self.placeholder = StaticPlaceholder.objects.get_or_create(
+            code='newsblog_social', site__isnull=True)[0].draft
         api.add_plugin(self.placeholder, 'NewsBlogRelatedPlugin', self.language)
         self.plugin = self.placeholder.get_plugins()[0].get_plugin_instance()[0]
         self.plugin.save()

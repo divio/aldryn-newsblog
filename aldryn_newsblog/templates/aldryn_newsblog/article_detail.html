@@ -1,5 +1,5 @@
 {% extends "aldryn_newsblog/base.html" %}
-{% load i18n apphooks_config_tags %}
+{% load i18n cms_tags apphooks_config_tags %}
 
 {% block title %}
     {{ article.title }} - {{ block.super }}
@@ -7,6 +7,8 @@
 
 {% block newsblog_content %}
     {% include "aldryn_newsblog/includes/article.html" with detail_view="true" %}
+
+    {% static_placeholder "newsblog_social" %}
 
     <ul>
         {% if prev_article %}
