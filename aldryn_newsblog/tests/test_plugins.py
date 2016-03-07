@@ -244,11 +244,18 @@ class TestRelatedArticlesPlugin(NewsBlogTestCase):
 
     def test_related_articles_plugin(self):
         main_article = self.create_article(app_config=self.app_config)
-        self.placeholder = StaticPlaceholder.objects.get_or_create(
-            code='newsblog_social', site__isnull=True)[0].draft
-        api.add_plugin(self.placeholder, 'NewsBlogRelatedPlugin', self.language)
-        self.plugin = self.placeholder.get_plugins()[0].get_plugin_instance()[0]
-        self.plugin.save()
+        static_placeholder = StaticPlaceholder.objects.get_or_create(
+            code='newsblog_social',
+            site__isnull=True,
+        )[0]
+        placeholder = static_placeholder.draft
+        api.add_plugin(placeholder, 'NewsBlogRelatedPlugin', self.language)
+
+        static_placeholder.publish(None, language=self.language, force=True)
+
+        plugin = placeholder.get_plugins()[0].get_plugin_instance()[0]
+        plugin.save()
+
         self.plugin_page.publish(self.language)
 
         main_article.save()
