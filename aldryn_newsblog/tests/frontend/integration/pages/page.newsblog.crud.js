@@ -56,15 +56,15 @@ var page = {
         '.results th > [href*="/aldryn_newsblog/article/"]')),
 
     // adding article to the page
-    aldrynNewsBlogBlock: element(by.css('.aldryn-newsblog-list')),
+    aldrynNewsBlogBlock: element(by.css('article')),
     advancedSettingsOption: element(by.css(
         '.cms-toolbar-item-navigation [href*="advanced-settings"]')),
     modalIframe: element(by.css('.cms-modal-frame iframe')),
     applicationSelect: element(by.id('application_urls')),
     newsBlogOption: element(by.css('option[value="NewsBlogApp"]')),
     saveModalButton: element(by.css('.cms-modal-buttons .cms-btn-action')),
-    newsBlogMetaBlock: element(by.css('.aldryn-newsblog-meta')),
-    articleLink: element(by.css('.aldryn-newsblog-list h2 > a')),
+    newsBlogMetaBlock: element(by.css('p')),
+    articleLink: element(by.css('article h2 > a')),
 
     // deleting article
     deleteButton: element(by.css('.deletelink-box a')),
