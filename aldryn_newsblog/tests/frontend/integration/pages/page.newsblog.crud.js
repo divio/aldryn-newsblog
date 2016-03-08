@@ -27,11 +27,11 @@ var page = {
         '.cms-toolbar-item-navigation a[href="/en/admin/"]')),
     sideMenuIframe: element(by.css('.cms-sideframe-frame iframe')),
     pagesLink: element(by.css('.model-page > th > a')),
-    addPageLink: element(by.css('.sitemap-noentry .addlink')),
+    addPageLink: element(by.css('.object-tools .addlink')),
     titleInput: element(by.id('id_title')),
     slugErrorNotification: element(by.css('.errors.slug')),
     saveButton: element(by.css('.submit-row [name="_save"]')),
-    editPageLink: element(by.css('.col-preview [href*="preview/"]')),
+    editPageLink: element(by.css('.cms-tree-item-preview [href*="preview/"]')),
     testLink: element(by.cssContainingText('a', 'Test')),
     sideFrameClose: element(by.css('.cms-sideframe-close')),
 
@@ -56,15 +56,15 @@ var page = {
         '.results th > [href*="/aldryn_newsblog/article/"]')),
 
     // adding article to the page
-    aldrynNewsBlogBlock: element(by.css('.aldryn-newsblog-list')),
+    aldrynNewsBlogBlock: element(by.css('article')),
     advancedSettingsOption: element(by.css(
         '.cms-toolbar-item-navigation [href*="advanced-settings"]')),
     modalIframe: element(by.css('.cms-modal-frame iframe')),
     applicationSelect: element(by.id('application_urls')),
     newsBlogOption: element(by.css('option[value="NewsBlogApp"]')),
     saveModalButton: element(by.css('.cms-modal-buttons .cms-btn-action')),
-    newsBlogMetaBlock: element(by.css('.aldryn-newsblog-meta')),
-    articleLink: element(by.css('.aldryn-newsblog-list h2 > a')),
+    newsBlogMetaBlock: element(by.css('p')),
+    articleLink: element(by.css('article h2 > a')),
 
     // deleting article
     deleteButton: element(by.css('.deletelink-box a')),

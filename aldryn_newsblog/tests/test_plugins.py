@@ -11,6 +11,7 @@ from django.utils.translation import force_text
 
 from aldryn_newsblog.models import NewsBlogConfig
 from cms import api
+from cms.models import StaticPlaceholder
 
 from . import NewsBlogTestCase
 
@@ -112,8 +113,8 @@ class TestAuthorsPlugin(TestAppConfigPluginsBase):
 
         response = self.client.get(self.plugin_page.get_absolute_url())
         response_content = force_text(response.content)
-        pattern = '<p class="author"><a href="{url}"></a>'
-        pattern += '</p>\s*<p[^>]*></p>\s*<p class="badge">{num}</p>'
+        pattern = '<p>\s*<a href="{url}">\s*</a>\s*</p>'
+        pattern += '\s*<p>{num}</p>'
         author1_pattern = pattern.format(
             num=3,
             url=reverse(
@@ -167,7 +168,7 @@ class TestCategoriesPlugin(TestAppConfigPluginsBase):
 
         response = self.client.get(self.plugin_page.get_absolute_url())
         response_content = force_text(response.content)
-        pattern = '<span[^>]*>{num}</span>\s*<a href=[^>]*>{name}</a>'
+        pattern = '<a href=[^>]*>{name}</a>\s*<span[^>]*>{num}</span>'
         needle1 = pattern.format(num=3, name=self.category1.name)
         needle2 = pattern.format(num=5, name=self.category2.name)
         self.assertRegexpMatches(response_content, needle1)
@@ -243,10 +244,18 @@ class TestRelatedArticlesPlugin(NewsBlogTestCase):
 
     def test_related_articles_plugin(self):
         main_article = self.create_article(app_config=self.app_config)
-        self.placeholder = self.app_config.placeholder_detail_top
-        api.add_plugin(self.placeholder, 'NewsBlogRelatedPlugin', self.language)
-        self.plugin = self.placeholder.get_plugins()[0].get_plugin_instance()[0]
-        self.plugin.save()
+        static_placeholder = StaticPlaceholder.objects.get_or_create(
+            code='newsblog_social',
+            site__isnull=True,
+        )[0]
+        placeholder = static_placeholder.draft
+        api.add_plugin(placeholder, 'NewsBlogRelatedPlugin', self.language)
+
+        static_placeholder.publish(None, language=self.language, force=True)
+
+        plugin = placeholder.get_plugins()[0].get_plugin_instance()[0]
+        plugin.save()
+
         self.plugin_page.publish(self.language)
 
         main_article.save()

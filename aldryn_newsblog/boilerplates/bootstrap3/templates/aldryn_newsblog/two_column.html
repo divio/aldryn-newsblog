@@ -6,16 +6,14 @@
         <div class="row">
             <div class="col-md-17">
                 {% if view.show_header %}
-                    {% render_placeholder view.config.placeholder_base_top %}
+                    {% static_placeholder "newsblog_feature" %}
                 {% endif %}
                 <div class="aldryn aldryn-newsblog">
-                    {% block newsblog_title %}{% endblock %}
                     {% block newsblog_content %}{% endblock %}
-                    {% block newsblog_footer %}{% endblock %}
                 </div>
             </div>
             <div class="col-md-7 aldryn-newsblog aldryn-newsblog-sidebar">
-                {% render_placeholder view.config.placeholder_base_sidebar %}
+                {% static_placeholder "newsblog_sidebar" %}
                 {% block newsblog_sidebar %}{% endblock %}
             </div>
         </div>
