@@ -2,7 +2,7 @@ CHANGELOG
 =========
 
 
-1.2.0 (UNRELEASED)
+1.2.0 (2016-03-10)
 -------------------
 
 * Remove unused render_placeholder configs
@@ -16,7 +16,7 @@ CHANGELOG
 * Change default for app config setting ``default_published`` to False
 
 
-1.1 (2016-02-12)
+1.1.0 (2016-02-12)
 -------------------
 
 * Add Django 1.9 compatibility
