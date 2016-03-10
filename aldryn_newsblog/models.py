@@ -26,6 +26,7 @@ from aldryn_reversion.core import version_controlled_content
 from aldryn_translation_tools.models import (
     TranslationHelperMixin, TranslatedAutoSlugifyMixin,
 )
+from aldryn_newsblog.utils.utilities import get_valid_languages_from_request
 
 from cms.models.fields import PlaceholderField
 from cms.models.pluginmodel import CMSPlugin
@@ -379,10 +380,11 @@ class NewsBlogFeaturedArticlesPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
         queryset = Article.objects
         if not self.get_edit_mode(request):
             queryset = queryset.published()
-        queryset = queryset.active_translations(get_current_language()).filter(
+        languages = get_valid_languages_from_request(
+            self.app_config.namespace, request)
+        queryset = queryset.translated(*languages).filter(
             app_config=self.app_config,
-            is_featured=True,
-        )
+            is_featured=True)
         return queryset[:self.article_count]
 
     def __str__(self):
@@ -413,9 +415,10 @@ class NewsBlogLatestArticlesPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
         queryset = Article.objects
         if not self.get_edit_mode(request):
             queryset = queryset.published()
-        queryset = queryset.active_translations(get_current_language()).filter(
-            app_config=self.app_config
-        )
+        languages = get_valid_languages_from_request(
+            self.app_config.namespace, request)
+        queryset = queryset.translated(*languages).filter(
+            app_config=self.app_config)
         return queryset[:self.latest_articles]
 
     def __str__(self):
@@ -434,7 +437,9 @@ class NewsBlogRelatedPlugin(PluginEditModeMixin, CMSPlugin):
         """
         Returns a queryset of articles that are related to the given article.
         """
-        qs = article.related.all()
+        languages = get_valid_languages_from_request(
+            article.app_config.namespace, request)
+        qs = article.related.translated(*languages)
         if not self.get_edit_mode(request):
             qs = qs.published()
         return qs

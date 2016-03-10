@@ -6,8 +6,9 @@ import time
 import datetime
 import pytz
 
+from django.core.cache import cache
 from django.core.urlresolvers import reverse
-from django.utils.translation import force_text
+from django.utils.translation import force_text, override
 
 from aldryn_newsblog.models import NewsBlogConfig
 from cms import api
@@ -205,6 +206,21 @@ class TestFeaturedArticlesPlugin(TestAppConfigPluginsBase):
         for article in other_articles:
             self.assertNotContains(response, article.title)
 
+    def test_featured_articles_plugin_unpublished_app_page(self):
+        with override('de'):
+            articles = [self.create_article(is_featured=True)
+                        for _ in range(3)]
+
+        response = self.client.get(self.plugin_page.get_absolute_url())
+        for article in articles:
+            self.assertContains(response, article.title)
+
+        self.page.unpublish('de')
+        cache.clear()
+        response = self.client.get(self.plugin_page.get_absolute_url())
+        for article in articles:
+            self.assertNotContains(response, article.title)
+
 
 class TestLatestArticlesPlugin(TestAppConfigPluginsBase):
     plugin_to_test = 'NewsBlogLatestArticlesPlugin'
@@ -223,8 +239,22 @@ class TestLatestArticlesPlugin(TestAppConfigPluginsBase):
         for article in another_articles:
             self.assertNotContains(response, article.title)
 
+    def test_latest_articles_plugin_unpublished_app_page(self):
+        with override('de'):
+            articles = [self.create_article() for _ in range(3)]
 
-class TestPrefixedLatestArticlesPlugin(TestLatestArticlesPlugin):
+        response = self.client.get(self.plugin_page.get_absolute_url())
+        for article in articles:
+            self.assertContains(response, article.title)
+
+        self.page.unpublish('de')
+        cache.clear()
+        response = self.client.get(self.plugin_page.get_absolute_url())
+        for article in articles:
+            self.assertNotContains(response, article.title)
+
+
+class TestPrefixedLatestArticlesPlugin(TestAppConfigPluginsBase):
     plugin_to_test = 'NewsBlogLatestArticlesPlugin'
     plugin_params = {
         "latest_articles": 7,
@@ -263,7 +293,15 @@ class TestRelatedArticlesPlugin(NewsBlogTestCase):
             a = self.create_article()
             a.save()
             main_article.related.add(a)
-        self.assertEquals(main_article.related.count(), 3)
+
+        another_language_articles = []
+        with override('de'):
+            for _ in range(4):
+                a = self.create_article()
+                main_article.related.add(a)
+                another_language_articles.append(a)
+
+        self.assertEquals(main_article.related.count(), 7)
         unrelated = []
         for _ in range(5):
             unrelated.append(self.create_article())
@@ -272,6 +310,12 @@ class TestRelatedArticlesPlugin(NewsBlogTestCase):
         for article in main_article.related.all():
             self.assertContains(response, article.title)
         for article in unrelated:
+            self.assertNotContains(response, article.title)
+
+        self.page.unpublish('de')
+        cache.clear()
+        response = self.client.get(main_article.get_absolute_url())
+        for article in another_language_articles:
             self.assertNotContains(response, article.title)
 
 

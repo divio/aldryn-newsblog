@@ -5,10 +5,16 @@ from __future__ import unicode_literals
 from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.sites.models import Site
+try:
+    from django.contrib.sites.shortcuts import get_current_site
+except ImportError:
+    # Django 1.6
+    from django.contrib.sites.models import get_current_site
 from django.core.urlresolvers import reverse, NoReverseMatch
 from django.db import models
 from django.template import RequestContext
 from django.test import RequestFactory
+from django.utils import translation
 try:
     from django.utils.encoding import force_unicode
 except ImportError:
@@ -172,6 +178,16 @@ def is_valid_namespace_for_language(namespace, language_code):
     """
     with force_language(language_code):
         return is_valid_namespace(namespace)
+
+
+def get_valid_languages_from_request(namespace, request):
+    language = translation.get_language_from_request(
+        request, check_path=True)
+    site_id = getattr(get_current_site(request), 'id', None)
+    return get_valid_languages(
+        namespace,
+        language_code=language,
+        site_id=site_id)
 
 
 def get_valid_languages(namespace, language_code, site_id=None):
