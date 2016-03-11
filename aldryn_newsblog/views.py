@@ -5,11 +5,6 @@ from __future__ import unicode_literals
 from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
 
-try:
-    from django.contrib.sites.shortcuts import get_current_site
-except ImportError:
-    # Django 1.6
-    from django.contrib.sites.models import get_current_site
 from django.db.models import Q
 from django.http import (
     Http404,
@@ -29,7 +24,7 @@ from aldryn_apphooks_config.mixins import AppConfigMixin
 from aldryn_categories.models import Category
 from aldryn_people.models import Person
 
-from aldryn_newsblog.utils.utilities import get_valid_languages
+from aldryn_newsblog.utils.utilities import get_valid_languages_from_request
 from .models import Article
 from .utils import add_prefix_to_path
 
@@ -80,13 +75,8 @@ class PreviewModeMixin(EditModeMixin):
 class AppHookCheckMixin(object):
 
     def dispatch(self, request, *args, **kwargs):
-        language = translation.get_language_from_request(
-            request, check_path=True)
-        site_id = getattr(get_current_site(request), 'id', None)
-        self.valid_languages = get_valid_languages(
-            self.namespace,
-            language_code=language,
-            site_id=site_id)
+        self.valid_languages = get_valid_languages_from_request(
+            self.namespace, request)
         return super(AppHookCheckMixin, self).dispatch(
             request, *args, **kwargs)
 
