@@ -3,9 +3,16 @@
 {% if is_paginated %}
     <ul class="pagination">
         {% if page_obj.has_previous %}
+            {% if page_obj.number > 5 %}
+                <li>
+                    <a href="?page=1" aria-label="{% trans 'First' %}" title="{% trans 'First' %}">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            {% endif %}
             <li>
-                <a href="?page={{ page_obj.previous_page_number }}" aria-label="{% trans 'Previous' %}>
-                    <span aria-hidden="true">&laquo;</span>
+                <a href="?page={{ page_obj.previous_page_number }}" aria-label="{% trans 'Previous' %}" title="{% trans 'Previous' %}">
+                    <span aria-hidden="true">&lsaquo;</span>
                 </a>
             </li>
         {% endif %}
@@ -38,10 +45,17 @@
 
         {% if page_obj.has_next %}
             <li>
-                <a href="?page={{ page_obj.next_page_number }}" aria-label="{% trans 'Next' %}>
-                    <span aria-hidden="true">&raquo;</span>
+                <a href="?page={{ page_obj.next_page_number }}" aria-label="{% trans 'Next' %}" title="{% trans 'Next' %}">
+                    <span aria-hidden="true">&rsaquo;</span>
                 </a>
             </li>
+            {% if page_obj.number < paginator.num_pages|add:-4 %}
+                <li>
+                    <a href="?page={{ page_obj.paginator.page_range|last }}" aria-label="{% trans 'Last' %}" title="{% trans 'Last' %}">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            {% endif %}
         {% endif %}
     </ul>
 {% endif %}
