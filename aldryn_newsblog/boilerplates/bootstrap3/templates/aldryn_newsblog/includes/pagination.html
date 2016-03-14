@@ -5,7 +5,7 @@
         {% if page_obj.has_previous %}
             {% if page_obj.number > 5 %}
                 <li>
-                    <a href="?page=1" aria-label="{% trans 'First' %}" title="{% trans 'First' %}">
+                    <a href="?page={{ page_obj.paginator.page_range|first }}" aria-label="{% trans 'First' %}" title="{% trans 'First' %}">
                         <span aria-hidden="true">&laquo;</span>
                     </a>
                 </li>
@@ -51,7 +51,7 @@
             </li>
             {% if page_obj.number < paginator.num_pages|add:-4 %}
                 <li>
-                    <a href="?page={{ page_obj.paginator.page_range|last }}" aria-label="{% trans 'Last' %}" title="{% trans 'Last' %}">
+                    <a href="?page={{ paginator.num_pages }}" aria-label="{% trans 'Last' %}" title="{% trans 'Last' %}">
                         <span aria-hidden="true">&raquo;</span>
                     </a>
                 </li>
