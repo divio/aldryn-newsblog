@@ -2,6 +2,12 @@ CHANGELOG
 =========
 
 
+1.2.1 (UNRELEASED)
+-------------------
+* Adapt pagenav to hide too many entries
+* Pagenav shows "..." if there are to many pages forward or backwards
+
+
 1.2.0 (2016-03-10)
 -------------------
 
