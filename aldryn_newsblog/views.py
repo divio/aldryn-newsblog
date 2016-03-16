@@ -5,7 +5,6 @@ from __future__ import unicode_literals
 from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
 
-from django.conf import settings
 from django.db.models import Q
 from django.http import (
     Http404,
@@ -189,14 +188,6 @@ class ArticleListBase(AppConfigMixin, AppHookCheckMixin, TemplatePrefixMixin,
     model = Article
     show_header = False
 
-    # Integer that indicates the number after which
-    # we'll start compacting the pagination pages into chunks.
-    pagination_pages_start = getattr(
-        settings, 'ALDRYN_NEWSBLOG_PAGINATION_PAGES_START', 10)
-    # The number of pages visible on each side (left and right).
-    pagination_pages_visible = getattr(
-        settings, 'ALDRYN_NEWSBLOG_PAGINATION_PAGES_VISIBLE', 4)
-
     def get_paginate_by(self, queryset):
         if self.paginate_by is not None:
             return self.paginate_by
@@ -210,11 +201,17 @@ class ArticleListBase(AppConfigMixin, AppHookCheckMixin, TemplatePrefixMixin,
         # Django does not handle negative numbers well
         # when using variables.
         # So we perform the conversion here.
-        options = {
-            'pages_start': self.pagination_pages_start,
-            'pages_visible': self.pagination_pages_visible,
-            'pages_visible_negative': -self.pagination_pages_visible,
-        }
+        if self.config:
+            options = {
+                'pages_start': self.config.pagination_pages_start,
+                'pages_visible': self.config.pagination_pages_visible,
+            }
+        else:
+            options = {
+                'pages_start': 10,
+                'pages_visible': 4,
+            }
+        options['pages_visible_negative'] = -options['pages_visible']
         options['pages_visible_total'] = options['pages_visible'] + 1
         options['pages_visible_total_negative'] = options['pages_visible_negative'] - 1
         return options
