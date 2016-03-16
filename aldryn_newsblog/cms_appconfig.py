@@ -53,12 +53,25 @@ class NewsBlogConfig(TranslatableModel, AppHookConfig):
         choices=NON_PERMALINK_HANDLING,
         help_text=_('How to handle non-permalink urls?'))
 
-    # ALDRYN_NEWSBLOG_PAGINATE_BY
     paginate_by = models.PositiveIntegerField(
         _('Paginate size'),
         blank=False,
         default=5,
         help_text=_('When paginating list views, how many articles per page?'),
+    )
+    pagination_pages_start = models.PositiveIntegerField(
+        _('Pagination pages start'),
+        blank=False,
+        default=10,
+        help_text=_('When paginating list views, after how many pages '
+                    'should we start grouping the page numbers.'),
+    )
+    pagination_pages_visible = models.PositiveIntegerField(
+        _('Pagination pages visible'),
+        blank=False,
+        default=4,
+        help_text=_('When grouping page numbers, this determines how many '
+                    'pages are visible on each side of the active page.'),
     )
 
     template_prefix = models.CharField(
