@@ -1,2 +1,3 @@
 recursive-include aldryn_newsblog/boilerplates *
 recursive-include aldryn_newsblog/templates *
+recursive-include aldryn_newsblog/locale *
