@@ -197,6 +197,32 @@ class ArticleListBase(AppConfigMixin, AppHookCheckMixin, TemplatePrefixMixin,
             except AttributeError:
                 return 10  # sensible failsafe
 
+    def get_pagination_options(self):
+        # Django does not handle negative numbers well
+        # when using variables.
+        # So we perform the conversion here.
+        if self.config:
+            options = {
+                'pages_start': self.config.pagination_pages_start,
+                'pages_visible': self.config.pagination_pages_visible,
+            }
+        else:
+            options = {
+                'pages_start': 10,
+                'pages_visible': 4,
+            }
+
+        pages_visible_negative = -options['pages_visible']
+        options['pages_visible_negative'] = pages_visible_negative
+        options['pages_visible_total'] = options['pages_visible'] + 1
+        options['pages_visible_total_negative'] = pages_visible_negative - 1
+        return options
+
+    def get_context_data(self, **kwargs):
+        context = super(ArticleListBase, self).get_context_data(**kwargs)
+        context['pagination'] = self.get_pagination_options()
+        return context
+
 
 class ArticleList(ArticleListBase):
     """A complete list of articles."""
