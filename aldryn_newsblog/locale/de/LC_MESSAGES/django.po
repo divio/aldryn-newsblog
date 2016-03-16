@@ -1,0 +1,422 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-03-16 17:36+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: admin.py:23
+msgid "Mark selected articles as published"
+msgstr ""
+
+#: admin.py:29
+msgid "Mark selected articles as not published"
+msgstr ""
+
+#: admin.py:35
+msgid "Mark selected articles as featured"
+msgstr ""
+
+#: admin.py:41
+msgid "Mark selected articles as not featured"
+msgstr ""
+
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/article_detail.html:18
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/article_detail.html:20
+#: templates/aldryn_newsblog/article_detail.html:15
+msgid "Previous Article"
+msgstr ""
+
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/article_detail.html:22
+#: templates/aldryn_newsblog/article_detail.html:17
+msgid "Back to Overview"
+msgstr ""
+
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/article_detail.html:24
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/article_detail.html:26
+#: templates/aldryn_newsblog/article_detail.html:19
+msgid "Next Article"
+msgstr ""
+
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/article_list.html:9
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/archive.html:21
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/authors.html:10
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/latest_articles.html:7
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/related_articles.html:12
+#: templates/aldryn_newsblog/article_list.html:8
+#: templates/aldryn_newsblog/plugins/archive.html:22
+#: templates/aldryn_newsblog/plugins/authors.html:9
+#: templates/aldryn_newsblog/plugins/featured_articles.html:6
+#: templates/aldryn_newsblog/plugins/latest_articles.html:6
+#: templates/aldryn_newsblog/plugins/related_articles.html:11
+msgid "No items available"
+msgstr ""
+
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/pagination.html:7
+#: templates/aldryn_newsblog/includes/pagination.html:8
+msgid "Previous"
+msgstr ""
+
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/pagination.html:41
+#: templates/aldryn_newsblog/includes/pagination.html:42
+msgid "Next"
+msgstr ""
+
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/search_results.html:4
+#: templates/aldryn_newsblog/includes/search_results.html:6
+#, python-format
+msgid "Most recent articles containing \"<strong>%(query)s</strong>\""
+msgstr ""
+
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/search_results.html:19
+#: templates/aldryn_newsblog/includes/search_results.html:21
+msgid "No articles found"
+msgstr ""
+
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/search_results.html:21
+#: templates/aldryn_newsblog/includes/search_results.html:23
+msgid "Enter a query above"
+msgstr ""
+
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/article_search.html:8
+#: templates/aldryn_newsblog/plugins/article_search.html:6
+msgid "Keyword search"
+msgstr ""
+
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/article_search.html:9
+#: templates/aldryn_newsblog/plugins/article_search.html:7
+msgid "Keyword"
+msgstr ""
+
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/article_search.html:11
+#: templates/aldryn_newsblog/plugins/article_search.html:10
+msgid "Go"
+msgstr ""
+
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/categories.html:6
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/tags.html:6
+#: templates/aldryn_newsblog/plugins/categories.html:5
+#: templates/aldryn_newsblog/plugins/tags.html:5
+msgid "All"
+msgstr ""
+
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/related_articles.html:9
+#: templates/aldryn_newsblog/plugins/related_articles.html:8
+msgid "by"
+msgstr ""
+
+#: cms_app.py:15
+msgid "NewsBlog"
+msgstr ""
+
+#: cms_appconfig.py:19
+msgid "the-eagle-has-landed/"
+msgstr ""
+
+#: cms_appconfig.py:20
+msgid "1969/the-eagle-has-landed/"
+msgstr ""
+
+#: cms_appconfig.py:21
+msgid "1969/07/the-eagle-has-landed/"
+msgstr ""
+
+#: cms_appconfig.py:22
+msgid "1969/07/16/the-eagle-has-landed/"
+msgstr ""
+
+#: cms_appconfig.py:23
+msgid "1969/07/16/11/"
+msgstr ""
+
+#: cms_appconfig.py:27
+msgid "Allow"
+msgstr ""
+
+#: cms_appconfig.py:28
+msgid "Redirect to permalink (default)"
+msgstr ""
+
+#: cms_appconfig.py:29
+msgid "Permanent redirect to permalink"
+msgstr ""
+
+#: cms_appconfig.py:30
+msgid "Return 404: Not Found"
+msgstr ""
+
+#: cms_appconfig.py:42
+msgid "application title"
+msgstr ""
+
+#: cms_appconfig.py:45
+msgid "permalink type"
+msgstr ""
+
+#: cms_appconfig.py:47
+msgid ""
+"Choose the style of urls to use from the examples. (Note, all types are "
+"relative to apphook)"
+msgstr ""
+
+#: cms_appconfig.py:51
+msgid "non-permalink handling"
+msgstr ""
+
+#: cms_appconfig.py:54
+msgid "How to handle non-permalink urls?"
+msgstr ""
+
+#: cms_appconfig.py:58
+msgid "Paginate size"
+msgstr ""
+
+#: cms_appconfig.py:61
+msgid "When paginating list views, how many articles per page?"
+msgstr ""
+
+#: cms_appconfig.py:68
+msgid "Prefix for template dirs"
+msgstr ""
+
+#: cms_appconfig.py:72
+msgid "Auto-create authors?"
+msgstr ""
+
+#: cms_appconfig.py:74
+msgid "Automatically create authors from logged-in user?"
+msgstr ""
+
+#: cms_appconfig.py:79
+msgid "Include in search index?"
+msgstr ""
+
+#: cms_appconfig.py:81
+msgid "Include articles in search indexes?"
+msgstr ""
+
+#: cms_appconfig.py:120
+msgid "untitled"
+msgstr ""
+
+#: cms_appconfig.py:129
+msgid "Post published by default"
+msgstr ""
+
+#: cms_plugins.py:33
+msgid "Archive"
+msgstr ""
+
+#: cms_plugins.py:54
+msgid "Article Search"
+msgstr ""
+
+#: cms_plugins.py:68
+msgid "Authors"
+msgstr ""
+
+#: cms_plugins.py:86
+msgid "Categories"
+msgstr ""
+
+#: cms_plugins.py:103
+msgid "Featured Articles"
+msgstr ""
+
+#: cms_plugins.py:117
+msgid "Latest Articles"
+msgstr ""
+
+#: cms_plugins.py:132
+msgid "Related Articles"
+msgstr ""
+
+#: cms_plugins.py:160
+msgid "Tags"
+msgstr ""
+
+#: cms_toolbar.py:92
+msgid "Configure addon"
+msgstr ""
+
+#: cms_toolbar.py:103
+msgid "Article list"
+msgstr ""
+
+#: cms_toolbar.py:110
+msgid "Add new article"
+msgstr ""
+
+#: cms_toolbar.py:118
+msgid "Edit this article"
+msgstr ""
+
+#: cms_toolbar.py:126
+msgid "Delete this article"
+msgstr ""
+
+#: cms_wizards.py:70
+msgid ""
+"Optional. If provided, it will be added to the main body of the article as a "
+"text plugin, that can be formatted."
+msgstr ""
+
+#: cms_wizards.py:124
+msgid "Initial version."
+msgstr ""
+
+#: cms_wizards.py:130
+msgid "New news/blog article"
+msgstr ""
+
+#: cms_wizards.py:133
+msgid "Create a new news/blog article."
+msgstr ""
+
+#: feeds.py:36
+#, python-brace-format
+msgid "Articles on {0}"
+msgstr ""
+
+#: menu.py:20
+msgid "Aldryn NewsBlog Menu"
+msgstr ""
+
+#: models.py:77
+msgid "untitled-article"
+msgstr ""
+
+#: models.py:88
+msgid "title"
+msgstr ""
+
+#: models.py:90
+msgid "slug"
+msgstr ""
+
+#: models.py:95
+msgid ""
+"Used in the URL. If changed, the URL will change. Clear it to have it re-"
+"created automatically."
+msgstr ""
+
+#: models.py:99
+msgid "lead"
+msgstr ""
+
+#: models.py:101
+msgid ""
+"The lead gives the reader the main idea of the story, this is useful in "
+"overviews, lists or as an introduction to your article."
+msgstr ""
+
+#: models.py:108
+msgid "meta title"
+msgstr ""
+
+#: models.py:111
+msgid "meta description"
+msgstr ""
+
+#: models.py:113
+msgid "meta keywords"
+msgstr ""
+
+#: models.py:122
+msgid "author"
+msgstr ""
+
+#: models.py:123
+msgid "owner"
+msgstr ""
+
+#: models.py:125
+msgid "app. config"
+msgstr ""
+
+#: models.py:127
+msgid "categories"
+msgstr ""
+
+#: models.py:129
+msgid "publishing date"
+msgstr ""
+
+#: models.py:131
+msgid "is published"
+msgstr ""
+
+#: models.py:133
+msgid "is featured"
+msgstr ""
+
+#: models.py:139
+msgid "related articles"
+msgstr ""
+
+#: models.py:272 models.py:283
+#, python-format
+msgid "%s archive"
+msgstr ""
+
+#: models.py:277
+msgid "max articles"
+msgstr ""
+
+#: models.py:279
+msgid "The maximum number of found articles display."
+msgstr ""
+
+#: models.py:324
+#, python-format
+msgid "%s authors"
+msgstr ""
+
+#: models.py:330
+#, python-format
+msgid "%s categories"
+msgstr ""
+
+#: models.py:374
+msgid "The maximum number of featured articles display."
+msgstr ""
+
+#: models.py:395
+msgid "featured article"
+msgstr ""
+
+#: models.py:397
+#, python-format
+msgid "featured articles: %(count)s"
+msgstr ""
+
+#: models.py:407
+msgid "The maximum number of latest articles to display."
+msgstr ""
+
+#: models.py:425
+#, python-format
+msgid "%s latest articles: %s"
+msgstr ""
+
+#: models.py:448
+msgid "Related articles"
+msgstr ""
+
+#: models.py:490
+#, python-format
+msgid "%s tags"
+msgstr ""
