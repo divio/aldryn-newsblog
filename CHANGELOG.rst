@@ -2,10 +2,11 @@ CHANGELOG
 =========
 
 
-1.2.1 (UNRELEASED)
+1.2.1 (2016-03-18)
 -------------------
 * Adapt pagenav to hide too many entries
 * Pagenav shows "..." if there are to many pages forward or backwards
+* Add pagenav settings to apphook configs
 
 
 1.2.0 (2016-03-10)
