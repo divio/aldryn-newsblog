@@ -34,6 +34,25 @@ class TestAppConfigPluginsBase(NewsBlogTestCase):
             namespace=self.rand_str())
 
 
+class TestPluginLanguageHelperMixin(object):
+    def _test_plugin_languages_with_article(self, article):
+        """Set up conditions to test plugin languages edge cases"""
+        # Add 'de' translation to one of the articles
+        title_de = 'title-de'
+        title_en = article.title
+        article.set_current_language('de')
+        article.title = title_de
+        article.save()
+
+        # Unpublish page with newsblog apphook
+        self.page.unpublish('en')
+        cache.clear()
+        response = self.client.get(self.plugin_page.get_absolute_url())
+
+        # This article should not be visible on 'en' page/plugin
+        self.assertNotContains(response, title_en)
+
+
 class TestArchivePlugin(TestAppConfigPluginsBase):
     plugin_to_test = 'NewsBlogArchivePlugin'
 
@@ -176,7 +195,8 @@ class TestCategoriesPlugin(TestAppConfigPluginsBase):
         self.assertRegexpMatches(response_content, needle2)
 
 
-class TestFeaturedArticlesPlugin(TestAppConfigPluginsBase):
+class TestFeaturedArticlesPlugin(TestPluginLanguageHelperMixin,
+                                 TestAppConfigPluginsBase):
     plugin_to_test = 'NewsBlogFeaturedArticlesPlugin'
     plugin_params = {
         "article_count": 5,
@@ -221,8 +241,13 @@ class TestFeaturedArticlesPlugin(TestAppConfigPluginsBase):
         for article in articles:
             self.assertNotContains(response, article.title)
 
+    def test_featured_articles_plugin_language(self):
+        article = self.create_article(is_featured=True)
+        self._test_plugin_languages_with_article(article)
 
-class TestLatestArticlesPlugin(TestAppConfigPluginsBase):
+
+class TestLatestArticlesPlugin(TestPluginLanguageHelperMixin,
+                               TestAppConfigPluginsBase):
     plugin_to_test = 'NewsBlogLatestArticlesPlugin'
     plugin_params = {
         "latest_articles": 7,
@@ -253,6 +278,10 @@ class TestLatestArticlesPlugin(TestAppConfigPluginsBase):
         for article in articles:
             self.assertNotContains(response, article.title)
 
+    def test_latest_articles_plugin_language(self):
+        article = self.create_article()
+        self._test_plugin_languages_with_article(article)
+
 
 class TestPrefixedLatestArticlesPlugin(TestAppConfigPluginsBase):
     plugin_to_test = 'NewsBlogLatestArticlesPlugin'
@@ -270,7 +299,8 @@ class TestPrefixedLatestArticlesPlugin(TestAppConfigPluginsBase):
         self.assertContains(response, 'This is dummy latest articles plugin')
 
 
-class TestRelatedArticlesPlugin(NewsBlogTestCase):
+class TestRelatedArticlesPlugin(TestPluginLanguageHelperMixin,
+                                NewsBlogTestCase):
 
     def test_related_articles_plugin(self):
         main_article = self.create_article(app_config=self.app_config)
@@ -317,6 +347,12 @@ class TestRelatedArticlesPlugin(NewsBlogTestCase):
         response = self.client.get(main_article.get_absolute_url())
         for article in another_language_articles:
             self.assertNotContains(response, article.title)
+
+    def test_latest_articles_plugin_language(self):
+        main_article, related_article = [
+            self.create_article() for _ in range(2)]
+        main_article.related.add(related_article)
+        self._test_plugin_languages_with_article(related_article)
 
 
 class TestTagsPlugin(TestAppConfigPluginsBase):
