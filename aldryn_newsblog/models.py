@@ -382,6 +382,8 @@ class NewsBlogFeaturedArticlesPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
             queryset = queryset.published()
         languages = get_valid_languages_from_request(
             self.app_config.namespace, request)
+        if self.language not in languages:
+            return queryset.none()
         queryset = queryset.translated(*languages).filter(
             app_config=self.app_config,
             is_featured=True)
@@ -417,6 +419,8 @@ class NewsBlogLatestArticlesPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
             queryset = queryset.published()
         languages = get_valid_languages_from_request(
             self.app_config.namespace, request)
+        if self.language not in languages:
+            return queryset.none()
         queryset = queryset.translated(*languages).filter(
             app_config=self.app_config)
         return queryset[:self.latest_articles]
@@ -439,6 +443,8 @@ class NewsBlogRelatedPlugin(PluginEditModeMixin, CMSPlugin):
         """
         languages = get_valid_languages_from_request(
             article.app_config.namespace, request)
+        if self.language not in languages:
+            return Article.objects.none()
         qs = article.related.translated(*languages)
         if not self.get_edit_mode(request):
             qs = qs.published()
