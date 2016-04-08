@@ -104,7 +104,8 @@ class ArticleAdmin(
             'fields': (
                 'title',
                 'author',
-                ('publishing_date', 'is_published'),
+                'publishing_date',
+                'is_published',
                 'featured_image',
                 'is_featured',
             )
