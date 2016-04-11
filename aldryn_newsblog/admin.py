@@ -106,8 +106,9 @@ class ArticleAdmin(
                 'author',
                 'publishing_date',
                 'is_published',
-                'featured_image',
                 'is_featured',
+                'featured_image',
+                'lead_in',
             )
         }),
         ('Meta Options', {
@@ -122,7 +123,6 @@ class ArticleAdmin(
         ('Advanced Settings', {
             'classes': ('collapse',),
             'fields': (
-                'lead_in',
                 'tags',
                 'categories',
                 'related',
