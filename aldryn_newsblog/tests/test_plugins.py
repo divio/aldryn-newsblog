@@ -264,6 +264,33 @@ class TestLatestArticlesPlugin(TestPluginLanguageHelperMixin,
         for article in another_articles:
             self.assertNotContains(response, article.title)
 
+    def _test_latest_articles_plugin_exclude_count(self, exclude_count=0):
+        self.plugin.exclude_featured = exclude_count
+        self.plugin.save()
+        self.plugin_page.publish(self.plugin.language)
+        articles = []
+        featured_articles = []
+        for idx in range(7):
+            if idx % 2:
+                featured_articles.append(self.create_article(is_featured=True))
+            else:
+                articles.append(self.create_article())
+        response = self.client.get(self.plugin_page.get_absolute_url())
+        for article in articles:
+            self.assertContains(response, article.title)
+        # check that configured among of featured articles is excluded
+        for featured_article in featured_articles[:exclude_count]:
+            self.assertNotContains(response, featured_article.title)
+        # ensure that other articles featured articles are present
+        for featured_article in featured_articles[exclude_count:]:
+            self.assertContains(response, featured_article.title)
+
+    def test_latest_articles_plugin_exclude_featured(self):
+        self._test_latest_articles_plugin_exclude_count(3)
+
+    def test_latest_articles_plugin_no_excluded_featured(self):
+        self._test_latest_articles_plugin_exclude_count()
+
     def test_latest_articles_plugin_unpublished_app_page(self):
         with override('de'):
             articles = [self.create_article() for _ in range(3)]

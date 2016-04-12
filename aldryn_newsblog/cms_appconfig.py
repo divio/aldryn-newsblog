@@ -73,7 +73,14 @@ class NewsBlogConfig(TranslatableModel, AppHookConfig):
         help_text=_('When grouping page numbers, this determines how many '
                     'pages are visible on each side of the active page.'),
     )
-
+    exclude_featured = models.PositiveSmallIntegerField(
+        _('Excluded featured articles count'),
+        blank=True,
+        default=0,
+        help_text=_('If you are using featured articles plugin on article list '
+                    'page you might want to avoid duplicated articles. '
+                    'This option allows you to exclude first N of them.'),
+    )
     template_prefix = models.CharField(
         max_length=20,
         null=True, blank=True,

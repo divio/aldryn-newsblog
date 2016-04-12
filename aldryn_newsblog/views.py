@@ -228,6 +228,21 @@ class ArticleList(ArticleListBase):
     """A complete list of articles."""
     show_header = True
 
+    def paginate_queryset(self, queryset, page_size):
+        # exclude featured articles from queryset, to allow featured article
+        # plugin on the list view page without duplicate entries in page qs.
+        exclude_count = self.config.exclude_featured
+        # don't exclude anything if it wasn't configured
+        if exclude_count == 0:
+            return super(ArticleList, self).paginate_queryset(queryset,
+                                                              page_size)
+        featured_qs = Article.objects.all().filter(is_featured=True)
+        if not self.edit_mode:
+            featured_qs = featured_qs.published()
+        exclude_featured = featured_qs[:exclude_count].values_list('pk')
+        queryset = queryset.exclude(pk__in=exclude_featured)
+        return super(ArticleList, self).paginate_queryset(queryset, page_size)
+
 
 class ArticleSearchResultsList(ArticleListBase):
     model = Article

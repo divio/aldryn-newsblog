@@ -90,6 +90,31 @@ class TestViews(NewsBlogTestCase):
             self.assertContains(response, article.title)
         self.assertNotContains(response, unpublished_article.title)
 
+    def test_articles_list_exclude_featured(self):
+        namespace = self.app_config.namespace
+        # configure app config
+        exclude_count = 5
+        self.app_config.exclude_featured = exclude_count
+        self.app_config.save()
+        # se up articles
+        articles = []
+        featured_articles = []
+        for idx in range(11):
+            if idx % 2:
+                featured_articles.append(self.create_article(is_featured=True))
+            else:
+                articles.append(self.create_article())
+        response = self.client.get(
+            reverse('{0}:article-list'.format(namespace)))
+        for article in articles:
+            self.assertContains(response, article.title)
+        # check that configured among of featured articles is excluded
+        for featured_article in featured_articles[:exclude_count]:
+            self.assertNotContains(response, featured_article.title)
+        # ensure that other articles featured articles are present
+        for featured_article in featured_articles[exclude_count:]:
+            self.assertContains(response, featured_article.title)
+
     def test_articles_list_pagination(self):
         namespace = self.app_config.namespace
         paginate_by = self.app_config.paginate_by
