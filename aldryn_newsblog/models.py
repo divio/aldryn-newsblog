@@ -408,6 +408,13 @@ class NewsBlogLatestArticlesPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
         default=5,
         help_text=_('The maximum number of latest articles to display.')
     )
+    exclude_featured = models.PositiveSmallIntegerField(
+        default=0,
+        blank=True,
+        help_text=_(
+            'The maximum number of featured articles to exclude from display. '
+            'E.g. for uses in combination with featured articles plugin.')
+    )
 
     def get_articles(self, request):
         """
@@ -415,14 +422,21 @@ class NewsBlogLatestArticlesPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
         latest_articles.
         """
         queryset = Article.objects
+        featured_qs = Article.objects.all().filter(is_featured=True)
         if not self.get_edit_mode(request):
             queryset = queryset.published()
+            featured_qs = featured_qs.published()
         languages = get_valid_languages_from_request(
             self.app_config.namespace, request)
         if self.language not in languages:
             return queryset.none()
         queryset = queryset.translated(*languages).filter(
             app_config=self.app_config)
+        featured_qs = featured_qs.translated(*languages).filter(
+            app_config=self.app_config)
+        exclude_featured = featured_qs.values_list(
+            'pk', flat=True)[:self.exclude_featured]
+        queryset = queryset.exclude(pk__in=list(exclude_featured))
         return queryset[:self.latest_articles]
 
     def __str__(self):

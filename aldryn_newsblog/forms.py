@@ -52,7 +52,7 @@ class NewsBlogLatestArticlesPluginForm(AutoAppConfigFormMixin,
                                        forms.ModelForm):
     class Meta:
         model = models.NewsBlogLatestArticlesPlugin
-        fields = ['app_config', 'latest_articles']
+        fields = ['app_config', 'latest_articles', 'exclude_featured']
 
 
 class NewsBlogTagsPluginForm(AutoAppConfigFormMixin, forms.ModelForm):
