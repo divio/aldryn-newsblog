@@ -93,27 +93,43 @@ class TestViews(NewsBlogTestCase):
     def test_articles_list_exclude_featured(self):
         namespace = self.app_config.namespace
         # configure app config
-        exclude_count = 5
+        exclude_count = 2
         self.app_config.exclude_featured = exclude_count
+        self.app_config.paginate_by = 2
         self.app_config.save()
-        # se up articles
+        # set up articles
         articles = []
         featured_articles = []
-        for idx in range(11):
+        for idx in range(6):
             if idx % 2:
                 featured_articles.append(self.create_article(is_featured=True))
             else:
                 articles.append(self.create_article())
-        response = self.client.get(
-            reverse('{0}:article-list'.format(namespace)))
-        for article in articles:
-            self.assertContains(response, article.title)
-        # check that configured among of featured articles is excluded
-        for featured_article in featured_articles[:exclude_count]:
-            self.assertNotContains(response, featured_article.title)
-        # ensure that other articles featured articles are present
-        for featured_article in featured_articles[exclude_count:]:
-            self.assertContains(response, featured_article.title)
+        # imitate ordering by publish date DESC
+        articles.reverse()
+        featured_articles.reverse()
+        # prepare urls
+        list_base_url = reverse('{0}:article-list'.format(namespace))
+        page_url_template = '{0}?page={1}'
+        response_page_1 = self.client.get(list_base_url)
+        response_page_2 = self.client.get(
+            page_url_template.format(list_base_url, 2))
+
+        # page 1
+        # ensure that first two not featured articles are present on first page
+        for article in articles[:2]:
+            self.assertContains(response_page_1, article.title)
+        # Ensure no featured articles are present on first page.
+        for featured_article in featured_articles[:2]:
+            self.assertNotContains(response_page_1, featured_article.title)
+
+        # page 2
+        # check that not excluded featured article is present on second page
+        for featured_article in featured_articles[2:]:
+            self.assertContains(response_page_2, featured_article.title)
+        # ensure that third not featured article is present in the response
+        for article in articles[2:]:
+            self.assertContains(response_page_2, article.title)
 
     def test_articles_list_pagination(self):
         namespace = self.app_config.namespace

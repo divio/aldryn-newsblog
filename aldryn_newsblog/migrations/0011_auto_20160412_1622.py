@@ -15,13 +15,13 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='newsblogconfig',
             name='exclude_featured',
-            field=models.PositiveSmallIntegerField(default=0, help_text='If you are using featured articles plugin on article list page you might want to avoid duplicated articles. This option allows you to exclude first N of them.', verbose_name='Excluded featured articles count', blank=True),
+            field=models.PositiveSmallIntegerField(default=0, help_text='If you are using the Featured Articles plugin on the article list view, you may prefer to exclude featured articles from the article list itself to avoid duplicates. To do this, enter the same number here as in your Featured Articles plugin.', verbose_name='Excluded featured articles count', blank=True),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='newsbloglatestarticlesplugin',
             name='exclude_featured',
-            field=models.PositiveSmallIntegerField(default=0, help_text='The maximum number of featured articles to exclude from display. F.e. for uses in combination with featured articles plugin.', blank=True),
+            field=models.PositiveSmallIntegerField(default=0, help_text='The maximum number of featured articles to exclude from display. E.g. for uses in combination with featured articles plugin.', blank=True),
             preserve_default=True,
         ),
         migrations.AlterField(

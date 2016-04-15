@@ -77,9 +77,11 @@ class NewsBlogConfig(TranslatableModel, AppHookConfig):
         _('Excluded featured articles count'),
         blank=True,
         default=0,
-        help_text=_('If you are using featured articles plugin on article list '
-                    'page you might want to avoid duplicated articles. '
-                    'This option allows you to exclude first N of them.'),
+        help_text=_(
+            'If you are using the Featured Articles plugin on the article list '
+            'view, you may prefer to exclude featured articles from the '
+            'article list itself to avoid duplicates. To do this, enter the '
+            'same number here as in your Featured Articles plugin.'),
     )
     template_prefix = models.CharField(
         max_length=20,

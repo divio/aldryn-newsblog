@@ -413,7 +413,7 @@ class NewsBlogLatestArticlesPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
         blank=True,
         help_text=_(
             'The maximum number of featured articles to exclude from display. '
-            'F.e. for uses in combination with featured articles plugin.')
+            'E.g. for uses in combination with featured articles plugin.')
     )
 
     def get_articles(self, request):
