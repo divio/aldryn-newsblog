@@ -81,7 +81,7 @@ class Article(TranslatedAutoSlugifyMixin,
     update_search_on_save = getattr(
         settings,
         'ALDRYN_NEWSBLOG_UPDATE_SEARCH_DATA_ON_SAVE',
-        True
+        False
     )
 
     translations = TranslatedFields(
