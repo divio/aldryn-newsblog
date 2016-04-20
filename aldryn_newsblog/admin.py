@@ -85,7 +85,9 @@ class ArticleAdminForm(TranslatableModelForm):
         # Don't allow related articles to be added here.
         # doesn't makes much sense to add articles from another article other
         # than save and add another.
-        self.fields['related'].widget.can_add_related = False
+        if ('related' in self.fields and
+                hasattr(self.fields['related'], 'widget')):
+            self.fields['related'].widget.can_add_related = False
 
 
 class ArticleAdmin(
