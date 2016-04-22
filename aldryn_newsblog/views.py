@@ -65,7 +65,12 @@ class PreviewModeMixin(EditModeMixin):
     """
     def get_queryset(self):
         qs = super(PreviewModeMixin, self).get_queryset()
-        if not self.edit_mode:
+        # check if user can see unpublished items. this will allow to switch
+        # to edit mode instead of 404 on article detail page. CMS handles the
+        # permissions.
+        user = self.request.user
+        user_can_edit = user.is_staff or user.is_superuser
+        if not (self.edit_mode or user_can_edit):
             qs = qs.published()
         language = translation.get_language()
         qs = qs.active_translations(language).namespace(self.namespace)
