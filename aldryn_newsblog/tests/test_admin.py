@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
-
 from __future__ import unicode_literals
 
 from django.test import TransactionTestCase
+from django.test.utils import override_settings
+from djangocms_helper.utils import create_user
+from cms.utils.urlutils import admin_reverse
 
 from aldryn_newsblog.cms_appconfig import NewsBlogConfig
 from aldryn_newsblog.models import Article
 from aldryn_people.models import Person
 
-from . import NewsBlogTestsMixin
+from . import NewsBlogTestsMixin, NewsBlogTransactionTestCase
 
 
 class AdminTest(NewsBlogTestsMixin, TransactionTestCase):
@@ -38,3 +40,49 @@ class AdminTest(NewsBlogTestsMixin, TransactionTestCase):
         option = '<option value="1" selected="selected">%s</option>'
         self.assertContains(response, option % user.username)
         self.assertContains(response, option % user.get_full_name())
+
+
+# session engine is hardcoded in djangocms-helper (atm v0.9.4), so override
+# per test case
+@override_settings(SESSION_ENGINE='django.contrib.sessions.backends.cached_db')
+class AdminViewsTestCase(NewsBlogTransactionTestCase):
+    tag_html = '<p>no html</p>'
+    escaped_tag_html = '&lt;p&gt;no html&lt;/p&gt;'
+    change_view = 'aldryn_newsblog_article_change'
+    change_list_view = 'aldryn_newsblog_article_changelist'
+
+    def setUp(self):
+        super(AdminViewsTestCase, self).setUp()
+        username = 'admin_user'
+        password = 'test'
+        self.admin_user = create_user(
+            username=username,
+            email='test@example.com',
+            password=password,
+            is_superuser=True,
+        )
+        self.client.login(username=username, password=password)
+
+    def get_object(self):
+        return self.create_article()
+
+    def add_tag_with_html(self, obj):
+        obj.tags.add(self.tag_html)
+
+    def _test_admin_view(self, view_name, args=None):
+        view_url = admin_reverse(view_name, args=args)
+        response = self.client.get(view_url)
+        # ensure that html was escaped
+        self.assertNotContains(response, self.tag_html)
+
+    def test_admin_change_veiw(self):
+        article = self.get_object()
+        self.add_tag_with_html(article)
+        self._test_admin_view(
+            view_name=self.change_view,
+            args=[article.pk])
+
+    def test_admin_changelist_veiw(self):
+        article = self.get_object()
+        self.add_tag_with_html(article)
+        self._test_admin_view(view_name=self.change_list_view)
