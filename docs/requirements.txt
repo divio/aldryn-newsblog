@@ -6,3 +6,5 @@ aldryn-newsblog
 
 sphinx-autobuild==0.5.2
 sphinx_rtd_theme # always use latest version of the theme
+sphinxcontrib-spelling
+pyenchant

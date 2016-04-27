@@ -122,7 +122,7 @@ class Article(TranslatedAutoSlugifyMixin,
                                verbose_name=_('author'))
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_('owner'))
     app_config = AppHookConfigField(NewsBlogConfig,
-                                    verbose_name=_('app. config'))
+                                    verbose_name=_('Apphook configuration'))
     categories = CategoryManyToManyField('aldryn_categories.Category',
                                          verbose_name=_('categories'),
                                          blank=True)
@@ -255,7 +255,7 @@ class NewsBlogCMSPlugin(CMSPlugin):
     cmsplugin_ptr = models.OneToOneField(
         CMSPlugin, related_name='+', parent_link=True)
 
-    app_config = models.ForeignKey(NewsBlogConfig)
+    app_config = models.ForeignKey(NewsBlogConfig, verbose_name=_('Apphook configuration'))
 
     class Meta:
         abstract = True
