@@ -21,4 +21,8 @@ selenium
 sphinx
 sphinx-rtd-theme
 
+sphinxcontrib-spelling
+pyenchant
+
+
 https://github.com/aldryn/aldryn-people/archive/feature/future-release-1-2-0.zip

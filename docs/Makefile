@@ -61,6 +61,7 @@ help:
 	@echo "  pseudoxml  to make pseudoxml-XML files for display purposes"
 	@echo "  linkcheck  to check all external links for integrity"
 	@echo "  doctest    to run all doctests embedded in the documentation (if enabled)"
+	@echo "  spelling  to check for typos in documentation"
 
 clean:
 	rm -rf $(BUILDDIR)/*
@@ -191,3 +192,9 @@ pseudoxml:
 	$(SPHINXBUILD) -b pseudoxml $(ALLSPHINXOPTS) $(BUILDDIR)/pseudoxml
 	@echo
 	@echo "Build finished. The pseudo-XML files are in $(BUILDDIR)/pseudoxml."
+
+spelling:
+	$(SPHINXBUILD) -b spelling $(ALLSPHINXOPTS) _build/spelling
+	@echo
+	@echo "Check finished. Wrong words can be found in " \
+		"_build/spelling/output.txt."

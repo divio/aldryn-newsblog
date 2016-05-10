@@ -142,8 +142,8 @@ class NewsBlogConfig(TranslatableModel, AppHookConfig):
         return getattr(self, 'app_title', _('untitled'))
 
     class Meta:
-        verbose_name = 'config'
-        verbose_name_plural = 'configs'
+        verbose_name = 'application configuration'
+        verbose_name_plural = 'application configurations'
 
 
 class NewsBlogConfigForm(AppDataForm):
