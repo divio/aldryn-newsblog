@@ -1,20 +1,9 @@
 django>=1.9,<1.10
+
 django-reversion>=1.9.4,<1.11
+
 # Django 1.9 compatible packages
 aldryn-boilerplates>=0.7.4
-
-# filer
-django-filer>=1.1.1
-
-# TODO: remove repo URL from base.txt, replace with an appropriate version
-# after changes would be merged
-# aldryn-people
-
-aldryn-reversion>=1.0.8
-
-# TODO: replace with appropriate version after changes would be merged
-# aldryn-categories
-https://github.com/aldryn/aldryn-categories/archive/master.zip
 
 # NOTE: These are for Filer
 django-mptt>=0.7

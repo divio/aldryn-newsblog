@@ -1,4 +1,4 @@
-aldryn-search
+aldryn-search>=0.2.12
 coverage>=3.7.1
 dj-database-url
 django-classy-tags
@@ -6,11 +6,8 @@ django-haystack
 django-sekizai
 django-treebeard>=2.0
 djangocms-admin-style
-# djangocms-helper has issues with management command which is fixed but
-# not released yet, so use develop branch temporary.
-# TODO: please replace with a release >0.9.0
-https://github.com/nephila/djangocms-helper/archive/develop.zip
-djangocms_text_ckeditor
+djangocms-helper>0.9.0
+# djangocms_text_ckeditor
 docopt
 flake8
 html5lib
@@ -24,5 +21,11 @@ sphinx-rtd-theme
 sphinxcontrib-spelling
 pyenchant
 
+# Requires 1.0.4+, just running can use earlier versions of aldryn-reversion.
+aldryn-reversion>=1.0.4
 
-https://github.com/aldryn/aldryn-people/archive/feature/future-release-1-2-0.zip
+# This is the last version to support Django 1.6
+# django-filer>=1.1.1
+
+# Updated version of Aldryn People
+# -e https://github.com/mkoistinen/aldryn-people/archive/feature/update_for_cms33.zip

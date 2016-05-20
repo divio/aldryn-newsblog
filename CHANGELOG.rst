@@ -1,16 +1,22 @@
 CHANGELOG
 =========
 
+1.2.2 (2016-05-19)
+------------------
+* Adds support for Python 3.5
+* Adds support for Django 1.9
+* Adds support for CMS 3.3.x
+
 
 1.2.1 (2016-03-18)
--------------------
+------------------
 * Adapt pagenav to hide too many entries
 * Pagenav shows "..." if there are to many pages forward or backwards
 * Add pagenav settings to apphook configs
 
 
 1.2.0 (2016-03-10)
--------------------
+------------------
 
 * Remove unused render_placeholder configs
 * Add static_placeholders where necessary
@@ -18,13 +24,13 @@ CHANGELOG
 
 
 1.1.1 (2016-02-12)
--------------------
+------------------
 
 * Change default for app config setting ``default_published`` to False
 
 
 1.1.0 (2016-02-12)
--------------------
+------------------
 
 * Add Django 1.9 compatibility
 * Add stripped default django templates to `/aldryn_newsblog/templates`

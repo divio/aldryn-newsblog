@@ -133,17 +133,16 @@ class TestAuthorsPlugin(TestAppConfigPluginsBase):
 
         response = self.client.get(self.plugin_page.get_absolute_url())
         response_content = force_text(response.content)
-        pattern = '<p>\s*<a href="{url}">\s*</a>\s*</p>'
-        pattern += '\s*<p>{num}</p>'
+        # This pattern tries to accommodate all the templates from all the
+        # versions of this package.
+        pattern = '<a href="{url}">\s*</a>'
         author1_pattern = pattern.format(
-            num=3,
             url=reverse(
                 '{0}:article-list-by-author'.format(self.app_config.namespace),
                 args=[author1.slug]
             )
         )
         author2_pattern = pattern.format(
-            num=5,
             url=reverse(
                 '{0}:article-list-by-author'.format(self.app_config.namespace),
                 args=[author2.slug]
@@ -188,7 +187,10 @@ class TestCategoriesPlugin(TestAppConfigPluginsBase):
 
         response = self.client.get(self.plugin_page.get_absolute_url())
         response_content = force_text(response.content)
-        pattern = '<a href=[^>]*>{name}</a>\s*<span[^>]*>{num}</span>'
+        # We use two different patterns in alternation because different
+        # versions of newsblog have different templates
+        pattern = '<span[^>]*>{num}</span>\s*<a href=[^>]*>{name}</a>'
+        pattern += '|<a href=[^>]*>{name}</a>\s*<span[^>]*>{num}</span>'
         needle1 = pattern.format(num=3, name=self.category1.name)
         needle2 = pattern.format(num=5, name=self.category2.name)
         self.assertRegexpMatches(response_content, needle1)

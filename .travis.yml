@@ -1,5 +1,7 @@
 language: python
 
+python: 3.5
+
 # Use container based infrastructure
 sudo: false
 
@@ -22,31 +24,36 @@ env:
     # NOTE: FE-TESTS ARE DISABLED UNTIL THEY ARE FIXED FOR CMS 3.2
     # NOTE: MYSQL AND POSTGRES TESTS ARE DISABLED UNTIL #339 IS MERGED.
     - TOXENV=flake8
-    - TOXENV=py34-dj19-sqlite-cms32-fe
+    - TOXENV=py35-dj19-sqlite-cms33
+    - TOXENV=py35-dj19-sqlite-cms32
+    - TOXENV=py34-dj19-sqlite-cms33
     - TOXENV=py34-dj19-sqlite-cms32
-    - TOXENV=py34-dj18-sqlite-cms32-fe
-#    - TOXENV=py34-dj18-mysql-cms32
-#    - TOXENV=py34-dj18-postgres-cms32
-    - TOXENV=py34-dj18-sqlite-cms31
+    - TOXENV=py27-dj19-sqlite-cms33
     - TOXENV=py27-dj19-sqlite-cms32
+    - TOXENV=py35-dj18-sqlite-cms33
+    - TOXENV=py35-dj18-sqlite-cms32
+    - TOXENV=py34-dj18-sqlite-cms33
+    - TOXENV=py34-dj18-sqlite-cms32
+    - TOXENV=py34-dj18-sqlite-cms31
+    - TOXENV=py27-dj18-sqlite-cms33
     - TOXENV=py27-dj18-sqlite-cms32
     - TOXENV=py27-dj18-sqlite-cms31
     - TOXENV=py34-dj17-sqlite-cms32
-#    - TOXENV=py34-dj17-mysql-cms32
-#    - TOXENV=py34-dj17-postgres-cms32
     - TOXENV=py34-dj17-sqlite-cms31
     - TOXENV=py34-dj17-sqlite-cms30
-    - TOXENV=py27-dj17-sqlite-cms32-fe
-#    - TOXENV=py27-dj17-mysql-cms32
-#    - TOXENV=py27-dj17-postgres-cms32
+    - TOXENV=py33-dj17-sqlite-cms32
+    - TOXENV=py33-dj17-sqlite-cms31
+    - TOXENV=py33-dj17-sqlite-cms30
+    - TOXENV=py27-dj17-sqlite-cms32
     - TOXENV=py27-dj17-sqlite-cms31
     - TOXENV=py27-dj17-sqlite-cms30
+    - TOXENV=py33-dj16-sqlite-cms32
+    - TOXENV=py33-dj16-sqlite-cms31
+    - TOXENV=py33-dj16-sqlite-cms30
     - TOXENV=py27-dj16-sqlite-cms32
     - TOXENV=py27-dj16-sqlite-cms31
     - TOXENV=py27-dj16-sqlite-cms30
-    - TOXENV=py26-dj16-sqlite-cms32-fe
-#    - TOXENV=py26-dj16-oldmysql-cms32
-#    - TOXENV=py26-dj16-postgres-cms32
+    - TOXENV=py26-dj16-sqlite-cms32
     - TOXENV=py26-dj16-sqlite-cms31
     - TOXENV=py26-dj16-sqlite-cms30
 
