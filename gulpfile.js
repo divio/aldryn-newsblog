@@ -69,12 +69,8 @@ gulp.task('tests:unit', function (done) {
     server.start();
 });
 
-var child_process = require('child_process');
-var spawn = require('child_process').spawn;
 // gulp tests:integration [--clean] [--screenshots] [--tests=loginAdmin,toolbar]
 gulp.task('tests:integration', integrationTests({
-    child_process: child_process,
-    spawn: spawn,
     tests: INTEGRATION_TESTS,
     pathToTests: PROJECT_PATH.tests,
     argv: argv,
