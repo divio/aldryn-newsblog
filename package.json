@@ -3,6 +3,7 @@
   "private": true,
   "devDependencies": {
     "browserslist-saucelabs": "^0.1.4",
+    "djangocms-casper-helpers": "^1.0.0",
     "gulp": "3.9.0",
     "gulp-jscs": "1.6.0",
     "gulp-jshint": "1.11.0",
