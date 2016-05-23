@@ -68,6 +68,8 @@ install:
   - pip install coveralls
 
 before_script:
+  - nvm install 0.12.7 && nvm use 0.12.7
+  - npm config set spin false
   - npm install -g gulp
   - npm install -g codeclimate-test-reporter
   - npm install
