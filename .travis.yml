@@ -23,7 +23,7 @@ env:
     #                DB backends
     # NOTE: MYSQL AND POSTGRES TESTS ARE DISABLED UNTIL #339 IS MERGED.
     - TOXENV=flake8
-    - TOXENV=py35-dj19-sqlite-cms33-fe
+    - TOXENV=py35-dj19-sqlite-cms33-fe FE=1
     - TOXENV=py35-dj19-sqlite-cms32
     - TOXENV=py34-dj19-sqlite-cms33
     - TOXENV=py34-dj19-sqlite-cms32
@@ -34,7 +34,7 @@ env:
     - TOXENV=py34-dj18-sqlite-cms33
     - TOXENV=py34-dj18-sqlite-cms32
     - TOXENV=py34-dj18-sqlite-cms31
-    - TOXENV=py27-dj18-sqlite-cms33-fe
+    - TOXENV=py27-dj18-sqlite-cms33-fe FE=1
     - TOXENV=py27-dj18-sqlite-cms32
     - TOXENV=py27-dj18-sqlite-cms31
     - TOXENV=py34-dj17-sqlite-cms32
@@ -60,19 +60,17 @@ cache:
   directories:
     - $HOME/.wheelhouse
 
-before_install:
-  - npm install -g npm
-
 install:
   - pip install tox
   - pip install coveralls
 
 before_script:
-  - nvm install 0.12.7 && nvm use 0.12.7
-  - npm config set spin false
-  - npm install -g gulp
-  - npm install -g codeclimate-test-reporter
-  - npm install
+  - if [ "$FE" == 1 ]; then nvm install 0.12.7 && nvm use 0.12.7; fi
+  - if [ "$FE" == 1 ]; then npm config set spin false; fi
+  - if [ "$FE" == 1 ]; then npm install -g npm@2; fi
+  - if [ "$FE" == 1 ]; then npm install -g gulp@3.9.0; fi
+  - if [ "$FE" == 1 ]; then npm install -g codeclimate-test-reporter; fi
+  - if [ "$FE" == 1 ]; then npm install; fi
 
 after_script:
   - codeclimate < tests/coverage/**/lcov.info
