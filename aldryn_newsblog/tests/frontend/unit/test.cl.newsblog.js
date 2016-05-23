@@ -4,7 +4,7 @@
  */
 
 'use strict';
-/* global Cl, describe, it, expect, beforeEach, afterEach, fixture, spyOn */
+/* global Cl, $, describe, window, it, expect, beforeEach, afterEach, fixture, spyOn */
 
 // #############################################################################
 // UNIT TEST
