@@ -19,21 +19,24 @@ casper.test.tearDown(function (done) {
 });
 
 /**
- * Returns xpath expression to find the "Add" link corresponding
- * to the specific row in the admin.
+ * Returns xpath expression to find the to the specific row in the admin.
+ * Can also be used to find xpath to specific links in that row.
  *
- * @function generateXPathForAddLink
+ * @function generateXPathForAdminSection
  * @param {Object} options
  * @param {String} options.section module name, e.g. Django CMS
  * @param {String} options.row module row, e.g Pages, Users
+ * @param {String} [options.link] specific link in the row, e.g "Add" or "Change"
  */
-var generateXPathForAddLink = function (options) {
-    var section = options.section;
-    var row = options.row;
-    var xpath = '//div[.//caption/a[contains(text(), "' + section + '")]]';
+var generateXPathForAdminSection = function (options) {
+    var xpath = '//div[.//caption/a[contains(text(), "' + options.section + '")]]';
 
-    xpath += '//th[./a[contains(text(), "' + row + '")]]';
-    xpath += '/following-sibling::td/a[contains(text(), "Add")]';
+    if (options.link) {
+        xpath += '//th[./a[contains(text(), "' + options.row + '")]]';
+        xpath += '/following-sibling::td/a[contains(text(), "' + options.link + '")]';
+    } else {
+        xpath += '//th/a[contains(text(), "' + options.row + '")]';
+    }
 
     return xpath;
 };
@@ -44,9 +47,10 @@ casper.test.begin('Creation / deletion of the apphook', function (test) {
         .waitUntilVisible('#content', function () {
             test.assertVisible('#content', 'Admin loaded');
             this.click(
-                xPath(generateXPathForAddLink({
+                xPath(generateXPathForAdminSection({
                     section: 'Aldryn News & Blog',
-                    row: 'Application configurations'
+                    row: 'Application configurations',
+                    link: 'Add'
                 }))
             );
         })
@@ -88,6 +92,91 @@ casper.test.begin('Creation / deletion of the apphook', function (test) {
                 'Apphook config was deleted'
             );
         })
+        .run(function () {
+            test.done();
+        });
+});
+
+casper.test.begin('Creation / deletion of the article', function (test) {
+    casper
+        .start()
+        .then(cms.addPage({ title: 'Blog' }))
+        .then(cms.addApphookToPage({
+            page: 'Blog',
+            apphook: 'NewsBlogApp'
+        }))
+        .then(cms.publishPage({
+            page: 'Blog'
+        }))
+        .thenOpen(globals.editUrl, function () {
+            test.assertSelectorHasText('p', 'No items available', 'No articles yet');
+        })
+        .thenOpen(globals.adminUrl)
+        .waitUntilVisible('#content', function () {
+            test.assertVisible('#content', 'Admin loaded');
+            this.click(
+                xPath(generateXPathForAdminSection({
+                    section: 'Aldryn News & Blog',
+                    row: 'Articles',
+                    link: 'Add'
+                }))
+            );
+        })
+        .waitForUrl(/add/)
+        .waitUntilVisible('#article_form')
+        .then(function () {
+            test.assertVisible('#article_form', 'Article creation form loaded');
+
+            this.fill('#article_form', {
+                title: 'Test article'
+            }, true);
+        })
+        .waitUntilVisible('.success', function () {
+            test.assertSelectorHasText(
+                '.success',
+                'The article "Test article" was added successfully.',
+                'Article was created'
+            );
+
+            test.assertElementCount(
+                '#result_list tbody tr',
+                1,
+                'There is 1 article available'
+            );
+        })
+        .thenOpen(globals.editUrl, function () {
+            test.assertSelectorHasText(
+                '.article.unpublished h2 a',
+                'Test article',
+                'Article is available on the page'
+            );
+        })
+        .thenOpen(globals.adminUrl)
+        .waitUntilVisible('#content', function () {
+            this.click(
+                xPath(generateXPathForAdminSection({
+                    section: 'Aldryn News & Blog',
+                    row: 'Articles'
+                }))
+            );
+        })
+        .waitForUrl(/article/, function () {
+            this.clickLabel('Test article', 'a');
+        })
+        .waitUntilVisible('.deletelink', function () {
+            this.click('.deletelink');
+        })
+        .waitForUrl(/delete/, function () {
+            this.click('input[value="Yes, I\'m sure"]');
+        })
+        .waitUntilVisible('.success', function () {
+            test.assertSelectorHasText(
+                '.success',
+                'The article "Test article" was deleted successfully.',
+                'Article was deleted'
+            );
+        })
+        .then(cms.removePage())
         .run(function () {
             test.done();
         });
