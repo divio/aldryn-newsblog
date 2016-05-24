@@ -181,3 +181,123 @@ casper.test.begin('Creation / deletion of the article', function (test) {
             test.done();
         });
 });
+
+casper.test.begin('Latest articles plugin', function (test) {
+    casper
+        .start()
+        .then(cms.addPage({ title: 'Home' }))
+        .then(cms.addPlugin({
+            type: 'NewsBlogLatestArticlesPlugin',
+            content: {
+                id_latest_articles: 1
+            }
+        }))
+        .thenOpen(globals.editUrl, function () {
+            test.assertSelectorHasText(
+                '.cms-plugin p',
+                'No items available',
+                'No articles yet'
+            );
+        })
+        .then(cms.openSideframe())
+        // add articles
+        .withFrame(0, function () {
+            this.waitForSelector('.cms-pagetree-breadcrumbs')
+                .then(function () {
+                    this.click('.cms-pagetree-breadcrumbs a:first-child');
+                })
+                .waitForUrl(/admin/)
+                .waitForSelector('.dashboard', function () {
+                    this.click(xPath(generateXPathForAdminSection({
+                        section: 'Aldryn News & Blog',
+                        row: 'Articles',
+                        link: 'Add'
+                    })));
+                })
+                .waitForSelector('#article_form', function () {
+                    this.fill('#article_form', {
+                        title: 'First article'
+                    }, false);
+
+                })
+                // wait 3 seconds so the second article is definitely
+                // created after the first one :)
+                .wait(3000, function () {
+                    this.click('input[value="Save and add another"]');
+                })
+                .waitForSelector('.success', function () {
+                    test.assertSelectorHasText(
+                        '.success',
+                        'The article "First article" was added successfully. You may add another article below.',
+                        'First article added'
+                    );
+
+                    this.fill('#article_form', {
+                        title: 'Second article'
+                    }, true);
+                })
+                .waitForSelector('.success');
+        })
+        .thenOpen(globals.editUrl, function () {
+            test.assertSelectorHasText(
+                '.cms-plugin p',
+                'No items available',
+                'Still no articles yet (no apphooked page yet)'
+            );
+        })
+        .then(cms.addPage({ title: 'Blog' }))
+        .then(cms.addApphookToPage({
+            page: 'Blog',
+            apphook: 'NewsBlogApp'
+        }))
+        .then(cms.publishPage({ page: 'Blog' }))
+        .thenOpen(globals.editUrl, function () {
+            test.assertSelectorHasText(
+                '.cms-plugin .article h2 a',
+                'Second article',
+                'Latest article is visible on the page'
+            );
+            test.assertElementCount(
+                '.cms-plugin .article',
+                1,
+                'Only one latest article is visible on the page'
+            );
+        })
+        // remove articles
+        .then(cms.openSideframe())
+        .withFrame(0, function () {
+            this.waitForSelector('.cms-pagetree-breadcrumbs')
+                .then(function () {
+                    this.click('.cms-pagetree-breadcrumbs a:first-child');
+                })
+                .waitForUrl(/admin/)
+                .waitForSelector('.dashboard', function () {
+                    this.click(xPath(generateXPathForAdminSection({
+                        section: 'Aldryn News & Blog',
+                        row: 'Articles'
+                    })));
+                })
+                .waitForSelector('#changelist-form', function () {
+                    this.click('th input[type="checkbox"]');
+                    this.fill('#changelist-form', {
+                        action: 'delete_selected'
+                    }, true);
+
+                })
+                .waitForSelector('.delete-confirmation', function () {
+                    this.click('input[value="Yes, I\'m sure"]');
+                })
+                .waitForSelector('.success', function () {
+                    test.assertSelectorHasText(
+                        '.success',
+                        'Successfully deleted 2 articles.',
+                        'Articles deleted'
+                    );
+                });
+        })
+        .then(cms.removePage())
+        .then(cms.removePage())
+        .run(function () {
+            test.done();
+        });
+});
