@@ -35,7 +35,7 @@ var PROJECT_PATTERNS = {
 
 var INTEGRATION_TESTS = [
     [
-        'loginAdmin'
+        'crud'
     ]
 ];
 
