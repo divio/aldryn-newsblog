@@ -1,0 +1,6 @@
+{
+    "node": true,
+    "predef": [
+        "casper"
+    ]
+}
