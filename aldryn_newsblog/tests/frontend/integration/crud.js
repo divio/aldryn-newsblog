@@ -18,36 +18,13 @@ casper.test.tearDown(function (done) {
         .run(done);
 });
 
-/**
- * Returns xpath expression to find the to the specific row in the admin.
- * Can also be used to find xpath to specific links in that row.
- *
- * @function generateXPathForAdminSection
- * @param {Object} options
- * @param {String} options.section module name, e.g. Django CMS
- * @param {String} options.row module row, e.g Pages, Users
- * @param {String} [options.link] specific link in the row, e.g "Add" or "Change"
- */
-var generateXPathForAdminSection = function (options) {
-    var xpath = '//div[.//caption/a[contains(text(), "' + options.section + '")]]';
-
-    if (options.link) {
-        xpath += '//th[./a[contains(text(), "' + options.row + '")]]';
-        xpath += '/following-sibling::td/a[contains(text(), "' + options.link + '")]';
-    } else {
-        xpath += '//th/a[contains(text(), "' + options.row + '")]';
-    }
-
-    return xpath;
-};
-
 casper.test.begin('Creation / deletion of the apphook', function (test) {
     casper
         .start(globals.adminUrl)
         .waitUntilVisible('#content', function () {
             test.assertVisible('#content', 'Admin loaded');
             this.click(
-                xPath(generateXPathForAdminSection({
+                xPath(cms.getXPathForAdminSection({
                     section: 'Aldryn News & Blog',
                     row: 'Application configurations',
                     link: 'Add'
@@ -115,7 +92,7 @@ casper.test.begin('Creation / deletion of the article', function (test) {
         .waitUntilVisible('#content', function () {
             test.assertVisible('#content', 'Admin loaded');
             this.click(
-                xPath(generateXPathForAdminSection({
+                xPath(cms.getXPathForAdminSection({
                     section: 'Aldryn News & Blog',
                     row: 'Articles',
                     link: 'Add'
@@ -154,7 +131,7 @@ casper.test.begin('Creation / deletion of the article', function (test) {
         .thenOpen(globals.adminUrl)
         .waitUntilVisible('#content', function () {
             this.click(
-                xPath(generateXPathForAdminSection({
+                xPath(cms.getXPathForAdminSection({
                     section: 'Aldryn News & Blog',
                     row: 'Articles'
                 }))
@@ -208,7 +185,7 @@ casper.test.begin('Latest articles plugin', function (test) {
                 })
                 .waitForUrl(/admin/)
                 .waitForSelector('.dashboard', function () {
-                    this.click(xPath(generateXPathForAdminSection({
+                    this.click(xPath(cms.getXPathForAdminSection({
                         section: 'Aldryn News & Blog',
                         row: 'Articles',
                         link: 'Add'
@@ -272,7 +249,7 @@ casper.test.begin('Latest articles plugin', function (test) {
                 })
                 .waitForUrl(/admin/)
                 .waitForSelector('.dashboard', function () {
-                    this.click(xPath(generateXPathForAdminSection({
+                    this.click(xPath(cms.getXPathForAdminSection({
                         section: 'Aldryn News & Blog',
                         row: 'Articles'
                     })));
