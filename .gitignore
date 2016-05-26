@@ -11,8 +11,7 @@ cms/django
 !.coveragerc
 !.codeclimate.yml
 !.editorconfig
-!.jshintrc
-!.jscsrc
+!.eslintrc.js
 *.xml
 /*env*/
 *.sqlite

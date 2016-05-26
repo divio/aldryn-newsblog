@@ -115,9 +115,11 @@ describe('cl.newsblog.js:', function () {
             // emulate fail after always after ajax call
             spyOn($, 'ajax').and.returnValue({
                 always: function () {
-                    return { fail: function (callback) {
-                        callback();
-                    }};
+                    return {
+                        fail: function (callback) {
+                            callback();
+                        }
+                    };
                 }
             });
 
