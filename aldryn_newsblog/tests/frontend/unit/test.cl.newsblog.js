@@ -53,7 +53,12 @@ describe('cl.newsblog.js:', function () {
         });
 
         it('has correct url parameter in ajax request', function () {
-            spyOn($, 'ajax').and.callThrough();
+            spyOn($, 'ajax').and.returnValue({
+                always: function () {
+                    return { fail: function () {} };
+                }
+            });
+
             Cl.newsBlog._handler.call(
                 $('.js-aldryn-newsblog-article-search .form-inline')[0],
                     this.preventEvent);
@@ -67,7 +72,11 @@ describe('cl.newsblog.js:', function () {
         });
 
         it('has correct data parameter in ajax request', function () {
-            spyOn($, 'ajax').and.callThrough();
+            spyOn($, 'ajax').and.returnValue({
+                always: function () {
+                    return { fail: function () {} };
+                }
+            });
             Cl.newsBlog._handler.call(
                 $('.js-aldryn-newsblog-article-search .form-inline')[0],
                     this.preventEvent);
