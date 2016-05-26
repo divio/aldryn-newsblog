@@ -1,4 +1,5 @@
-/*!
+/* eslint strict: [2, "global"] */
+/**
  * @author:    Divio AG
  * @copyright: http://www.divio.ch
  */
@@ -10,8 +11,7 @@
 var gulp = require('gulp');
 var gutil = require('gulp-util');
 var KarmaServer = require('karma').Server;
-var jshint = require('gulp-jshint');
-var jscs = require('gulp-jscs');
+var eslint = require('gulp-eslint');
 var integrationTests = require('djangocms-casper-helpers/gulp');
 
 var argv = require('minimist')(process.argv.slice(2)); // eslint-disable-line
@@ -20,12 +20,12 @@ var argv = require('minimist')(process.argv.slice(2)); // eslint-disable-line
 // SETTINGS
 var PROJECT_ROOT = __dirname;
 var PROJECT_PATH = {
-    'js': PROJECT_ROOT + '/aldryn_newsblog/boilerplates/bootstrap3/static/js/',
-    'tests': PROJECT_ROOT + '/aldryn_newsblog/tests/frontend'
+    js: PROJECT_ROOT + '/aldryn_newsblog/boilerplates/bootstrap3/static/js/',
+    tests: PROJECT_ROOT + '/aldryn_newsblog/tests/frontend'
 };
 
 var PROJECT_PATTERNS = {
-    'lint': [
+    lint: [
         PROJECT_PATH.js + '/addons/*.js',
         PROJECT_PATH.tests + '/**/*.js',
         '!' + PROJECT_PATH.tests + '/coverage/**/*.js',
@@ -44,17 +44,11 @@ var INTEGRATION_TESTS = [
 // #############################################################################
 // LINTING
 gulp.task('lint', function () {
+    // DOCS: http://eslint.org
     return gulp.src(PROJECT_PATTERNS.lint)
-        .pipe(jshint())
-        .pipe(jscs())
-        .on('error', function (error) {
-            gutil.log('\n' + error.message);
-            if (process.env.CI) {
-                // force the process to exit with error code
-                process.exit(1);
-            }
-        })
-        .pipe(jshint.reporter('jshint-stylish'));
+        .pipe(eslint())
+        .pipe(eslint.format())
+        .pipe(eslint.failAfterError());
 });
 
 // #########################################################

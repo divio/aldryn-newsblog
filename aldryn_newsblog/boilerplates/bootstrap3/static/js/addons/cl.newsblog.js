@@ -3,12 +3,8 @@
  * @copyright: http://www.divio.ch
  */
 
-//######################################################################################################################
-// #NAMESPACES#
 var Cl = window.Cl || {};
 
-//######################################################################################################################
-// #UTILS#
 (function ($) {
     'use strict';
 
@@ -35,7 +31,7 @@ var Cl = window.Cl || {};
             }).always(function (data) {
                 form.siblings('.js-search-results').html(data);
             }).fail(function () {
-                alert('REQUEST TIMEOUT');
+                alert('REQUEST TIMEOUT'); // eslint-disable-line
             });
         },
 

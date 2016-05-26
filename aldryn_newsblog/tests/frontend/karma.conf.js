@@ -11,16 +11,16 @@ var baseConf = require('./base.conf');
 
 module.exports = function (config) {
     var browsers = {
-        'PhantomJS': 'used for local testing'
+        PhantomJS: 'used for local testing'
     };
 
     // Browsers to run on Sauce Labs
     // Check out https://saucelabs.com/platforms for all browser/OS combos
     if (process.env.SAUCE_USERNAME && process.env.SAUCE_ACCESS_KEY) {
-        browsers = baseConf.sauceLabsBrowsers.reduce(function (browsers, capability) {
-            browsers[JSON.stringify(capability)] = capability;
-            browsers[JSON.stringify(capability)].base = 'SauceLabs';
-            return browsers;
+        browsers = baseConf.sauceLabsBrowsers.reduce(function (newBrowsers, capability) {
+            newBrowsers[JSON.stringify(capability)] = capability;
+            newBrowsers[JSON.stringify(capability)].base = 'SauceLabs';
+            return newBrowsers;
         }, {});
     }
 
