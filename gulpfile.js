@@ -35,7 +35,8 @@ var PROJECT_PATTERNS = {
 
 var INTEGRATION_TESTS = [
     [
-        'crud'
+        'crud',
+        'related-articles'
     ]
 ];
 
