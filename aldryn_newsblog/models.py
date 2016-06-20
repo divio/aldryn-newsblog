@@ -440,8 +440,10 @@ class NewsBlogLatestArticlesPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
         return queryset[:self.latest_articles]
 
     def __str__(self):
-        return ugettext('%s latest articles: %s') % (
-            self.app_config.get_app_title(), self.latest_articles, )
+        return ugettext('%(app_title)s latest articles: %(latest_articles)s') % {
+            'app_title': self.app_config.get_app_title(),
+            'latest_articles': self.latest_articles,
+        }
 
 
 @python_2_unicode_compatible
