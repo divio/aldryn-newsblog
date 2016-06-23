@@ -3,13 +3,15 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Angelo Dini <finalangeljp@hotmail.com>, 2016
 # divio <developers@divio.ch>, 2016
+# Gentian Mazrekaj <gentian.mazrekaj@divio.ch>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Aldryn News & Blog\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-03-16 17:36+0200\n"
-"PO-Revision-Date: 2016-05-30 12:46+0000\n"
+"PO-Revision-Date: 2016-06-23 07:18+0000\n"
 "Last-Translator: Angelo Dini <finalangeljp@hotmail.com>\n"
 "Language-Team: German (http://www.transifex.com/divio/aldryn-newsblog/language/de/)\n"
 "MIME-Version: 1.0\n"
@@ -43,7 +45,7 @@ msgstr "Vorheriger Artikel"
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/article_detail.html:22
 #: templates/aldryn_newsblog/article_detail.html:17
 msgid "Back to Overview"
-msgstr "Zurück zu Übersicht"
+msgstr "Zurück zur Übersicht"
 
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/article_detail.html:24
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/article_detail.html:26
@@ -79,7 +81,7 @@ msgstr "Nächster"
 #: templates/aldryn_newsblog/includes/search_results.html:6
 #, python-format
 msgid "Most recent articles containing \"<strong>%(query)s</strong>\""
-msgstr "Neuste Artikel enthalten \"<strong>%(query)s</strong>\""
+msgstr "Neuste Artikel die \"<strong>%(query)s</strong>\" enthalten"
 
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/search_results.html:19
 #: templates/aldryn_newsblog/includes/search_results.html:21
@@ -104,7 +106,7 @@ msgstr "Begriff"
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/article_search.html:11
 #: templates/aldryn_newsblog/plugins/article_search.html:10
 msgid "Go"
-msgstr "Ok"
+msgstr "Los"
 
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/categories.html:6
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/tags.html:6
@@ -124,23 +126,23 @@ msgstr "News Blog"
 
 #: cms_appconfig.py:19
 msgid "the-eagle-has-landed/"
-msgstr ""
+msgstr "der-adler-ist-gelandet/"
 
 #: cms_appconfig.py:20
 msgid "1969/the-eagle-has-landed/"
-msgstr ""
+msgstr "1969/der-adler-ist-gelandet/"
 
 #: cms_appconfig.py:21
 msgid "1969/07/the-eagle-has-landed/"
-msgstr ""
+msgstr "1969/07/der-adler-ist-gelandet/"
 
 #: cms_appconfig.py:22
 msgid "1969/07/16/the-eagle-has-landed/"
-msgstr ""
+msgstr "1969/07/16/der-adler-ist-gelandet/"
 
 #: cms_appconfig.py:23
 msgid "1969/07/16/11/"
-msgstr ""
+msgstr "1969/07/16/11/"
 
 #: cms_appconfig.py:27
 msgid "Allow"
@@ -148,7 +150,7 @@ msgstr "Erlauben"
 
 #: cms_appconfig.py:28
 msgid "Redirect to permalink (default)"
-msgstr "Zum Permalink weiterleiten (standard)"
+msgstr "Zum Permalink weiterleiten (Standard)"
 
 #: cms_appconfig.py:29
 msgid "Permanent redirect to permalink"
@@ -156,7 +158,7 @@ msgstr "Permanente Weiterleitung zum Permalink"
 
 #: cms_appconfig.py:30
 msgid "Return 404: Not Found"
-msgstr "404: Nicht gefunden"
+msgstr "Zeige 404: Nicht gefunden"
 
 #: cms_appconfig.py:42
 msgid "application title"
@@ -170,43 +172,43 @@ msgstr "Permalink Typ"
 msgid ""
 "Choose the style of urls to use from the examples. (Note, all types are "
 "relative to apphook)"
-msgstr ""
+msgstr "Stil der URLs aus den Beispielen auswählen. (Notiz, alle Typen sind relativ zur Applikations Seite)"
 
 #: cms_appconfig.py:51
 msgid "non-permalink handling"
-msgstr ""
+msgstr "Nicht-Permanente Links Handhabung"
 
 #: cms_appconfig.py:54
 msgid "How to handle non-permalink urls?"
-msgstr ""
+msgstr "Wie sollen nicht-Permamente Links gehandhabt werden?"
 
 #: cms_appconfig.py:58
 msgid "Paginate size"
-msgstr ""
+msgstr "Anzahl der Seitennummern"
 
 #: cms_appconfig.py:61
 msgid "When paginating list views, how many articles per page?"
-msgstr ""
+msgstr "Wie viele Artikel sollen pro Seite dargestellt werden?"
 
 #: cms_appconfig.py:68
 msgid "Prefix for template dirs"
-msgstr ""
+msgstr "Präfix für Template \"dirs\""
 
 #: cms_appconfig.py:72
 msgid "Auto-create authors?"
-msgstr ""
+msgstr "Auto-Kreierte Auhore?"
 
 #: cms_appconfig.py:74
 msgid "Automatically create authors from logged-in user?"
-msgstr ""
+msgstr "Kreiere automatisch Autoren von eingeloggten Benutzern?"
 
 #: cms_appconfig.py:79
 msgid "Include in search index?"
-msgstr ""
+msgstr "Inbegriffen im Such-Index?"
 
 #: cms_appconfig.py:81
 msgid "Include articles in search indexes?"
-msgstr ""
+msgstr "Artikel sind inbegriffen im Such-Index?"
 
 #: cms_appconfig.py:120
 msgid "untitled"
@@ -214,11 +216,11 @@ msgstr "News Blog"
 
 #: cms_appconfig.py:129
 msgid "Post published by default"
-msgstr ""
+msgstr "Post standartmässig publizieren"
 
 #: cms_plugins.py:33
 msgid "Archive"
-msgstr ""
+msgstr "Archiv"
 
 #: cms_plugins.py:54
 msgid "Article Search"
@@ -272,7 +274,7 @@ msgstr "Artikel löschen"
 msgid ""
 "Optional. If provided, it will be added to the main body of the article as a"
 " text plugin, that can be formatted."
-msgstr ""
+msgstr "Optional. Wenn verfügbar, wird es zum \"Main-Body\" vom Artikel als ein Text Plugin, das formatiert werden kann, hinzugefügt."
 
 #: cms_wizards.py:124
 msgid "Initial version."
@@ -297,7 +299,7 @@ msgstr "Aldryn NewsBlog Menu"
 
 #: models.py:77
 msgid "untitled-article"
-msgstr ""
+msgstr "unbenannter-artikel"
 
 #: models.py:88
 msgid "title"
@@ -311,7 +313,7 @@ msgstr "Slug"
 msgid ""
 "Used in the URL. If changed, the URL will change. Clear it to have it re-"
 "created automatically."
-msgstr ""
+msgstr "Wird in der URL verwendet. Wenn dies geändert wird, ändert sich auch die URL. Lösch es um es automatisch neu-generieren zu können."
 
 #: models.py:99
 msgid "lead"
@@ -321,19 +323,19 @@ msgstr "Lead"
 msgid ""
 "The lead gives the reader the main idea of the story, this is useful in "
 "overviews, lists or as an introduction to your article."
-msgstr ""
+msgstr "Der Lead sollte dem Leser die eigentliche Idee des Text geben. Dies ist hilfreich für Überschriften, Listen oder als Einleitung eines Artikels."
 
 #: models.py:108
 msgid "meta title"
-msgstr ""
+msgstr "Meta-Titel"
 
 #: models.py:111
 msgid "meta description"
-msgstr ""
+msgstr "Meta-Beschreibung"
 
 #: models.py:113
 msgid "meta keywords"
-msgstr ""
+msgstr "Meta-Schlüsselwörter"
 
 #: models.py:122
 msgid "author"
@@ -341,11 +343,11 @@ msgstr "Autor"
 
 #: models.py:123
 msgid "owner"
-msgstr ""
+msgstr "Owner"
 
 #: models.py:125
 msgid "app. config"
-msgstr ""
+msgstr "Applikations Konfiguration"
 
 #: models.py:127
 msgid "categories"
@@ -353,15 +355,15 @@ msgstr "Kategorien"
 
 #: models.py:129
 msgid "publishing date"
-msgstr ""
+msgstr "Veröffentlichungsdatum"
 
 #: models.py:131
 msgid "is published"
-msgstr ""
+msgstr "Ist Publiziert"
 
 #: models.py:133
 msgid "is featured"
-msgstr ""
+msgstr "Ist Featured"
 
 #: models.py:139
 msgid "related articles"
@@ -370,7 +372,7 @@ msgstr "ähnliche Artikel"
 #: models.py:272 models.py:283
 #, python-format
 msgid "%s archive"
-msgstr ""
+msgstr "%s Archiv"
 
 #: models.py:277
 msgid "max articles"
@@ -378,7 +380,7 @@ msgstr "Max Artikel"
 
 #: models.py:279
 msgid "The maximum number of found articles display."
-msgstr ""
+msgstr "Maximale Anzahl der gefundenen Artikel."
 
 #: models.py:324
 #, python-format
@@ -392,7 +394,7 @@ msgstr "%s Kategorien"
 
 #: models.py:374
 msgid "The maximum number of featured articles display."
-msgstr ""
+msgstr "Maximale Anzahl der \"featured\" Artikel."
 
 #: models.py:395
 msgid "featured article"
@@ -405,12 +407,12 @@ msgstr "Featured Artikel: %(count)s"
 
 #: models.py:407
 msgid "The maximum number of latest articles to display."
-msgstr ""
+msgstr "Maximale Anzal der neusten Artikel."
 
 #: models.py:425
 #, python-format
 msgid "%s latest articles: %s"
-msgstr "%s Neuste Artikel %s"
+msgstr "%s letzte Artikel: %s"
 
 #: models.py:448
 msgid "Related articles"
