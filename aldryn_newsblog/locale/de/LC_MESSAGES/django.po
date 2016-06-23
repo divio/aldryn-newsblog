@@ -3,6 +3,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Translators:
 # Angelo Dini <finalangeljp@hotmail.com>, 2016
 # divio <developers@divio.ch>, 2016
 # Gentian Mazrekaj <gentian.mazrekaj@divio.ch>, 2016
@@ -11,7 +12,7 @@ msgstr ""
 "Project-Id-Version: Aldryn News & Blog\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-03-16 17:36+0200\n"
-"PO-Revision-Date: 2016-06-23 07:18+0000\n"
+"PO-Revision-Date: 2016-06-23 07:42+0000\n"
 "Last-Translator: Angelo Dini <finalangeljp@hotmail.com>\n"
 "Language-Team: German (http://www.transifex.com/divio/aldryn-newsblog/language/de/)\n"
 "MIME-Version: 1.0\n"
@@ -196,27 +197,27 @@ msgstr "Präfix für Template \"dirs\""
 
 #: cms_appconfig.py:72
 msgid "Auto-create authors?"
-msgstr "Auto-Kreierte Auhore?"
+msgstr "Autore automatisch erstellen?"
 
 #: cms_appconfig.py:74
 msgid "Automatically create authors from logged-in user?"
-msgstr "Kreiere automatisch Autoren von eingeloggten Benutzern?"
+msgstr "Sollen automatisch Autoren für eingeloggte Benutzer erstellt werden?"
 
 #: cms_appconfig.py:79
 msgid "Include in search index?"
-msgstr "Inbegriffen im Such-Index?"
+msgstr "Im Suchindex mit einbeziehen?"
 
 #: cms_appconfig.py:81
 msgid "Include articles in search indexes?"
-msgstr "Artikel sind inbegriffen im Such-Index?"
+msgstr "Sollen Artikel indexiert werden?"
 
 #: cms_appconfig.py:120
 msgid "untitled"
-msgstr "News Blog"
+msgstr "kein Titel"
 
 #: cms_appconfig.py:129
 msgid "Post published by default"
-msgstr "Post standartmässig publizieren"
+msgstr "Beitrag standartmässig publizieren"
 
 #: cms_plugins.py:33
 msgid "Archive"
@@ -282,11 +283,11 @@ msgstr "Initiale Version"
 
 #: cms_wizards.py:130
 msgid "New news/blog article"
-msgstr "Neuer NewsBlog Artikel"
+msgstr "Neuer News/Blog Artikel"
 
 #: cms_wizards.py:133
 msgid "Create a new news/blog article."
-msgstr "Neuen NewsBlog Artikel erstellen"
+msgstr "Neuen News/Blog Artikel erstellen"
 
 #: feeds.py:36
 #, python-brace-format
@@ -295,11 +296,11 @@ msgstr "Artikel bei {0}"
 
 #: menu.py:20
 msgid "Aldryn NewsBlog Menu"
-msgstr "Aldryn NewsBlog Menu"
+msgstr "Aldryn News/Blog Menu"
 
 #: models.py:77
 msgid "untitled-article"
-msgstr "unbenannter-artikel"
+msgstr "unbenannter Artikel"
 
 #: models.py:88
 msgid "title"
@@ -359,11 +360,11 @@ msgstr "Veröffentlichungsdatum"
 
 #: models.py:131
 msgid "is published"
-msgstr "Ist Publiziert"
+msgstr "Ist publiziert"
 
 #: models.py:133
 msgid "is featured"
-msgstr "Ist Featured"
+msgstr "Ist featured"
 
 #: models.py:139
 msgid "related articles"
