@@ -20,7 +20,7 @@ class AutoAppConfigFormMixin(object):
 class NewsBlogArchivePluginForm(AutoAppConfigFormMixin, forms.ModelForm):
     class Meta:
         model = models.NewsBlogArchivePlugin
-        fields = ['app_config']
+        fields = ['app_config', 'cache_duration']
 
 
 class NewsBlogArticleSearchPluginForm(AutoAppConfigFormMixin, forms.ModelForm):
@@ -52,9 +52,17 @@ class NewsBlogLatestArticlesPluginForm(AutoAppConfigFormMixin,
                                        forms.ModelForm):
     class Meta:
         model = models.NewsBlogLatestArticlesPlugin
-        fields = ['app_config', 'latest_articles', 'exclude_featured']
+        fields = [
+            'app_config', 'latest_articles', 'exclude_featured',
+            'cache_duration'
+        ]
 
 
 class NewsBlogTagsPluginForm(AutoAppConfigFormMixin, forms.ModelForm):
     class Meta:
         fields = ['app_config']
+
+
+class NewsBlogRelatedPluginForm(forms.ModelForm):
+    class Meta:
+        fields = ['cache_duration']

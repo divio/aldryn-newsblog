@@ -248,6 +248,21 @@ class PluginEditModeMixin(object):
             request.toolbar.edit_mode)
 
 
+class AdjustableCacheModelMixin(models.Model):
+    # NOTE: This field shouldn't even be displayed in the plugin's change form
+    # if using django CMS < 3.3.0
+    cache_duration = models.PositiveSmallIntegerField(
+        default=0,  # not the most sensible, but consistent with older versions
+        blank=False,
+        help_text=_(
+            "The maximum duration (in seconds) that this plugin's content "
+            "should be cached.")
+    )
+
+    class Meta:
+        abstract = True
+
+
 class NewsBlogCMSPlugin(CMSPlugin):
     """AppHookConfig aware abstract CMSPlugin class for Aldryn Newsblog"""
     # avoid reverse relation name clashes by not adding a related_name
@@ -265,7 +280,8 @@ class NewsBlogCMSPlugin(CMSPlugin):
 
 
 @python_2_unicode_compatible
-class NewsBlogArchivePlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
+class NewsBlogArchivePlugin(PluginEditModeMixin, AdjustableCacheModelMixin,
+                            NewsBlogCMSPlugin):
     # NOTE: the PluginEditModeMixin is eventually used in the cmsplugin, not
     # here in the model.
     def __str__(self):
@@ -403,7 +419,9 @@ class NewsBlogFeaturedArticlesPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
 
 
 @python_2_unicode_compatible
-class NewsBlogLatestArticlesPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
+class NewsBlogLatestArticlesPlugin(PluginEditModeMixin,
+                                   AdjustableCacheModelMixin,
+                                   NewsBlogCMSPlugin):
     latest_articles = models.IntegerField(
         default=5,
         help_text=_('The maximum number of latest articles to display.')
@@ -447,7 +465,8 @@ class NewsBlogLatestArticlesPlugin(PluginEditModeMixin, NewsBlogCMSPlugin):
 
 
 @python_2_unicode_compatible
-class NewsBlogRelatedPlugin(PluginEditModeMixin, CMSPlugin):
+class NewsBlogRelatedPlugin(PluginEditModeMixin, AdjustableCacheModelMixin,
+                            CMSPlugin):
     # NOTE: This one does NOT subclass NewsBlogCMSPlugin. This is because this
     # plugin can really only be placed on the article detail view in an apphook.
     cmsplugin_ptr = models.OneToOneField(
