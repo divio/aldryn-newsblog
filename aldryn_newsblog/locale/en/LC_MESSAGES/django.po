@@ -1,54 +1,54 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
+# 
+# Translators:
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: Aldryn News & Blog\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-03-16 17:36+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2016-06-21 08:46+0000\n"
+"Last-Translator: Mikhail Kolesnik <mike@openbunker.org>\n"
+"Language-Team: English (http://www.transifex.com/divio/aldryn-newsblog/language/en/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: admin.py:23
 msgid "Mark selected articles as published"
-msgstr ""
+msgstr "Mark selected articles as published"
 
 #: admin.py:29
 msgid "Mark selected articles as not published"
-msgstr ""
+msgstr "Mark selected articles as not published"
 
 #: admin.py:35
 msgid "Mark selected articles as featured"
-msgstr ""
+msgstr "Mark selected articles as featured"
 
 #: admin.py:41
 msgid "Mark selected articles as not featured"
-msgstr ""
+msgstr "Mark selected articles as not featured"
 
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/article_detail.html:18
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/article_detail.html:20
 #: templates/aldryn_newsblog/article_detail.html:15
 msgid "Previous Article"
-msgstr ""
+msgstr "Previous Article"
 
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/article_detail.html:22
 #: templates/aldryn_newsblog/article_detail.html:17
 msgid "Back to Overview"
-msgstr ""
+msgstr "Back to Overview"
 
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/article_detail.html:24
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/article_detail.html:26
 #: templates/aldryn_newsblog/article_detail.html:19
 msgid "Next Article"
-msgstr ""
+msgstr "Next Article"
 
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/article_list.html:9
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/archive.html:21
@@ -62,360 +62,360 @@ msgstr ""
 #: templates/aldryn_newsblog/plugins/latest_articles.html:6
 #: templates/aldryn_newsblog/plugins/related_articles.html:11
 msgid "No items available"
-msgstr ""
+msgstr "No items available"
 
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/pagination.html:7
 #: templates/aldryn_newsblog/includes/pagination.html:8
 msgid "Previous"
-msgstr ""
+msgstr "Previous"
 
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/pagination.html:41
 #: templates/aldryn_newsblog/includes/pagination.html:42
 msgid "Next"
-msgstr ""
+msgstr "Next"
 
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/search_results.html:4
 #: templates/aldryn_newsblog/includes/search_results.html:6
 #, python-format
 msgid "Most recent articles containing \"<strong>%(query)s</strong>\""
-msgstr ""
+msgstr "Most recent articles containing \"<strong>%(query)s</strong>\""
 
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/search_results.html:19
 #: templates/aldryn_newsblog/includes/search_results.html:21
 msgid "No articles found"
-msgstr ""
+msgstr "No articles found"
 
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/search_results.html:21
 #: templates/aldryn_newsblog/includes/search_results.html:23
 msgid "Enter a query above"
-msgstr ""
+msgstr "Enter a query above"
 
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/article_search.html:8
 #: templates/aldryn_newsblog/plugins/article_search.html:6
 msgid "Keyword search"
-msgstr ""
+msgstr "Keyword search"
 
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/article_search.html:9
 #: templates/aldryn_newsblog/plugins/article_search.html:7
 msgid "Keyword"
-msgstr ""
+msgstr "Keyword"
 
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/article_search.html:11
 #: templates/aldryn_newsblog/plugins/article_search.html:10
 msgid "Go"
-msgstr ""
+msgstr "Go"
 
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/categories.html:6
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/tags.html:6
 #: templates/aldryn_newsblog/plugins/categories.html:5
 #: templates/aldryn_newsblog/plugins/tags.html:5
 msgid "All"
-msgstr ""
+msgstr "All"
 
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/related_articles.html:9
 #: templates/aldryn_newsblog/plugins/related_articles.html:8
 msgid "by"
-msgstr ""
+msgstr "by"
 
 #: cms_app.py:15
 msgid "NewsBlog"
-msgstr ""
+msgstr "NewsBlog"
 
 #: cms_appconfig.py:19
 msgid "the-eagle-has-landed/"
-msgstr ""
+msgstr "the-eagle-has-landed/"
 
 #: cms_appconfig.py:20
 msgid "1969/the-eagle-has-landed/"
-msgstr ""
+msgstr "1969/the-eagle-has-landed/"
 
 #: cms_appconfig.py:21
 msgid "1969/07/the-eagle-has-landed/"
-msgstr ""
+msgstr "1969/07/the-eagle-has-landed/"
 
 #: cms_appconfig.py:22
 msgid "1969/07/16/the-eagle-has-landed/"
-msgstr ""
+msgstr "1969/07/16/the-eagle-has-landed/"
 
 #: cms_appconfig.py:23
 msgid "1969/07/16/11/"
-msgstr ""
+msgstr "1969/07/16/11/"
 
 #: cms_appconfig.py:27
 msgid "Allow"
-msgstr ""
+msgstr "Allow"
 
 #: cms_appconfig.py:28
 msgid "Redirect to permalink (default)"
-msgstr ""
+msgstr "Redirect to permalink (default)"
 
 #: cms_appconfig.py:29
 msgid "Permanent redirect to permalink"
-msgstr ""
+msgstr "Permanent redirect to permalink"
 
 #: cms_appconfig.py:30
 msgid "Return 404: Not Found"
-msgstr ""
+msgstr "Return 404: Not Found"
 
 #: cms_appconfig.py:42
 msgid "application title"
-msgstr ""
+msgstr "application title"
 
 #: cms_appconfig.py:45
 msgid "permalink type"
-msgstr ""
+msgstr "permalink type"
 
 #: cms_appconfig.py:47
 msgid ""
 "Choose the style of urls to use from the examples. (Note, all types are "
 "relative to apphook)"
-msgstr ""
+msgstr "Choose the style of urls to use from the examples. (Note, all types are relative to apphook)"
 
 #: cms_appconfig.py:51
 msgid "non-permalink handling"
-msgstr ""
+msgstr "non-permalink handling"
 
 #: cms_appconfig.py:54
 msgid "How to handle non-permalink urls?"
-msgstr ""
+msgstr "How to handle non-permalink urls?"
 
 #: cms_appconfig.py:58
 msgid "Paginate size"
-msgstr ""
+msgstr "Paginate size"
 
 #: cms_appconfig.py:61
 msgid "When paginating list views, how many articles per page?"
-msgstr ""
+msgstr "When paginating list views, how many articles per page?"
 
 #: cms_appconfig.py:68
 msgid "Prefix for template dirs"
-msgstr ""
+msgstr "Prefix for template dirs"
 
 #: cms_appconfig.py:72
 msgid "Auto-create authors?"
-msgstr ""
+msgstr "Auto-create authors?"
 
 #: cms_appconfig.py:74
 msgid "Automatically create authors from logged-in user?"
-msgstr ""
+msgstr "Automatically create authors from logged-in user?"
 
 #: cms_appconfig.py:79
 msgid "Include in search index?"
-msgstr ""
+msgstr "Include in search index?"
 
 #: cms_appconfig.py:81
 msgid "Include articles in search indexes?"
-msgstr ""
+msgstr "Include articles in search indexes?"
 
 #: cms_appconfig.py:120
 msgid "untitled"
-msgstr ""
+msgstr "untitled"
 
 #: cms_appconfig.py:129
 msgid "Post published by default"
-msgstr ""
+msgstr "Post published by default"
 
 #: cms_plugins.py:33
 msgid "Archive"
-msgstr ""
+msgstr "Archive"
 
 #: cms_plugins.py:54
 msgid "Article Search"
-msgstr ""
+msgstr "Article Search"
 
 #: cms_plugins.py:68
 msgid "Authors"
-msgstr ""
+msgstr "Authors"
 
 #: cms_plugins.py:86
 msgid "Categories"
-msgstr ""
+msgstr "Categories"
 
 #: cms_plugins.py:103
 msgid "Featured Articles"
-msgstr ""
+msgstr "Featured Articles"
 
 #: cms_plugins.py:117
 msgid "Latest Articles"
-msgstr ""
+msgstr "Latest Articles"
 
 #: cms_plugins.py:132
 msgid "Related Articles"
-msgstr ""
+msgstr "Related Articles"
 
 #: cms_plugins.py:160
 msgid "Tags"
-msgstr ""
+msgstr "Tags"
 
 #: cms_toolbar.py:92
 msgid "Configure addon"
-msgstr ""
+msgstr "Configure addon"
 
 #: cms_toolbar.py:103
 msgid "Article list"
-msgstr ""
+msgstr "Article list"
 
 #: cms_toolbar.py:110
 msgid "Add new article"
-msgstr ""
+msgstr "Add new article"
 
 #: cms_toolbar.py:118
 msgid "Edit this article"
-msgstr ""
+msgstr "Edit this article"
 
 #: cms_toolbar.py:126
 msgid "Delete this article"
-msgstr ""
+msgstr "Delete this article"
 
 #: cms_wizards.py:70
 msgid ""
-"Optional. If provided, it will be added to the main body of the article as a "
-"text plugin, that can be formatted."
-msgstr ""
+"Optional. If provided, it will be added to the main body of the article as a"
+" text plugin, that can be formatted."
+msgstr "Optional. If provided, it will be added to the main body of the article as a text plugin, that can be formatted."
 
 #: cms_wizards.py:124
 msgid "Initial version."
-msgstr ""
+msgstr "Initial version."
 
 #: cms_wizards.py:130
 msgid "New news/blog article"
-msgstr ""
+msgstr "New news/blog article"
 
 #: cms_wizards.py:133
 msgid "Create a new news/blog article."
-msgstr ""
+msgstr "Create a new news/blog article."
 
 #: feeds.py:36
 #, python-brace-format
 msgid "Articles on {0}"
-msgstr ""
+msgstr "Articles on {0}"
 
 #: menu.py:20
 msgid "Aldryn NewsBlog Menu"
-msgstr ""
+msgstr "Aldryn NewsBlog Menu"
 
 #: models.py:77
 msgid "untitled-article"
-msgstr ""
+msgstr "untitled-article"
 
 #: models.py:88
 msgid "title"
-msgstr ""
+msgstr "title"
 
 #: models.py:90
 msgid "slug"
-msgstr ""
+msgstr "slug"
 
 #: models.py:95
 msgid ""
 "Used in the URL. If changed, the URL will change. Clear it to have it re-"
 "created automatically."
-msgstr ""
+msgstr "Used in the URL. If changed, the URL will change. Clear it to have it re-created automatically."
 
 #: models.py:99
 msgid "lead"
-msgstr ""
+msgstr "lead"
 
 #: models.py:101
 msgid ""
 "The lead gives the reader the main idea of the story, this is useful in "
 "overviews, lists or as an introduction to your article."
-msgstr ""
+msgstr "The lead gives the reader the main idea of the story, this is useful in overviews, lists or as an introduction to your article."
 
 #: models.py:108
 msgid "meta title"
-msgstr ""
+msgstr "meta title"
 
 #: models.py:111
 msgid "meta description"
-msgstr ""
+msgstr "meta description"
 
 #: models.py:113
 msgid "meta keywords"
-msgstr ""
+msgstr "meta keywords"
 
 #: models.py:122
 msgid "author"
-msgstr ""
+msgstr "author"
 
 #: models.py:123
 msgid "owner"
-msgstr ""
+msgstr "owner"
 
 #: models.py:125
 msgid "app. config"
-msgstr ""
+msgstr "app. config"
 
 #: models.py:127
 msgid "categories"
-msgstr ""
+msgstr "categories"
 
 #: models.py:129
 msgid "publishing date"
-msgstr ""
+msgstr "publishing date"
 
 #: models.py:131
 msgid "is published"
-msgstr ""
+msgstr "is published"
 
 #: models.py:133
 msgid "is featured"
-msgstr ""
+msgstr "is featured"
 
 #: models.py:139
 msgid "related articles"
-msgstr ""
+msgstr "related articles"
 
 #: models.py:272 models.py:283
 #, python-format
 msgid "%s archive"
-msgstr ""
+msgstr "%s archive"
 
 #: models.py:277
 msgid "max articles"
-msgstr ""
+msgstr "max articles"
 
 #: models.py:279
 msgid "The maximum number of found articles display."
-msgstr ""
+msgstr "The maximum number of found articles display."
 
 #: models.py:324
 #, python-format
 msgid "%s authors"
-msgstr ""
+msgstr "%s authors"
 
 #: models.py:330
 #, python-format
 msgid "%s categories"
-msgstr ""
+msgstr "%s categories"
 
 #: models.py:374
 msgid "The maximum number of featured articles display."
-msgstr ""
+msgstr "The maximum number of featured articles display."
 
 #: models.py:395
 msgid "featured article"
-msgstr ""
+msgstr "featured article"
 
 #: models.py:397
 #, python-format
 msgid "featured articles: %(count)s"
-msgstr ""
+msgstr "featured articles: %(count)s"
 
 #: models.py:407
 msgid "The maximum number of latest articles to display."
-msgstr ""
+msgstr "The maximum number of latest articles to display."
 
 #: models.py:425
 #, python-format
 msgid "%s latest articles: %s"
-msgstr ""
+msgstr "%s latest articles: %s"
 
 #: models.py:448
 msgid "Related articles"
-msgstr ""
+msgstr "Related articles"
 
 #: models.py:490
 #, python-format
 msgid "%s tags"
-msgstr ""
+msgstr "%s tags"

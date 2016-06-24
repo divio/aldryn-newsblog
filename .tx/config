@@ -1,0 +1,9 @@
+[main]
+host = https://www.transifex.com
+
+[aldryn-newsblog.aldryn_newsblog]
+file_filter = aldryn_newsblog/locale/<lang>/LC_MESSAGES/django.po
+source_file = aldryn_newsblog/locale/en/LC_MESSAGES/django.po
+source_lang = en
+type = PO
+

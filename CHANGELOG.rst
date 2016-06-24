@@ -1,8 +1,15 @@
 CHANGELOG
 =========
 
+1.2.3 (UNRELEASED)
+------------------
+
+* Updated translation setup for transifex
+
+
 1.2.2 (2016-05-19)
 ------------------
+
 * Adds support for Python 3.5
 * Adds support for Django 1.9
 * Adds support for CMS 3.3.x
@@ -10,6 +17,7 @@ CHANGELOG
 
 1.2.1 (2016-03-18)
 ------------------
+
 * Adapt pagenav to hide too many entries
 * Pagenav shows "..." if there are to many pages forward or backwards
 * Add pagenav settings to apphook configs
