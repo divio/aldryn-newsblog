@@ -5,6 +5,7 @@ CHANGELOG
 ------------------
 
 * Updated translation setup for transifex
+* Fixed bootstrap3 article template sometimes causing broken pages
 
 
 1.2.2 (2016-05-19)
