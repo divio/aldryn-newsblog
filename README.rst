@@ -1,10 +1,8 @@
-##################
-Aldryn News & Blog
-##################
+#################################
+Aldryn News & Blog for django CMS
+#################################
 
 |PyPI Version| |Build Status| |Coverage Status| |codeclimate| |requires_io|
-
-|Browser Matrix|
 
 Aldryn News & Blog is an `Aldryn <http://aldryn.com>`_-compatible news and
 weblog application for `django CMS <http://django-cms.org>`_.
@@ -60,5 +58,3 @@ review our guidelines for `Aldryn addons`_.
 .. |requires_io| image:: https://requires.io/github/aldryn/aldryn-newsblog/requirements.svg?branch=master
    :target: https://requires.io/github/aldryn/aldryn-newsblog/requirements/?branch=master
    :alt: Requirements Status
-.. |Browser Matrix| image:: https://saucelabs.com/browser-matrix/aldryn-newsblog.svg
-   :target: https://saucelabs.com/u/aldryn-newsblog
