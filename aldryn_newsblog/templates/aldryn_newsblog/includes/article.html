@@ -11,7 +11,7 @@
         </p>
     {% endif %}
 
-    {% if article.categories %}
+    {% if article.categories.exists %}
         <p>
             {% for category in article.categories.all %}
                 <a href="{% namespace_url 'article-list-by-category' category.slug namespace=namespace default='' %}">{{ category.name }}</a>
