@@ -1,7 +1,7 @@
 CHANGELOG
 =========
 
-1.2.3 (UNRELEASED)
+1.2.3 (2016-06-28)
 ------------------
 
 * Updated translation setup for transifex
