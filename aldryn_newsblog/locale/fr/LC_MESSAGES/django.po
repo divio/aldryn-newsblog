@@ -3,15 +3,16 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Translators:
 # Frigory33 <chironsylvain@orange.fr>, 2016
 # Samuel Sorin, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Aldryn News & Blog\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-16 17:36+0200\n"
-"PO-Revision-Date: 2016-06-21 08:46+0000\n"
-"Last-Translator: Mikhail Kolesnik <mike@openbunker.org>\n"
+"POT-Creation-Date: 2016-06-28 20:56-0400\n"
+"PO-Revision-Date: 2016-06-29 00:57+0000\n"
+"Last-Translator: Martin Koistinen <mkoistinen@gmail.com>\n"
 "Language-Team: French (http://www.transifex.com/divio/aldryn-newsblog/language/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -66,15 +67,23 @@ msgstr "Article suivant"
 msgid "No items available"
 msgstr "Aucun élément disponible"
 
-#: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/pagination.html:7
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/pagination.html:8
+msgid "First"
+msgstr ""
+
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/pagination.html:14
 #: templates/aldryn_newsblog/includes/pagination.html:8
 msgid "Previous"
 msgstr "Précédent"
 
-#: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/pagination.html:41
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/pagination.html:47
 #: templates/aldryn_newsblog/includes/pagination.html:42
 msgid "Next"
 msgstr "Suivant"
+
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/pagination.html:53
+msgid "Last"
+msgstr ""
 
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/search_results.html:4
 #: templates/aldryn_newsblog/includes/search_results.html:6
@@ -181,71 +190,106 @@ msgstr "gestion de non-permalien"
 msgid "How to handle non-permalink urls?"
 msgstr "Comment gérer les URL non-permaliens ?"
 
-#: cms_appconfig.py:58
+#: cms_appconfig.py:57
 msgid "Paginate size"
 msgstr "Taille de pagination"
 
-#: cms_appconfig.py:61
+#: cms_appconfig.py:60
 msgid "When paginating list views, how many articles per page?"
 msgstr "Lorsque la pagination liste des vues, combien d'articles par page ?"
 
-#: cms_appconfig.py:68
+#: cms_appconfig.py:63
+msgid "Pagination pages start"
+msgstr ""
+
+#: cms_appconfig.py:66
+#| msgid "When paginating list views, how many articles per page?"
+msgid ""
+"When paginating list views, after how many pages should we start grouping "
+"the page numbers."
+msgstr ""
+
+#: cms_appconfig.py:70
+#| msgid "Paginate size"
+msgid "Pagination pages visible"
+msgstr ""
+
+#: cms_appconfig.py:73
+msgid ""
+"When grouping page numbers, this determines how many pages are visible on "
+"each side of the active page."
+msgstr ""
+
+#: cms_appconfig.py:77
+#| msgid "featured articles: %(count)s"
+msgid "Excluded featured articles count"
+msgstr ""
+
+#: cms_appconfig.py:81
+msgid ""
+"If you are using the Featured Articles plugin on the article list view, you "
+"may prefer to exclude featured articles from the article list itself to "
+"avoid duplicates. To do this, enter the same number here as in your Featured"
+" Articles plugin."
+msgstr ""
+
+#: cms_appconfig.py:90
 msgid "Prefix for template dirs"
 msgstr "Préfixe des dossiers de modèles"
 
-#: cms_appconfig.py:72
+#: cms_appconfig.py:94
 msgid "Auto-create authors?"
 msgstr "Auto-générer les crédits ?"
 
-#: cms_appconfig.py:74
+#: cms_appconfig.py:96
 msgid "Automatically create authors from logged-in user?"
 msgstr "Générer automatiquement les crédits à partir des utilisateurs connectés ?"
 
-#: cms_appconfig.py:79
+#: cms_appconfig.py:101
 msgid "Include in search index?"
 msgstr "Inclure dans l'index de recherche ?"
 
-#: cms_appconfig.py:81
+#: cms_appconfig.py:103
 msgid "Include articles in search indexes?"
 msgstr "Inclure les articles dans les index de recherche ?"
 
-#: cms_appconfig.py:120
+#: cms_appconfig.py:142
 msgid "untitled"
 msgstr "sans nom"
 
-#: cms_appconfig.py:129
+#: cms_appconfig.py:151
 msgid "Post published by default"
 msgstr "Envoyé publié par défaut"
 
-#: cms_plugins.py:33
+#: cms_plugins.py:66
 msgid "Archive"
 msgstr "Archive"
 
-#: cms_plugins.py:54
+#: cms_plugins.py:86
 msgid "Article Search"
 msgstr "Recherche d'article"
 
-#: cms_plugins.py:68
+#: cms_plugins.py:100
 msgid "Authors"
 msgstr "Crédits"
 
-#: cms_plugins.py:86
+#: cms_plugins.py:118
 msgid "Categories"
 msgstr "Catégories"
 
-#: cms_plugins.py:103
+#: cms_plugins.py:135
 msgid "Featured Articles"
 msgstr "Articles en lumière"
 
-#: cms_plugins.py:117
+#: cms_plugins.py:149
 msgid "Latest Articles"
 msgstr "Articles récents"
 
-#: cms_plugins.py:132
+#: cms_plugins.py:163
 msgid "Related Articles"
 msgstr "Articles liés"
 
-#: cms_plugins.py:160
+#: cms_plugins.py:191
 msgid "Tags"
 msgstr "Balises"
 
@@ -344,8 +388,8 @@ msgstr "auteur"
 msgid "owner"
 msgstr "propriétaire"
 
-#: models.py:125
-msgid "app. config"
+#: models.py:125 models.py:273
+msgid "Apphook configuration"
 msgstr ""
 
 #: models.py:127
@@ -368,56 +412,72 @@ msgstr "est en lumière"
 msgid "related articles"
 msgstr "articles liés"
 
-#: models.py:272 models.py:283
+#: models.py:258
+msgid ""
+"The maximum duration (in seconds) that this plugin's content should be "
+"cached."
+msgstr ""
+
+#: models.py:288 models.py:299
 #, python-format
 msgid "%s archive"
 msgstr "archive %s"
 
-#: models.py:277
+#: models.py:293
 msgid "max articles"
 msgstr "nb max d'articles"
 
-#: models.py:279
+#: models.py:295
 msgid "The maximum number of found articles display."
 msgstr "Le nombre maximum d'articles trouvés à afficher."
 
-#: models.py:324
+#: models.py:340
 #, python-format
 msgid "%s authors"
 msgstr "auteurs %s"
 
-#: models.py:330
+#: models.py:346
 #, python-format
 msgid "%s categories"
 msgstr "catégories %s"
 
-#: models.py:374
+#: models.py:390
 msgid "The maximum number of featured articles display."
 msgstr "Le nombre maximum d'articles en lumière à afficher."
 
-#: models.py:395
+#: models.py:413
 msgid "featured article"
 msgstr "article en lumière"
 
-#: models.py:397
+#: models.py:415
 #, python-format
 msgid "featured articles: %(count)s"
 msgstr "articles en lumière : %(count)s"
 
-#: models.py:407
+#: models.py:427
 msgid "The maximum number of latest articles to display."
 msgstr "Le nombre maximum d'articles récents à afficher."
 
-#: models.py:425
-#, python-format
-msgid "%s latest articles: %s"
+#: models.py:433
+msgid ""
+"The maximum number of featured articles to exclude from display. E.g. for "
+"uses in combination with featured articles plugin."
 msgstr ""
 
-#: models.py:448
+#: models.py:461
+#, python-format
+#| msgid "%s latest articles: %s"
+msgid "%(app_title)s latest articles: %(latest_articles)s"
+msgstr ""
+
+#: models.py:489
 msgid "Related articles"
 msgstr "Articles liés"
 
-#: models.py:490
+#: models.py:531
 #, python-format
 msgid "%s tags"
 msgstr "balises %s"
+
+#~ msgid "app. config"
+#~ msgstr "app. config"
