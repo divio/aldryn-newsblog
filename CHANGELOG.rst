@@ -6,6 +6,8 @@ CHANGELOG
 
 * Updated translation setup for transifex
 * Fixed bootstrap3 article template sometimes causing broken pages
+* Added support for cache durations fields in "time-sensitive" plugins on django CMS 3.3.0+
+* Added support for newer versions of django-filer
 
 
 1.2.2 (2016-05-19)
