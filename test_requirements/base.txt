@@ -2,7 +2,6 @@ aldryn-search>=0.2.12
 coverage>=3.7.1
 dj-database-url
 django-classy-tags
-django-haystack
 django-sekizai
 django-treebeard>=2.0
 djangocms-admin-style

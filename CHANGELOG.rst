@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+1.2.4 (unreleased)
+------------------
+
+* Fixed aldryn_translation_tools not being added to INSTALLED_APPS on Aldryn
+
+
 1.2.3 (2016-06-28)
 ------------------
 
