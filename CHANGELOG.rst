@@ -1,9 +1,12 @@
 CHANGELOG
 =========
 
-1.2.4 (unreleased)
+1.2.4 (2016-07-14)
 ------------------
 
+* Relaxed sortedm2m version range
+* Updated translation setup for transifex
+* Updated translation strings
 * Fixed aldryn_translation_tools not being added to INSTALLED_APPS on Aldryn
 
 

@@ -10,9 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Aldryn News & Blog\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-28 20:56-0400\n"
-"PO-Revision-Date: 2016-06-29 00:57+0000\n"
-"Last-Translator: Martin Koistinen <mkoistinen@gmail.com>\n"
+"POT-Creation-Date: 2016-07-14 11:46-0400\n"
+"PO-Revision-Date: 2016-07-06 17:37+0000\n"
+"Last-Translator: Frigory33 <chironsylvain@orange.fr>\n"
 "Language-Team: French (http://www.transifex.com/divio/aldryn-newsblog/language/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -35,98 +35,6 @@ msgstr "Marquer les articles sélectionnés comme mis en avant"
 #: admin.py:41
 msgid "Mark selected articles as not featured"
 msgstr "Marquer les articles sélectionnés comme non mis en avant"
-
-#: boilerplates/bootstrap3/templates/aldryn_newsblog/article_detail.html:18
-#: boilerplates/bootstrap3/templates/aldryn_newsblog/article_detail.html:20
-#: templates/aldryn_newsblog/article_detail.html:15
-msgid "Previous Article"
-msgstr "Article précédent"
-
-#: boilerplates/bootstrap3/templates/aldryn_newsblog/article_detail.html:22
-#: templates/aldryn_newsblog/article_detail.html:17
-msgid "Back to Overview"
-msgstr "Retour au sommaire"
-
-#: boilerplates/bootstrap3/templates/aldryn_newsblog/article_detail.html:24
-#: boilerplates/bootstrap3/templates/aldryn_newsblog/article_detail.html:26
-#: templates/aldryn_newsblog/article_detail.html:19
-msgid "Next Article"
-msgstr "Article suivant"
-
-#: boilerplates/bootstrap3/templates/aldryn_newsblog/article_list.html:9
-#: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/archive.html:21
-#: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/authors.html:10
-#: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/latest_articles.html:7
-#: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/related_articles.html:12
-#: templates/aldryn_newsblog/article_list.html:8
-#: templates/aldryn_newsblog/plugins/archive.html:22
-#: templates/aldryn_newsblog/plugins/authors.html:9
-#: templates/aldryn_newsblog/plugins/featured_articles.html:6
-#: templates/aldryn_newsblog/plugins/latest_articles.html:6
-#: templates/aldryn_newsblog/plugins/related_articles.html:11
-msgid "No items available"
-msgstr "Aucun élément disponible"
-
-#: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/pagination.html:8
-msgid "First"
-msgstr ""
-
-#: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/pagination.html:14
-#: templates/aldryn_newsblog/includes/pagination.html:8
-msgid "Previous"
-msgstr "Précédent"
-
-#: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/pagination.html:47
-#: templates/aldryn_newsblog/includes/pagination.html:42
-msgid "Next"
-msgstr "Suivant"
-
-#: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/pagination.html:53
-msgid "Last"
-msgstr ""
-
-#: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/search_results.html:4
-#: templates/aldryn_newsblog/includes/search_results.html:6
-#, python-format
-msgid "Most recent articles containing \"<strong>%(query)s</strong>\""
-msgstr "Articles les plus récents contenant « <strong>%(query)s</strong> »"
-
-#: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/search_results.html:19
-#: templates/aldryn_newsblog/includes/search_results.html:21
-msgid "No articles found"
-msgstr "Aucun article trouvé"
-
-#: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/search_results.html:21
-#: templates/aldryn_newsblog/includes/search_results.html:23
-msgid "Enter a query above"
-msgstr "Entrez une requête ci-dessus"
-
-#: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/article_search.html:8
-#: templates/aldryn_newsblog/plugins/article_search.html:6
-msgid "Keyword search"
-msgstr "Recherche par mot clé"
-
-#: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/article_search.html:9
-#: templates/aldryn_newsblog/plugins/article_search.html:7
-msgid "Keyword"
-msgstr "Mot clé"
-
-#: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/article_search.html:11
-#: templates/aldryn_newsblog/plugins/article_search.html:10
-msgid "Go"
-msgstr "Go"
-
-#: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/categories.html:6
-#: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/tags.html:6
-#: templates/aldryn_newsblog/plugins/categories.html:5
-#: templates/aldryn_newsblog/plugins/tags.html:5
-msgid "All"
-msgstr "Tout"
-
-#: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/related_articles.html:9
-#: templates/aldryn_newsblog/plugins/related_articles.html:8
-msgid "by"
-msgstr "par"
 
 #: cms_app.py:15
 msgid "NewsBlog"
@@ -200,30 +108,27 @@ msgstr "Lorsque la pagination liste des vues, combien d'articles par page ?"
 
 #: cms_appconfig.py:63
 msgid "Pagination pages start"
-msgstr ""
+msgstr "Début des pages paginées"
 
 #: cms_appconfig.py:66
-#| msgid "When paginating list views, how many articles per page?"
 msgid ""
 "When paginating list views, after how many pages should we start grouping "
 "the page numbers."
-msgstr ""
+msgstr "Lorsque la pagination liste des vues, après combien de pages devrait-on commencer à grouper les numéros de page ?"
 
 #: cms_appconfig.py:70
-#| msgid "Paginate size"
 msgid "Pagination pages visible"
-msgstr ""
+msgstr "Pages de pagination visibles"
 
 #: cms_appconfig.py:73
 msgid ""
 "When grouping page numbers, this determines how many pages are visible on "
 "each side of the active page."
-msgstr ""
+msgstr "Lorsque les numéros de page sont groupés, cela définit combien de pages sont visibles sur chaque côté de la page active."
 
 #: cms_appconfig.py:77
-#| msgid "featured articles: %(count)s"
 msgid "Excluded featured articles count"
-msgstr ""
+msgstr "Nombre d'articles mis en avant exclus"
 
 #: cms_appconfig.py:81
 msgid ""
@@ -231,7 +136,7 @@ msgid ""
 "may prefer to exclude featured articles from the article list itself to "
 "avoid duplicates. To do this, enter the same number here as in your Featured"
 " Articles plugin."
-msgstr ""
+msgstr "Si vous utilisez le greffon des Articles mis en avant dans l'affichage de la liste des articles, vous pouvez décider d'exclure les articles mis en avant de la liste d'articles pour éviter les doublons. Pour ce faire, saisissez le même nombre ici que dans votre greffon Articles mis en avant."
 
 #: cms_appconfig.py:90
 msgid "Prefix for template dirs"
@@ -390,7 +295,7 @@ msgstr "propriétaire"
 
 #: models.py:125 models.py:273
 msgid "Apphook configuration"
-msgstr ""
+msgstr "Configuration du crochet d'application"
 
 #: models.py:127
 msgid "categories"
@@ -416,7 +321,7 @@ msgstr "articles liés"
 msgid ""
 "The maximum duration (in seconds) that this plugin's content should be "
 "cached."
-msgstr ""
+msgstr "La durée maximale (en seconde) durant laquelle les données de ce greffon devraient être mises en cache."
 
 #: models.py:288 models.py:299
 #, python-format
@@ -462,13 +367,12 @@ msgstr "Le nombre maximum d'articles récents à afficher."
 msgid ""
 "The maximum number of featured articles to exclude from display. E.g. for "
 "uses in combination with featured articles plugin."
-msgstr ""
+msgstr "Le nombre maximum d'articles mis en avant à exclure de l'affichage. À utiliser par ex. avec un greffon d'articles mis en avant."
 
 #: models.py:461
 #, python-format
-#| msgid "%s latest articles: %s"
 msgid "%(app_title)s latest articles: %(latest_articles)s"
-msgstr ""
+msgstr "Derniers articles dans %(app_title)s : %(latest_articles)s"
 
 #: models.py:489
 msgid "Related articles"
@@ -478,6 +382,98 @@ msgstr "Articles liés"
 #, python-format
 msgid "%s tags"
 msgstr "balises %s"
+
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/article_detail.html:18
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/article_detail.html:20
+#: templates/aldryn_newsblog/article_detail.html:15
+msgid "Previous Article"
+msgstr "Article précédent"
+
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/article_detail.html:22
+#: templates/aldryn_newsblog/article_detail.html:17
+msgid "Back to Overview"
+msgstr "Retour au sommaire"
+
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/article_detail.html:24
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/article_detail.html:26
+#: templates/aldryn_newsblog/article_detail.html:19
+msgid "Next Article"
+msgstr "Article suivant"
+
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/article_list.html:9
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/archive.html:21
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/authors.html:10
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/latest_articles.html:7
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/related_articles.html:12
+#: templates/aldryn_newsblog/article_list.html:8
+#: templates/aldryn_newsblog/plugins/archive.html:22
+#: templates/aldryn_newsblog/plugins/authors.html:9
+#: templates/aldryn_newsblog/plugins/featured_articles.html:6
+#: templates/aldryn_newsblog/plugins/latest_articles.html:6
+#: templates/aldryn_newsblog/plugins/related_articles.html:11
+msgid "No items available"
+msgstr "Aucun élément disponible"
+
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/pagination.html:8
+msgid "First"
+msgstr "Premier"
+
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/pagination.html:14
+#: templates/aldryn_newsblog/includes/pagination.html:8
+msgid "Previous"
+msgstr "Précédent"
+
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/pagination.html:47
+#: templates/aldryn_newsblog/includes/pagination.html:42
+msgid "Next"
+msgstr "Suivant"
+
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/pagination.html:53
+msgid "Last"
+msgstr "Dernier"
+
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/search_results.html:4
+#: templates/aldryn_newsblog/includes/search_results.html:6
+#, python-format
+msgid "Most recent articles containing \"<strong>%(query)s</strong>\""
+msgstr "Articles les plus récents contenant « <strong>%(query)s</strong> »"
+
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/search_results.html:19
+#: templates/aldryn_newsblog/includes/search_results.html:21
+msgid "No articles found"
+msgstr "Aucun article trouvé"
+
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/search_results.html:21
+#: templates/aldryn_newsblog/includes/search_results.html:23
+msgid "Enter a query above"
+msgstr "Entrez une requête ci-dessus"
+
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/article_search.html:8
+#: templates/aldryn_newsblog/plugins/article_search.html:6
+msgid "Keyword search"
+msgstr "Recherche par mot clé"
+
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/article_search.html:9
+#: templates/aldryn_newsblog/plugins/article_search.html:7
+msgid "Keyword"
+msgstr "Mot clé"
+
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/article_search.html:11
+#: templates/aldryn_newsblog/plugins/article_search.html:10
+msgid "Go"
+msgstr "Go"
+
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/categories.html:6
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/tags.html:6
+#: templates/aldryn_newsblog/plugins/categories.html:5
+#: templates/aldryn_newsblog/plugins/tags.html:5
+msgid "All"
+msgstr "Tout"
+
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/related_articles.html:9
+#: templates/aldryn_newsblog/plugins/related_articles.html:8
+msgid "by"
+msgstr "par"
 
 #~ msgid "app. config"
 #~ msgstr "app. config"

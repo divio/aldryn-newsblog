@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
 # Translators:
 # kurdyma <transifex.com@kurdyenviolien.nl>, 2016
@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Aldryn News & Blog\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-28 20:56-0400\n"
-"PO-Revision-Date: 2016-06-29 00:57+0000\n"
-"Last-Translator: Martin Koistinen <mkoistinen@gmail.com>\n"
+"POT-Creation-Date: 2016-07-14 11:46-0400\n"
+"PO-Revision-Date: 2016-07-06 09:52+0000\n"
+"Last-Translator: kurdyma <transifex.com@kurdyenviolien.nl>\n"
 "Language-Team: Dutch (http://www.transifex.com/divio/aldryn-newsblog/language/nl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -21,115 +21,23 @@ msgstr ""
 
 #: admin.py:23
 msgid "Mark selected articles as published"
-msgstr "Markeer geselecteerde artikelen als gepubliseerd"
+msgstr "Markeer geselecteerde artikelen als gepubliceerd"
 
 #: admin.py:29
 msgid "Mark selected articles as not published"
-msgstr "Markeer geselecteerde artikelen als ongepubliseerd"
+msgstr "Markeer geselecteerde artikelen als ongepubliceerd"
 
 #: admin.py:35
 msgid "Mark selected articles as featured"
-msgstr "Markeer geselecteerde artikelen als aangemerkt"
+msgstr "Markeer geselecteerde artikelen als aanbevolen"
 
 #: admin.py:41
 msgid "Mark selected articles as not featured"
-msgstr "Markeer geselecteerde artikelen als onaangemerkt"
-
-#: boilerplates/bootstrap3/templates/aldryn_newsblog/article_detail.html:18
-#: boilerplates/bootstrap3/templates/aldryn_newsblog/article_detail.html:20
-#: templates/aldryn_newsblog/article_detail.html:15
-msgid "Previous Article"
-msgstr "Vorig artikel"
-
-#: boilerplates/bootstrap3/templates/aldryn_newsblog/article_detail.html:22
-#: templates/aldryn_newsblog/article_detail.html:17
-msgid "Back to Overview"
-msgstr "Terug naar overzicht"
-
-#: boilerplates/bootstrap3/templates/aldryn_newsblog/article_detail.html:24
-#: boilerplates/bootstrap3/templates/aldryn_newsblog/article_detail.html:26
-#: templates/aldryn_newsblog/article_detail.html:19
-msgid "Next Article"
-msgstr "Volgend artikel"
-
-#: boilerplates/bootstrap3/templates/aldryn_newsblog/article_list.html:9
-#: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/archive.html:21
-#: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/authors.html:10
-#: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/latest_articles.html:7
-#: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/related_articles.html:12
-#: templates/aldryn_newsblog/article_list.html:8
-#: templates/aldryn_newsblog/plugins/archive.html:22
-#: templates/aldryn_newsblog/plugins/authors.html:9
-#: templates/aldryn_newsblog/plugins/featured_articles.html:6
-#: templates/aldryn_newsblog/plugins/latest_articles.html:6
-#: templates/aldryn_newsblog/plugins/related_articles.html:11
-msgid "No items available"
-msgstr "Geen items beschikbaar"
-
-#: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/pagination.html:8
-msgid "First"
-msgstr ""
-
-#: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/pagination.html:14
-#: templates/aldryn_newsblog/includes/pagination.html:8
-msgid "Previous"
-msgstr "Vorig"
-
-#: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/pagination.html:47
-#: templates/aldryn_newsblog/includes/pagination.html:42
-msgid "Next"
-msgstr "Volgend"
-
-#: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/pagination.html:53
-msgid "Last"
-msgstr ""
-
-#: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/search_results.html:4
-#: templates/aldryn_newsblog/includes/search_results.html:6
-#, python-format
-msgid "Most recent articles containing \"<strong>%(query)s</strong>\""
-msgstr "Meest recente artikelen die \"<strong>%(query)s</strong>\" bevatten"
-
-#: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/search_results.html:19
-#: templates/aldryn_newsblog/includes/search_results.html:21
-msgid "No articles found"
-msgstr "Geen artikelen gevonden"
-
-#: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/search_results.html:21
-#: templates/aldryn_newsblog/includes/search_results.html:23
-msgid "Enter a query above"
-msgstr "Geef hierboven een zoekvraag op"
-
-#: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/article_search.html:8
-#: templates/aldryn_newsblog/plugins/article_search.html:6
-msgid "Keyword search"
-msgstr "Zoekterm zoeken"
-
-#: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/article_search.html:9
-#: templates/aldryn_newsblog/plugins/article_search.html:7
-msgid "Keyword"
-msgstr "Zoekterm"
-
-#: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/article_search.html:11
-#: templates/aldryn_newsblog/plugins/article_search.html:10
-msgid "Go"
-msgstr "Ga"
-
-#: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/categories.html:6
-#: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/tags.html:6
-#: templates/aldryn_newsblog/plugins/categories.html:5
-#: templates/aldryn_newsblog/plugins/tags.html:5
-msgid "All"
-msgstr "Alle"
-
-#: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/related_articles.html:9
-#: templates/aldryn_newsblog/plugins/related_articles.html:8
-msgid "by"
-msgstr "door"
+msgstr "Markeer geselecteerde artikelen als niet-aanbevolen"
 
 #: cms_app.py:15
 msgid "NewsBlog"
-msgstr "NewsBlog"
+msgstr "NieuwsBlog"
 
 #: cms_appconfig.py:19
 msgid "the-eagle-has-landed/"
@@ -191,38 +99,35 @@ msgstr "Hoe moeten non-permalinks afgehandeld worden?"
 
 #: cms_appconfig.py:57
 msgid "Paginate size"
-msgstr "Paginate grootte"
+msgstr "Paginerings grootte"
 
 #: cms_appconfig.py:60
 msgid "When paginating list views, how many articles per page?"
-msgstr "Als de lijst view gepagineert wordt, hoeveel artikelen moeten er dan per pagina komen?"
+msgstr "Als de lijst view gepagineerd wordt, hoeveel artikelen moeten er dan per pagina komen?"
 
 #: cms_appconfig.py:63
 msgid "Pagination pages start"
-msgstr ""
+msgstr "Paginering pagina's begin"
 
 #: cms_appconfig.py:66
-#| msgid "When paginating list views, how many articles per page?"
 msgid ""
 "When paginating list views, after how many pages should we start grouping "
 "the page numbers."
-msgstr ""
+msgstr "Als je lijsten pagineert, na hoeveel pagina's moeten we dan beginnen de pagina nummers te groeperen?"
 
 #: cms_appconfig.py:70
-#| msgid "Paginate size"
 msgid "Pagination pages visible"
-msgstr ""
+msgstr "Paginerings pagina's zichtbaar"
 
 #: cms_appconfig.py:73
 msgid ""
 "When grouping page numbers, this determines how many pages are visible on "
 "each side of the active page."
-msgstr ""
+msgstr "Als pagina nummers worden gegroepeerd, bepaalt dit hoeveel pagina's zichtbaar zijn op iedere kant van de actieve pagina."
 
 #: cms_appconfig.py:77
-#| msgid "featured articles: %(count)s"
 msgid "Excluded featured articles count"
-msgstr ""
+msgstr "Uitgezonderde aanbevolen artikelen telling"
 
 #: cms_appconfig.py:81
 msgid ""
@@ -230,7 +135,7 @@ msgid ""
 "may prefer to exclude featured articles from the article list itself to "
 "avoid duplicates. To do this, enter the same number here as in your Featured"
 " Articles plugin."
-msgstr ""
+msgstr "Als je de Aanbevolen Artikelen plugin gebruikt bij de artikellijst opmaak, wil je misschien aanbevolen artikelen uitsluiten van de artikellijst zelf, om dubbelen te voorkomen. Om dit te doen, moet je hier hetzelfde aantal ingeven als bij je Aanbevolen Artikelen plugin."
 
 #: cms_appconfig.py:90
 msgid "Prefix for template dirs"
@@ -238,11 +143,11 @@ msgstr "Prefix voor template dirs"
 
 #: cms_appconfig.py:94
 msgid "Auto-create authors?"
-msgstr "Auto-create auteurs?"
+msgstr "Auto-creëer auteurs?"
 
 #: cms_appconfig.py:96
 msgid "Automatically create authors from logged-in user?"
-msgstr "Automatisch auteurs creeeren vanuit logged-in gebruikers?"
+msgstr "Automatisch auteurs creëren vanuit logged-in gebruikers?"
 
 #: cms_appconfig.py:101
 msgid "Include in search index?"
@@ -258,7 +163,7 @@ msgstr "Titelloos"
 
 #: cms_appconfig.py:151
 msgid "Post published by default"
-msgstr "Artikel default publiseren"
+msgstr "Artikel default publiceren"
 
 #: cms_plugins.py:66
 msgid "Archive"
@@ -274,11 +179,11 @@ msgstr "Auteurs"
 
 #: cms_plugins.py:118
 msgid "Categories"
-msgstr "Categorieen"
+msgstr "Categorieën"
 
 #: cms_plugins.py:135
 msgid "Featured Articles"
-msgstr "Aangemerkte artikelen"
+msgstr "Aanbevolen Artikelen"
 
 #: cms_plugins.py:149
 msgid "Latest Articles"
@@ -298,7 +203,7 @@ msgstr "Configureer addon"
 
 #: cms_toolbar.py:103
 msgid "Article list"
-msgstr "Artikele lijst"
+msgstr "Artikel lijst"
 
 #: cms_toolbar.py:110
 msgid "Add new article"
@@ -320,7 +225,7 @@ msgstr "Optioneel. Als het wordt ingevuld, wordt het toegevoegd aan de body van 
 
 #: cms_wizards.py:124
 msgid "Initial version."
-msgstr "Initiele versie"
+msgstr "Initiële versie."
 
 #: cms_wizards.py:130
 msgid "New news/blog article"
@@ -328,7 +233,7 @@ msgstr "Nieuw nieuws/blog artikel"
 
 #: cms_wizards.py:133
 msgid "Create a new news/blog article."
-msgstr "Maak een nieuw nieuws/blog artikel"
+msgstr "Maak een nieuw nieuws/blog artikel."
 
 #: feeds.py:36
 #, python-brace-format
@@ -337,7 +242,7 @@ msgstr "Artikelen op {0}"
 
 #: menu.py:20
 msgid "Aldryn NewsBlog Menu"
-msgstr "Aldryn NewsBlog Menu"
+msgstr "Aldryn NieuwsBlog Menu"
 
 #: models.py:77
 msgid "untitled-article"
@@ -369,7 +274,7 @@ msgstr "De inleiding geeft de lezer het belangrijkste idee van het verhaal. Dit 
 
 #: models.py:108
 msgid "meta title"
-msgstr "Meta titel"
+msgstr "meta titel"
 
 #: models.py:111
 msgid "meta description"
@@ -389,11 +294,11 @@ msgstr "eigenaar"
 
 #: models.py:125 models.py:273
 msgid "Apphook configuration"
-msgstr ""
+msgstr "Apphook configuratie"
 
 #: models.py:127
 msgid "categories"
-msgstr "categorieen"
+msgstr "categorieën"
 
 #: models.py:129
 msgid "publishing date"
@@ -401,11 +306,11 @@ msgstr "publicatie datum"
 
 #: models.py:131
 msgid "is published"
-msgstr "is gepubliseerd"
+msgstr "is gepubliceerd"
 
 #: models.py:133
 msgid "is featured"
-msgstr "is aangemerkt"
+msgstr "is aanbevolen"
 
 #: models.py:139
 msgid "related articles"
@@ -415,7 +320,7 @@ msgstr "gerelateerde artikelen"
 msgid ""
 "The maximum duration (in seconds) that this plugin's content should be "
 "cached."
-msgstr ""
+msgstr "De maximale duur (in seconden) dat de plugin's inhoud gecached moet worden."
 
 #: models.py:288 models.py:299
 #, python-format
@@ -438,20 +343,20 @@ msgstr "%s auteurs"
 #: models.py:346
 #, python-format
 msgid "%s categories"
-msgstr "%s categorieen"
+msgstr "%s categorieën"
 
 #: models.py:390
 msgid "The maximum number of featured articles display."
-msgstr "Het  maximale aantal aangemerkte artikelen wordt getoond."
+msgstr "Het  maximale aantal aanbevolen artikelen dat wordt getoond."
 
 #: models.py:413
 msgid "featured article"
-msgstr "aangemerkt artikel"
+msgstr "aanbevolen artikel"
 
 #: models.py:415
 #, python-format
 msgid "featured articles: %(count)s"
-msgstr "aangemerkte artikelen: %(count)s"
+msgstr "aanbevolen artikelen: %(count)s"
 
 #: models.py:427
 msgid "The maximum number of latest articles to display."
@@ -461,13 +366,12 @@ msgstr "Het  maximale aantal van de laatste artikelen om te tonen."
 msgid ""
 "The maximum number of featured articles to exclude from display. E.g. for "
 "uses in combination with featured articles plugin."
-msgstr ""
+msgstr "Het maximale aantal aanbevolen artikelen om niet te laten zien. Bijv. voor gebruik in combinatie met aanbevolen artikelen plugin."
 
 #: models.py:461
 #, python-format
-#| msgid "%s latest articles: %s"
 msgid "%(app_title)s latest articles: %(latest_articles)s"
-msgstr ""
+msgstr "%(app_title)s laatste artikelen: %(latest_articles)s"
 
 #: models.py:489
 msgid "Related articles"
@@ -477,6 +381,98 @@ msgstr "Gerelateerde artikelen"
 #, python-format
 msgid "%s tags"
 msgstr "%s tags"
+
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/article_detail.html:18
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/article_detail.html:20
+#: templates/aldryn_newsblog/article_detail.html:15
+msgid "Previous Article"
+msgstr "Vorig artikel"
+
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/article_detail.html:22
+#: templates/aldryn_newsblog/article_detail.html:17
+msgid "Back to Overview"
+msgstr "Terug naar Overzicht"
+
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/article_detail.html:24
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/article_detail.html:26
+#: templates/aldryn_newsblog/article_detail.html:19
+msgid "Next Article"
+msgstr "Volgend artikel"
+
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/article_list.html:9
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/archive.html:21
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/authors.html:10
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/latest_articles.html:7
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/related_articles.html:12
+#: templates/aldryn_newsblog/article_list.html:8
+#: templates/aldryn_newsblog/plugins/archive.html:22
+#: templates/aldryn_newsblog/plugins/authors.html:9
+#: templates/aldryn_newsblog/plugins/featured_articles.html:6
+#: templates/aldryn_newsblog/plugins/latest_articles.html:6
+#: templates/aldryn_newsblog/plugins/related_articles.html:11
+msgid "No items available"
+msgstr "Geen items beschikbaar"
+
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/pagination.html:8
+msgid "First"
+msgstr "Eerste"
+
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/pagination.html:14
+#: templates/aldryn_newsblog/includes/pagination.html:8
+msgid "Previous"
+msgstr "Vorig"
+
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/pagination.html:47
+#: templates/aldryn_newsblog/includes/pagination.html:42
+msgid "Next"
+msgstr "Volgend"
+
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/pagination.html:53
+msgid "Last"
+msgstr "Laatste"
+
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/search_results.html:4
+#: templates/aldryn_newsblog/includes/search_results.html:6
+#, python-format
+msgid "Most recent articles containing \"<strong>%(query)s</strong>\""
+msgstr "Meest recente artikelen die \"<strong>%(query)s</strong>\" bevatten"
+
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/search_results.html:19
+#: templates/aldryn_newsblog/includes/search_results.html:21
+msgid "No articles found"
+msgstr "Geen artikelen gevonden"
+
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/search_results.html:21
+#: templates/aldryn_newsblog/includes/search_results.html:23
+msgid "Enter a query above"
+msgstr "Geef hierboven een zoekvraag op"
+
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/article_search.html:8
+#: templates/aldryn_newsblog/plugins/article_search.html:6
+msgid "Keyword search"
+msgstr "Zoekterm zoeken"
+
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/article_search.html:9
+#: templates/aldryn_newsblog/plugins/article_search.html:7
+msgid "Keyword"
+msgstr "Zoekterm"
+
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/article_search.html:11
+#: templates/aldryn_newsblog/plugins/article_search.html:10
+msgid "Go"
+msgstr "Ga"
+
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/categories.html:6
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/tags.html:6
+#: templates/aldryn_newsblog/plugins/categories.html:5
+#: templates/aldryn_newsblog/plugins/tags.html:5
+msgid "All"
+msgstr "Alle"
+
+#: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/related_articles.html:9
+#: templates/aldryn_newsblog/plugins/related_articles.html:8
+msgid "by"
+msgstr "door"
 
 #~ msgid "app. config"
 #~ msgstr "app. config"
