@@ -5,6 +5,11 @@ python: 3.5
 # Use container based infrastructure
 sudo: false
 
+addons:
+  apt:
+    packages:
+      - libenchant-dev
+
 env:
   global:
     # encrypted Sauce Labs sub-account user name
