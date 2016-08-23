@@ -14,7 +14,7 @@ REQUIREMENTS = [
     'aldryn-translation-tools>=0.2.0',
     'backport_collections==0.1',
     'django-appdata>=0.1.4',
-    'django-cms>=3.0.12',
+    'django-cms>=3.2',
     'djangocms-text-ckeditor',
     'django-filer>=0.9.9',
     'django-parler>=1.4',

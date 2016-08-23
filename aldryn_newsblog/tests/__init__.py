@@ -14,7 +14,7 @@ from django.test import RequestFactory
 from django.utils.timezone import now
 from django.utils.translation import override
 from aldryn_categories.models import Category
-from aldryn_newsblog.cms_app import NewsBlogApp
+from aldryn_newsblog.cms_apps import NewsBlogApp
 from aldryn_newsblog.models import Article, NewsBlogConfig
 from aldryn_people.models import Person
 from cms import api
@@ -269,7 +269,7 @@ class CleanUpMixin(object):
         except AppAlreadyRegistered:
             # there is an issue with discover apps, or i'm using it wrong.
             # setting discovered to True solves it. Maybe that is due to import
-            # from aldryn_events.cms_app which registers EventListAppHook
+            # from aldryn_events.cms_apps which registers EventListAppHook
             apphook_pool.discovered = True
             apphooks = apphook_pool.get_apphooks()
 
