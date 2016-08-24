@@ -33,7 +33,8 @@ class LatestArticlesFeed(Feed):
         return reverse('{0}:article-list-feed'.format(self.namespace))
 
     def title(self):
-        return _('Articles on {0}').format(Site.objects.get_current().name)
+        msgformat = {'site_name': Site.objects.get_current().name}
+        return _('Articles on %(site_name)s') % msgformat
 
     def get_queryset(self):
         qs = Article.objects.published().namespace(self.namespace).translated(
