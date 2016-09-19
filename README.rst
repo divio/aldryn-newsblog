@@ -17,7 +17,7 @@ refer to the `documentation`_ sections.
 Aldryn News & Blog is intended to serve as a model of good practice for
 development of django CMS and Aldryn applications.
 
-.. _user manual: http://aldryn-newsblog.readthedocs.org/en/latest/user/index.html
+.. _user manual: http://aldryn-newsblog.readthedocs.io/en/latest/
 
 
 ======================
@@ -29,8 +29,8 @@ configure and use Aldryn News & Blog.
 
 You can also find instructions on `how to upgrade`_ from earlier versions.
 
-.. _documentation: http://aldryn-newsblog.readthedocs.org/en/latest/how_to/index.html
-.. _how to upgrade: http://aldryn-newsblog.readthedocs.org/en/latest/how_to/upgrade.html
+.. _documentation: http://aldryn-newsblog.readthedocs.io/en/latest/
+.. _how to upgrade: http://aldryn-newsblog.readthedocs.io/en/latest/upgrade.html
 
 
 ============
