@@ -163,6 +163,7 @@ class NewsBlogRelatedPlugin(AdjustableCacheMixin, NewsBlogPlugin):
     name = _('Related Articles')
     model = models.NewsBlogRelatedPlugin
     form = forms.NewsBlogRelatedPluginForm
+    cache = False
 
     def get_article(self, request):
         if request and request.resolver_match:
