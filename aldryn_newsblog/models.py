@@ -136,8 +136,17 @@ class Article(TranslatedAutoSlugifyMixin,
                                      on_delete=models.SET_NULL)
     tags = TaggableManager(blank=True)
 
+    # Setting "symmetrical" to False since it's a bit unexpected that if you
+    # set "B relates to A" you immediately have also "A relates to B". It have
+    # to be forced to False because by default it's True if rel.to is "self":
+    #
+    # https://github.com/django/django/blob/1.8.4/django/db/models/fields/related.py#L2144
+    #
+    # which in the end causes to add reversed releted-to entry as well:
+    #
+    # https://github.com/django/django/blob/1.8.4/django/db/models/fields/related.py#L977
     related = SortedManyToManyField('self', verbose_name=_('related articles'),
-                                    blank=True)
+                                    blank=True, symmetrical=False)
 
     objects = RelatedManager()
 

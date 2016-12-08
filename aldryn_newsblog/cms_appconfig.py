@@ -150,4 +150,6 @@ class NewsBlogConfigForm(AppDataForm):
     default_published = forms.BooleanField(
         label=_(u'Post published by default'), required=False,
         initial=getattr(settings, 'ALDRYN_NEWSBLOG_DEFAULT_PUBLISHED', False))
+
+
 setup_config(NewsBlogConfigForm, NewsBlogConfig)
