@@ -18,4 +18,5 @@ class NewsBlogApp(CMSConfigApp):
     # NOTE: Please do not add a «menu» here, menu’s should only be added by at
     # the discretion of the operator.
 
+
 apphook_pool.register(NewsBlogApp)

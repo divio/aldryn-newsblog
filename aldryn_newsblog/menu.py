@@ -49,4 +49,5 @@ class NewsBlogMenu(CMSAttachMenu):
                 nodes.append(node)
         return nodes
 
+
 menu_pool.register_menu(NewsBlogMenu)
