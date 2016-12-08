@@ -53,6 +53,10 @@ else:
         'Neither LANGUAGES nor LANGUAGE was found in settings.')
 
 
+ARTICLE_RELATED_SYMMETRICAL = getattr(
+    settings, 'NEWSBLOG_ARTICLE_RELATED_SYMMETRICAL', False)
+
+
 # At startup time, SQL_NOW_FUNC will contain the database-appropriate SQL to
 # obtain the CURRENT_TIMESTAMP.
 SQL_NOW_FUNC = {
@@ -137,7 +141,7 @@ class Article(TranslatedAutoSlugifyMixin,
     tags = TaggableManager(blank=True)
 
     related = SortedManyToManyField('self', verbose_name=_('related articles'),
-                                    blank=True)
+                                    blank=True, symmetrical=ARTICLE_RELATED_SYMMETRICAL)
 
     objects = RelatedManager()
 
