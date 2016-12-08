@@ -53,8 +53,16 @@ else:
         'Neither LANGUAGES nor LANGUAGE was found in settings.')
 
 
+# The default set to true because when definition of the field relates to
+# "self", "symmetrical" is always true:
+#
+# https://github.com/django/django/blob/1.8.4/django/db/models/fields/related.py#L2144
+#
+# which in the end causes to add reversed releted-to entry as well:
+#
+# https://github.com/django/django/blob/1.8.4/django/db/models/fields/related.py#L977
 ARTICLE_RELATED_SYMMETRICAL = getattr(
-    settings, 'NEWSBLOG_ARTICLE_RELATED_SYMMETRICAL', False)
+    settings, 'NEWSBLOG_ARTICLE_RELATED_SYMMETRICAL', True)
 
 
 # At startup time, SQL_NOW_FUNC will contain the database-appropriate SQL to
