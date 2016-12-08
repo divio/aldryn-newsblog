@@ -53,18 +53,6 @@ else:
         'Neither LANGUAGES nor LANGUAGE was found in settings.')
 
 
-# The default set to true because when definition of the field relates to
-# "self", "symmetrical" is always true:
-#
-# https://github.com/django/django/blob/1.8.4/django/db/models/fields/related.py#L2144
-#
-# which in the end causes to add reversed releted-to entry as well:
-#
-# https://github.com/django/django/blob/1.8.4/django/db/models/fields/related.py#L977
-ARTICLE_RELATED_SYMMETRICAL = getattr(
-    settings, 'NEWSBLOG_ARTICLE_RELATED_SYMMETRICAL', True)
-
-
 # At startup time, SQL_NOW_FUNC will contain the database-appropriate SQL to
 # obtain the CURRENT_TIMESTAMP.
 SQL_NOW_FUNC = {
@@ -148,8 +136,17 @@ class Article(TranslatedAutoSlugifyMixin,
                                      on_delete=models.SET_NULL)
     tags = TaggableManager(blank=True)
 
+    # Setting "symmetrical" to False since it's a bit unexpected that if you
+    # set "B relates to A" you immediately have also "A relates to B". It have
+    # to be forced to False because by default it's True if rel.to is "self":
+    #
+    # https://github.com/django/django/blob/1.8.4/django/db/models/fields/related.py#L2144
+    #
+    # which in the end causes to add reversed releted-to entry as well:
+    #
+    # https://github.com/django/django/blob/1.8.4/django/db/models/fields/related.py#L977
     related = SortedManyToManyField('self', verbose_name=_('related articles'),
-                                    blank=True, symmetrical=ARTICLE_RELATED_SYMMETRICAL)
+                                    blank=True, symmetrical=False)
 
     objects = RelatedManager()
 
