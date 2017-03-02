@@ -1,6 +1,13 @@
 CHANGELOG
 =========
 
+1.3.1 (2017-03-02)
+------------------
+
+* Updated translations
+* Removed cache exclusion for ``NewsBlogRelatedPlugin`` plugin.
+
+
 1.3.0 (2016-09-05)
 ------------------
 
