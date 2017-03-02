@@ -125,7 +125,7 @@ class ArticleAdmin(
                 'lead_in',
             )
         }),
-        ('Meta Options', {
+        (_('Meta Options'), {
             'classes': ('collapse',),
             'fields': (
                 'slug',
@@ -134,7 +134,7 @@ class ArticleAdmin(
                 'meta_keywords',
             )
         }),
-        ('Advanced Settings', {
+        (_('Advanced Settings'), {
             'classes': ('collapse',),
             'fields': (
                 'tags',

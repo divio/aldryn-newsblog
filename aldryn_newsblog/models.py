@@ -132,8 +132,12 @@ class Article(TranslatedAutoSlugifyMixin,
                                        db_index=True)
     is_featured = models.BooleanField(_('is featured'), default=False,
                                       db_index=True)
-    featured_image = FilerImageField(null=True, blank=True,
-                                     on_delete=models.SET_NULL)
+    featured_image = FilerImageField(
+        verbose_name=_('featured image'),
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+    )
     tags = TaggableManager(blank=True)
 
     # Setting "symmetrical" to False since it's a bit unexpected that if you

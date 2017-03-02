@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Aldryn News & Blog\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-23 15:51-0400\n"
-"PO-Revision-Date: 2016-08-23 19:51+0000\n"
+"POT-Creation-Date: 2017-03-02 07:59-0500\n"
+"PO-Revision-Date: 2017-03-02 12:59+0000\n"
 "Last-Translator: Paulo Alvarado <paulo.alvarado@divio.ch>\n"
 "Language-Team: Italian (http://www.transifex.com/divio/aldryn-newsblog/language/it/)\n"
 "MIME-Version: 1.0\n"
@@ -18,20 +18,29 @@ msgstr ""
 "Language: it\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: admin.py:23
+#: admin.py:25
 msgid "Mark selected articles as published"
 msgstr ""
 
-#: admin.py:29
+#: admin.py:33
 msgid "Mark selected articles as not published"
 msgstr ""
 
-#: admin.py:35
+#: admin.py:41
 msgid "Mark selected articles as featured"
 msgstr ""
 
-#: admin.py:41
+#: admin.py:49
 msgid "Mark selected articles as not featured"
+msgstr ""
+
+#: admin.py:128
+#| msgid "meta description"
+msgid "Meta Options"
+msgstr ""
+
+#: admin.py:137
+msgid "Advanced Settings"
 msgstr ""
 
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/article_detail.html:18
@@ -248,6 +257,16 @@ msgstr ""
 msgid "untitled"
 msgstr ""
 
+#: cms_appconfig.py:145
+#| msgid "application title"
+msgid "application configuration"
+msgstr ""
+
+#: cms_appconfig.py:146
+#| msgid "application title"
+msgid "application configurations"
+msgstr ""
+
 #: cms_appconfig.py:151
 msgid "Post published by default"
 msgstr ""
@@ -308,21 +327,25 @@ msgstr ""
 msgid "Delete this article"
 msgstr ""
 
-#: cms_wizards.py:70
+#: cms_wizards.py:68
+msgid "Content"
+msgstr ""
+
+#: cms_wizards.py:72
 msgid ""
 "Optional. If provided, it will be added to the main body of the article as a"
 " text plugin, that can be formatted."
 msgstr ""
 
-#: cms_wizards.py:124
+#: cms_wizards.py:126
 msgid "Initial version."
 msgstr ""
 
-#: cms_wizards.py:130
+#: cms_wizards.py:132
 msgid "New news/blog article"
 msgstr ""
 
-#: cms_wizards.py:133
+#: cms_wizards.py:135
 msgid "Create a new news/blog article."
 msgstr ""
 
@@ -384,7 +407,7 @@ msgstr ""
 msgid "owner"
 msgstr ""
 
-#: models.py:125 models.py:273
+#: models.py:125 models.py:286
 msgid "Apphook configuration"
 msgstr ""
 
@@ -404,72 +427,77 @@ msgstr ""
 msgid "is featured"
 msgstr ""
 
-#: models.py:139
+#: models.py:136
+#| msgid "featured article"
+msgid "featured image"
+msgstr ""
+
+#: models.py:152
 msgid "related articles"
 msgstr ""
 
-#: models.py:258
+#: models.py:271
 msgid ""
 "The maximum duration (in seconds) that this plugin's content should be "
 "cached."
 msgstr ""
 
-#: models.py:288 models.py:299
+#: models.py:301 models.py:312
 #, python-format
 msgid "%s archive"
 msgstr ""
 
-#: models.py:293
+#: models.py:306
 msgid "max articles"
 msgstr ""
 
-#: models.py:295
+#: models.py:308
 msgid "The maximum number of found articles display."
 msgstr ""
 
-#: models.py:340
+#: models.py:353
 #, python-format
 msgid "%s authors"
 msgstr ""
 
-#: models.py:346
+#: models.py:359
 #, python-format
 msgid "%s categories"
 msgstr ""
 
-#: models.py:390
+#: models.py:403
 msgid "The maximum number of featured articles display."
 msgstr ""
 
-#: models.py:413
+#: models.py:426
 msgid "featured article"
 msgstr ""
 
-#: models.py:415
+#: models.py:428
 #, python-format
 msgid "featured articles: %(count)s"
 msgstr ""
 
-#: models.py:427
+#: models.py:440
 msgid "The maximum number of latest articles to display."
 msgstr ""
 
-#: models.py:433
+#: models.py:446
 msgid ""
 "The maximum number of featured articles to exclude from display. E.g. for "
 "uses in combination with featured articles plugin."
 msgstr ""
 
-#: models.py:461
+#: models.py:474
 #, python-format
 msgid "%(app_title)s latest articles: %(latest_articles)s"
 msgstr ""
 
-#: models.py:489
+#: models.py:502
 msgid "Related articles"
 msgstr ""
 
-#: models.py:531
+#: models.py:544
 #, python-format
 msgid "%s tags"
 msgstr ""

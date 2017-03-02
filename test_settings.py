@@ -169,5 +169,6 @@ def run():
     # added to settings
     runner.cms('aldryn_newsblog', extra_args=[])
 
+
 if __name__ == "__main__":
     run()

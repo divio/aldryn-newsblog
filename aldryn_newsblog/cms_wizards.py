@@ -65,7 +65,9 @@ class CreateNewsBlogArticleForm(BaseFormMixin, TranslatableModelForm):
     """
 
     content = forms.CharField(
-        label="Content", required=False, widget=TextEditorWidget,
+        label=_('Content'),
+        required=False,
+        widget=TextEditorWidget,
         help_text=_(
             "Optional. If provided, it will be added to the main body of "
             "the article as a text plugin, that can be formatted."

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Aldryn News & Blog\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-23 15:51-0400\n"
+"POT-Creation-Date: 2017-03-02 07:59-0500\n"
 "PO-Revision-Date: 2016-06-21 08:46+0000\n"
 "Last-Translator: Mikhail Kolesnik <mike@openbunker.org>\n"
 "Language-Team: English (http://www.transifex.com/divio/aldryn-newsblog/"
@@ -18,21 +18,31 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: admin.py:23
+#: admin.py:25
 msgid "Mark selected articles as published"
 msgstr "Mark selected articles as published"
 
-#: admin.py:29
+#: admin.py:33
 msgid "Mark selected articles as not published"
 msgstr "Mark selected articles as not published"
 
-#: admin.py:35
+#: admin.py:41
 msgid "Mark selected articles as featured"
 msgstr "Mark selected articles as featured"
 
-#: admin.py:41
+#: admin.py:49
 msgid "Mark selected articles as not featured"
 msgstr "Mark selected articles as not featured"
+
+#: admin.py:128
+#, fuzzy
+#| msgid "meta description"
+msgid "Meta Options"
+msgstr "meta description"
+
+#: admin.py:137
+msgid "Advanced Settings"
+msgstr ""
 
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/article_detail.html:18
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/article_detail.html:20
@@ -253,6 +263,18 @@ msgstr "Include articles in search indexes?"
 msgid "untitled"
 msgstr "untitled"
 
+#: cms_appconfig.py:145
+#, fuzzy
+#| msgid "application title"
+msgid "application configuration"
+msgstr "application title"
+
+#: cms_appconfig.py:146
+#, fuzzy
+#| msgid "application title"
+msgid "application configurations"
+msgstr "application title"
+
 #: cms_appconfig.py:151
 msgid "Post published by default"
 msgstr "Post published by default"
@@ -313,7 +335,11 @@ msgstr "Edit this article"
 msgid "Delete this article"
 msgstr "Delete this article"
 
-#: cms_wizards.py:70
+#: cms_wizards.py:68
+msgid "Content"
+msgstr ""
+
+#: cms_wizards.py:72
 msgid ""
 "Optional. If provided, it will be added to the main body of the article as a "
 "text plugin, that can be formatted."
@@ -321,15 +347,15 @@ msgstr ""
 "Optional. If provided, it will be added to the main body of the article as a "
 "text plugin, that can be formatted."
 
-#: cms_wizards.py:124
+#: cms_wizards.py:126
 msgid "Initial version."
 msgstr "Initial version."
 
-#: cms_wizards.py:130
+#: cms_wizards.py:132
 msgid "New news/blog article"
 msgstr "New news/blog article"
 
-#: cms_wizards.py:133
+#: cms_wizards.py:135
 msgid "Create a new news/blog article."
 msgstr "Create a new news/blog article."
 
@@ -395,7 +421,7 @@ msgstr "author"
 msgid "owner"
 msgstr "owner"
 
-#: models.py:125 models.py:273
+#: models.py:125 models.py:286
 msgid "Apphook configuration"
 msgstr ""
 
@@ -415,72 +441,78 @@ msgstr "is published"
 msgid "is featured"
 msgstr "is featured"
 
-#: models.py:139
+#: models.py:136
+#, fuzzy
+#| msgid "featured article"
+msgid "featured image"
+msgstr "featured article"
+
+#: models.py:152
 msgid "related articles"
 msgstr "related articles"
 
-#: models.py:258
+#: models.py:271
 msgid ""
 "The maximum duration (in seconds) that this plugin's content should be "
 "cached."
 msgstr ""
 
-#: models.py:288 models.py:299
+#: models.py:301 models.py:312
 #, python-format
 msgid "%s archive"
 msgstr "%s archive"
 
-#: models.py:293
+#: models.py:306
 msgid "max articles"
 msgstr "max articles"
 
-#: models.py:295
+#: models.py:308
 msgid "The maximum number of found articles display."
 msgstr "The maximum number of found articles display."
 
-#: models.py:340
+#: models.py:353
 #, python-format
 msgid "%s authors"
 msgstr "%s authors"
 
-#: models.py:346
+#: models.py:359
 #, python-format
 msgid "%s categories"
 msgstr "%s categories"
 
-#: models.py:390
+#: models.py:403
 msgid "The maximum number of featured articles display."
 msgstr "The maximum number of featured articles display."
 
-#: models.py:413
+#: models.py:426
 msgid "featured article"
 msgstr "featured article"
 
-#: models.py:415
+#: models.py:428
 #, python-format
 msgid "featured articles: %(count)s"
 msgstr "featured articles: %(count)s"
 
-#: models.py:427
+#: models.py:440
 msgid "The maximum number of latest articles to display."
 msgstr "The maximum number of latest articles to display."
 
-#: models.py:433
+#: models.py:446
 msgid ""
 "The maximum number of featured articles to exclude from display. E.g. for "
 "uses in combination with featured articles plugin."
 msgstr ""
 
-#: models.py:461
+#: models.py:474
 #, fuzzy, python-format
 msgid "%(app_title)s latest articles: %(latest_articles)s"
 msgstr "%s latest articles: %s"
 
-#: models.py:489
+#: models.py:502
 msgid "Related articles"
 msgstr "Related articles"
 
-#: models.py:531
+#: models.py:544
 #, python-format
 msgid "%s tags"
 msgstr "%s tags"
