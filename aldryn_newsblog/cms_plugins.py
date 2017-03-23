@@ -118,6 +118,7 @@ class NewsBlogCategoriesPlugin(NewsBlogPlugin):
     name = _('Categories')
     model = models.NewsBlogCategoriesPlugin
     form = forms.NewsBlogCategoriesPluginForm
+    cache = False
 
     def render(self, context, instance, placeholder):
         request = context.get('request')

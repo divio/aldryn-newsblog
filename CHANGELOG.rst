@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+1.3.2 (2017-03-23)
+------------------
+
+* Disabled caching for ``NewsBlogCategoriesPlugin`` plugin.
+
+
 1.3.1 (2017-03-02)
 ------------------
 
