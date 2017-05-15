@@ -145,6 +145,9 @@ class ArticleAdmin(
             )
         }),
     )
+    filter_horizontal = [
+        'categories',
+    ]
     app_config_values = {
         'default_published': 'is_published'
     }
