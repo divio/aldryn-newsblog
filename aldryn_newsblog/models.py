@@ -162,12 +162,18 @@ class Article(PublisherModelMixin,
 
     def publisher_copy_relations(self, old_obj):
         from djangocms_publisher.utils import copy_parler_translations
+        from djangocms_publisher.utils import copy_placeholder
         new_obj = self
         copy_parler_translations(new_obj=self, old_obj=old_obj)
         # TODO: Is there a more efficient way to copy ManyToMany?
         new_obj.categories = old_obj.categories.all()
         new_obj.related = old_obj.related.all()
         new_obj.tags = old_obj.tags.all()
+        if old_obj.content_id == new_obj.content_id:
+            new_obj.content = None
+            new_obj.save()
+            new_obj.refresh_from_db()
+        copy_placeholder(old_obj.content, new_obj.content)
 
     def publisher_rewrite_ignore_stuff(self, old_obj):
         from django.db.models import Q
