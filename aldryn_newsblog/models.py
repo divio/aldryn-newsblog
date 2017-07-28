@@ -162,7 +162,26 @@ class Article(PublisherModelMixin,
 
     def publisher_copy_relations(self, old_obj):
         from djangocms_publisher.utils import copy_parler_translations
+        new_obj = self
         copy_parler_translations(new_obj=self, old_obj=old_obj)
+        # TODO: Is there a more efficient way to copy ManyToMany?
+        new_obj.categories = old_obj.categories.all()
+        new_obj.related = old_obj.related.all()
+        new_obj.tags = old_obj.tags.all()
+
+    def publisher_rewrite_ignore_stuff(self, old_obj):
+        from django.db.models import Q
+        new_obj = self
+        return [
+            # SortedMany2Many adds some relationships that can be ignored
+            # because they are duplicates of the normal Many2Many
+            (Article.related.through, 'from_article'),
+            (Article.related.through, 'to_article'),
+            # (Article, 'related', Q(from_article=new_obj) | Q(from_article=old_obj)),
+            # Categories are handled manually
+            (Article.categories.through, 'article'),
+        ]
+
 
     @property
     def published(self):
@@ -256,7 +275,11 @@ class Article(PublisherModelMixin,
         super(Article, self).save(*args, **kwargs)
 
     def __str__(self):
-        return self.safe_translation_getter('title', any_language=True)
+        try:
+            title = self.safe_translation_getter('title', any_language=True)
+        except AttributeError:
+            title = 'Article {}'.format(self.id)
+        return self.publisher_add_status_label(title)
 
 
 class PluginEditModeMixin(object):
