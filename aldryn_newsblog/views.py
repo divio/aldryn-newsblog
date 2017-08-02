@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
 
+from cms.utils import get_cms_setting
 from django.db.models import Q
 from django.http import (
     Http404,
@@ -63,6 +64,8 @@ class PreviewModeMixin(EditModeMixin):
     If content editor is logged-in, show all articles. Otherwise, only the
     published articles should be returned.
     """
+    prefer_drafts = False
+
     def get_queryset(self):
         qs = super(PreviewModeMixin, self).get_queryset()
         # check if user can see unpublished items. this will allow to switch
@@ -70,8 +73,10 @@ class PreviewModeMixin(EditModeMixin):
         # permissions.
         user = self.request.user
         user_can_edit = user.is_staff or user.is_superuser
+
         if not (self.edit_mode or user_can_edit):
             qs = qs.published()
+        qs = qs.publisher_draft_or_published_only(prefer_drafts=self.prefer_drafts)
         language = translation.get_language()
         qs = qs.active_translations(language).namespace(self.namespace)
         return qs
@@ -95,8 +100,13 @@ class AppHookCheckMixin(object):
         return qs.translated(*self.valid_languages)
 
 
-class ArticleDetail(AppConfigMixin, AppHookCheckMixin, PreviewModeMixin,
-                    TranslatableSlugMixin, TemplatePrefixMixin, DetailView):
+class ArticleDetailBase(
+    AppConfigMixin,
+    AppHookCheckMixin,
+    PreviewModeMixin,
+    TemplatePrefixMixin,
+    DetailView,
+):
     model = Article
     slug_field = 'slug'
     year_url_kwarg = 'year'
@@ -104,6 +114,7 @@ class ArticleDetail(AppConfigMixin, AppHookCheckMixin, PreviewModeMixin,
     day_url_kwarg = 'day'
     slug_url_kwarg = 'slug'
     pk_url_kwarg = 'pk'
+    prefer_drafts = False
 
     def get(self, request, *args, **kwargs):
         """
@@ -112,7 +123,82 @@ class ArticleDetail(AppConfigMixin, AppHookCheckMixin, PreviewModeMixin,
         """
         if not hasattr(self, 'object'):
             self.object = self.get_object()
+        if hasattr(request, 'toolbar'):
+            request.toolbar.set_object(self.object)
         set_language_changer(request, self.object.get_absolute_url)
+        url = self.object.get_absolute_url()
+        if self.config.non_permalink_handling == 200 or request.path == url:
+            # Continue as normal
+            return super(ArticleDetailBase, self).get(request, *args, **kwargs)
+
+        # Check to see if the URL path matches the correct absolute_url of
+        # the found object
+        if self.config.non_permalink_handling == 302:
+            return HttpResponseRedirect(url)
+        elif self.config.non_permalink_handling == 301:
+            return HttpResponsePermanentRedirect(url)
+        else:
+            raise Http404('This is not the canonical uri of this object.')
+
+    def get_context_data(self, **kwargs):
+        context = super(ArticleDetailBase, self).get_context_data(**kwargs)
+        context['prev_article'] = self.get_prev_object(
+            self.queryset, self.object)
+        context['next_article'] = self.get_next_object(
+            self.queryset, self.object)
+        return context
+
+    def get_prev_object(self, queryset=None, object=None):
+        if queryset is None:
+            queryset = self.get_queryset()
+        if object is None:
+            object = self.get_object(self)
+        prev_objs = queryset.filter(
+            publishing_date__lt=object.publishing_date
+        ).order_by(
+            '-publishing_date'
+        )[:1]
+        if prev_objs:
+            return prev_objs[0]
+        else:
+            return None
+
+    def get_next_object(self, queryset=None, object=None):
+        if queryset is None:
+            queryset = self.get_queryset()
+        if object is None:
+            object = self.get_object(self)
+        next_objs = queryset.filter(
+            publishing_date__gt=object.publishing_date
+        ).order_by(
+            'publishing_date'
+        )[:1]
+        if next_objs:
+            return next_objs[0]
+        else:
+            return None
+
+
+class ArticleDetail(TranslatableSlugMixin, ArticleDetailBase):
+    def get(self, request, *args, **kwargs):
+        """
+        This handles non-permalinked URLs according to preferences as set in
+        NewsBlogConfig.
+        """
+        if not hasattr(self, 'object'):
+            self.object = self.get_object()
+        set_language_changer(request, self.object.get_absolute_url)
+
+        # If we're in edit mode and the current article is not a draft: redirect
+        if self.edit_mode:
+            if (
+                self.object.publisher_is_draft_version or
+                self.object.publisher_is_published_version and
+                self.object.publisher_has_pending_changes
+            ):
+                draft = self.object.publisher_get_draft_version()
+                return HttpResponseRedirect(draft.get_absolute_url())
+
         url = self.object.get_absolute_url()
         if (self.config.non_permalink_handling == 200 or request.path == url):
             # Continue as normal
@@ -149,43 +235,46 @@ class ArticleDetail(AppConfigMixin, AppHookCheckMixin, PreviewModeMixin,
         raise AttributeError('ArticleDetail view must be called with either '
                              'an object pk or a slug')
 
-    def get_context_data(self, **kwargs):
-        context = super(ArticleDetail, self).get_context_data(**kwargs)
-        context['prev_article'] = self.get_prev_object(
-            self.queryset, self.object)
-        context['next_article'] = self.get_next_object(
-            self.queryset, self.object)
-        return context
 
-    def get_prev_object(self, queryset=None, object=None):
-        if queryset is None:
-            queryset = self.get_queryset()
-        if object is None:
-            object = self.get_object(self)
-        prev_objs = queryset.filter(
-            publishing_date__lt=object.publishing_date
-        ).order_by(
-            '-publishing_date'
-        )[:1]
-        if prev_objs:
-            return prev_objs[0]
-        else:
-            return None
+class ArticleDetailDraft(ArticleDetailBase):
+    prefer_drafts = True
+    create_draft = False
+    publish = False
+    discard_draft = False
 
-    def get_next_object(self, queryset=None, object=None):
-        if queryset is None:
-            queryset = self.get_queryset()
-        if object is None:
-            object = self.get_object(self)
-        next_objs = queryset.filter(
-            publishing_date__gt=object.publishing_date
-        ).order_by(
-            'publishing_date'
-        )[:1]
-        if next_objs:
-            return next_objs[0]
-        else:
-            return None
+    def get(self, request, *args, **kwargs):
+        """
+        This handles non-permalinked URLs according to preferences as set in
+        NewsBlogConfig.
+        """
+        if not any([self.create_draft, self.publish, self.discard_draft]):
+            return super(ArticleDetailDraft, self).get(request, *args, **kwargs)
+
+        if not hasattr(self, 'object'):
+            self.object = self.get_object()
+        if self.create_draft:
+            draft, created = self.object.publisher_get_or_create_draft()
+            url = '{}?{}'.format(
+                draft.get_absolute_url(),
+                get_cms_setting('CMS_TOOLBAR_URL__EDIT_ON'),
+            )
+            return HttpResponseRedirect(url)
+        elif self.publish:
+            published = self.object.publisher_publish()
+            url = '{}?{}'.format(
+                published.get_absolute_url(),
+                get_cms_setting('CMS_TOOLBAR_URL__EDIT_OFF'),
+            )
+            return HttpResponseRedirect(url)
+        elif self.discard_draft:
+            draft = self.object.publisher_get_draft_version()
+            published = self.object.publisher_get_draft_version()
+            draft.publisher_discard_draft()
+            url = '{}?{}'.format(
+                published.get_absolute_url(),
+                get_cms_setting('CMS_TOOLBAR_URL__EDIT_OFF'),
+            )
+            return HttpResponseRedirect(url)
 
 
 class ArticleListBase(AppConfigMixin, AppHookCheckMixin, TemplatePrefixMixin,

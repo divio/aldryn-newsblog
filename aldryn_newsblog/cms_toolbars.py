@@ -11,10 +11,8 @@ from cms.toolbar_base import CMSToolbar
 from cms.toolbar_pool import toolbar_pool
 
 from aldryn_apphooks_config.utils import get_app_instance
-from aldryn_translation_tools.utils import (
-    get_object_from_request,
-    get_admin_url,
-)
+from aldryn_translation_tools.utils import get_admin_url
+from aldryn_translation_tools.utils import get_object_from_request
 
 from .models import Article
 from .cms_appconfig import NewsBlogConfig
@@ -60,8 +58,16 @@ class NewsBlogToolbar(CMSToolbar):
         if user and view_name:
             language = get_language_from_request(self.request, check_path=True)
 
+            # FIXME: determine if we're in edit mode and load the draft if
+            #        applicable.
             # If we're on an Article detail page, then get the article
-            if view_name == '{0}:article-detail'.format(config.namespace):
+            detail_view_names = [
+                '{0}:article-detail'.format(config.namespace),
+                '{0}:article-detail-draft'.format(config.namespace),
+                '{0}:article-detail-draft-create'.format(config.namespace),
+                # '{0}:article-detail-draft-publish'.format(config.namespace),
+            ]
+            if view_name in detail_view_names:
                 article = get_object_from_request(Article, self.request)
             else:
                 article = None
@@ -125,3 +131,63 @@ class NewsBlogToolbar(CMSToolbar):
                                     [article.pk, ])
                 menu.add_modal_item(_('Delete this article'), url=url,
                                     on_close=redirect_url)
+
+            # PUBLISHER
+            if article:
+                draft_article = article.publisher_get_draft_version()
+                published_article = article.publisher_get_published_version()
+                if self.toolbar.edit_mode:
+                    if draft_article:
+                        # We're in edit mode. There is a draft article.
+                        self.toolbar.add_button(
+                            name='Publish',
+                            url=draft_article.get_publish_url(),
+                            side=self.toolbar.RIGHT,
+                            extra_classes=[
+                                'cms-btn-action',
+                            ],
+                        )
+                        # add_ajax_button(
+                        #     toolbar=self.toolbar,
+                        #     name='Publish',
+                        #     action=draft_article.get_publish_url(),
+                        #     side=self.toolbar.RIGHT,
+                        #     extra_classes=[
+                        #         'cms-btn-action',
+                        #     ],
+                        # )
+                    else:
+                        # We're in edit mode but there is no draft yet. Add a
+                        # edit button that will create a draft if it does not
+                        # exist.
+                        self.toolbar.add_button(
+                            name='Edit',
+                            url=published_article.get_draft_url(),
+                            side=self.toolbar.RIGHT,
+                            extra_classes=[
+                                'cms-btn-action',
+                            ],
+                        )
+                        # add_ajax_button(
+                        #     toolbar=self.toolbar,
+                        #     name='Edit',
+                        #     action=published_article.get_draft_url(),
+                        #     side=self.toolbar.RIGHT,
+                        #     extra_classes=[
+                        #         'cms-btn-action',
+                        #     ],
+                        # )
+                    if self.toolbar.edit_mode and draft_article:
+                        menu.add_ajax_item(
+                            name=_('Revert to live'),
+                            action=draft_article.get_discard_draft_url(),
+                            question=_('Are you sure you want to revert to live?'),
+                        )
+                    elif self.toolbar.edit_mode:
+                        menu.add_link_item(
+                            name=_('Revert to live'),
+                            url='',
+                            disabled=True,
+                        )
+
+            # /PUBLISHER

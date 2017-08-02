@@ -15,17 +15,18 @@ from django.utils.timezone import now
 
 from aldryn_apphooks_config.managers.base import ManagerMixin, QuerySetMixin
 from aldryn_people.models import Person
+from djangocms_publisher.models import PublisherQuerySetMixin
 from parler.managers import TranslatableManager, TranslatableQuerySet
 from taggit.models import Tag, TaggedItem
 
 
-class ArticleQuerySet(QuerySetMixin, TranslatableQuerySet):
+class ArticleQuerySet(QuerySetMixin, TranslatableQuerySet, PublisherQuerySetMixin):
     def published(self):
         """
         Returns articles that are published AND have a publishing_date that
         has actually passed.
         """
-        return self.filter(is_published=True, publishing_date__lte=now())
+        return self.filter(publishing_date__lte=now())
 
 
 class RelatedManager(ManagerMixin, TranslatableManager):

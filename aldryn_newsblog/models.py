@@ -82,6 +82,15 @@ class Article(PublisherModelMixin,
     )
 
     translations = TranslatedFields(
+        # publisher_is_published_version is used to maintain slug uniqueness
+        # for published versions. It is a NullBooleanField so it can be
+        # null for drafts and allow non-unique slugs.
+        publisher_is_published_translation_version=models.NullBooleanField(
+            null=True,
+            blank=True,
+            default=None,
+            editable=False,
+        ),
         title=models.CharField(_('title'), max_length=234),
         slug=models.SlugField(
             verbose_name=_('slug'),
@@ -108,10 +117,15 @@ class Article(PublisherModelMixin,
             verbose_name=_('meta description'), blank=True, default=''),
         meta_keywords=models.TextField(
             verbose_name=_('meta keywords'), blank=True, default=''),
-        # FIXME: We should have this unique_together, but we need to be able
-        #        to have two identical slugs at the same time for
-        #        draft/published.
-        # meta={'unique_together': (('language_code', 'slug', ), )},
+        meta={
+            'unique_together': (
+                (
+                    'language_code',
+                    'slug',
+                    'publisher_is_published_translation_version',
+                ),
+            )
+        },
 
         search_data=models.TextField(blank=True, editable=False)
     )
@@ -131,8 +145,6 @@ class Article(PublisherModelMixin,
                                          blank=True)
     publishing_date = models.DateTimeField(_('publishing date'),
                                            default=now)
-    is_published = models.BooleanField(_('is published'), default=False,
-                                       db_index=True)
     is_featured = models.BooleanField(_('is featured'), default=False,
                                       db_index=True)
     featured_image = FilerImageField(
@@ -164,30 +176,38 @@ class Article(PublisherModelMixin,
         from djangocms_publisher.utils import copy_parler_translations
         from djangocms_publisher.utils import copy_placeholder
         new_obj = self
-        copy_parler_translations(new_obj=self, old_obj=old_obj)
+        new_is_pub = True if new_obj.publisher_is_published_version else None
+        copy_parler_translations(
+            new_obj=self,
+            old_obj=old_obj,
+            extra_values={
+                'publisher_is_published_translation_version': new_is_pub,
+            }
+        )
         # TODO: Is there a more efficient way to copy ManyToMany?
         new_obj.categories = old_obj.categories.all()
         new_obj.related = old_obj.related.all()
         new_obj.tags = old_obj.tags.all()
         if old_obj.content_id == new_obj.content_id:
+            # If for whatever reason both are pointing to the same placeholder
+            # create a new one for the new_obj.
             new_obj.content = None
             new_obj.save()
-            new_obj.refresh_from_db()
         copy_placeholder(old_obj.content, new_obj.content)
+        return new_obj
 
     def publisher_rewrite_ignore_stuff(self, old_obj):
-        from django.db.models import Q
-        new_obj = self
         return [
             # SortedMany2Many adds some relationships that can be ignored
             # because they are duplicates of the normal Many2Many
             (Article.related.through, 'from_article'),
             (Article.related.through, 'to_article'),
-            # (Article, 'related', Q(from_article=new_obj) | Q(from_article=old_obj)),
-            # Categories are handled manually
             (Article.categories.through, 'article'),
         ]
 
+    @property
+    def is_published(self):
+        return self.publisher_is_published_version
 
     @property
     def published(self):
@@ -195,7 +215,7 @@ class Article(PublisherModelMixin,
         Returns True only if the article (is_published == True) AND has a
         published_date that has passed.
         """
-        return (self.is_published and self.publishing_date <= now())
+        return self.is_published and self.publishing_date <= now()
 
     @property
     def future(self):
@@ -203,7 +223,13 @@ class Article(PublisherModelMixin,
         Returns True if the article is published but is scheduled for a
         future date/time.
         """
-        return (self.is_published and self.publishing_date > now())
+        return self.is_published and self.publishing_date > now()
+
+    def get_app_namespace(self):
+        if self.app_config and self.app_config.namespace:
+            return '{0}:'.format(self.app_config.namespace)
+        else:
+            return ''
 
     def get_absolute_url(self, language=None):
         """Returns the url for this Article in the selected permalink format."""
@@ -228,13 +254,64 @@ class Article(PublisherModelMixin,
                     language = lang
                 kwargs.update(slug=slug)
 
-        if self.app_config and self.app_config.namespace:
-            namespace = '{0}:'.format(self.app_config.namespace)
-        else:
-            namespace = ''
+        namespace = self.get_app_namespace()
 
         with override(language):
-            return reverse('{0}article-detail'.format(namespace), kwargs=kwargs)
+            if self.publisher_is_draft_version:
+                return reverse(
+                    '{0}article-detail-draft'.format(namespace),
+                    kwargs={'pk': self.pk},
+                )
+            else:
+                return reverse(
+                    '{0}article-detail'.format(namespace),
+                    kwargs=kwargs,
+                )
+
+    def get_public_url(self, language=None):
+        if not language:
+            language = get_current_language()
+        published_version = self.publisher_get_published_version()
+        if published_version:
+            return published_version.get_absolute_url(language=language)
+        return ''
+
+    def get_draft_url(self, language=None):
+        if not language:
+            language = get_current_language()
+        draft_version = self.publisher_get_draft_version()
+        if draft_version:
+            return draft_version.get_absolute_url(language=language)
+
+        # There is no draft of this url yet. get_object_draft_url will end up
+        # as the url in the button in the toolbar to "edit". If a user clicks
+        # on that we want to explicitly create a draft version if there is none
+        # yet.
+        namespace = self.get_app_namespace()
+        return reverse(
+            '{0}article-detail-draft-create'.format(namespace),
+            kwargs={'pk': self.pk},
+        )
+
+    def get_publish_url(self, language=None):
+        draft_version = self.publisher_get_draft_version()
+        if draft_version:
+            namespace = self.get_app_namespace()
+            return reverse(
+                '{0}article-detail-draft-publish'.format(namespace),
+                kwargs={'pk': draft_version.pk},
+            )
+        return ''
+
+    def get_discard_draft_url(self, language=None):
+        draft_version = self.publisher_get_draft_version()
+        if draft_version:
+            namespace = self.get_app_namespace()
+            return reverse(
+                '{0}article-detail-draft-discard'.format(namespace),
+                kwargs={'pk': draft_version.pk},
+            )
+        return ''
 
     def get_search_data(self, language=None, request=None):
         """

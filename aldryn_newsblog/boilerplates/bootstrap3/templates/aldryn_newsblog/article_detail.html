@@ -6,6 +6,9 @@
 
 {% block newsblog_content %}
     <div class="aldryn-newsblog-detail">
+        <pre>id:{{ article.id }} status: {{ article.publisher_status_text|default:"Published" }} type:{% if article.publisher_is_draft_version %}draft{% else %}published{% endif %} has_pending_changes:{{ article.publisher_has_pending_changes }}
+{% for translation in article.translations.all %}    id:{{ translation.id }} {{ translation.language_code }} {{ translation.slug }} "{{ translation.title }}"
+{% endfor %}</pre>
         {% include "aldryn_newsblog/includes/article.html" with detail_view="true" %}
     </div>
     {% static_placeholder "newsblog_social" %}

@@ -58,7 +58,7 @@ class ArticleAdminForm(TranslatableModelForm):
             'categories',
             'featured_image',
             'is_featured',
-            'is_published',
+            # 'is_published',
             'lead_in',
             'meta_description',
             'meta_keywords',
@@ -110,6 +110,7 @@ class ArticleAdmin(
     form = ArticleAdminForm
     list_display = (
         'title',
+        'publisher_status',
         'app_config',
         'slug',
         'is_featured',
@@ -121,7 +122,8 @@ class ArticleAdmin(
     ]
     actions = (
         make_featured, make_not_featured,
-        make_published, make_unpublished,
+        # FIXME: implement with djangocms-publisher
+        # make_published, make_unpublished,
     )
     fieldsets = (
         (None, {
@@ -178,12 +180,17 @@ class ArticleAdmin(
         'publisher_is_published_version',
         'publisher_published_version',
         'publisher_deletion_requested',
+        'is_published',
     )
     app_config_values = {
         'default_published': 'is_published',
     }
     app_config_selection_title = ''
     app_config_selection_desc = ''
+
+    def is_published(self, obj):
+        return obj.is_published
+    is_published.admin_order_field = 'publisher_is_published_version'
 
     def add_view(self, request, *args, **kwargs):
         data = request.GET.copy()
