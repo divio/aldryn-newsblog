@@ -2,15 +2,11 @@
 
 from __future__ import unicode_literals
 
-from cms.toolbar.items import Dropdown, DropdownToggleButton, ModalButton, \
-    Button
-
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse
 from django.utils.translation import (
     ugettext as _, get_language_from_request, override)
 
-from cms.toolbar_base import CMSToolbar
 from cms.toolbar_pool import toolbar_pool
 
 from aldryn_apphooks_config.utils import get_app_instance
