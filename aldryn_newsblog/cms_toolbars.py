@@ -19,10 +19,11 @@ from aldryn_translation_tools.utils import get_object_from_request
 
 from .models import Article
 from .cms_appconfig import NewsBlogConfig
+from djangocms_publisher.contrib.parler.cms_toolbars import PublisherToolbar
 
 
 @toolbar_pool.register
-class NewsBlogToolbar(CMSToolbar):
+class NewsBlogToolbar(PublisherToolbar):
     # watch_models must be a list, not a tuple
     # see https://github.com/divio/django-cms/issues/4135
     watch_models = [Article, ]
@@ -67,11 +68,10 @@ class NewsBlogToolbar(CMSToolbar):
             detail_view_names = [
                 '{0}:article-detail'.format(config.namespace),
                 '{0}:article-detail-draft'.format(config.namespace),
-                '{0}:article-detail-draft-create'.format(config.namespace),
-                # '{0}:article-detail-draft-publish'.format(config.namespace),
             ]
             if view_name in detail_view_names:
                 article = get_object_from_request(Article, self.request)
+                article.set_current_language(language)
             else:
                 article = None
 
@@ -127,98 +127,7 @@ class NewsBlogToolbar(CMSToolbar):
                 menu.add_modal_item(_('Edit this article'), url=url,
                                     active=True)
 
-            if delete_article_perm and article:
-                redirect_url = self.get_on_delete_redirect_url(
-                    article, language=language)
-                url = get_admin_url('aldryn_newsblog_article_delete',
-                                    [article.pk, ])
-                menu.add_modal_item(_('Delete this article'), url=url,
-                                    on_close=redirect_url)
-
             # PUBLISHER
             if article:
-                draft_article = article.publisher.get_draft_version()
-                published_article = article.publisher.get_published_version()
-                if self.toolbar.edit_mode:
-                    if draft_article:
-                        # We're in edit mode. There is a draft article.
-                        # self.toolbar.add_button(
-                        #     name='Publish',
-                        #     url=draft_article.get_publish_url(),
-                        #     side=self.toolbar.RIGHT,
-                        #     extra_classes=[
-                        #         'cms-btn-action',
-                        #     ],
-                        # )
-                        self.add_publisher_publish_dropdown(draft_article)
-                        # add_ajax_button(
-                        #     toolbar=self.toolbar,
-                        #     name='Publish',
-                        #     action=draft_article.get_publish_url(),
-                        #     side=self.toolbar.RIGHT,
-                        #     extra_classes=[
-                        #         'cms-btn-action',
-                        #     ],
-                        # )
-                    else:
-                        # We're in edit mode but there is no draft yet. Add a
-                        # edit button that will create a draft if it does not
-                        # exist.
-                        self.toolbar.add_button(
-                            name='Edit',
-                            url=published_article.get_draft_url(),
-                            side=self.toolbar.RIGHT,
-                            extra_classes=[
-                                'cms-btn-action',
-                            ],
-                        )
-                        # add_ajax_button(
-                        #     toolbar=self.toolbar,
-                        #     name='Edit',
-                        #     action=published_article.get_draft_url(),
-                        #     side=self.toolbar.RIGHT,
-                        #     extra_classes=[
-                        #         'cms-btn-action',
-                        #     ],
-                        # )
-                    if self.toolbar.edit_mode and draft_article:
-                        menu.add_ajax_item(
-                            name=_('Revert to live'),
-                            action=draft_article.get_discard_draft_url(),
-                            question=_('Are you sure you want to revert to live?'),
-                        )
-                    elif self.toolbar.edit_mode:
-                        menu.add_link_item(
-                            name=_('Revert to live'),
-                            url='',
-                            disabled=True,
-                        )
-
+                self.setup_publisher_toolbar(obj=article)
             # /PUBLISHER
-
-    def add_publisher_publish_dropdown(self, obj):
-        container = Dropdown(
-            side=self.toolbar.RIGHT,
-            extra_classes=[
-                'cms-btn-action',
-            ],
-        )
-        container.add_primary_button(
-            ModalButton(
-                name=_('Publish'),
-                url=obj.get_publish_url(),
-                extra_classes=[
-                    'cms-btn-action',
-                ],
-            )
-        )
-        container.buttons.append(
-            Button(name=_('View published'), url=obj.get_draft_url())
-        )
-        container.buttons.append(
-            ModalButton(name=_('Discard draft'), url='FIXME')
-        )
-        container.buttons.append(
-            ModalButton(name=_('Request deletion'), url='FIXME')
-        )
-        self.toolbar.add_item(container)

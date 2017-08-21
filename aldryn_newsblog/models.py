@@ -14,7 +14,7 @@ from cms.models.pluginmodel import CMSPlugin
 from cms.utils.i18n import get_current_language, get_redirect_on_fallback
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
-from django.core.exceptions import ImproperlyConfigured
+from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.db import connection, models
 from django.db.models.signals import post_save
@@ -183,7 +183,7 @@ class Article(ParlerPublisherModelMixin,
         )
         return self
 
-    def publisher_rewrite_ignore_stuff(self, old_obj):
+    def publisher_update_relations_exclude(self, old_obj):
         return [
             # SortedMany2Many adds some relationships that can be ignored
             # because they are duplicates of the normal Many2Many
@@ -194,7 +194,7 @@ class Article(ParlerPublisherModelMixin,
 
     @property
     def is_published(self):
-        return self.publisher_is_published_version
+        return self.publisher.is_published_version
 
     @property
     def published(self):
@@ -255,51 +255,6 @@ class Article(ParlerPublisherModelMixin,
                     kwargs=kwargs,
                 )
 
-    def get_public_url(self, language=None):
-        if not language:
-            language = get_current_language()
-        published_version = self.publisher.get_published_version()
-        if published_version:
-            return published_version.get_absolute_url(language=language)
-        return ''
-
-    def get_draft_url(self, language=None):
-        if not language:
-            language = get_current_language()
-        draft_version = self.publisher.get_draft_version()
-        if draft_version:
-            return draft_version.get_absolute_url(language=language)
-
-        # There is no draft of this url yet. get_object_draft_url will end up
-        # as the url in the button in the toolbar to "edit". If a user clicks
-        # on that we want to explicitly create a draft version if there is none
-        # yet.
-        namespace = self.get_app_namespace()
-        return reverse(
-            '{0}article-detail-draft-create'.format(namespace),
-            kwargs={'pk': self.pk},
-        )
-
-    def get_publish_url(self, language=None):
-        draft_version = self.publisher.get_draft_version()
-        if draft_version:
-            namespace = self.get_app_namespace()
-            return reverse(
-                '{0}article-detail-draft-publish'.format(namespace),
-                kwargs={'pk': draft_version.pk},
-            )
-        return ''
-
-    def get_discard_draft_url(self, language=None):
-        draft_version = self.publisher.get_draft_version()
-        if draft_version:
-            namespace = self.get_app_namespace()
-            return reverse(
-                '{0}article-detail-draft-discard'.format(namespace),
-                kwargs={'pk': draft_version.pk},
-            )
-        return ''
-
     def get_search_data(self, language=None, request=None):
         """
         Provides an index for use with Haystack, or, for populating
@@ -349,7 +304,10 @@ class Article(ParlerPublisherModelMixin,
             title = self.safe_translation_getter('title', any_language=True)
         except AttributeError:
             title = 'Article {}'.format(self.id)
-        return self.publisher.add_status_label(title)
+        try:
+            return self.publisher.add_status_label(title)
+        except ObjectDoesNotExist:
+            return title or ''
 
 
 class PluginEditModeMixin(object):

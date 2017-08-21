@@ -1,7 +1,7 @@
 {% if version %}
 <pre style="margin-bottom: 4px; background-color: {% if obj == version %}darkgray{% else %}lightgray{% endif %};">id:{{ version.id }} type:{% if version.publisher.is_draft_version %}draft{% elif version.publisher.is_published_version %}published{% endif %}
 {% for translation in version.translations.all %}    {% spaceless %}
-    {% if translation.language_code == version.language_code and obj == version %}<strong>{% endif %}id:{{ translation.id }} lang:{{ translation.language_code }} slug="{{ translation.slug }}" title="translation.title" {% if translation.language_code == version.language_code and obj == version %}</strong>{% endif %}
+    {% if translation.language_code == version.language_code and obj == version %}<strong>{% endif %}id:{{ translation.id }} lang:{{ translation.language_code }} slug="{{ translation.slug }}" title="{{ translation.title }}" {% if translation.publisher_translation_deletion_requested %}DELETE{% endif %} {% if translation.language_code == version.language_code and obj == version %}</strong>{% endif %}
 {% endspaceless %}
 {% endfor %}</pre>
 {% else %}
