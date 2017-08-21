@@ -38,13 +38,6 @@ urlpatterns = [
     # Draft editing
     url(r'^(?P<pk>\d+)/draft/$',
         views.ArticleDetailDraft.as_view(), name='article-detail-draft'),
-    url(r'^(?P<pk>\d+)/draft/create/$',
-        views.ArticleDetailDraft.as_view(create_draft=True), name='article-detail-draft-create'),
-    url(r'^(?P<pk>\d+)/draft/publish/$',  # (.+)/ for language code
-        views.ArticleDetailDraft.as_view(publish=True), name='article-detail-draft-publish'),
-    url(r'^(?P<pk>\d+)/draft/discard_draft/$',
-        views.ArticleDetailDraft.as_view(discard_draft=True), name='article-detail-draft-discard'),
-
 
     url(r'^author/(?P<author>\w[-\w]*)/$',
         views.AuthorArticleList.as_view(), name='article-list-by-author'),

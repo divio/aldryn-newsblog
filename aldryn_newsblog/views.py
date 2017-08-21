@@ -238,44 +238,6 @@ class ArticleDetail(TranslatableSlugMixin, ArticleDetailBase):
 
 class ArticleDetailDraft(ArticleDetailBase):
     prefer_drafts = True
-    create_draft = False
-    publish = False
-    discard_draft = False
-
-    def get(self, request, *args, **kwargs):
-        """
-        This handles non-permalinked URLs according to preferences as set in
-        NewsBlogConfig.
-        """
-        if not any([self.create_draft, self.publish, self.discard_draft]):
-            return super(ArticleDetailDraft, self).get(request, *args, **kwargs)
-
-        # FIXME: do this on POST
-        if not hasattr(self, 'object'):
-            self.object = self.get_object()
-        if self.create_draft:
-            draft, created = self.object.publisher_get_or_create_draft()
-            url = '{}?{}'.format(
-                draft.get_absolute_url(),
-                get_cms_setting('CMS_TOOLBAR_URL__EDIT_ON'),
-            )
-            return HttpResponseRedirect(url)
-        elif self.publish:
-            published = self.object.publisher_publish()
-            url = '{}?{}'.format(
-                published.get_absolute_url(),
-                get_cms_setting('CMS_TOOLBAR_URL__EDIT_OFF'),
-            )
-            return HttpResponseRedirect(url)
-        elif self.discard_draft:
-            draft = self.object.publisher_get_draft_version()
-            published = self.object.publisher_get_draft_version()
-            draft.publisher_discard_draft()
-            url = '{}?{}'.format(
-                published.get_absolute_url(),
-                get_cms_setting('CMS_TOOLBAR_URL__EDIT_OFF'),
-            )
-            return HttpResponseRedirect(url)
 
 
 class ArticleListBase(AppConfigMixin, AppHookCheckMixin, TemplatePrefixMixin,
