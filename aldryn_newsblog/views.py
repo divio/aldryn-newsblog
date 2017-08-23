@@ -198,6 +198,16 @@ class ArticleDetail(TranslatableSlugMixin, ArticleDetailBase):
             ):
                 draft = self.object.publisher.get_draft_version()
                 return HttpResponseRedirect(draft.get_absolute_url())
+            # elif (
+            #     self.object.publisher.is_published_version and
+            #     not self.object.publisher.has_pending_changes
+            # ):
+            #     # If there is no draft, redirect to non-edit mode. This is done
+            #     # because otherwise the user can edit the placeholders of the
+            #     # published version.
+            #     # TODO: better solution for preventing editing of published
+            #     #       placeholders when there is no draft.
+            #     return HttpResponseRedirect('?edit_off')
 
         url = self.object.get_absolute_url()
         if (self.config.non_permalink_handling == 200 or request.path == url):
