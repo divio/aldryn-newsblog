@@ -22,7 +22,6 @@ from aldryn_apphooks_config.fields import AppHookConfigField
 from aldryn_categories.fields import CategoryManyToManyField
 from aldryn_categories.models import Category
 from aldryn_people.models import Person
-from aldryn_reversion.core import version_controlled_content
 from aldryn_translation_tools.models import (
     TranslationHelperMixin, TranslatedAutoSlugifyMixin,
 )
@@ -52,6 +51,8 @@ else:
     raise ImproperlyConfigured(
         'Neither LANGUAGES nor LANGUAGE was found in settings.')
 
+from .settings import ENABLE_REVERSION
+
 
 # At startup time, SQL_NOW_FUNC will contain the database-appropriate SQL to
 # obtain the CURRENT_TIMESTAMP.
@@ -66,8 +67,6 @@ SQL_IS_TRUE = {
 }[connection.vendor]
 
 
-@python_2_unicode_compatible
-@version_controlled_content(follow=['app_config'])
 class Article(TranslatedAutoSlugifyMixin,
               TranslationHelperMixin,
               TranslatableModel):
@@ -562,3 +561,9 @@ def update_search_data(sender, instance, **kwargs):
                     instance.language).get(content=placeholder.pk)
                 article.search_data = article.get_search_data(instance.language)
                 article.save()
+
+
+if ENABLE_REVERSION:
+    from aldryn_reversion.core import version_controlled_content
+    Article = version_controlled_content(Article, follow=['app_config'])
+Article = python_2_unicode_compatible(Article)

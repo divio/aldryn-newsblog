@@ -1,18 +1,4 @@
 {
     "package-name": "aldryn-newsblog",
-    "installed-apps": [
-        "aldryn_apphooks_config",
-        "aldryn_boilerplates",
-        "aldryn_categories",
-        "aldryn_common",
-        "aldryn_newsblog",
-        "aldryn_people",
-        "aldryn_reversion",
-        "aldryn_translation_tools",
-        "easy_thumbnails",
-        "filer",
-        "sortedm2m",
-        "taggit",
-        "treebeard"
-    ]
+    "installed-apps": []
 }

@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from __future__ import unicode_literals
 
 from django.contrib import admin
@@ -11,7 +10,13 @@ from parler.forms import TranslatableModelForm
 from parler.admin import TranslatableAdmin
 from aldryn_apphooks_config.admin import BaseAppHookConfig, ModelAppHookConfig
 from aldryn_people.models import Person
-from aldryn_reversion.admin import VersionedPlaceholderAdminMixin
+
+from .settings import ENABLE_REVERSION
+if ENABLE_REVERSION:
+    from aldryn_reversion.admin import VersionedPlaceholderAdminMixin
+else:
+    from cms.admin.placeholderadmin import PlaceholderAdminMixin as VersionedPlaceholderAdminMixin
+
 from aldryn_translation_tools.admin import AllTranslationsMixin
 
 from . import models
