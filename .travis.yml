@@ -18,40 +18,57 @@ env:
     - secure: Lt1n+6a4hj7BuShOufWfiAF3aTC4B6xpHwwcbklVy+fdy4pkY3okXO9CFtWkOTBRrFrgc8R+PL9dZ6ObK3SE1w7LU3dur89uIvJ4RXQ1uROr40PXAxD8RO+/2wp7nhh6CmG7GEKpuKt5QHbgdFVrJtmyoPp4vco1pU86njtEico=
     # encrypted Code Climate token
     - secure: Jq2JBTBMYLpnrwk6uuAWGOX4y+TEVkBuwSZywSrlKb9sW77DloxRfGXH81Q9juvaAy4KqtcGY6HE5vqJSo77MS/cmbtmZe4ypPKgVFy2YDDUGdLi65vEjkerjAmtS7bYBVur+fWG0mpYAmnfj06d0MgkBgwgCr4yLbJFtW8ElAM=
-  matrix:
-    # Matrix-size reduction strategies:
-    #   PY strategy: do not test 3.3 at all.
-    #   DB stragegy: we use raw queries, so good coverage is required. Test on
-    #                each django/cms combination.
-    #   FE strategy: only test on Django/CMS3.3 combinations, but place tests on
-    #                different Python ENVs if possible. Also, test against all
-    #                DB backends
-    # NOTE: MYSQL AND POSTGRES TESTS ARE DISABLED UNTIL #339 IS MERGED.
-    - TOXENV=flake8
-    - TOXENV=py35-dj19-sqlite-cms34
-    - TOXENV=py35-dj19-sqlite-cms33-fe FE=1
-    - TOXENV=py35-dj19-sqlite-cms32
-    - TOXENV=py34-dj19-sqlite-cms34
-    - TOXENV=py34-dj19-sqlite-cms33
-    - TOXENV=py34-dj19-sqlite-cms32
-    - TOXENV=py27-dj19-sqlite-cms34
-    - TOXENV=py27-dj19-sqlite-cms33
-    - TOXENV=py27-dj19-sqlite-cms32
-    - TOXENV=py35-dj18-sqlite-cms34
-    - TOXENV=py35-dj18-sqlite-cms33
-    - TOXENV=py35-dj18-sqlite-cms32
-    - TOXENV=py34-dj18-sqlite-cms34
-    - TOXENV=py34-dj18-sqlite-cms33
-    - TOXENV=py34-dj18-sqlite-cms32
-    - TOXENV=py27-dj18-sqlite-cms34
-    - TOXENV=py27-dj18-sqlite-cms33-fe FE=1
-    - TOXENV=py27-dj18-sqlite-cms32
-    - TOXENV=py34-dj17-sqlite-cms32
-    - TOXENV=py33-dj17-sqlite-cms32
-    - TOXENV=py27-dj17-sqlite-cms32
-    - TOXENV=py33-dj16-sqlite-cms32
-    - TOXENV=py27-dj16-sqlite-cms32
-    - TOXENV=py26-dj16-sqlite-cms32
+matrix:
+  include:
+    - python: '3.5'
+      env: TOXENV=flake8
+    - python: '3.6'
+      env: TOXENV=py36-dj111-sqlite-cms35
+    - python: '3.5'
+      env: TOXENV=py35-dj111-sqlite-cms35
+    - python: '3.5'
+      env: TOXENV=py35-dj110-sqlite-cms34
+    - python: '3.5'
+      env: TOXENV=py35-dj19-sqlite-cms34-reversion
+    - python: '3.5'
+      env: TOXENV=py35-dj19-sqlite-cms34
+    - python: '3.5'
+      env: TOXENV=py35-dj19-sqlite-cms33-fe FE=1
+    - python: '2.7'
+      env: TOXENV=py27-dj111-sqlite-cms34
+    - python: '2.7'
+      env: TOXENV=py27-dj110-sqlite-cms34
+    - python: '2.7'
+      env: TOXENV=py27-dj19-sqlite-cms34
+    - python: '2.7'
+      env: TOXENV=py27-dj19-sqlite-cms33
+    - python: '2.7'
+      env: TOXENV=py27-dj19-sqlite-cms32
+    - python: '3.5'
+      env: TOXENV=py35-dj18-sqlite-cms34-reversion
+    - python: '3.5'
+      env: TOXENV=py35-dj18-sqlite-cms34
+    - python: '3.5'
+      env: TOXENV=py35-dj18-sqlite-cms33
+    - python: '3.5'
+      env: TOXENV=py35-dj18-sqlite-cms32
+    - python: '2.7'
+      env: TOXENV=py27-dj18-sqlite-cms34
+    - python: '2.7'
+      env: TOXENV=py27-dj18-sqlite-cms33-fe FE=1
+    - python: '2.7'
+      env: TOXENV=py27-dj18-sqlite-cms32
+  allow_failures:
+    - python: '2.7'
+      env: TOXENV=py27-dj18-sqlite-cms33-fe FE=1
+    - python: '3.5'
+      env: TOXENV=py35-dj19-sqlite-cms33-fe FE=1
+    - python: '3.6'
+      env: TOXENV=py36-dj111-sqlite-cms35
+    - python: '3.5'
+      env: TOXENV=py35-dj111-sqlite-cms35
+    - python: '2.7'
+      env: TOXENV=py27-dj111-sqlite-cms34
 
 cache:
   directories:

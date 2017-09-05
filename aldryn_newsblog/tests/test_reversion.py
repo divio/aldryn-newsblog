@@ -1,27 +1,28 @@
 # -*- coding: utf-8 -*-
-
 from __future__ import unicode_literals
+
+from unittest import skipIf
+
 from django.core.urlresolvers import reverse
-
-from reversion.revisions import default_revision_manager
-try:
-    from reversion import create_revision
-except ImportError:
-    # django-reversion >=1.9
-    from reversion.revisions import create_revision
-
-import six
-
 from django.db import transaction
-
 from aldryn_reversion.core import create_revision as aldryn_create_revision
-
 from parler.utils.context import switch_language
+import six
 
 from . import NewsBlogTestCase
 from aldryn_newsblog.cms_appconfig import NewsBlogConfig
+from ..settings import ENABLE_REVERSION
+
+if ENABLE_REVERSION:
+    try:
+        from reversion import create_revision
+        from reversion import default_revision_manager
+    except ImportError:
+        from reversion.revisions import create_revision
+        from reversion.revisions import default_revision_manager
 
 
+@skipIf(not ENABLE_REVERSION, 'django-reversion not enabled')
 class TestVersioning(NewsBlogTestCase):
     def create_revision(self, article, content=None, language=None, **kwargs):
         with transaction.atomic():

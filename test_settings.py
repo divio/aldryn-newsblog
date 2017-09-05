@@ -17,14 +17,12 @@ HELPER_SETTINGS = {
         'aldryn_apphooks_config',
         'aldryn_categories',
         'aldryn_people',
-        'aldryn_reversion',
         'aldryn_translation_tools',
         'djangocms_text_ckeditor',
         'easy_thumbnails',
         'filer',
         'mptt',
         'parler',
-        'reversion',
         'sortedm2m',
         'taggit',
     ],
@@ -151,6 +149,25 @@ HELPER_SETTINGS = {
         'cms.middleware.language.LanguageCookieMiddleware'
     ]
 }
+
+
+def boolean_ish(var):
+    var = '{}'.format(var)
+    var = var.lower()
+    if var in ('false', 'nope', '0', 'none', 'no'):
+        return False
+    else:
+        return bool(var)
+
+
+ENABLE_REVERSION = boolean_ish(os.environ.get('ENABLE_REVERSION', ''))
+if ENABLE_REVERSION:
+    HELPER_SETTINGS['INSTALLED_APPS'].extend([
+        'aldryn_reversion',
+        'reversion',
+    ])
+    HELPER_SETTINGS['ALDRYN_NEWSBLOG_ENABLE_REVERSION'] = True
+
 
 # If using CMS 3.2+, use the CMS middleware for ApphookReloading, otherwise,
 # use aldryn_apphook_reload's.

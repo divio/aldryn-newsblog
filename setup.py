@@ -3,14 +3,13 @@ from setuptools import setup, find_packages
 from aldryn_newsblog import __version__
 
 REQUIREMENTS = [
-    'Django>=1.6,<1.10',
+    'Django>=1.8,<1.11',
     'python-dateutil',
     'aldryn-apphooks-config>=0.2.4',
     'aldryn-boilerplates>=0.7.2',
-    'aldryn-categories',
+    'aldryn-categories>=1.1.0',
     'aldryn-common>=0.1.3',
     'aldryn-people>=1.1.0',
-    'aldryn-reversion>=0.1.0',
     'aldryn-translation-tools>=0.2.0',
     'backport_collections==0.1',
     'django-appdata>=0.1.4',
@@ -18,7 +17,6 @@ REQUIREMENTS = [
     'djangocms-text-ckeditor',
     'django-filer>=0.9.9',
     'django-parler>=1.4',
-    'django-reversion>=1.8.2,<1.11',
     'django-sortedm2m>=1.2.2,!=1.3.0,!=1.3.1',
     'django-taggit',
     'lxml',
@@ -62,6 +60,9 @@ setup(
     license='LICENSE.txt',
     platforms=['OS Independent'],
     install_requires=REQUIREMENTS,
+    extras_require={
+        'reversion': ['aldryn-reversion']
+    },
     classifiers=CLASSIFIERS,
     long_description=open('README.rst').read(),
     include_package_data=True,

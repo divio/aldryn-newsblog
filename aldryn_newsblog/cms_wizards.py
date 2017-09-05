@@ -15,11 +15,11 @@ from cms.wizards.forms import BaseFormMixin
 from djangocms_text_ckeditor.widgets import TextEditorWidget
 from djangocms_text_ckeditor.html import clean_html
 from parler.forms import TranslatableModelForm
-from reversion.revisions import revision_context_manager
 
 from .cms_appconfig import NewsBlogConfig
 from .models import Article
 from .utils.utilities import is_valid_namespace
+from .settings import ENABLE_REVERSION
 
 
 def get_published_app_configs():
@@ -76,7 +76,7 @@ class CreateNewsBlogArticleForm(BaseFormMixin, TranslatableModelForm):
 
     class Meta:
         model = Article
-        fields = ['title', 'app_config', 'content']
+        fields = ['title', 'app_config']
         # The natural widget for app_config is meant for normal Admin views and
         # contains JS to refresh the page on change. This is not wanted here.
         widgets = {'app_config': forms.Select()}
@@ -102,7 +102,6 @@ class CreateNewsBlogArticleForm(BaseFormMixin, TranslatableModelForm):
         content = clean_html(self.cleaned_data.get('content', ''), False)
         if content and permissions.has_plugin_permission(
                 self.user, 'TextPlugin', 'add'):
-
             # If the article has not been saved, then there will be no
             # Placeholder set-up for this article yet, so, ensure we have saved
             # first.
@@ -117,14 +116,15 @@ class CreateNewsBlogArticleForm(BaseFormMixin, TranslatableModelForm):
                     body=content,
                 )
 
-        with transaction.atomic():
-            with revision_context_manager.create_revision():
-                article.save()
-                if self.user:
-                    revision_context_manager.set_user(self.user)
-                revision_context_manager.set_comment(
-                    ugettext("Initial version."))
-
+        if ENABLE_REVERSION:
+            from reversion.revisions import revision_context_manager
+            with transaction.atomic():
+                with revision_context_manager.create_revision():
+                    article.save()
+                    if self.user:
+                        revision_context_manager.set_user(self.user)
+                    revision_context_manager.set_comment(
+                        ugettext("Initial version."))
         return article
 
 

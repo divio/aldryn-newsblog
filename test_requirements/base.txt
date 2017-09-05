@@ -5,7 +5,7 @@ django-classy-tags
 django-sekizai
 django-treebeard>=2.0
 djangocms-admin-style
-djangocms-helper<0.9.6
+djangocms-helper
 # djangocms_text_ckeditor
 docopt
 flake8

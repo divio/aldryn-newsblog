@@ -1,20 +1,22 @@
 # -*- coding: utf-8 -*-
-
 from __future__ import unicode_literals
 
-from django.contrib import admin
-from django.utils.translation import ugettext_lazy as _
-from cms.admin.placeholderadmin import (
-    FrontendEditableAdminMixin,
-)
-from parler.forms import TranslatableModelForm
-from parler.admin import TranslatableAdmin
 from aldryn_apphooks_config.admin import BaseAppHookConfig, ModelAppHookConfig
 from aldryn_people.models import Person
-from aldryn_reversion.admin import VersionedPlaceholderAdminMixin
 from aldryn_translation_tools.admin import AllTranslationsMixin
+from cms.admin.placeholderadmin import FrontendEditableAdminMixin
+from django.contrib import admin
+from django.utils.translation import ugettext_lazy as _
+from parler.admin import TranslatableAdmin
+from parler.forms import TranslatableModelForm
 
 from . import models
+from .settings import ENABLE_REVERSION
+
+if ENABLE_REVERSION:
+    from aldryn_reversion.admin import VersionedPlaceholderAdminMixin
+else:
+    from cms.admin.placeholderadmin import PlaceholderAdminMixin as VersionedPlaceholderAdminMixin
 
 
 def make_published(modeladmin, request, queryset):

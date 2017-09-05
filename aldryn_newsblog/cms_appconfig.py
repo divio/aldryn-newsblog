@@ -2,18 +2,17 @@
 
 from __future__ import unicode_literals
 
+from aldryn_apphooks_config.models import AppHookConfig
+from aldryn_apphooks_config.utils import setup_config
+from app_data import AppDataForm
+from cms.models.fields import PlaceholderField
 from django import forms
 from django.conf import settings
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from parler.models import TranslatableModel, TranslatedFields
 
-from aldryn_apphooks_config.utils import setup_config
-from aldryn_apphooks_config.models import AppHookConfig
-from aldryn_reversion.core import version_controlled_content
-from app_data import AppDataForm
-from cms.models.fields import PlaceholderField
-from parler.models import TranslatableModel
-from parler.models import TranslatedFields
+from .settings import ENABLE_REVERSION
 
 PERMALINK_CHOICES = (
     ('s', _('the-eagle-has-landed/', )),
@@ -35,7 +34,6 @@ TEMPLATE_PREFIX_CHOICES = getattr(
     settings, 'ALDRYN_NEWSBLOG_TEMPLATE_PREFIXES', [])
 
 
-@version_controlled_content
 class NewsBlogConfig(TranslatableModel, AppHookConfig):
     """Adds some translatable, per-app-instance fields."""
     translations = TranslatedFields(
@@ -153,3 +151,7 @@ class NewsBlogConfigForm(AppDataForm):
 
 
 setup_config(NewsBlogConfigForm, NewsBlogConfig)
+
+if ENABLE_REVERSION:
+    from aldryn_reversion.core import version_controlled_content
+    NewsBlogConfig = version_controlled_content(NewsBlogConfig)

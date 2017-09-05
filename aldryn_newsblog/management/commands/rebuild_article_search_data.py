@@ -1,27 +1,21 @@
 # -*- coding: utf-8 -*-
-from optparse import make_option
-
+from aldryn_newsblog.models import Article
 from django.conf import settings
 from django.core.management.base import BaseCommand
-
 from parler.utils.context import switch_language
-
-from aldryn_newsblog.models import Article
 
 
 class Command(BaseCommand):
     can_import_settings = True
 
-    base_options = (
-        make_option(
-            "-l",
-            "--language",
-            action="append",
-            dest="languages",
+    def add_arguments(self, parser):
+        parser.add_argument(
+            '-l',
+            '--language',
+            action='append',
+            dest='languages',
             default=None,
-        ),
-    )
-    option_list = BaseCommand.option_list + base_options
+        )
 
     def handle(self, *args, **options):
         languages = options.get('languages')

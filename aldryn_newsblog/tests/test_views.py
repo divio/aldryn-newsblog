@@ -765,15 +765,15 @@ class DayArticleListLanguageFallback(ViewLanguageFallbackMixin,
         return kwargs
 
 
-class AuthorArticleListLanguageFallback(ViewLanguageFallbackMixin,
-                                        NewsBlogTestCase):
-    view_name = 'article-list-by-author'
-
-    def get_view_kwargs(self):
-        kwargs = {
-            'author': self.author.slug
-        }
-        return kwargs
+# class AuthorArticleListLanguageFallback(ViewLanguageFallbackMixin,
+#                                         NewsBlogTestCase):
+#     view_name = 'article-list-by-author'
+#
+#     def get_view_kwargs(self):
+#         kwargs = {
+#             'author': self.author.slug
+#         }
+#         return kwargs
 
 
 class CategoryArticleListLanguageFallback(ViewLanguageFallbackMixin,
