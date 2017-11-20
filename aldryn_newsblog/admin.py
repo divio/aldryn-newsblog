@@ -156,6 +156,8 @@ class ArticleAdmin(
     app_config_values = {
         'default_published': 'is_published'
     }
+    app_config_selection_title = ''
+    app_config_selection_desc = ''
 
     def add_view(self, request, *args, **kwargs):
         data = request.GET.copy()

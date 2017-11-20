@@ -116,8 +116,11 @@ class Article(TranslatedAutoSlugifyMixin,
     author = models.ForeignKey(Person, null=True, blank=True,
                                verbose_name=_('author'))
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_('owner'))
-    app_config = AppHookConfigField(NewsBlogConfig,
-                                    verbose_name=_('Apphook configuration'))
+    app_config = AppHookConfigField(
+        NewsBlogConfig,
+        verbose_name=_('Section'),
+        help_text='',
+    )
     categories = CategoryManyToManyField('aldryn_categories.Category',
                                          verbose_name=_('categories'),
                                          blank=True)
