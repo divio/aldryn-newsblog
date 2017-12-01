@@ -78,10 +78,11 @@ class NewsBlogTestsMixin(object):
         return prefix + u''.join(random.choice(chars) for _ in range(length))
 
     @classmethod
-    def create_user(cls):
-        return User.objects.create(
-            username=cls.rand_str(), first_name=cls.rand_str(),
-            last_name=cls.rand_str())
+    def create_user(cls, **kwargs):
+        kwargs.setdefault('username', cls.rand_str())
+        kwargs.setdefault('first_name', cls.rand_str())
+        kwargs.setdefault('last_name', cls.rand_str())
+        return User.objects.create(**kwargs)
 
     def create_person(self):
         return Person.objects.create(

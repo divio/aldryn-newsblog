@@ -9,6 +9,7 @@ djangocms-helper
 # djangocms_text_ckeditor
 docopt
 flake8
+tox>=2.9.1
 html5lib<0.99999999
 pyflakes
 selenium

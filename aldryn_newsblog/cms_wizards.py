@@ -93,38 +93,28 @@ class CreateNewsBlogArticleForm(BaseFormMixin, TranslatableModelForm):
 
     def save(self, commit=True):
         article = super(CreateNewsBlogArticleForm, self).save(commit=False)
-
-        # Set owner to current user
         article.owner = self.user
-
-        # If 'content' field has value, create a TextPlugin with same and add
-        # it to the PlaceholderField
-        content = clean_html(self.cleaned_data.get('content', ''), False)
-        if content and permissions.has_plugin_permission(
-                self.user, 'TextPlugin', 'add'):
-            # If the article has not been saved, then there will be no
-            # Placeholder set-up for this article yet, so, ensure we have saved
-            # first.
-            if not article.pk:
-                article.save()
-
-            if article and article.content:
-                add_plugin(
-                    placeholder=article.content,
-                    plugin_type='TextPlugin',
-                    language=self.language_code,
-                    body=content,
-                )
 
         if ENABLE_REVERSION:
             from reversion.revisions import revision_context_manager
             with transaction.atomic():
                 with revision_context_manager.create_revision():
                     article.save()
-                    if self.user:
-                        revision_context_manager.set_user(self.user)
-                    revision_context_manager.set_comment(
-                        ugettext("Initial version."))
+                    revision_context_manager.set_user(self.user)
+                    revision_context_manager.set_comment(ugettext("Initial version."))
+        else:
+            article.save()
+
+        # If 'content' field has value, create a TextPlugin with same and add it to the PlaceholderField
+        content = clean_html(self.cleaned_data.get('content', ''), False)
+        if content and permissions.has_plugin_permission(self.user, 'TextPlugin', 'add'):
+            add_plugin(
+                placeholder=article.content,
+                plugin_type='TextPlugin',
+                language=self.language_code,
+                body=content,
+            )
+
         return article
 
 
