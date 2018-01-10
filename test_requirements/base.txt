@@ -21,9 +21,6 @@ sphinx-rtd-theme
 sphinxcontrib-spelling
 pyenchant
 
-# Requires 1.0.4+, just running can use earlier versions of aldryn-reversion.
-aldryn-reversion>=1.0.4
-
 # This is the last version to support Django 1.6
 # django-filer>=1.1.1
 

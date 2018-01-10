@@ -60,9 +60,6 @@ setup(
     license='LICENSE.txt',
     platforms=['OS Independent'],
     install_requires=REQUIREMENTS,
-    extras_require={
-        'reversion': ['aldryn-reversion']
-    },
     classifiers=CLASSIFIERS,
     long_description=open('README.rst').read(),
     include_package_data=True,

@@ -160,15 +160,6 @@ def boolean_ish(var):
         return bool(var)
 
 
-ENABLE_REVERSION = boolean_ish(os.environ.get('ENABLE_REVERSION', ''))
-if ENABLE_REVERSION:
-    HELPER_SETTINGS['INSTALLED_APPS'].extend([
-        'aldryn_reversion',
-        'reversion',
-    ])
-    HELPER_SETTINGS['ALDRYN_NEWSBLOG_ENABLE_REVERSION'] = True
-
-
 # If using CMS 3.2+, use the CMS middleware for ApphookReloading, otherwise,
 # use aldryn_apphook_reload's.
 if cms_version < LooseVersion('3.2.0'):

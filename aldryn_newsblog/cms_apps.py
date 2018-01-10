@@ -10,10 +10,13 @@ from .models import NewsBlogConfig
 
 
 class NewsBlogApp(CMSConfigApp):
-    app_config = NewsBlogConfig
-    app_name = 'aldryn_newsblog'
     name = _('NewsBlog')
-    urls = ['aldryn_newsblog.urls']
+    app_name = 'aldryn_newsblog'
+    app_config = NewsBlogConfig
+    urls = ['aldryn_newsblog.urls']  # COMPAT: CMS3.2
+
+    def get_urls(self, *args, **kwargs):
+        return self.urls
 
     # NOTE: Please do not add a «menu» here, menu’s should only be added by at
     # the discretion of the operator.

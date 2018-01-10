@@ -1,6 +1,5 @@
 django>=1.9,<1.10
 
-django-reversion>=1.9.4,<1.11
 django-haystack
 
 # Django 1.9 compatible packages

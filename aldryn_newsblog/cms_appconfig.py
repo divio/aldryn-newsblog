@@ -13,8 +13,6 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from parler.models import TranslatableModel, TranslatedFields
 
-from .settings import ENABLE_REVERSION
-
 PERMALINK_CHOICES = (
     ('s', _('the-eagle-has-landed/', )),
     ('ys', _('1969/the-eagle-has-landed/', )),
@@ -42,7 +40,8 @@ class NewsBlogConfig(TranslatableModel, AppHookConfig):
         app_title=models.CharField(_('name'), max_length=234),
     )
 
-    permalink_type = models.CharField(_('permalink type'), max_length=8,
+    permalink_type = models.CharField(
+        _('permalink type'), max_length=8,
         blank=False, default='slug', choices=PERMALINK_CHOICES,
         help_text=_('Choose the style of urls to use from the examples. '
                     '(Note, all types are relative to apphook)'))
@@ -156,7 +155,3 @@ class NewsBlogConfigForm(AppDataForm):
 
 
 setup_config(NewsBlogConfigForm, NewsBlogConfig)
-
-if ENABLE_REVERSION:
-    from aldryn_reversion.core import version_controlled_content
-    NewsBlogConfig = version_controlled_content(NewsBlogConfig)

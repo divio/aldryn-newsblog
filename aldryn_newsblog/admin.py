@@ -11,12 +11,8 @@ from parler.admin import TranslatableAdmin
 from parler.forms import TranslatableModelForm
 
 from . import models
-from .settings import ENABLE_REVERSION
 
-if ENABLE_REVERSION:
-    from aldryn_reversion.admin import VersionedPlaceholderAdminMixin
-else:
-    from cms.admin.placeholderadmin import PlaceholderAdminMixin as VersionedPlaceholderAdminMixin
+from cms.admin.placeholderadmin import PlaceholderAdminMixin
 
 
 def make_published(modeladmin, request, queryset):
@@ -102,7 +98,7 @@ class ArticleAdminForm(TranslatableModelForm):
 
 class ArticleAdmin(
     AllTranslationsMixin,
-    VersionedPlaceholderAdminMixin,
+    PlaceholderAdminMixin,
     FrontendEditableAdminMixin,
     ModelAppHookConfig,
     TranslatableAdmin
@@ -178,7 +174,7 @@ admin.site.register(models.Article, ArticleAdmin)
 
 class NewsBlogConfigAdmin(
     AllTranslationsMixin,
-    VersionedPlaceholderAdminMixin,
+    PlaceholderAdminMixin,
     BaseAppHookConfig,
     TranslatableAdmin
 ):

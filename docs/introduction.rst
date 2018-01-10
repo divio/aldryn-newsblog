@@ -65,7 +65,6 @@ In your project's ``settings.py`` make sure you have all of::
     'aldryn_common',
     'aldryn_newsblog',
     'aldryn_people',
-    'aldryn_reversion',
     'aldryn_translation_tools',
     'parler',
     'sortedm2m',
@@ -75,7 +74,6 @@ In your project's ``settings.py`` make sure you have all of::
     'djangocms_text_ckeditor',
     'easy_thumbnails',
     'filer',
-    'reversion',
 
 listed in ``INSTALLED_APPS``, *after* ``'cms'``.
 

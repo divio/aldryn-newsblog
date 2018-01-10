@@ -19,7 +19,6 @@ from parler.forms import TranslatableModelForm
 from .cms_appconfig import NewsBlogConfig
 from .models import Article
 from .utils.utilities import is_valid_namespace
-from .settings import ENABLE_REVERSION
 
 
 def get_published_app_configs():
@@ -94,16 +93,7 @@ class CreateNewsBlogArticleForm(BaseFormMixin, TranslatableModelForm):
     def save(self, commit=True):
         article = super(CreateNewsBlogArticleForm, self).save(commit=False)
         article.owner = self.user
-
-        if ENABLE_REVERSION:
-            from reversion.revisions import revision_context_manager
-            with transaction.atomic():
-                with revision_context_manager.create_revision():
-                    article.save()
-                    revision_context_manager.set_user(self.user)
-                    revision_context_manager.set_comment(ugettext("Initial version."))
-        else:
-            article.save()
+        article.save()
 
         # If 'content' field has value, create a TextPlugin with same and add it to the PlaceholderField
         content = clean_html(self.cleaned_data.get('content', ''), False)

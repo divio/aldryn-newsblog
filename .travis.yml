@@ -29,7 +29,7 @@ matrix:
     - python: '3.5'
       env: TOXENV=py35-dj110-sqlite-cms34
     - python: '3.5'
-      env: TOXENV=py35-dj19-sqlite-cms34-reversion
+      env: TOXENV=py35-dj19-sqlite-cms34
     - python: '3.5'
       env: TOXENV=py35-dj19-sqlite-cms34
     - python: '3.5'
@@ -45,7 +45,7 @@ matrix:
     - python: '2.7'
       env: TOXENV=py27-dj19-sqlite-cms32
     - python: '3.5'
-      env: TOXENV=py35-dj18-sqlite-cms34-reversion
+      env: TOXENV=py35-dj18-sqlite-cms34
     - python: '3.5'
       env: TOXENV=py35-dj18-sqlite-cms34
     - python: '3.5'
