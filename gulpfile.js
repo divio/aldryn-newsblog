@@ -13,6 +13,8 @@ var gutil = require('gulp-util');
 var KarmaServer = require('karma').Server;
 var eslint = require('gulp-eslint');
 var integrationTests = require('djangocms-casper-helpers/gulp');
+var path = require('path');
+var child_process = require('child_process');
 
 var argv = require('minimist')(process.argv.slice(2)); // eslint-disable-line
 
@@ -65,13 +67,18 @@ gulp.task('tests:unit', function (done) {
 });
 
 // gulp tests:integration [--clean] [--screenshots] [--tests=loginAdmin,toolbar]
+var pathToBin = child_process.execSync('npm bin').toString().trim();
+var pathToCasper = path.join(pathToBin, 'casperjs');
+
 gulp.task('tests:integration', integrationTests({
     tests: INTEGRATION_TESTS,
     pathToTests: PROJECT_PATH.tests,
     argv: argv,
     dbPath: 'local.sqlite',
     serverCommand: 'test_settings.py server',
-    logger: gutil.log.bind(gutil)
+    logger: gutil.log.bind(gutil),
+    waitForMigrations: 120,
+    pathToCasper: pathToCasper
 }));
 
 

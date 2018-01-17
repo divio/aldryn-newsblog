@@ -7,22 +7,10 @@
 
 // #############################################################################
 // CONFIGURATION
-var baseConf = require('./base.conf');
-
 module.exports = function (config) {
     var browsers = {
         PhantomJS: 'used for local testing'
     };
-
-    // Browsers to run on Sauce Labs
-    // Check out https://saucelabs.com/platforms for all browser/OS combos
-    if (process.env.SAUCE_USERNAME && process.env.SAUCE_ACCESS_KEY) {
-        browsers = baseConf.sauceLabsBrowsers.reduce(function (newBrowsers, capability) {
-            newBrowsers[JSON.stringify(capability)] = capability;
-            newBrowsers[JSON.stringify(capability)].base = 'SauceLabs';
-            return newBrowsers;
-        }, {});
-    }
 
     var settings = {
         // base path that will be used to resolve all patterns (eg. files, exclude)
@@ -78,7 +66,7 @@ module.exports = function (config) {
         // test results reporter to use
         // possible values: 'dots', 'progress'
         // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-        reporters: ['progress', 'coverage', 'saucelabs'],
+        reporters: ['progress', 'coverage'],
 
         // web server port
         port: 9876,
@@ -102,14 +90,6 @@ module.exports = function (config) {
         // if true, Karma captures browsers, runs the tests and exits
         singleRun: false
     };
-
-    if (process.env.SAUCE_USERNAME && process.env.SAUCE_ACCESS_KEY) {
-        settings.sauceLabs = {
-            testName: baseConf.formatTaskName('Unit')
-        };
-        settings.captureTimeout = 240000;
-        settings.customLaunchers = browsers;
-    }
 
     config.set(settings);
 };
