@@ -69,6 +69,6 @@ class TestAddPrefixToPath(TestCase):
                     default_reverse(non_pattern, default=default),
                     default
                 )
-            except:
+            except:  # noqa: E722
                 self.fail('default_reverse raised exception even though we '
                           'set a default value of: {0}.'.format(default))
