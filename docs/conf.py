@@ -111,7 +111,7 @@ if not on_rtd:  # only import and set the theme if we're building docs locally
         import sphinx_rtd_theme
         html_theme = 'sphinx_rtd_theme'
         html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
-    except:
+    except:  # noqa: E722
         html_theme = 'default'
 
 # The theme to use for HTML and HTML Help pages.  Major themes that come with

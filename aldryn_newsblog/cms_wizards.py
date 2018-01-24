@@ -3,8 +3,7 @@
 from __future__ import unicode_literals
 
 from django import forms
-from django.db import transaction
-from django.utils.translation import ugettext_lazy as _, ugettext
+from django.utils.translation import ugettext_lazy as _
 
 from cms.api import add_plugin
 from cms.utils import permissions
