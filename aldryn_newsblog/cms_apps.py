@@ -13,10 +13,9 @@ class NewsBlogApp(CMSConfigApp):
     name = _('NewsBlog')
     app_name = 'aldryn_newsblog'
     app_config = NewsBlogConfig
-    urls = ['aldryn_newsblog.urls']  # COMPAT: CMS3.2
 
     def get_urls(self, *args, **kwargs):
-        return self.urls
+        return ['aldryn_newsblog.urls']
 
     # NOTE: Please do not add a «menu» here, menu’s should only be added by at
     # the discretion of the operator.

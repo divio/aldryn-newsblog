@@ -24,43 +24,18 @@ matrix:
       env: TOXENV=py35-dj19-sqlite-cms34
     - python: '3.5'
       env: TOXENV=py35-dj19-sqlite-cms34
-    - python: '3.5'
-      env: TOXENV=py35-dj19-sqlite-cms33-fe FE=1
     - python: '2.7'
       env: TOXENV=py27-dj111-sqlite-cms34
     - python: '2.7'
       env: TOXENV=py27-dj110-sqlite-cms34
     - python: '2.7'
       env: TOXENV=py27-dj19-sqlite-cms34
-    - python: '2.7'
-      env: TOXENV=py27-dj19-sqlite-cms33
-    - python: '2.7'
-      env: TOXENV=py27-dj19-sqlite-cms32
     - python: '3.5'
       env: TOXENV=py35-dj18-sqlite-cms34
     - python: '3.5'
       env: TOXENV=py35-dj18-sqlite-cms34
-    - python: '3.5'
-      env: TOXENV=py35-dj18-sqlite-cms33
-    - python: '3.5'
-      env: TOXENV=py35-dj18-sqlite-cms32
     - python: '2.7'
       env: TOXENV=py27-dj18-sqlite-cms34
-    - python: '2.7'
-      env: TOXENV=py27-dj18-sqlite-cms33-fe FE=1
-    - python: '2.7'
-      env: TOXENV=py27-dj18-sqlite-cms32
-  allow_failures:
-    - python: '2.7'
-      env: TOXENV=py27-dj18-sqlite-cms33-fe FE=1
-    - python: '3.5'
-      env: TOXENV=py35-dj19-sqlite-cms33-fe FE=1
-    - python: '3.6'
-      env: TOXENV=py36-dj111-sqlite-cms35
-    - python: '3.5'
-      env: TOXENV=py35-dj111-sqlite-cms35
-    - python: '2.7'
-      env: TOXENV=py27-dj111-sqlite-cms34
 
 cache:
   directories:

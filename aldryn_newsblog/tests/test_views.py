@@ -559,6 +559,7 @@ class TestIndex(NewsBlogTestCase):
             article.tags.add(tag_name)
         for category in (self.category1, self.category2):
             article.categories.add(category)
+        article.update_search_on_save = True
         article.save()
 
         self.assertEqual(self.index.get_title(article), 'a title')

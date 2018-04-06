@@ -21,6 +21,9 @@ class ArticleIndexingTests(NewsBlogTestCase):
         lead_in = 'Hello! this text will be searchable.'
 
         article = self.create_article(lead_in=lead_in)
+        # If set ALDRYN_NEWSBLOG_UPDATE_SEARCH_DATA_ON_SAVE this will do
+        # automatically
+        article.search_data = article.get_search_data()
 
         index = self.get_index()
 

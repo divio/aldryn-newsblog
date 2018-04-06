@@ -229,7 +229,7 @@ class TestFeaturedArticlesPlugin(TestPluginLanguageHelperMixin,
             self.assertNotContains(response, article.title)
 
     def test_featured_articles_plugin_unpublished_app_page(self):
-        with override('de'):
+        with override(self.language):
             articles = [self.create_article(is_featured=True)
                         for _ in range(3)]
 
@@ -237,7 +237,8 @@ class TestFeaturedArticlesPlugin(TestPluginLanguageHelperMixin,
         for article in articles:
             self.assertContains(response, article.title)
 
-        self.page.unpublish('de')
+        self.page.unpublish(self.language)
+        self.reload_urls()
         cache.clear()
         response = self.client.get(self.plugin_page.get_absolute_url())
         for article in articles:
@@ -294,14 +295,15 @@ class TestLatestArticlesPlugin(TestPluginLanguageHelperMixin,
         self._test_latest_articles_plugin_exclude_count()
 
     def test_latest_articles_plugin_unpublished_app_page(self):
-        with override('de'):
+        with override(self.language):
             articles = [self.create_article() for _ in range(3)]
 
         response = self.client.get(self.plugin_page.get_absolute_url())
         for article in articles:
             self.assertContains(response, article.title)
 
-        self.page.unpublish('de')
+        self.page.unpublish(self.language)
+        self.reload_urls()
         cache.clear()
         response = self.client.get(self.plugin_page.get_absolute_url())
         for article in articles:
@@ -372,6 +374,7 @@ class TestRelatedArticlesPlugin(TestPluginLanguageHelperMixin,
             self.assertNotContains(response, article.title)
 
         self.page.unpublish('de')
+        self.reload_urls()
         cache.clear()
         response = self.client.get(main_article.get_absolute_url())
         for article in another_language_articles:

@@ -35,6 +35,8 @@ class AdminTest(NewsBlogTestsMixin, TransactionTestCase):
         self.request.user = user
         self.request.META['HTTP_HOST'] = 'example.com'
         response = admin_inst.add_view(self.request)
-        option = '<option value="1" selected="selected">%s</option>'
-        self.assertContains(response, option % user.username)
-        self.assertContains(response, option % user.get_full_name())
+        option = r'<option value="{}" (selected="selected"|selected)>%s<\/option>'.format(
+            user.pk,
+        )
+        self.assertRegexpMatches(response.rendered_content, option % user.username)
+        self.assertRegexpMatches(response.rendered_content, option % user.get_full_name())
