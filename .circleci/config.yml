@@ -61,7 +61,7 @@ jobs:
       - run: docker save -o caches/py27.tar py27
       - save_cache:
          key: py27-{{ .Environment.CIRCLE_SHA1 }}
-         paths: 
+         paths:
             - "caches/"
   py36_base:
     docker:
@@ -75,7 +75,7 @@ jobs:
       - run: docker save -o caches/py36.tar py36
       - save_cache:
          key: py36-{{ .Environment.CIRCLE_SHA1 }}
-         paths: 
+         paths:
             - "caches/"
 
   py35_base:
@@ -90,12 +90,12 @@ jobs:
       - run: docker save -o caches/py35.tar py35
       - save_cache:
          key: py35-{{ .Environment.CIRCLE_SHA1 }}
-         paths: 
+         paths:
             - "caches/"
 
   flake8:
     <<: *py35default
-  py36-dj111-sqlite-cms35:
+  py36-dj111-sqlite-cms35-fe:
     <<: *py36default
   py35-dj111-sqlite-cms35:
     <<: *py35default
@@ -113,10 +113,6 @@ jobs:
     <<: *py35default
   py27-dj18-sqlite-cms34:
     <<: *py27default
-  py27-dj18-sqlite-cms34-fe:
-    <<: *py27default
-  py35-dj19-sqlite-cms34-fe:
-    <<: *py35default
 
 #######################
 
