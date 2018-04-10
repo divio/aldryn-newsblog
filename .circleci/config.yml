@@ -99,8 +99,6 @@ jobs:
     <<: *py36default
   py35-dj111-sqlite-cms35:
     <<: *py35default
-  py35-dj111-sqlite-cms35-fe:
-    <<: *py35default
   py35-dj110-sqlite-cms34:
     <<: *py35default
   py35-dj19-sqlite-cms34:
@@ -136,9 +134,6 @@ workflows:
           requires:
             - py36_base
       - py35-dj111-sqlite-cms35:
-          requires:
-            - py35_base
-      - py35-dj111-sqlite-cms35-fe:
           requires:
             - py35_base
       - py35-dj110-sqlite-cms34:
