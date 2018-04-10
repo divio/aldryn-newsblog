@@ -26,7 +26,7 @@ casper.test.begin('Creation / deletion of the apphook', function (test) {
             this.click(
                 xPath(cms.getXPathForAdminSection({
                     section: 'Aldryn News & Blog',
-                    row: 'Application configurations',
+                    row: 'Sections',
                     link: 'Add'
                 }))
             );
@@ -44,7 +44,7 @@ casper.test.begin('Creation / deletion of the apphook', function (test) {
         .waitUntilVisible('.success', function () {
             test.assertSelectorHasText(
                 '.success',
-                'The application configuration "NewsBlog / Test namespace" was added successfully.',
+                'The Section "Test Blog" was added successfully.',
                 'Apphook config was created'
             );
 
@@ -54,7 +54,7 @@ casper.test.begin('Creation / deletion of the apphook', function (test) {
                 'There are 2 apphooks now'
             );
 
-            this.clickLabel('NewsBlog / Test namespace', 'a');
+            this.clickLabel('Test Blog', 'a');
         })
         .waitUntilVisible('.deletelink', function () {
             this.click('.deletelink');
@@ -65,7 +65,7 @@ casper.test.begin('Creation / deletion of the apphook', function (test) {
         .waitUntilVisible('.success', function () {
             test.assertSelectorHasText(
                 '.success',
-                'The application configuration "NewsBlog / Test namespace" was deleted successfully.',
+                'The Section "Test Blog" was deleted successfully.',
                 'Apphook config was deleted'
             );
         })
