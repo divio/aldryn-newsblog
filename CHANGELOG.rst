@@ -1,6 +1,13 @@
 CHANGELOG
 =========
 
+2.1.1 (unreleased)
+------------------
+
+* django-parler >= 1.8.1 is now required
+* Fixed FieldError on creating article from cms wizard
+
+
 2.1.0 (2018-04-06)
 ------------------
 
