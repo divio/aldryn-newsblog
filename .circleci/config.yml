@@ -126,7 +126,7 @@ workflows:
       - flake8:
           requires:
             - py35_base
-      - py36-dj111-sqlite-cms35:
+      - py36-dj111-sqlite-cms35-fe:
           requires:
             - py36_base
       - py35-dj111-sqlite-cms35:
@@ -138,7 +138,7 @@ workflows:
       - py35-dj19-sqlite-cms34:
           requires:
             - py35_base
-      - py35-dj19-sqlite-cms34-fe:
+      - py35-dj19-sqlite-cms34:
           requires:
             - py35_base
       - py27-dj111-sqlite-cms34:
@@ -156,7 +156,7 @@ workflows:
       - py27-dj18-sqlite-cms34:
           requires:
             - py27_base
-      - py27-dj18-sqlite-cms34-fe:
+      - py27-dj18-sqlite-cms34:
           requires:
             - py27_base
 
