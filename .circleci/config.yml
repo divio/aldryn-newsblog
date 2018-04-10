@@ -103,8 +103,6 @@ jobs:
     <<: *py35default
   py35-dj19-sqlite-cms34:
     <<: *py35default
-  py35-dj19-sqlite-cms34:
-    <<: *py35default
   py27-dj111-sqlite-cms34:
     <<: *py27default
   py27-dj110-sqlite-cms34:
@@ -113,10 +111,12 @@ jobs:
     <<: *py27default
   py35-dj18-sqlite-cms34:
     <<: *py35default
-  py35-dj18-sqlite-cms34:
-    <<: *py35default
   py27-dj18-sqlite-cms34:
     <<: *py27default
+  py27-dj18-sqlite-cms34-fe:
+    <<: *py27default
+  py35-dj19-sqlite-cms34-fe:
+    <<: *py35default
 
 #######################
 
@@ -142,7 +142,7 @@ workflows:
       - py35-dj19-sqlite-cms34:
           requires:
             - py35_base
-      - py35-dj19-sqlite-cms34:
+      - py35-dj19-sqlite-cms34-fe:
           requires:
             - py35_base
       - py27-dj111-sqlite-cms34:
@@ -157,10 +157,10 @@ workflows:
       - py35-dj18-sqlite-cms34:
           requires:
             - py35_base
-      - py35-dj18-sqlite-cms34:
-          requires:
-            - py35_base
       - py27-dj18-sqlite-cms34:
+          requires:
+            - py27_base
+      - py27-dj18-sqlite-cms34-fe:
           requires:
             - py27_base
 
