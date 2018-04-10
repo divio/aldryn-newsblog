@@ -235,9 +235,6 @@ class Article(TranslatedAutoSlugifyMixin,
 
         # Ensure there is an owner.
         if self.app_config.create_authors and self.author is None:
-            # TODO: With django-parler 1.8 and Django 1.11 get_or_create() is
-            #       not working with translated fields yet:
-            #       https://github.com/django-parler/django-parler/issues/189
             self.author = Person.objects.get_or_create(
                 user=self.owner,
                 defaults={
