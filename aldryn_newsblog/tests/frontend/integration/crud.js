@@ -74,13 +74,41 @@ casper.test.begin('Creation / deletion of the apphook', function (test) {
         });
 });
 
+cms._modifyPageAdvancedSettings = function _modifyPageAdvancedSettings(opts) {
+    var that = this;
+
+    return function () {
+        return this.wait(1000).thenOpen(globals.adminPagesUrl)
+            .waitUntilVisible('.cms-pagetree-jstree')
+            .then(that.waitUntilAllAjaxCallsFinish())
+            .then(that.expandPageTree())
+            .then(function () {
+                var pageId = that.getPageId(opts.page);
+
+                this.thenOpen(globals.adminPagesUrl + pageId + '/advanced-settings/');
+            })
+            .waitForSelector('#page_form', function () {
+                this.fill('#page_form', opts.fields);
+            })
+            .wait(100, function () {
+                this.click('input.default');
+            })
+            .waitForUrl(/page/)
+            .waitUntilVisible('.success')
+            .then(that.waitUntilAllAjaxCallsFinish())
+            .wait(1000);
+    };
+},
 casper.test.begin('Creation / deletion of the article', function (test) {
     casper
         .start()
         .then(cms.addPage({ title: 'Blog' }))
-        .then(cms.addApphookToPage({
+        .then(cms._modifyPageAdvancedSettings({
             page: 'Blog',
-            apphook: 'NewsBlogApp'
+            fields: {
+                application_configs: 1,
+                application_urls: 'NewsBlogApp'
+            }
         }))
         .then(cms.publishPage({
             page: 'Blog'
