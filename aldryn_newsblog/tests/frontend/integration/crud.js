@@ -98,7 +98,8 @@ cms._modifyPageAdvancedSettings = function _modifyPageAdvancedSettings(opts) {
             .then(that.waitUntilAllAjaxCallsFinish())
             .wait(1000);
     };
-},
+};
+
 casper.test.begin('Creation / deletion of the article', function (test) {
     casper
         .start()
