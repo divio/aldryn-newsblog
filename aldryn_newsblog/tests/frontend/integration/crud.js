@@ -200,7 +200,7 @@ casper.test.begin('Latest articles plugin', function (test) {
         }))
         .thenOpen(globals.editUrl, function () {
             test.assertSelectorHasText(
-                '.cms-plugin p',
+                'p.cms-plugin',
                 'No items available',
                 'No articles yet'
             );
@@ -246,7 +246,7 @@ casper.test.begin('Latest articles plugin', function (test) {
         })
         .thenOpen(globals.editUrl, function () {
             test.assertSelectorHasText(
-                '.cms-plugin p',
+                'p.cms-plugin',
                 'No items available',
                 'Still no articles yet (no apphooked page yet)'
             );
@@ -259,12 +259,12 @@ casper.test.begin('Latest articles plugin', function (test) {
         .then(cms.publishPage({ page: 'Blog' }))
         .thenOpen(globals.editUrl, function () {
             test.assertSelectorHasText(
-                '.cms-plugin .article h2 a',
+                '.article h2 a cms-plugin',
                 'Second article',
                 'Latest article is visible on the page'
             );
             test.assertElementCount(
-                '.cms-plugin .article',
+                '.article cms-plugin',
                 1,
                 'Only one latest article is visible on the page'
             );
