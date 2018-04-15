@@ -56,7 +56,7 @@ jobs:
       - checkout
       - setup_remote_docker:
           docker_layer_caching: true
-      - run: docker build --build-arg PYTHON_VERSION=2.7 -t py27 .
+      - run: docker build -f .circleci/Dockerfile --build-arg PYTHON_VERSION=2.7 -t py27 .
       - run: mkdir caches
       - run: docker save -o caches/py27.tar py27
       - save_cache:
@@ -70,7 +70,7 @@ jobs:
       - checkout
       - setup_remote_docker:
           docker_layer_caching: true
-      - run: docker build --build-arg PYTHON_VERSION=3.6 -t py36 .
+      - run: docker build -f .circleci/Dockerfile --build-arg PYTHON_VERSION=3.6 -t py36 .
       - run: mkdir caches
       - run: docker save -o caches/py36.tar py36
       - save_cache:
@@ -85,7 +85,7 @@ jobs:
       - checkout
       - setup_remote_docker:
           docker_layer_caching: true
-      - run: docker build --build-arg PYTHON_VERSION=3.5 -t py35 .
+      - run: docker build -f .circleci/Dockerfile --build-arg PYTHON_VERSION=3.5 -t py35 .
       - run: mkdir caches
       - run: docker save -o caches/py35.tar py35
       - save_cache:
