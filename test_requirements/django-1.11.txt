@@ -6,7 +6,7 @@ django-haystack
 aldryn-boilerplates>=0.7.4
 
 # NOTE: These are for Filer
-django-mptt>=0.7
-django-polymorphic>=0.7
+django-mptt>=0.8,<0.9
+django_polymorphic>=2.0,<2.1
 
 -r base.txt

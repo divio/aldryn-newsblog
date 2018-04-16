@@ -26,7 +26,7 @@ casper.test.begin('Creation / deletion of the apphook', function (test) {
             this.click(
                 xPath(cms.getXPathForAdminSection({
                     section: 'Aldryn News & Blog',
-                    row: 'Application configurations',
+                    row: 'Sections',
                     link: 'Add'
                 }))
             );
@@ -44,7 +44,7 @@ casper.test.begin('Creation / deletion of the apphook', function (test) {
         .waitUntilVisible('.success', function () {
             test.assertSelectorHasText(
                 '.success',
-                'The application configuration "NewsBlog / Test namespace" was added successfully.',
+                'The Section "Test Blog" was added successfully.',
                 'Apphook config was created'
             );
 
@@ -54,7 +54,7 @@ casper.test.begin('Creation / deletion of the apphook', function (test) {
                 'There are 2 apphooks now'
             );
 
-            this.clickLabel('NewsBlog / Test namespace', 'a');
+            this.clickLabel('Test Blog', 'a');
         })
         .waitUntilVisible('.deletelink', function () {
             this.click('.deletelink');
@@ -65,7 +65,7 @@ casper.test.begin('Creation / deletion of the apphook', function (test) {
         .waitUntilVisible('.success', function () {
             test.assertSelectorHasText(
                 '.success',
-                'The application configuration "NewsBlog / Test namespace" was deleted successfully.',
+                'The Section "Test Blog" was deleted successfully.',
                 'Apphook config was deleted'
             );
         })
@@ -74,13 +74,42 @@ casper.test.begin('Creation / deletion of the apphook', function (test) {
         });
 });
 
+cms._modifyPageAdvancedSettings = function _modifyPageAdvancedSettings(opts) {
+    var that = this;
+
+    return function () {
+        return this.wait(1000).thenOpen(globals.adminPagesUrl)
+            .waitUntilVisible('.cms-pagetree-jstree')
+            .then(that.waitUntilAllAjaxCallsFinish())
+            .then(that.expandPageTree())
+            .then(function () {
+                var pageId = that.getPageId(opts.page);
+
+                this.thenOpen(globals.adminPagesUrl + pageId + '/advanced-settings/');
+            })
+            .waitForSelector('#page_form', function () {
+                this.fill('#page_form', opts.fields);
+            })
+            .wait(100, function () {
+                this.click('input.default');
+            })
+            .waitForUrl(/page/)
+            .waitUntilVisible('.success')
+            .then(that.waitUntilAllAjaxCallsFinish())
+            .wait(1000);
+    };
+};
+
 casper.test.begin('Creation / deletion of the article', function (test) {
     casper
         .start()
         .then(cms.addPage({ title: 'Blog' }))
-        .then(cms.addApphookToPage({
+        .then(cms._modifyPageAdvancedSettings({
             page: 'Blog',
-            apphook: 'NewsBlogApp'
+            fields: {
+                application_configs: 1,
+                application_urls: 'NewsBlogApp'
+            }
         }))
         .then(cms.publishPage({
             page: 'Blog'
@@ -171,7 +200,7 @@ casper.test.begin('Latest articles plugin', function (test) {
         }))
         .thenOpen(globals.editUrl, function () {
             test.assertSelectorHasText(
-                '.cms-plugin p',
+                'p.cms-plugin',
                 'No items available',
                 'No articles yet'
             );
@@ -217,7 +246,7 @@ casper.test.begin('Latest articles plugin', function (test) {
         })
         .thenOpen(globals.editUrl, function () {
             test.assertSelectorHasText(
-                '.cms-plugin p',
+                'p.cms-plugin',
                 'No items available',
                 'Still no articles yet (no apphooked page yet)'
             );
@@ -230,12 +259,12 @@ casper.test.begin('Latest articles plugin', function (test) {
         .then(cms.publishPage({ page: 'Blog' }))
         .thenOpen(globals.editUrl, function () {
             test.assertSelectorHasText(
-                '.cms-plugin .article h2 a',
+                '.article h2 a cms-plugin',
                 'Second article',
                 'Latest article is visible on the page'
             );
             test.assertElementCount(
-                '.cms-plugin .article',
+                '.article cms-plugin',
                 1,
                 'Only one latest article is visible on the page'
             );
