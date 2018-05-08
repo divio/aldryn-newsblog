@@ -17,6 +17,7 @@ class Form(forms.BaseForm):
             'aldryn_newsblog',
             'aldryn_people',
             'aldryn_translation_tools',
+            'djangocms_publisher',
             'easy_thumbnails',
             'filer',
             'sortedm2m',

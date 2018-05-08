@@ -10,6 +10,8 @@ from django.utils.translation import ugettext_lazy as _
 from parler.admin import TranslatableAdmin
 from parler.forms import TranslatableModelForm
 
+from djangocms_publisher.admin import PublisherAdminMixin, \
+    PublisherParlerAdminMixin
 from . import models
 
 from cms.admin.placeholderadmin import PlaceholderAdminMixin
@@ -87,7 +89,8 @@ class ArticleAdminForm(TranslatableModelForm):
 
         # Don't allow app_configs to be added here. The correct way to add an
         # apphook-config is to create an apphook on a cms Page.
-        self.fields['app_config'].widget.can_add_related = False
+        if 'app_config' in self.fields:
+            self.fields['app_config'].widget.can_add_related = False
         # Don't allow related articles to be added here.
         # doesn't makes much sense to add articles from another article other
         # than save and add another.
@@ -97,6 +100,7 @@ class ArticleAdminForm(TranslatableModelForm):
 
 
 class ArticleAdmin(
+    PublisherParlerAdminMixin,
     AllTranslationsMixin,
     PlaceholderAdminMixin,
     FrontendEditableAdminMixin,
@@ -104,8 +108,13 @@ class ArticleAdmin(
     TranslatableAdmin
 ):
     form = ArticleAdminForm
-    list_display = ('title', 'app_config', 'slug', 'is_featured',
-                    'is_published')
+    list_display = (
+        'title',
+        'app_config',
+        'slug',
+        'is_featured',
+        'is_published',
+    )
     list_filter = [
         'app_config',
         'categories',
@@ -115,6 +124,21 @@ class ArticleAdmin(
         make_published, make_unpublished,
     )
     fieldsets = (
+        (None, {
+            'fields': (
+                'publisher_status',
+            ),
+            'classes': ('filer-file-info',),  # FIXME: add styling in djangocms-publisher to hide the ":"
+        }),
+        (None, {
+            'fields': (
+                (
+                    'publisher_is_published_version',
+                    'publisher_published_version',
+                    'publisher_deletion_requested',
+                ),
+            ),
+        }),
         (None, {
             'fields': (
                 'title',
@@ -149,8 +173,14 @@ class ArticleAdmin(
     filter_horizontal = [
         'categories',
     ]
+    readonly_fields = (
+        'publisher_status',
+        'publisher_is_published_version',
+        'publisher_published_version',
+        'publisher_deletion_requested',
+    )
     app_config_values = {
-        'default_published': 'is_published'
+        'default_published': 'is_published',
     }
     app_config_selection_title = ''
     app_config_selection_desc = ''
