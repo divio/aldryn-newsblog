@@ -26,7 +26,10 @@ class ArticleQuerySet(QuerySetMixin, TranslatableQuerySet, PublisherQuerySetMixi
         Returns articles that are published AND have a publishing_date that
         has actually passed.
         """
-        return self.filter(publishing_date__lte=now())
+        return self.filter(
+            publisher_is_published_version=True,
+            publishing_date__lte=now(),
+        )
 
 
 class RelatedManager(ManagerMixin, TranslatableManager):
@@ -88,7 +91,7 @@ class RelatedManager(ManagerMixin, TranslatableManager):
         # is effectively unique for Article models
         return Person.objects.filter(
             article__app_config__namespace=namespace,
-            article__is_published=True).annotate(
+            article__publisher_is_published_version=True).annotate(
                 num_articles=models.Count('article')).order_by('-num_articles')
 
     def get_tags(self, request, namespace):

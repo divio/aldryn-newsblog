@@ -19,7 +19,7 @@ from cms.admin.placeholderadmin import PlaceholderAdminMixin
 
 
 def make_published(modeladmin, request, queryset):
-    queryset.update(is_published=True)
+    queryset.update(publisher_is_published_version=True)
 
 
 make_published.short_description = _(
@@ -27,7 +27,7 @@ make_published.short_description = _(
 
 
 def make_unpublished(modeladmin, request, queryset):
-    queryset.update(is_published=False)
+    queryset.update(publisher_is_published_version=False)
 
 
 make_unpublished.short_description = _(
@@ -136,7 +136,7 @@ class ArticleAdmin(
                 'title',
                 'author',
                 'publishing_date',
-                'is_published',
+                # 'is_published',
                 'is_featured',
                 'featured_image',
                 'lead_in',
@@ -172,10 +172,10 @@ class ArticleAdmin(
         'publisher_is_published_version',
         'publisher_published_version',
         'publisher_deletion_requested',
-        'is_published',
+        # 'is_published',
     )
     app_config_values = {
-        'default_published': 'is_published',
+        'default_published': 'publisher_is_published_version',
     }
     app_config_selection_title = ''
     app_config_selection_desc = ''

@@ -18,6 +18,7 @@ HELPER_SETTINGS = {
         'aldryn_categories',
         'aldryn_people',
         'aldryn_translation_tools',
+        'djangocms_publisher',
         'djangocms_text_ckeditor',
         'easy_thumbnails',
         'filer',

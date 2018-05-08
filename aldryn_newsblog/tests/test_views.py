@@ -82,7 +82,7 @@ class TestViews(NewsBlogTestCase):
         namespace = self.app_config.namespace
         articles = [self.create_article() for _ in range(11)]
         unpublished_article = articles[0]
-        unpublished_article.is_published = False
+        unpublished_article.publisher_is_published_version = False
         unpublished_article.save()
         response = self.client.get(
             reverse('{0}:article-list'.format(namespace)))
@@ -189,7 +189,7 @@ class TestViews(NewsBlogTestCase):
                         author=author,
                         owner=author.user,
                         publishing_date=now(),
-                        is_published=True,
+                        publisher_is_published_version=True,
                     )
                     # Make sure there are translations in place for the
                     # articles.
@@ -263,7 +263,7 @@ class TestTranslationFallbacks(NewsBlogTestCase):
                 app_config=self.app_config,
                 author=author, owner=author.user,
                 publishing_date=now(),
-                is_published=True,
+                publisher_is_published_version=True,
             )
             article.save()
             article.categories.add(self.category1)
@@ -313,7 +313,7 @@ class TestTranslationFallbacks(NewsBlogTestCase):
             app_config=self.app_config,
             author=author, owner=author.user,
             publishing_date=now(),
-            is_published=True,
+            publisher_is_published_version=True,
         )
         article.save()
         article.categories.add(self.category1)
@@ -413,7 +413,7 @@ class TestVariousViews(NewsBlogTestCase):
                 article = self.create_article(publishing_date=month['date'])
 
         # unpublish one specific article to test that it is not counted
-        article.is_published = False
+        article.publisher_is_published_version = False
         article.save()
         months[-1]['num_articles'] -= 1
 
@@ -437,7 +437,7 @@ class TestVariousViews(NewsBlogTestCase):
             authors[i] = (data[0].pk, data[1])
 
         # unpublish one specific article to test that it is not counted
-        article.is_published = False
+        article.publisher_is_published_version = False
         article.save()
         authors[-1] = (authors[-1][0], authors[-1][1] - 1)
 
@@ -464,7 +464,7 @@ class TestVariousViews(NewsBlogTestCase):
         tag_names = ('tag foo', 'tag bar', 'tag buzz')
         # create unpublished article to test that it is not counted
         self.create_tagged_articles(
-            1, tags=(tag_names[0],), is_published=False)
+            1, tags=(tag_names[0],), publisher_is_published_version=False)
         tag_slug2 = list(self.create_tagged_articles(
             3, tags=(tag_names[1],)).keys())[0]
         tag_slug3 = list(self.create_tagged_articles(
@@ -645,7 +645,7 @@ class ViewLanguageFallbackMixin(object):
                 owner=owner,
                 app_config=app_config,
                 publishing_date=now(),
-                is_published=True,
+                publisher_is_published_version=True,
             )
         if categories:
             de_article.categories = categories

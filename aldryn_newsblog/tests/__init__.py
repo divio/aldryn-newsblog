@@ -103,7 +103,7 @@ class NewsBlogTestsMixin(object):
             'owner': owner,
             'app_config': self.app_config,
             'publishing_date': now(),
-            'is_published': True,
+            'publisher_is_published_version': True,
         }
 
         fields.update(kwargs)

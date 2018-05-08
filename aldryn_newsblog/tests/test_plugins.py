@@ -118,7 +118,7 @@ class TestAuthorsPlugin(TestAppConfigPluginsBase):
         for _ in range(7):
             article = self.create_article(
                 author=author1,
-                is_published=False
+                publisher_is_published_version=False
             )
             other_articles.append(article)
 
@@ -172,7 +172,7 @@ class TestCategoriesPlugin(TestAppConfigPluginsBase):
 
         # Some tag1, but unpublished articles
         for _ in range(7):
-            article = self.create_article(is_published=False)
+            article = self.create_article(publisher_is_published_version=False)
             article.categories.add(self.category1)
             other_articles.append(article)
 
@@ -207,12 +207,12 @@ class TestFeaturedArticlesPlugin(TestPluginLanguageHelperMixin,
     def test_featured_articles_plugin(self):
         featured_articles = [self.create_article(
             is_featured=True,
-            is_published=True
+            publisher_is_published_version=True
         ) for _ in range(3)]
         # Some featured articles but unpublished articles
         other_articles = [self.create_article(
             is_featured=True,
-            is_published=False
+            publisher_is_published_version=False
         ) for _ in range(3)]
         # Some non-featured articles in the same namespace
         other_articles += [self.create_article() for _ in range(3)]
@@ -396,7 +396,7 @@ class TestTagsPlugin(TestAppConfigPluginsBase):
         other_articles = self.create_tagged_articles(5, tags=['tag2'])['tag2']
         # Some tag1, but unpublished articles
         other_articles += self.create_tagged_articles(
-            7, tags=['tag1'], is_published=False)['tag1']
+            7, tags=['tag1'], publisher_is_published_version=False)['tag1']
         # Some tag1 articles in another namespace
         other_articles += self.create_tagged_articles(
             1, tags=['tag1'], app_config=self.another_app_config)['tag1']

@@ -51,7 +51,7 @@ class TestSitemaps(NewsBlogTestCase):
     def test_listening_all_instances(self):
         articles = [self.create_article() for _ in range(11)]
         unpublished_article = articles[0]
-        unpublished_article.is_published = False
+        unpublished_article.publisher_is_published_version = False
         unpublished_article.save()
         sitemap = NewsBlogSitemap()
         self.assertArticlesIn(articles[1:], sitemap)
@@ -60,7 +60,7 @@ class TestSitemaps(NewsBlogTestCase):
     def test_listening_namespace(self):
         articles = [self.create_article() for _ in range(11)]
         unpublished_article = articles[0]
-        unpublished_article.is_published = False
+        unpublished_article.publisher_is_published_version = False
         unpublished_article.save()
         sitemap = NewsBlogSitemap(namespace=self.app_config.namespace)
         self.assertArticlesIn(articles[1:], sitemap)
@@ -69,7 +69,7 @@ class TestSitemaps(NewsBlogTestCase):
     def test_listening_unexisting_namespace(self):
         articles = [self.create_article() for _ in range(11)]
         unpublished_article = articles[0]
-        unpublished_article.is_published = False
+        unpublished_article.publisher_is_published_version = False
         unpublished_article.save()
         sitemap = NewsBlogSitemap(
             namespace='not exists')

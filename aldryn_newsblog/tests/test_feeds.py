@@ -20,7 +20,7 @@ class TestFeeds(NewsBlogTestsMixin, TransactionTestCase):
         article = self.create_article()
         future_article = self.create_article(
             publishing_date=now() + timedelta(days=3),
-            is_published=True,
+            publisher_is_published_version=True,
         )
         url = reverse(
             '{0}:article-list-feed'.format(self.app_config.namespace)

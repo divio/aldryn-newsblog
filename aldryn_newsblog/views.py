@@ -5,7 +5,6 @@ from __future__ import unicode_literals
 from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
 
-from cms.utils import get_cms_setting
 from django.db.models import Q
 from django.http import (
     Http404,
