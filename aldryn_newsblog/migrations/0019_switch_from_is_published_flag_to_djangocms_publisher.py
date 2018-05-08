@@ -35,7 +35,7 @@ def back_to_native(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('aldryn_newsblog', '0017_auto_20170727_0724'),
+        ('aldryn_newsblog', '0018_auto_20170727_0724'),
     ]
 
     operations = [

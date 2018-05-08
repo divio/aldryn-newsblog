@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('aldryn_newsblog', '0018_switch_from_is_published_flag_to_djangocms_publisher'),
+        ('aldryn_newsblog', '0019_switch_from_is_published_flag_to_djangocms_publisher'),
     ]
 
     operations = [
