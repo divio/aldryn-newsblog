@@ -7,7 +7,6 @@
 
 {% block newsblog_content %}
     {% include "aldryn_newsblog/includes/article.html" with detail_view="true" %}
-    {% include 'djangocms_publisher/tools/state_debug' with obj=article %}
     {% static_placeholder "newsblog_social" %}
 
     <ul>

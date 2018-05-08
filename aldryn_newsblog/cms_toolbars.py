@@ -2,6 +2,9 @@
 
 from __future__ import unicode_literals
 
+from cms.toolbar.items import Dropdown, DropdownToggleButton, ModalButton, \
+    Button
+
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse
 from django.utils.translation import (
@@ -134,19 +137,20 @@ class NewsBlogToolbar(CMSToolbar):
 
             # PUBLISHER
             if article:
-                draft_article = article.publisher_get_draft_version()
-                published_article = article.publisher_get_published_version()
+                draft_article = article.publisher.get_draft_version()
+                published_article = article.publisher.get_published_version()
                 if self.toolbar.edit_mode:
                     if draft_article:
                         # We're in edit mode. There is a draft article.
-                        self.toolbar.add_button(
-                            name='Publish',
-                            url=draft_article.get_publish_url(),
-                            side=self.toolbar.RIGHT,
-                            extra_classes=[
-                                'cms-btn-action',
-                            ],
-                        )
+                        # self.toolbar.add_button(
+                        #     name='Publish',
+                        #     url=draft_article.get_publish_url(),
+                        #     side=self.toolbar.RIGHT,
+                        #     extra_classes=[
+                        #         'cms-btn-action',
+                        #     ],
+                        # )
+                        self.add_publisher_publish_dropdown(draft_article)
                         # add_ajax_button(
                         #     toolbar=self.toolbar,
                         #     name='Publish',
@@ -191,3 +195,30 @@ class NewsBlogToolbar(CMSToolbar):
                         )
 
             # /PUBLISHER
+
+    def add_publisher_publish_dropdown(self, obj):
+        container = Dropdown(
+            side=self.toolbar.RIGHT,
+            extra_classes=[
+                'cms-btn-action',
+            ],
+        )
+        container.add_primary_button(
+            ModalButton(
+                name=_('Publish'),
+                url=obj.get_publish_url(),
+                extra_classes=[
+                    'cms-btn-action',
+                ],
+            )
+        )
+        container.buttons.append(
+            Button(name=_('View published'), url=obj.get_draft_url())
+        )
+        container.buttons.append(
+            ModalButton(name=_('Discard draft'), url='FIXME')
+        )
+        container.buttons.append(
+            ModalButton(name=_('Request deletion'), url='FIXME')
+        )
+        self.toolbar.add_item(container)

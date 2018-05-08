@@ -6,7 +6,7 @@
 
 {% block newsblog_content %}
     <div class="aldryn-newsblog-detail">
-        {% include 'admin/djangocms_publisher/tools/state_debug.html' with obj=article %}
+        {% include 'aldryn_newsblog/debug/state_debug.html' with obj=article %}
         {% include "aldryn_newsblog/includes/article.html" with detail_view="true" %}
     </div>
     {% static_placeholder "newsblog_social" %}

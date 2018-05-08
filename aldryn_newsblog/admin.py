@@ -11,6 +11,8 @@ from parler.admin import TranslatableAdmin
 from parler.forms import TranslatableModelForm
 
 from djangocms_publisher.contrib.parler.admin import PublisherParlerAdminMixin
+from djangocms_publisher.contrib.parler.utils import \
+    publisher_translation_states_admin_field_names
 from . import models
 
 from cms.admin.placeholderadmin import PlaceholderAdminMixin
@@ -109,14 +111,9 @@ class ArticleAdmin(
     form = ArticleAdminForm
     list_display = (
         'title',
-        'is_published',
-        'all_translations',
-        'publisher_status_parler',
-        'publisher_status',
         'app_config',
-        'slug',
         'is_featured',
-    )
+    ) + tuple(publisher_translation_states_admin_field_names())
     list_filter = [
         'app_config',
         'categories',
@@ -134,23 +131,6 @@ class ArticleAdmin(
         # make_published, make_unpublished,
     )
     fieldsets = (
-        (None, {
-            'fields': (
-                'is_published',
-                'publisher_status',
-                'publisher_status_parler',
-            ),
-            'classes': ('filer-file-info',),  # FIXME: add styling in djangocms-publisher to hide the ":"
-        }),
-        (None, {
-            'fields': (
-                (
-                    'publisher_is_published_version',
-                    'publisher_published_version',
-                    'publisher_deletion_requested',
-                ),
-            ),
-        }),
         (None, {
             'fields': (
                 'title',
@@ -176,7 +156,8 @@ class ArticleAdmin(
             'fields': (
                 'tags',
                 'categories',
-                'related',
+                # FIXME: add related again. Right now it is making the whole changeview in admin display nothing at all.
+                # 'related',
                 'owner',
                 'app_config',
             )
@@ -186,8 +167,8 @@ class ArticleAdmin(
         'categories',
     ]
     readonly_fields = (
-        'publisher_status',
-        'publisher_status_parler',
+        'publisher_state',
+        'publisher_translation_states',
         'publisher_is_published_version',
         'publisher_published_version',
         'publisher_deletion_requested',

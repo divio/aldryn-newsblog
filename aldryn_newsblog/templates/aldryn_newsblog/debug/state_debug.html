@@ -1,0 +1,4 @@
+<pre style="margin-bottom: 4px; background-color: lightgrey;">{% for key, value in obj.publisher.state.items|dictsort:'0.lower' %}{{ key }}: {{ value }}
+{% endfor %}</pre>
+{% include 'admin/djangocms_publisher/contrib/parler/debug/state_debug_version.html' with version=obj.master_publisher.get_draft_version %}
+{% include 'admin/djangocms_publisher/contrib/parler/debug/state_debug_version.html' with version=obj.master_publisher.get_published_version %}

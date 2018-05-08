@@ -192,11 +192,11 @@ class ArticleDetail(TranslatableSlugMixin, ArticleDetailBase):
         # If we're in edit mode and the current article is not a draft: redirect
         if self.edit_mode:
             if (
-                self.object.publisher_is_draft_version or
-                self.object.publisher_is_published_version and
-                self.object.publisher_has_pending_changes
+                self.object.publisher.is_draft_version or
+                self.object.publisher.is_published_version and
+                self.object.publisher.has_pending_changes
             ):
-                draft = self.object.publisher_get_draft_version()
+                draft = self.object.publisher.get_draft_version()
                 return HttpResponseRedirect(draft.get_absolute_url())
 
         url = self.object.get_absolute_url()
@@ -250,6 +250,7 @@ class ArticleDetailDraft(ArticleDetailBase):
         if not any([self.create_draft, self.publish, self.discard_draft]):
             return super(ArticleDetailDraft, self).get(request, *args, **kwargs)
 
+        # FIXME: do this on POST
         if not hasattr(self, 'object'):
             self.object = self.get_object()
         if self.create_draft:
