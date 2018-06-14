@@ -1,7 +1,7 @@
 CHANGELOG
 =========
 
-2.1.2 (unreleased)
+2.1.2 (2018-06-14)
 ------------------
 
 * Fixed NoReverseMatch errors raised when indexing an article not present
