@@ -1,7 +1,7 @@
 CHANGELOG
 =========
 
-2.1.4 (unreleased)
+2.1.4 (2019-02-04)
 ------------------
 
 * Fixed problem with not working sending forms on apphooked pages
