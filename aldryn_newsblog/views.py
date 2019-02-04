@@ -2,29 +2,24 @@
 
 from __future__ import unicode_literals
 
-from datetime import datetime, date
-from dateutil.relativedelta import relativedelta
-
-from django.db.models import Q
-from django.http import (
-    Http404,
-    HttpResponseRedirect,
-    HttpResponsePermanentRedirect,
-)
-from django.shortcuts import get_object_or_404
-from django.utils import translation
-from django.views.generic import ListView
-from django.views.generic.detail import DetailView
-
-from menus.utils import set_language_changer
-from parler.views import TranslatableSlugMixin, ViewUrlMixin
-from taggit.models import Tag
+from datetime import date, datetime
 
 from aldryn_apphooks_config.mixins import AppConfigMixin
 from aldryn_categories.models import Category
 from aldryn_people.models import Person
+from django.db.models import Q
+from django.http import Http404, HttpResponsePermanentRedirect, HttpResponseRedirect
+from django.shortcuts import get_object_or_404
+from django.utils import translation
+from django.views.generic import ListView
+from django.views.generic.detail import DetailView
+from menus.utils import set_language_changer
+from parler.views import TranslatableSlugMixin, ViewUrlMixin
+from taggit.models import Tag
 
 from aldryn_newsblog.utils.utilities import get_valid_languages_from_request
+from dateutil.relativedelta import relativedelta
+
 from .models import Article
 from .utils import add_prefix_to_path
 
@@ -32,7 +27,7 @@ from .utils import add_prefix_to_path
 class TemplatePrefixMixin(object):
 
     def prefix_template_names(self, template_names):
-        if (hasattr(self.config, 'template_prefix') and
+        if (hasattr(self.config, 'template_prefix') and  # noqa: W504
                 self.config.template_prefix):
             prefix = self.config.template_prefix
             return [
@@ -279,8 +274,8 @@ class ArticleSearchResultsList(ArticleListBase):
             qs = qs.published()
         if self.query:
             return qs.filter(
-                Q(translations__title__icontains=self.query) |
-                Q(translations__lead_in__icontains=self.query) |
+                Q(translations__title__icontains=self.query) |  # noqa: #W504
+                Q(translations__lead_in__icontains=self.query) |  # noqa: #W504
                 Q(translations__search_data__icontains=self.query)
             ).distinct()
         else:
@@ -366,8 +361,8 @@ class DateRangeArticleList(ArticleListBase):
         )
 
     def _daterange_from_kwargs(self, kwargs):
-        raise NotImplemented('Subclasses of DateRangeArticleList need to'
-                             'implement `_daterange_from_kwargs`.')
+        raise NotImplementedError('Subclasses of DateRangeArticleList need to'
+                                  'implement `_daterange_from_kwargs`.')
 
     def get(self, request, **kwargs):
         self.date_from, self.date_to = self._daterange_from_kwargs(kwargs)

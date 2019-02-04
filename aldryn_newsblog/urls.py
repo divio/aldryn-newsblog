@@ -1,10 +1,9 @@
 from django.conf.urls import url
 
-from aldryn_newsblog.views import (
-    ArticleDetail, ArticleList, AuthorArticleList, CategoryArticleList,
-    YearArticleList, MonthArticleList, DayArticleList, TagArticleList,
-    ArticleSearchResultsList)
-from aldryn_newsblog.feeds import LatestArticlesFeed, TagFeed, CategoryFeed
+from aldryn_newsblog.feeds import CategoryFeed, LatestArticlesFeed, TagFeed
+from aldryn_newsblog.views import (ArticleDetail, ArticleList, ArticleSearchResultsList, AuthorArticleList,
+                                   CategoryArticleList, DayArticleList, MonthArticleList, TagArticleList,
+                                   YearArticleList)
 
 urlpatterns = [
     url(r'^$',

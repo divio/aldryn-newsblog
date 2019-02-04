@@ -1,19 +1,20 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.db import models, migrations
-import taggit.managers
+import aldryn_apphooks_config.fields
 import aldryn_categories.fields
-import aldryn_newsblog.models
-import filer.fields.image
-from django.conf import settings
-import sortedm2m.fields
+import app_data.fields
+import cms.models.fields
+import django.core.validators
 import django.utils.timezone
 import djangocms_text_ckeditor.fields
-import cms.models.fields
-import app_data.fields
-import aldryn_apphooks_config.fields
-import django.core.validators
+import filer.fields.image
+import sortedm2m.fields
+import taggit.managers
+from django.conf import settings
+from django.db import migrations, models
+
+import aldryn_newsblog.models
 
 
 class Migration(migrations.Migration):

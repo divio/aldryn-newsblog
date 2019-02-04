@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.db import models, migrations
-import filer.fields.image
-import django.db.models.deletion
 import app_data.fields
+import django.db.models.deletion
+import filer.fields.image
+from django.db import migrations, models
 
 
 class Migration(migrations.Migration):

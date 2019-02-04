@@ -2,29 +2,28 @@
 
 from __future__ import unicode_literals
 
+from cms.plugin_rendering import ContentRenderer
+from cms.utils.i18n import force_language, get_language_object
 from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.sites.models import Site
+from django.core.urlresolvers import NoReverseMatch, reverse
+from django.db import models
+from django.test import RequestFactory
+from django.utils import translation
+from django.utils.html import strip_tags as _strip_tags
+from django.utils.text import smart_split
+from lxml.html.clean import Cleaner as LxmlCleaner
+
 try:
     from django.contrib.sites.shortcuts import get_current_site
 except ImportError:
     # Django 1.6
     from django.contrib.sites.models import get_current_site
-from django.core.urlresolvers import reverse, NoReverseMatch
-from django.db import models
-from django.test import RequestFactory
-from django.utils import translation
 try:
     from django.utils.encoding import force_unicode
 except ImportError:
     from django.utils.encoding import force_text as force_unicode
-from django.utils.html import strip_tags as _strip_tags
-from django.utils.text import smart_split
-
-from cms.plugin_rendering import ContentRenderer
-from cms.utils.i18n import force_language, get_language_object
-
-from lxml.html.clean import Cleaner as LxmlCleaner
 
 
 def default_reverse(*args, **kwargs):

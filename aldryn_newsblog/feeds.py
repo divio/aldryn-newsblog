@@ -1,19 +1,21 @@
 # -*- coding: utf-8 -*-
 
+from aldryn_apphooks_config.utils import get_app_instance
+from aldryn_categories.models import Category
 from django.contrib.sites.models import Site
 from django.contrib.syndication.views import Feed
+from django.core.urlresolvers import reverse
+from django.utils.translation import get_language_from_request
+from django.utils.translation import ugettext as _
+
+from aldryn_newsblog.models import Article
+from aldryn_newsblog.utils.utilities import get_valid_languages
+
 try:
     from django.contrib.sites.shortcuts import get_current_site
 except ImportError:
     # Django 1.6
     from django.contrib.sites.models import get_current_site
-from django.core.urlresolvers import reverse
-from django.utils.translation import get_language_from_request, ugettext as _
-
-from aldryn_apphooks_config.utils import get_app_instance
-from aldryn_categories.models import Category
-from aldryn_newsblog.models import Article
-from aldryn_newsblog.utils.utilities import get_valid_languages
 
 
 class LatestArticlesFeed(Feed):

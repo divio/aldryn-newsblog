@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from distutils.version import LooseVersion
-from django import get_version
-from cms import __version__ as cms_string_version
-
 import os
+from distutils.version import LooseVersion
+
+from cms import __version__ as cms_string_version
+from django import get_version
 
 django_version = LooseVersion(get_version())
 cms_version = LooseVersion(cms_string_version)

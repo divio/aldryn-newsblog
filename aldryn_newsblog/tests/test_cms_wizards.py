@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from aldryn_newsblog.tests import NewsBlogTestCase
 from aldryn_newsblog.cms_wizards import CreateNewsBlogArticleForm
+from aldryn_newsblog.tests import NewsBlogTestCase
 
 
 class CreateNewsBlogArticleFormTestCase(NewsBlogTestCase):

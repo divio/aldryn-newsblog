@@ -3,8 +3,8 @@ from __future__ import unicode_literals
 
 from django.apps import apps as django_apps
 from django.conf import settings
-from django.db import models, migrations, transaction
-from django.db.utils import ProgrammingError, OperationalError
+from django.db import migrations, models, transaction
+from django.db.utils import OperationalError, ProgrammingError
 
 
 def noop(apps, schema_editor):

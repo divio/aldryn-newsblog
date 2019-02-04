@@ -3,27 +3,26 @@
 from __future__ import unicode_literals
 
 import os
-
-from datetime import datetime, date
+from datetime import date, datetime
 from operator import itemgetter
 from random import randint
 
+from cms.utils.i18n import force_language, get_current_language
 from django.conf import settings
 from django.core.files import File as DjangoFile
-from django.core.urlresolvers import reverse, NoReverseMatch
+from django.core.urlresolvers import NoReverseMatch, reverse
 from django.utils.timezone import now
 from django.utils.translation import override
-
-from aldryn_newsblog.models import Article, NewsBlogConfig
-from aldryn_newsblog.search_indexes import ArticleIndex
-from cms.utils.i18n import get_current_language, force_language
 from easy_thumbnails.files import get_thumbnailer
 from filer.models.imagemodels import Image
 from parler.tests.utils import override_parler_settings
 from parler.utils.conf import add_default_language_settings
-from parler.utils.context import switch_language, smart_override
+from parler.utils.context import smart_override, switch_language
 
-from . import NewsBlogTestCase, TESTS_STATIC_ROOT
+from aldryn_newsblog.models import Article, NewsBlogConfig
+from aldryn_newsblog.search_indexes import ArticleIndex
+
+from . import TESTS_STATIC_ROOT, NewsBlogTestCase
 
 FEATURED_IMAGE_PATH = os.path.join(TESTS_STATIC_ROOT, 'featured_image.jpg')
 

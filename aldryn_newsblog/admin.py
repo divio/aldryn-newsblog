@@ -4,15 +4,13 @@ from __future__ import unicode_literals
 from aldryn_apphooks_config.admin import BaseAppHookConfig, ModelAppHookConfig
 from aldryn_people.models import Person
 from aldryn_translation_tools.admin import AllTranslationsMixin
-from cms.admin.placeholderadmin import FrontendEditableAdminMixin
+from cms.admin.placeholderadmin import FrontendEditableAdminMixin, PlaceholderAdminMixin
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 from parler.admin import TranslatableAdmin
 from parler.forms import TranslatableModelForm
 
 from . import models
-
-from cms.admin.placeholderadmin import PlaceholderAdminMixin
 
 
 def make_published(modeladmin, request, queryset):
@@ -91,7 +89,7 @@ class ArticleAdminForm(TranslatableModelForm):
         # Don't allow related articles to be added here.
         # doesn't makes much sense to add articles from another article other
         # than save and add another.
-        if ('related' in self.fields and
+        if ('related' in self.fields and  # noqa: W504
                 hasattr(self.fields['related'], 'widget')):
             self.fields['related'].widget.can_add_related = False
 

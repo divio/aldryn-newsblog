@@ -6,7 +6,6 @@ import django.core.validators
 from aldryn_apphooks_config.fields import AppHookConfigField
 from aldryn_categories.fields import CategoryManyToManyField
 from aldryn_categories.models import Category
-from aldryn_newsblog.utils.utilities import get_valid_languages_from_request
 from aldryn_people.models import Person
 from aldryn_translation_tools.models import TranslatedAutoSlugifyMixin, TranslationHelperMixin
 from cms.models.fields import PlaceholderField
@@ -21,14 +20,16 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.timezone import now
-from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import override, ugettext
+from django.utils.translation import ugettext_lazy as _
 from djangocms_text_ckeditor.fields import HTMLField
 from filer.fields.image import FilerImageField
 from parler.models import TranslatableModel, TranslatedFields
 from sortedm2m.fields import SortedManyToManyField
 from taggit.managers import TaggableManager
 from taggit.models import Tag
+
+from aldryn_newsblog.utils.utilities import get_valid_languages_from_request
 
 from .cms_appconfig import NewsBlogConfig
 from .managers import RelatedManager
@@ -257,7 +258,7 @@ class PluginEditModeMixin(object):
         edit mode.
         """
         return (
-            hasattr(request, 'toolbar') and request.toolbar and
+            hasattr(request, 'toolbar') and request.toolbar and  # noqa: W504
             request.toolbar.edit_mode)
 
 
@@ -554,7 +555,7 @@ def update_search_data(sender, instance, **kwargs):
     is_cms_plugin = issubclass(instance.__class__, CMSPlugin)
 
     if Article.update_search_on_save and is_cms_plugin:
-        placeholder = (getattr(instance, '_placeholder_cache', None) or
+        placeholder = (getattr(instance, '_placeholder_cache', None) or  # noqa: W504
                        instance.placeholder)
         if hasattr(placeholder, '_attached_model_cache'):
             if placeholder._attached_model_cache == Article:

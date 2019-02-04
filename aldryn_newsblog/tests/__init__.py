@@ -249,8 +249,7 @@ class CleanUpMixin(object):
         if apphook_object is None:
             apphook_object = self.get_apphook_object()
         app_config = getattr(apphook_object, 'app_config', None)
-        if (app_config and
-                getattr(app_config, 'cmsapp', None)):
+        if app_config and getattr(app_config, 'cmsapp', None):
             delattr(apphook_object.app_config, 'cmsapp')
         if getattr(app_config, 'cmsapp', None):
             delattr(app_config, 'cmsapp')

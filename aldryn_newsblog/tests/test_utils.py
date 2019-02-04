@@ -2,9 +2,9 @@
 
 from __future__ import unicode_literals
 
-from django.core.urlresolvers import NoReverseMatch, reverse
-
 from unittest import TestCase
+
+from django.core.urlresolvers import NoReverseMatch, reverse
 
 from ..utils import add_prefix_to_path, default_reverse
 

@@ -3,11 +3,10 @@
 from __future__ import unicode_literals
 
 import aldryn_apphooks_config.fields
-from django.conf import settings
-from django.db import migrations, models
 import django.db.models.deletion
 import filer.fields.image
-
+from django.conf import settings
+from django.db import migrations, models
 
 TEMPLATE_PREFIX_CHOICES = getattr(
     settings,

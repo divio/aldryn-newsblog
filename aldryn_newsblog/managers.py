@@ -2,21 +2,20 @@
 
 from __future__ import unicode_literals
 
+import datetime
+from operator import attrgetter
+
+from aldryn_apphooks_config.managers.base import ManagerMixin, QuerySetMixin
+from aldryn_people.models import Person
+from django.db import models
+from django.utils.timezone import now
+from parler.managers import TranslatableManager, TranslatableQuerySet
+from taggit.models import Tag, TaggedItem
+
 try:
     from collections import Counter
 except ImportError:
     from backport_collections import Counter
-
-import datetime
-from operator import attrgetter
-
-from django.db import models
-from django.utils.timezone import now
-
-from aldryn_apphooks_config.managers.base import ManagerMixin, QuerySetMixin
-from aldryn_people.models import Person
-from parler.managers import TranslatableManager, TranslatableQuerySet
-from taggit.models import Tag, TaggedItem
 
 
 class ArticleQuerySet(QuerySetMixin, TranslatableQuerySet):
@@ -58,7 +57,7 @@ class RelatedManager(ManagerMixin, TranslatableManager):
         # TODO: check if this limitation still exists in Django 1.6+
         # This is done in a naive way as Django is having tough time while
         # aggregating on date fields
-        if (request and hasattr(request, 'toolbar') and
+        if (request and hasattr(request, 'toolbar') and  # noqa: #W504
                 request.toolbar and request.toolbar.edit_mode):
             articles = self.namespace(namespace)
         else:
@@ -96,7 +95,7 @@ class RelatedManager(ManagerMixin, TranslatableManager):
 
         Return list of Tag objects ordered by custom 'num_articles' attribute.
         """
-        if (request and hasattr(request, 'toolbar') and
+        if (request and hasattr(request, 'toolbar') and  # noqa: #W504
                 request.toolbar and request.toolbar.edit_mode):
             articles = self.namespace(namespace)
         else:
