@@ -105,7 +105,7 @@ class ArticleDetail(AppConfigMixin, AppHookCheckMixin, PreviewModeMixin,
     slug_url_kwarg = 'slug'
     pk_url_kwarg = 'pk'
 
-    def get(self, request, *args, **kwargs):
+    def process(self, request, *args, **kwargs):
         """
         This handles non-permalinked URLs according to preferences as set in
         NewsBlogConfig.
@@ -114,7 +114,7 @@ class ArticleDetail(AppConfigMixin, AppHookCheckMixin, PreviewModeMixin,
             self.object = self.get_object()
         set_language_changer(request, self.object.get_absolute_url)
         url = self.object.get_absolute_url()
-        if (self.config.non_permalink_handling == 200 or request.path == url):
+        if self.config.non_permalink_handling == 200 or request.path == url:
             # Continue as normal
             return super(ArticleDetail, self).get(request, *args, **kwargs)
 
@@ -126,6 +126,12 @@ class ArticleDetail(AppConfigMixin, AppHookCheckMixin, PreviewModeMixin,
             return HttpResponsePermanentRedirect(url)
         else:
             raise Http404('This is not the canonical uri of this object.')
+
+    def get(self, request, *args, **kwargs):
+        return self.process(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.process(request, *args, **kwargs)
 
     def get_object(self, queryset=None):
         """
