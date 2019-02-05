@@ -4,21 +4,26 @@ from __future__ import unicode_literals
 
 from datetime import date, datetime
 
-from aldryn_apphooks_config.mixins import AppConfigMixin
-from aldryn_categories.models import Category
-from aldryn_people.models import Person
 from django.db.models import Q
-from django.http import Http404, HttpResponsePermanentRedirect, HttpResponseRedirect
+from django.http import (
+    Http404, HttpResponsePermanentRedirect, HttpResponseRedirect,
+)
 from django.shortcuts import get_object_or_404
 from django.utils import translation
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView
+
 from menus.utils import set_language_changer
+
+from aldryn_apphooks_config.mixins import AppConfigMixin
+from aldryn_categories.models import Category
+from aldryn_people.models import Person
+from dateutil.relativedelta import relativedelta
 from parler.views import TranslatableSlugMixin, ViewUrlMixin
 from taggit.models import Tag
 
+from aldryn_newsblog.compat import toolbar_edit_mode_active
 from aldryn_newsblog.utils.utilities import get_valid_languages_from_request
-from dateutil.relativedelta import relativedelta
 
 from .models import Article
 from .utils import add_prefix_to_path
@@ -49,7 +54,7 @@ class EditModeMixin(object):
 
     def dispatch(self, request, *args, **kwargs):
         self.edit_mode = (
-            self.request.toolbar and self.request.toolbar.edit_mode)
+            self.request.toolbar and toolbar_edit_mode_active(self.request))
         return super(EditModeMixin, self).dispatch(request, *args, **kwargs)
 
 

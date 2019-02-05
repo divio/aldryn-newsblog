@@ -4,14 +4,16 @@ from __future__ import unicode_literals
 
 import os
 
-from cms import api
 from django.conf import settings
 from django.utils.timezone import now
 from django.utils.translation import activate, override
 
+from cms import api
+
 from aldryn_newsblog.models import Article
 
 from . import TESTS_STATIC_ROOT, NewsBlogTestCase, NewsBlogTransactionTestCase
+
 
 FEATURED_IMAGE_PATH = os.path.join(TESTS_STATIC_ROOT, 'featured_image.jpg')
 

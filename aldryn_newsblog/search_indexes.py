@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from aldryn_search.utils import get_index_base
 from django.conf import settings
+
+from aldryn_search.utils import get_index_base
 from haystack.constants import DEFAULT_ALIAS
 
 from .models import Article

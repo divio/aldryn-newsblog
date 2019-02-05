@@ -2,33 +2,27 @@
 
 from __future__ import unicode_literals
 
-from cms.plugin_rendering import ContentRenderer
-from cms.utils.i18n import force_language, get_language_object
 from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.sites.models import Site
-from django.core.urlresolvers import NoReverseMatch, reverse
+from django.contrib.sites.shortcuts import get_current_site
 from django.db import models
 from django.test import RequestFactory
+from django.urls import NoReverseMatch, reverse
 from django.utils import translation
+from django.utils.encoding import force_text
 from django.utils.html import strip_tags as _strip_tags
 from django.utils.text import smart_split
-from lxml.html.clean import Cleaner as LxmlCleaner
 
-try:
-    from django.contrib.sites.shortcuts import get_current_site
-except ImportError:
-    # Django 1.6
-    from django.contrib.sites.models import get_current_site
-try:
-    from django.utils.encoding import force_unicode
-except ImportError:
-    from django.utils.encoding import force_text as force_unicode
+from cms.plugin_rendering import ContentRenderer
+from cms.utils.i18n import force_language, get_language_object
+
+from lxml.html.clean import Cleaner as LxmlCleaner
 
 
 def default_reverse(*args, **kwargs):
     """
-    Acts just like django.core.urlresolvers.reverse() except that if the
+    Acts just like django.urls.reverse() except that if the
     resolver raises a NoReverseMatch exception, then a default value will be
     returned instead. If no default value is provided, then the exception will
     be raised as normal.
@@ -79,7 +73,7 @@ def strip_tags(value):
 
 
 def get_cleaned_bits(data):
-    decoded = force_unicode(data)
+    decoded = force_text(data)
     stripped = strip_tags(decoded)
     return smart_split(stripped)
 

@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import djangocms_text_ckeditor.fields
 from django.db import migrations, models
+
+import djangocms_text_ckeditor.fields
 
 
 class Migration(migrations.Migration):

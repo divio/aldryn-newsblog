@@ -2,16 +2,19 @@
 
 from __future__ import unicode_literals
 
-from aldryn_apphooks_config.models import AppHookConfig
-from aldryn_apphooks_config.utils import setup_config
-from app_data import AppDataForm
-from cms.models.fields import PlaceholderField
 from django import forms
 from django.conf import settings
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
+
+from cms.models.fields import PlaceholderField
+
+from aldryn_apphooks_config.models import AppHookConfig
+from aldryn_apphooks_config.utils import setup_config
+from app_data import AppDataForm
 from parler.models import TranslatableModel, TranslatedFields
+
 
 PERMALINK_CHOICES = (
     ('s', _('the-eagle-has-landed/', )),

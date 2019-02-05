@@ -1,3 +1,7 @@
-recursive-include aldryn_newsblog/boilerplates *
-recursive-include aldryn_newsblog/templates *
+include LICENSE.txt
+include README.rst
 recursive-include aldryn_newsblog/locale *
+recursive-include aldryn_newsblog/static *
+recursive-include aldryn_newsblog/templates *
+recursive-include aldryn_newsblog/boilerplates *
+recursive-exclude * *.py[co]

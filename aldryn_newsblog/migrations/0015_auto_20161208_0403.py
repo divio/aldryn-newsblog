@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import sortedm2m.fields
 from django.db import migrations, models
+
+import sortedm2m.fields
 
 
 class Migration(migrations.Migration):

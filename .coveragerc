@@ -2,8 +2,8 @@
 branch = True
 source = aldryn_newsblog
 omit =
-    aldryn_newsblog/south_migrations/*
-    aldryn_newsblog/migrations/*
+    migrations/*
+    tests/*
 
 [report]
 exclude_lines =
@@ -15,3 +15,4 @@ exclude_lines =
     raise NotImplementedError
     if 0:
     if __name__ == .__main__.:
+ignore_errors = True

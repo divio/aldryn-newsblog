@@ -5,13 +5,16 @@ from __future__ import unicode_literals
 import datetime
 import time
 
+from django.core.cache import cache
+from django.urls import reverse
+from django.utils.encoding import force_text
+from django.utils.translation import override
+
 from cms import api
 from cms.models import StaticPlaceholder
-from django.core.cache import cache
-from django.core.urlresolvers import reverse
-from django.utils.translation import force_text, override
 
 import pytz
+
 from aldryn_newsblog.models import NewsBlogConfig
 
 from . import NewsBlogTestCase

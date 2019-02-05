@@ -5,8 +5,10 @@ from __future__ import unicode_literals
 import os
 from distutils.version import LooseVersion
 
-from cms import __version__ as cms_string_version
 from django import get_version
+
+from cms import __version__ as cms_string_version
+
 
 django_version = LooseVersion(get_version())
 cms_version = LooseVersion(cms_string_version)
@@ -25,6 +27,7 @@ HELPER_SETTINGS = {
         'parler',
         'sortedm2m',
         'taggit',
+        'aldryn_common',
     ],
     'TEMPLATE_DIRS': (
         os.path.join(
@@ -135,11 +138,14 @@ HELPER_SETTINGS = {
     #     }
     # }
     # This set of MW classes should work for Django 1.6 and 1.7.
-    'MIDDLEWARE_CLASSES': [
+    'MIDDLEWARE': [
+        'django.middleware.security.SecurityMiddleware',
         'django.contrib.sessions.middleware.SessionMiddleware',
+        'django.middleware.common.CommonMiddleware',
+        'django.middleware.csrf.CsrfViewMiddleware',
+        'django.contrib.auth.middleware.AuthenticationMiddleware',
         'django.contrib.messages.middleware.MessageMiddleware',
         'django.middleware.locale.LocaleMiddleware',
-        'django.middleware.common.CommonMiddleware',
         'django.middleware.clickjacking.XFrameOptionsMiddleware',
         # NOTE: This will actually be removed below in CMS<3.2 installs.
         'cms.middleware.utils.ApphookReloadMiddleware',
@@ -158,17 +164,6 @@ def boolean_ish(var):
         return False
     else:
         return bool(var)
-
-
-# If using CMS 3.2+, use the CMS middleware for ApphookReloading, otherwise,
-# use aldryn_apphook_reload's.
-if cms_version < LooseVersion('3.2.0'):
-    HELPER_SETTINGS['MIDDLEWARE_CLASSES'].remove(
-        'cms.middleware.utils.ApphookReloadMiddleware')
-    HELPER_SETTINGS['MIDDLEWARE_CLASSES'].insert(
-        0, 'aldryn_apphook_reload.middleware.ApphookReloadMiddleware')
-    HELPER_SETTINGS['INSTALLED_APPS'].insert(
-        0, 'aldryn_apphook_reload')
 
 
 def run():

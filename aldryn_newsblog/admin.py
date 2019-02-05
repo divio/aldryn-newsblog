@@ -1,12 +1,16 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from django.contrib import admin
+from django.utils.translation import ugettext_lazy as _
+
+from cms.admin.placeholderadmin import (
+    FrontendEditableAdminMixin, PlaceholderAdminMixin,
+)
+
 from aldryn_apphooks_config.admin import BaseAppHookConfig, ModelAppHookConfig
 from aldryn_people.models import Person
 from aldryn_translation_tools.admin import AllTranslationsMixin
-from cms.admin.placeholderadmin import FrontendEditableAdminMixin, PlaceholderAdminMixin
-from django.contrib import admin
-from django.utils.translation import ugettext_lazy as _
 from parler.admin import TranslatableAdmin
 from parler.forms import TranslatableModelForm
 

@@ -3,25 +3,29 @@
 from __future__ import unicode_literals
 
 import django.core.validators
+from django.conf import settings
+from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import ImproperlyConfigured
+from django.db import connection, models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.urls import reverse
+from django.utils.encoding import force_text, python_2_unicode_compatible
+from django.utils.timezone import now
+from django.utils.translation import override, ugettext
+from django.utils.translation import ugettext_lazy as _
+
+from cms.models.fields import PlaceholderField
+from cms.models.pluginmodel import CMSPlugin
+from cms.utils.i18n import get_current_language, get_redirect_on_fallback
+
 from aldryn_apphooks_config.fields import AppHookConfigField
 from aldryn_categories.fields import CategoryManyToManyField
 from aldryn_categories.models import Category
 from aldryn_people.models import Person
-from aldryn_translation_tools.models import TranslatedAutoSlugifyMixin, TranslationHelperMixin
-from cms.models.fields import PlaceholderField
-from cms.models.pluginmodel import CMSPlugin
-from cms.utils.i18n import get_current_language, get_redirect_on_fallback
-from django.conf import settings
-from django.contrib.contenttypes.models import ContentType
-from django.core.exceptions import ImproperlyConfigured
-from django.core.urlresolvers import reverse
-from django.db import connection, models
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-from django.utils.encoding import python_2_unicode_compatible
-from django.utils.timezone import now
-from django.utils.translation import override, ugettext
-from django.utils.translation import ugettext_lazy as _
+from aldryn_translation_tools.models import (
+    TranslatedAutoSlugifyMixin, TranslationHelperMixin,
+)
 from djangocms_text_ckeditor.fields import HTMLField
 from filer.fields.image import FilerImageField
 from parler.models import TranslatableModel, TranslatedFields
@@ -29,16 +33,12 @@ from sortedm2m.fields import SortedManyToManyField
 from taggit.managers import TaggableManager
 from taggit.models import Tag
 
+from aldryn_newsblog.compat import toolbar_edit_mode_active
 from aldryn_newsblog.utils.utilities import get_valid_languages_from_request
 
 from .cms_appconfig import NewsBlogConfig
 from .managers import RelatedManager
 from .utils import get_plugin_index_data, get_request, strip_tags
-
-try:
-    from django.utils.encoding import force_unicode
-except ImportError:
-    from django.utils.encoding import force_text as force_unicode
 
 
 if settings.LANGUAGES:
@@ -114,9 +114,18 @@ class Article(TranslatedAutoSlugifyMixin,
 
     content = PlaceholderField('newsblog_article_content',
                                related_name='newsblog_article_content')
-    author = models.ForeignKey(Person, null=True, blank=True,
-                               verbose_name=_('author'))
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_('owner'))
+    author = models.ForeignKey(
+        Person,
+        null=True,
+        blank=True,
+        verbose_name=_('author'),
+        on_delete=models.CASCADE,
+    )
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        verbose_name=_('owner'),
+        on_delete=models.CASCADE,
+    )
     app_config = AppHookConfigField(
         NewsBlogConfig,
         verbose_name=_('Section'),
@@ -162,7 +171,7 @@ class Article(TranslatedAutoSlugifyMixin,
         Returns True only if the article (is_published == True) AND has a
         published_date that has passed.
         """
-        return (self.is_published and self.publishing_date <= now())
+        return self.is_published and self.publishing_date <= now()
 
     @property
     def future(self):
@@ -170,7 +179,7 @@ class Article(TranslatedAutoSlugifyMixin,
         Returns True if the article is published but is scheduled for a
         future date/time.
         """
-        return (self.is_published and self.publishing_date > now())
+        return self.is_published and self.publishing_date > now()
 
     def get_absolute_url(self, language=None):
         """Returns the url for this Article in the selected permalink format."""
@@ -218,9 +227,9 @@ class Article(TranslatedAutoSlugifyMixin,
         text_bits = [strip_tags(description)]
         for category in self.categories.all():
             text_bits.append(
-                force_unicode(category.safe_translation_getter('name')))
+                force_text(category.safe_translation_getter('name')))
         for tag in self.tags.all():
-            text_bits.append(force_unicode(tag.name))
+            text_bits.append(force_text(tag.name))
         if self.content:
             plugins = self.content.cmsplugin_set.filter(language=language)
             for base_plugin in plugins:
@@ -259,7 +268,8 @@ class PluginEditModeMixin(object):
         """
         return (
             hasattr(request, 'toolbar') and request.toolbar and  # noqa: W504
-            request.toolbar.edit_mode)
+            toolbar_edit_mode_active(request)
+        )
 
 
 class AdjustableCacheModelMixin(models.Model):
@@ -282,9 +292,17 @@ class NewsBlogCMSPlugin(CMSPlugin):
     # avoid reverse relation name clashes by not adding a related_name
     # to the parent plugin
     cmsplugin_ptr = models.OneToOneField(
-        CMSPlugin, related_name='+', parent_link=True)
+        CMSPlugin,
+        related_name='+',
+        parent_link=True,
+        on_delete=models.CASCADE,
+    )
 
-    app_config = models.ForeignKey(NewsBlogConfig, verbose_name=_('Apphook configuration'))
+    app_config = models.ForeignKey(
+        NewsBlogConfig,
+        verbose_name=_('Apphook configuration'),
+        on_delete=models.CASCADE,
+    )
 
     class Meta:
         abstract = True
@@ -484,7 +502,11 @@ class NewsBlogRelatedPlugin(PluginEditModeMixin, AdjustableCacheModelMixin,
     # NOTE: This one does NOT subclass NewsBlogCMSPlugin. This is because this
     # plugin can really only be placed on the article detail view in an apphook.
     cmsplugin_ptr = models.OneToOneField(
-        CMSPlugin, related_name='+', parent_link=True)
+        CMSPlugin,
+        related_name='+',
+        parent_link=True,
+        on_delete=models.CASCADE,
+    )
 
     def get_articles(self, article, request):
         """

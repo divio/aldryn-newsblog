@@ -2,7 +2,7 @@
 
 from __future__ import unicode_literals
 
-from django.core.urlresolvers import NoReverseMatch
+from django.urls import NoReverseMatch
 from django.utils.translation import override
 
 from . import NewsBlogTestCase

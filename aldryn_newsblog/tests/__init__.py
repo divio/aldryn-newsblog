@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import unicode_literals
+
 import os
 import random
 import string
@@ -8,15 +9,12 @@ import sys
 
 from django.conf import settings
 from django.contrib.auth.models import AnonymousUser, User
-from django.core.urlresolvers import clear_url_caches
 from django.core.cache import cache
 from django.test import RequestFactory
+from django.urls import clear_url_caches
 from django.utils.timezone import now
 from django.utils.translation import override
-from aldryn_categories.models import Category
-from aldryn_newsblog.cms_apps import NewsBlogApp
-from aldryn_newsblog.models import Article, NewsBlogConfig
-from aldryn_people.models import Person
+
 from cms import api
 from cms.apphook_pool import apphook_pool
 from cms.appresolver import clear_app_resolvers
@@ -25,7 +23,13 @@ from cms.test_utils.testcases import CMSTestCase, TransactionCMSTestCase
 from cms.toolbar.toolbar import CMSToolbar
 from cms.utils.conf import get_cms_setting
 
+from aldryn_categories.models import Category
+from aldryn_people.models import Person
 from parler.utils.context import switch_language
+
+from aldryn_newsblog.cms_apps import NewsBlogApp
+from aldryn_newsblog.models import Article, NewsBlogConfig
+
 
 TESTS_ROOT = os.path.abspath(os.path.dirname(__file__))
 TESTS_STATIC_ROOT = os.path.abspath(os.path.join(TESTS_ROOT, 'static'))

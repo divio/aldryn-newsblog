@@ -1,0 +1,35 @@
+#aldryn-apphooks-config
+https://github.com/vThaian/aldryn-apphooks-config/archive/fixes-for-django-20-and-up.zip
+
+aldryn-categories
+aldryn-people
+django-haystack
+aldryn-boilerplates
+django-taggit
+
+# NOTE: These are for Filer
+django-mptt
+django_polymorphic
+
+aldryn-search>=0.2.12
+coverage>=3.7.1
+dj-database-url
+django-classy-tags
+django-sekizai
+django-treebeard>=2.0
+djangocms-admin-style
+djangocms-helper
+djangocms-text-ckeditor
+docopt
+flake8
+tox>=2.9.1
+pyflakes
+selenium
+python-dateutil
+
+# docs
+sphinx
+sphinx-rtd-theme
+
+sphinxcontrib-spelling
+pyenchant

@@ -3,19 +3,18 @@
 from __future__ import unicode_literals
 
 import datetime
+from collections import Counter
 from operator import attrgetter
+
+from django.db import models
+from django.utils.timezone import now
 
 from aldryn_apphooks_config.managers.base import ManagerMixin, QuerySetMixin
 from aldryn_people.models import Person
-from django.db import models
-from django.utils.timezone import now
 from parler.managers import TranslatableManager, TranslatableQuerySet
 from taggit.models import Tag, TaggedItem
 
-try:
-    from collections import Counter
-except ImportError:
-    from backport_collections import Counter
+from aldryn_newsblog.compat import toolbar_edit_mode_active
 
 
 class ArticleQuerySet(QuerySetMixin, TranslatableQuerySet):
@@ -58,7 +57,7 @@ class RelatedManager(ManagerMixin, TranslatableManager):
         # This is done in a naive way as Django is having tough time while
         # aggregating on date fields
         if (request and hasattr(request, 'toolbar') and  # noqa: #W504
-                request.toolbar and request.toolbar.edit_mode):
+                request.toolbar and toolbar_edit_mode_active(request)):
             articles = self.namespace(namespace)
         else:
             articles = self.published().namespace(namespace)
@@ -96,7 +95,7 @@ class RelatedManager(ManagerMixin, TranslatableManager):
         Return list of Tag objects ordered by custom 'num_articles' attribute.
         """
         if (request and hasattr(request, 'toolbar') and  # noqa: #W504
-                request.toolbar and request.toolbar.edit_mode):
+                request.toolbar and toolbar_edit_mode_active(request)):
             articles = self.namespace(namespace)
         else:
             articles = self.published().namespace(namespace)

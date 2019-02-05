@@ -7,12 +7,14 @@ from datetime import date, datetime
 from operator import itemgetter
 from random import randint
 
-from cms.utils.i18n import force_language, get_current_language
 from django.conf import settings
 from django.core.files import File as DjangoFile
-from django.core.urlresolvers import NoReverseMatch, reverse
+from django.urls import NoReverseMatch, reverse
 from django.utils.timezone import now
 from django.utils.translation import override
+
+from cms.utils.i18n import force_language, get_current_language
+
 from easy_thumbnails.files import get_thumbnailer
 from filer.models.imagemodels import Image
 from parler.tests.utils import override_parler_settings
@@ -23,6 +25,7 @@ from aldryn_newsblog.models import Article, NewsBlogConfig
 from aldryn_newsblog.search_indexes import ArticleIndex
 
 from . import TESTS_STATIC_ROOT, NewsBlogTestCase
+
 
 FEATURED_IMAGE_PATH = os.path.join(TESTS_STATIC_ROOT, 'featured_image.jpg')
 
@@ -647,7 +650,7 @@ class ViewLanguageFallbackMixin(object):
                 is_published=True,
             )
         if categories:
-            de_article.categories = categories
+            de_article.categories.set(categories)
         de_article.tags.add('tag1')
         de_article.save()
         return de_article
@@ -668,7 +671,7 @@ class ViewLanguageFallbackMixin(object):
                                               owner=owner,
                                               app_config=app_config)
                 if categories:
-                    article.categories = categories
+                    article.categories.set(categories)
                 article.tags.add('tag1')
                 article.save()
                 articles.append(article)

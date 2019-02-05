@@ -32,7 +32,7 @@ Manual Installation
 Requirements
 ============
 
-- This project requires **django CMS 3.0.12** or later.
+- This project requires **django CMS 3.4.5** or higher.
 
 
 Install the package using pip
