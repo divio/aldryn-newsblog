@@ -105,7 +105,7 @@ class ArticleDetail(AppConfigMixin, AppHookCheckMixin, PreviewModeMixin,
     slug_url_kwarg = 'slug'
     pk_url_kwarg = 'pk'
 
-    def process(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         """
         This handles non-permalinked URLs according to preferences as set in
         NewsBlogConfig.
@@ -127,11 +127,8 @@ class ArticleDetail(AppConfigMixin, AppHookCheckMixin, PreviewModeMixin,
         else:
             raise Http404('This is not the canonical uri of this object.')
 
-    def get(self, request, *args, **kwargs):
-        return self.process(request, *args, **kwargs)
-
     def post(self, request, *args, **kwargs):
-        return self.process(request, *args, **kwargs)
+        return self.get(request, *args, **kwargs)
 
     def get_object(self, queryset=None):
         """
@@ -239,6 +236,9 @@ class ArticleList(ArticleListBase):
     """A complete list of articles."""
     show_header = True
 
+    def post(self, request, *args, **kwargs):
+        return self.get(request, *args, **kwargs)
+
     def get_queryset(self):
         qs = super(ArticleList, self).get_queryset()
         # exclude featured articles from queryset, to allow featured article
@@ -263,7 +263,10 @@ class ArticleSearchResultsList(ArticleListBase):
         self.query = request.GET.get('q')
         self.max_articles = request.GET.get('max_articles', 0)
         self.edit_mode = (request.toolbar and request.toolbar.edit_mode)
-        return super(ArticleSearchResultsList, self).get(request)
+        return super(ArticleSearchResultsList, self).get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.get(request, *args, **kwargs)
 
     def get_paginate_by(self, queryset):
         """
@@ -308,14 +311,17 @@ class AuthorArticleList(ArticleListBase):
             author=self.author
         )
 
-    def get(self, request, author):
+    def get(self, request, author, *args, **kwargs):
         language = translation.get_language_from_request(
             request, check_path=True)
         self.author = Person.objects.language(language).active_translations(
             language, slug=author).first()
         if not self.author:
             raise Http404('Author not found')
-        return super(AuthorArticleList, self).get(request)
+        return super(AuthorArticleList, self).get(request, *args, **kwargs)
+
+    def post(self, request, author, *args, **kwargs):
+        return self.get(request, author, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         kwargs['newsblog_author'] = self.author
@@ -329,10 +335,13 @@ class CategoryArticleList(ArticleListBase):
             categories=self.category
         )
 
-    def get(self, request, category):
+    def get(self, request, category, *args, **kwargs):
         self.category = get_object_or_404(
             Category, translations__slug=category)
-        return super(CategoryArticleList, self).get(request)
+        return super(CategoryArticleList, self).get(request, *args, **kwargs)
+
+    def post(self, request, category, *args, **kwargs):
+        return self.get(request, category, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         kwargs['newsblog_category'] = self.category
@@ -348,9 +357,12 @@ class TagArticleList(ArticleListBase):
             tags=self.tag
         )
 
-    def get(self, request, tag):
+    def get(self, request, tag, *args, **kwargs):
         self.tag = get_object_or_404(Tag, slug=tag)
-        return super(TagArticleList, self).get(request)
+        return super(TagArticleList, self).get(request, *args, **kwargs)
+
+    def post(self, request, tag, *args, **kwargs):
+        return self.get(request, tag, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         kwargs['newsblog_tag'] = self.tag
@@ -369,9 +381,12 @@ class DateRangeArticleList(ArticleListBase):
         raise NotImplementedError('Subclasses of DateRangeArticleList need to'
                                   'implement `_daterange_from_kwargs`.')
 
-    def get(self, request, **kwargs):
+    def get(self, request, *args, **kwargs):
         self.date_from, self.date_to = self._daterange_from_kwargs(kwargs)
-        return super(DateRangeArticleList, self).get(request)
+        return super(DateRangeArticleList, self).get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         kwargs['newsblog_day'] = (
