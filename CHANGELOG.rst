@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.2.1 (unreleased)
+2.2.1 (2019-02-12)
 ==================
 
 * Added missing POST methods for newsblog views
