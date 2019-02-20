@@ -67,5 +67,5 @@ setup(
     zip_safe=False,
     install_requires=REQUIREMENTS,
     classifiers=CLASSIFIERS,
-    test_suite='tests.settings.run',
+    test_suite='test_settings.run',
 )
