@@ -27,7 +27,7 @@ REQUIREMENTS = [
     'python-dateutil',
 ]
 
-# https://pypi.python.org/pypi?%3Aaction=list_classifiers
+
 CLASSIFIERS = [
     'Development Status :: 5 - Production/Stable',
     'Environment :: Web Environment',
@@ -45,27 +45,27 @@ CLASSIFIERS = [
     'Programming Language :: Python :: 3.4',
     'Programming Language :: Python :: 3.5',
     'Programming Language :: Python :: 3.6',
+    'Programming Language :: Python :: 3.7',
     'Topic :: Internet :: WWW/HTTP',
     'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
-    'Topic :: Internet :: WWW/HTTP :: Dynamic Content :: News/Diary',
     'Topic :: Software Development',
     'Topic :: Software Development :: Libraries',
-    'Topic :: Software Development :: Libraries :: Application Frameworks',
 ]
+
 
 setup(
     name='aldryn-newsblog',
     version=__version__,
     author='Divio AG',
     author_email='info@divio.ch',
-    url='https://github.com/aldryn/aldryn-newsblog',
+    url='https://github.com/divio/aldryn-newsblog',
     license='BSD',
     description='Adds blogging and newsing capabilities to django CMS',
     long_description=open('README.rst').read(),
-    packages=find_packages(),
+    packages=find_packages(exclude=['tests']),
     include_package_data=True,
     zip_safe=False,
     install_requires=REQUIREMENTS,
     classifiers=CLASSIFIERS,
-    test_suite="test_settings.run",
+    test_suite='tests.settings.run',
 )
