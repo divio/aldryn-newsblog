@@ -30,7 +30,7 @@ before_script:
   - if [ "$FE" == 1 ]; then npm install; fi
 
 install:
-  - pip install -U tox coveralls
+  - pip install coverage isort tox
   - "if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then export PY_VER=py27; fi"
   - "if [[ $TRAVIS_PYTHON_VERSION == '3.4' ]]; then export PY_VER=py34; fi"
   - "if [[ $TRAVIS_PYTHON_VERSION == '3.5' ]]; then export PY_VER=py35; fi"
