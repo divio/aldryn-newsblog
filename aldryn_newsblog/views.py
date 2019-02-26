@@ -262,7 +262,7 @@ class ArticleSearchResultsList(ArticleListBase):
     def get(self, request, *args, **kwargs):
         self.query = request.GET.get('q')
         self.max_articles = request.GET.get('max_articles', 0)
-        self.edit_mode = (request.toolbar and request.toolbar.edit_mode)
+        self.edit_mode = (request.toolbar and toolbar_edit_mode_active(request))
         return super(ArticleSearchResultsList, self).get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
