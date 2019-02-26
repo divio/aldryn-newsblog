@@ -6,6 +6,7 @@ Changelog
 ==================
 
 * Updated translations
+* Fixed error when page with attached menu without apphook was not working
 
 
 2.2.1 (2019-02-12)
