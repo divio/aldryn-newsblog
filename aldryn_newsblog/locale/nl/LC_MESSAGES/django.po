@@ -4,15 +4,16 @@
 # 
 # Translators:
 # Translators:
-# Evelijn Saaltink <evelijnsaaltink@gmail.com>, 2016
+# Evelijn Saaltink <evelijnsaaltink@gmail.com>, 2016-2017
+# Heimen Stoffels <vistausss@outlook.com>, 2019
 # kurdyma <transifex.com@kurdyenviolien.nl>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Aldryn News & Blog\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-02 07:59-0500\n"
-"PO-Revision-Date: 2017-03-02 12:59+0000\n"
-"Last-Translator: Paulo Alvarado <paulo.alvarado@divio.ch>\n"
+"PO-Revision-Date: 2019-02-21 11:27+0000\n"
+"Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
 "Language-Team: Dutch (http://www.transifex.com/divio/aldryn-newsblog/language/nl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -22,28 +23,28 @@ msgstr ""
 
 #: admin.py:25
 msgid "Mark selected articles as published"
-msgstr "Markeer geselecteerde artikelen als gepubliceerd"
+msgstr "Geselecteerde artikelen markeren als gepubliceerd"
 
 #: admin.py:33
 msgid "Mark selected articles as not published"
-msgstr "Markeer geselecteerde artikelen als ongepubliceerd"
+msgstr "Geselecteerde artikelen markeren als ongepubliceerd"
 
 #: admin.py:41
 msgid "Mark selected articles as featured"
-msgstr "Markeer geselecteerde artikelen als aanbevolen"
+msgstr "Geselecteerde artikelen markeren als uitgelicht"
 
 #: admin.py:49
 msgid "Mark selected articles as not featured"
-msgstr "Markeer geselecteerde artikelen als niet-aanbevolen"
+msgstr "Geselecteerde artikelen markeren als niet-uitgelicht"
 
 #: admin.py:128
 #| msgid "meta description"
 msgid "Meta Options"
-msgstr ""
+msgstr "Meta-opties"
 
 #: admin.py:137
 msgid "Advanced Settings"
-msgstr ""
+msgstr "Geavanceerde instellingen"
 
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/article_detail.html:18
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/article_detail.html:20
@@ -108,7 +109,7 @@ msgstr "Geen artikelen gevonden"
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/search_results.html:21
 #: templates/aldryn_newsblog/includes/search_results.html:23
 msgid "Enter a query above"
-msgstr "Geef hierboven een zoekvraag op"
+msgstr "Voer hierboven een zoekopdracht in"
 
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/article_search.html:8
 #: templates/aldryn_newsblog/plugins/article_search.html:6
@@ -159,15 +160,15 @@ msgstr "1969/07/16/11/"
 
 #: cms_appconfig.py:27
 msgid "Allow"
-msgstr "Sta toe"
+msgstr "Toestaan"
 
 #: cms_appconfig.py:28
 msgid "Redirect to permalink (default)"
-msgstr "Redirect naar permalink (default)"
+msgstr "Doorverwijzen naar permalink (standaard)"
 
 #: cms_appconfig.py:29
 msgid "Permanent redirect to permalink"
-msgstr "Permanente  redirect naar permalink"
+msgstr "Permanente doorverwijzing naar permalink"
 
 #: cms_appconfig.py:30
 msgid "Return 404: Not Found"
@@ -175,33 +176,33 @@ msgstr "Retourneer 404: Not Found"
 
 #: cms_appconfig.py:42
 msgid "application title"
-msgstr "applicatie titel"
+msgstr "applicatietitel"
 
 #: cms_appconfig.py:45
 msgid "permalink type"
-msgstr "permalink type"
+msgstr "permalinktype"
 
 #: cms_appconfig.py:47
 msgid ""
 "Choose the style of urls to use from the examples. (Note, all types are "
 "relative to apphook)"
-msgstr "Kies de stijl van de urls om te gebruiken uit de voorbeelden. (Merk op dat alle types relatief zijn aan de apphook)"
+msgstr "Kies de te gebruiken stijl van de url's uit de voorbeelden. (Let op: alle types zijn relatief aan de apphook)"
 
 #: cms_appconfig.py:51
 msgid "non-permalink handling"
-msgstr "non-permalink afhandeling"
+msgstr "afhandeling van niet-permalink"
 
 #: cms_appconfig.py:54
 msgid "How to handle non-permalink urls?"
-msgstr "Hoe moeten non-permalinks afgehandeld worden?"
+msgstr "Hoe moeten niet-permalinks worden afgehandeld?"
 
 #: cms_appconfig.py:57
 msgid "Paginate size"
-msgstr "Paginerings grootte"
+msgstr "Pagineringsgrootte"
 
 #: cms_appconfig.py:60
 msgid "When paginating list views, how many articles per page?"
-msgstr "Als de lijst view gepagineerd wordt, hoeveel artikelen moeten er dan per pagina komen?"
+msgstr "Als de lijstweergave gepagineerd wordt, hoeveel artikelen moeten er dan per pagina komen?"
 
 #: cms_appconfig.py:63
 msgid "Pagination pages start"
@@ -211,7 +212,7 @@ msgstr "Paginering pagina's begin"
 msgid ""
 "When paginating list views, after how many pages should we start grouping "
 "the page numbers."
-msgstr "Als je lijsten pagineert, na hoeveel pagina's moeten we dan beginnen de pagina nummers te groeperen?"
+msgstr "Als je lijsten pagineert, na hoeveel pagina's moeten we dan beginnen de paginanummers te groeperen?"
 
 #: cms_appconfig.py:70
 msgid "Pagination pages visible"
@@ -221,11 +222,11 @@ msgstr "Paginerings pagina's zichtbaar"
 msgid ""
 "When grouping page numbers, this determines how many pages are visible on "
 "each side of the active page."
-msgstr "Als pagina nummers worden gegroepeerd, bepaalt dit hoeveel pagina's zichtbaar zijn op iedere kant van de actieve pagina."
+msgstr "Als paginanummers worden gegroepeerd, bepaalt dit hoeveel pagina's zichtbaar zijn op iedere kant van de actieve pagina."
 
 #: cms_appconfig.py:77
 msgid "Excluded featured articles count"
-msgstr "Uitgezonderde aanbevolen artikelen telling"
+msgstr "Uitgezonderd uitgelichte artikelen-telling"
 
 #: cms_appconfig.py:81
 msgid ""
@@ -233,45 +234,45 @@ msgid ""
 "may prefer to exclude featured articles from the article list itself to "
 "avoid duplicates. To do this, enter the same number here as in your Featured"
 " Articles plugin."
-msgstr "Als je de Aanbevolen Artikelen plugin gebruikt bij de artikellijst opmaak, wil je misschien aanbevolen artikelen uitsluiten van de artikellijst zelf, om dubbelen te voorkomen. Om dit te doen, moet je hier hetzelfde aantal ingeven als bij je Aanbevolen Artikelen plugin."
+msgstr "Als je de Uitgelichte artikelen-plug-in gebruikt bij de artikellijstopmaak, wil je misschien uitgelichte artikelen uitsluiten van de artikellijst zelf, om dubbele te voorkomen. Om dit te doen, moet je hier hetzelfde aantal opgeven als bij je Uitgelichte artikelen-plug-in."
 
 #: cms_appconfig.py:90
 msgid "Prefix for template dirs"
-msgstr "Prefix voor template dirs"
+msgstr "Voorvoegsel voor sjabloonmappen"
 
 #: cms_appconfig.py:94
 msgid "Auto-create authors?"
-msgstr "Auto-creëer auteurs?"
+msgstr "Auteurs automatisch creëren?"
 
 #: cms_appconfig.py:96
 msgid "Automatically create authors from logged-in user?"
-msgstr "Automatisch auteurs creëren vanuit logged-in gebruikers?"
+msgstr "Auteurs automatisch creëren vanuit ingelogde gebruikers?"
 
 #: cms_appconfig.py:101
 msgid "Include in search index?"
-msgstr "In de zoek index opnemen?"
+msgstr "Opnemen in de zoekindex?"
 
 #: cms_appconfig.py:103
 msgid "Include articles in search indexes?"
-msgstr "Artikel in de zoek index opnemen?"
+msgstr "Artikelen opnemen in de zoekindex?"
 
 #: cms_appconfig.py:142
 msgid "untitled"
-msgstr "Titelloos"
+msgstr "naamloos"
 
 #: cms_appconfig.py:145
 #| msgid "application title"
 msgid "application configuration"
-msgstr ""
+msgstr "applicatieconfiguratie"
 
 #: cms_appconfig.py:146
 #| msgid "application title"
 msgid "application configurations"
-msgstr ""
+msgstr "applicatieconfiguraties"
 
 #: cms_appconfig.py:151
 msgid "Post published by default"
-msgstr "Artikel default publiceren"
+msgstr "Artikelen standaard publiceren"
 
 #: cms_apps.py:15
 msgid "NewsBlog"
@@ -283,7 +284,7 @@ msgstr "Archief"
 
 #: cms_plugins.py:86
 msgid "Article Search"
-msgstr "Artikel Zoeken"
+msgstr "Artikel zoeken"
 
 #: cms_plugins.py:100
 msgid "Authors"
@@ -295,49 +296,49 @@ msgstr "Categorieën"
 
 #: cms_plugins.py:135
 msgid "Featured Articles"
-msgstr "Aanbevolen Artikelen"
+msgstr "Uitgelichte artikelen"
 
 #: cms_plugins.py:149
 msgid "Latest Articles"
-msgstr "Laatste artikelen"
+msgstr "Nieuwste artikelen"
 
 #: cms_plugins.py:163
 msgid "Related Articles"
-msgstr "Gerelateerde Artikelen"
+msgstr "Gerelateerde artikelen"
 
 #: cms_plugins.py:191
 msgid "Tags"
-msgstr "Tags"
+msgstr "Labels"
 
 #: cms_toolbars.py:92
 msgid "Configure addon"
-msgstr "Configureer addon"
+msgstr "Add-on instellen"
 
 #: cms_toolbars.py:103
 msgid "Article list"
-msgstr "Artikel lijst"
+msgstr "Artikellijst"
 
 #: cms_toolbars.py:110
 msgid "Add new article"
-msgstr "Voeg nieuw artikel toe"
+msgstr "Nieuw artikel toevoegen"
 
 #: cms_toolbars.py:118
 msgid "Edit this article"
-msgstr "Bewerk dit artikel"
+msgstr "Dit artikel bewerken"
 
 #: cms_toolbars.py:126
 msgid "Delete this article"
-msgstr "Verwijder dit artikel"
+msgstr "Dit artikel verwijderen"
 
 #: cms_wizards.py:68
 msgid "Content"
-msgstr ""
+msgstr "Inhoud"
 
 #: cms_wizards.py:72
 msgid ""
 "Optional. If provided, it will be added to the main body of the article as a"
 " text plugin, that can be formatted."
-msgstr "Optioneel. Als het wordt ingevuld, wordt het toegevoegd aan de body van het artikel als tekst plugin, welke opgemaakt kan worden."
+msgstr "Optioneel. Als het wordt ingevuld, wordt het toegevoegd aan de inhoud van het artikel als tekstplug-in, welke opgemaakt kan worden."
 
 #: cms_wizards.py:126
 msgid "Initial version."
@@ -345,11 +346,11 @@ msgstr "Initiële versie."
 
 #: cms_wizards.py:132
 msgid "New news/blog article"
-msgstr "Nieuw nieuws/blog artikel"
+msgstr "Nieuw nieuws/Blogartikel"
 
 #: cms_wizards.py:135
 msgid "Create a new news/blog article."
-msgstr "Maak een nieuw nieuws/blog artikel."
+msgstr "Nieuw nieuws/Blogartikel creëren."
 
 #: feeds.py:37
 #, python-format
@@ -359,11 +360,11 @@ msgstr "Artikelen op %(site_name)s"
 
 #: menu.py:20
 msgid "Aldryn NewsBlog Menu"
-msgstr "Aldryn NieuwsBlog Menu"
+msgstr "Aldryn NieuwsBlog-menu"
 
 #: models.py:77
 msgid "untitled-article"
-msgstr "Titelloos-artkel"
+msgstr "naamloos artikel"
 
 #: models.py:88
 msgid "title"
@@ -377,29 +378,29 @@ msgstr "slug"
 msgid ""
 "Used in the URL. If changed, the URL will change. Clear it to have it re-"
 "created automatically."
-msgstr "Wordt gebruikt in de URL. Als dit verandert, verandert de URL ook. Maak het leeg om automatisch opnieuw te laten maken."
+msgstr "Wordt gebruikt in de URL. Als je dit wijzigt, dan verandert de URL ook. Maak het leeg om automatisch opnieuw te genereren."
 
 #: models.py:99
 msgid "lead"
-msgstr "Inleiding"
+msgstr "inleiding"
 
 #: models.py:101
 msgid ""
 "The lead gives the reader the main idea of the story, this is useful in "
 "overviews, lists or as an introduction to your article."
-msgstr "De inleiding geeft de lezer het belangrijkste idee van het verhaal. Dit is waardevol bij overzichten. lijsten en als introductie bij uw artikel."
+msgstr "De inleiding geeft de lezer een idee van het verhaal. Dit is waardevol bij overzichten, lijsten en als introductie bij je artikel."
 
 #: models.py:108
 msgid "meta title"
-msgstr "meta titel"
+msgstr "metatitel"
 
 #: models.py:111
 msgid "meta description"
-msgstr "meta beschrijving"
+msgstr "meta-omschrijving"
 
 #: models.py:113
 msgid "meta keywords"
-msgstr "meta zoekwoorden"
+msgstr "metazoekwoorden"
 
 #: models.py:122
 msgid "author"
@@ -411,7 +412,7 @@ msgstr "eigenaar"
 
 #: models.py:125 models.py:286
 msgid "Apphook configuration"
-msgstr "Apphook configuratie"
+msgstr "Apphook-configuratie"
 
 #: models.py:127
 msgid "categories"
@@ -419,7 +420,7 @@ msgstr "categorieën"
 
 #: models.py:129
 msgid "publishing date"
-msgstr "publicatie datum"
+msgstr "publicatiedatum"
 
 #: models.py:131
 msgid "is published"
@@ -427,12 +428,12 @@ msgstr "is gepubliceerd"
 
 #: models.py:133
 msgid "is featured"
-msgstr "is aanbevolen"
+msgstr "is uitgelicht"
 
 #: models.py:136
 #| msgid "featured article"
 msgid "featured image"
-msgstr ""
+msgstr "uitgelichte afbeelding"
 
 #: models.py:152
 msgid "related articles"
@@ -442,7 +443,7 @@ msgstr "gerelateerde artikelen"
 msgid ""
 "The maximum duration (in seconds) that this plugin's content should be "
 "cached."
-msgstr "De maximale duur (in seconden) dat de plugin's inhoud gecached moet worden."
+msgstr "De maximale duur (in seconden) dat de plug-ininhoud gecached moet worden."
 
 #: models.py:301 models.py:312
 #, python-format
@@ -451,11 +452,11 @@ msgstr "%s archief"
 
 #: models.py:306
 msgid "max articles"
-msgstr "max artikelen"
+msgstr "maximaal aantal artikelen"
 
 #: models.py:308
 msgid "The maximum number of found articles display."
-msgstr "Het  maximale aantal gevonden artikelen wordt getoond."
+msgstr "Het maximale aantal gevonden artikelen dat wordt getoond."
 
 #: models.py:353
 #, python-format
@@ -469,31 +470,31 @@ msgstr "%s categorieën"
 
 #: models.py:403
 msgid "The maximum number of featured articles display."
-msgstr "Het  maximale aantal aanbevolen artikelen dat wordt getoond."
+msgstr "Het  maximale aantal uitgelichte artikelen dat wordt getoond."
 
 #: models.py:426
 msgid "featured article"
-msgstr "aanbevolen artikel"
+msgstr "uitgelicht artikel"
 
 #: models.py:428
 #, python-format
 msgid "featured articles: %(count)s"
-msgstr "aanbevolen artikelen: %(count)s"
+msgstr "uitgelichte artikelen: %(count)s"
 
 #: models.py:440
 msgid "The maximum number of latest articles to display."
-msgstr "Het  maximale aantal van de laatste artikelen om te tonen."
+msgstr "Het maximaal aantal nieuwste artikelen dat wordt getoond."
 
 #: models.py:446
 msgid ""
 "The maximum number of featured articles to exclude from display. E.g. for "
 "uses in combination with featured articles plugin."
-msgstr "Het maximale aantal aanbevolen artikelen om niet te laten zien. Bijv. voor gebruik in combinatie met aanbevolen artikelen plugin."
+msgstr "Het maximaal aantal uitgelichte artikelen dat niet wordt getoond, bijv. voor gebruik in combinatie met de uitgelichte artikelen-plug-in."
 
 #: models.py:474
 #, python-format
 msgid "%(app_title)s latest articles: %(latest_articles)s"
-msgstr "%(app_title)s laatste artikelen: %(latest_articles)s"
+msgstr "%(app_title)s nieuwste artikelen: %(latest_articles)s"
 
 #: models.py:502
 msgid "Related articles"
@@ -502,7 +503,7 @@ msgstr "Gerelateerde artikelen"
 #: models.py:544
 #, python-format
 msgid "%s tags"
-msgstr "%s tags"
+msgstr "%s labels"
 
 #~ msgid "app. config"
 #~ msgstr "app. config"

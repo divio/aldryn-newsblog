@@ -5,14 +5,15 @@
 # Translators:
 # Translators:
 # Frigory33 <chironsylvain@orange.fr>, 2016
+# Doryan R <doryan16238@gmail.com>, 2019
 # Samuel Sorin, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Aldryn News & Blog\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-02 07:59-0500\n"
-"PO-Revision-Date: 2017-03-02 12:59+0000\n"
-"Last-Translator: Paulo Alvarado <paulo.alvarado@divio.ch>\n"
+"PO-Revision-Date: 2019-02-20 17:45+0000\n"
+"Last-Translator: evildmp <daniele@vurt.org>\n"
 "Language-Team: French (http://www.transifex.com/divio/aldryn-newsblog/language/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -39,11 +40,11 @@ msgstr "Marquer les articles sélectionnés comme non mis en avant"
 #: admin.py:128
 #| msgid "meta description"
 msgid "Meta Options"
-msgstr ""
+msgstr "Options méta"
 
 #: admin.py:137
 msgid "Advanced Settings"
-msgstr ""
+msgstr "Réglages avancés"
 
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/article_detail.html:18
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/article_detail.html:20
@@ -175,7 +176,7 @@ msgstr "Retour 404 : Non trouvé"
 
 #: cms_appconfig.py:42
 msgid "application title"
-msgstr "Titre de l'application"
+msgstr ""
 
 #: cms_appconfig.py:45
 msgid "permalink type"
@@ -331,7 +332,7 @@ msgstr "Supprimer cet article"
 
 #: cms_wizards.py:68
 msgid "Content"
-msgstr ""
+msgstr "Contenu"
 
 #: cms_wizards.py:72
 msgid ""
@@ -341,7 +342,7 @@ msgstr "Facultatif. Si indiqué, il sera ajouté au corps principal de l'article
 
 #: cms_wizards.py:126
 msgid "Initial version."
-msgstr "Version initiale."
+msgstr ""
 
 #: cms_wizards.py:132
 msgid "New news/blog article"
@@ -432,7 +433,7 @@ msgstr "est en lumière"
 #: models.py:136
 #| msgid "featured article"
 msgid "featured image"
-msgstr ""
+msgstr "l'image sélectionnée"
 
 #: models.py:152
 msgid "related articles"

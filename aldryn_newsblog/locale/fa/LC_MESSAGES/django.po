@@ -4,61 +4,62 @@
 # 
 # Translators:
 # Translators:
+# Fariman Ghaedi <farimanghaedi@gmail.com>, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: Aldryn News & Blog\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-02 07:59-0500\n"
-"PO-Revision-Date: 2017-03-02 12:59+0000\n"
-"Last-Translator: Paulo Alvarado <paulo.alvarado@divio.ch>\n"
+"PO-Revision-Date: 2019-02-20 17:45+0000\n"
+"Last-Translator: evildmp <daniele@vurt.org>\n"
 "Language-Team: Persian (http://www.transifex.com/divio/aldryn-newsblog/language/fa/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: fa\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: admin.py:25
 msgid "Mark selected articles as published"
-msgstr ""
+msgstr "علامت زدن مقالات انتخابی به عنوان منتشر شده"
 
 #: admin.py:33
 msgid "Mark selected articles as not published"
-msgstr ""
+msgstr "علامت زدن مقالات انتخابی به عنوان منتشر نشده"
 
 #: admin.py:41
 msgid "Mark selected articles as featured"
-msgstr ""
+msgstr "علامت زدن مقالات انتخابی به عنوان مقاله ویژه"
 
 #: admin.py:49
 msgid "Mark selected articles as not featured"
-msgstr ""
+msgstr "علامت زدن مقالات انتخابی به عنوان مقاله غیر ویژه"
 
 #: admin.py:128
 #| msgid "meta description"
 msgid "Meta Options"
-msgstr ""
+msgstr "گزینه های متا"
 
 #: admin.py:137
 msgid "Advanced Settings"
-msgstr ""
+msgstr "تنظیمات پیشرفته"
 
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/article_detail.html:18
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/article_detail.html:20
 #: templates/aldryn_newsblog/article_detail.html:15
 msgid "Previous Article"
-msgstr ""
+msgstr "مقاله قبلی"
 
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/article_detail.html:22
 #: templates/aldryn_newsblog/article_detail.html:17
 msgid "Back to Overview"
-msgstr ""
+msgstr "بازگشت به بررسی اجمالی"
 
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/article_detail.html:24
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/article_detail.html:26
 #: templates/aldryn_newsblog/article_detail.html:19
 msgid "Next Article"
-msgstr ""
+msgstr "مقاله بعدی"
 
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/article_list.html:9
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/archive.html:21
@@ -72,68 +73,68 @@ msgstr ""
 #: templates/aldryn_newsblog/plugins/latest_articles.html:6
 #: templates/aldryn_newsblog/plugins/related_articles.html:11
 msgid "No items available"
-msgstr ""
+msgstr "هیچ موردی وجود ندارد"
 
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/pagination.html:8
 msgid "First"
-msgstr ""
+msgstr "اولین"
 
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/pagination.html:14
 #: templates/aldryn_newsblog/includes/pagination.html:8
 msgid "Previous"
-msgstr ""
+msgstr "قبلی"
 
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/pagination.html:47
 #: templates/aldryn_newsblog/includes/pagination.html:42
 msgid "Next"
-msgstr ""
+msgstr "بعدی"
 
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/pagination.html:53
 msgid "Last"
-msgstr ""
+msgstr "آخرین"
 
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/search_results.html:4
 #: templates/aldryn_newsblog/includes/search_results.html:6
 #, python-format
 msgid "Most recent articles containing \"<strong>%(query)s</strong>\""
-msgstr ""
+msgstr "جدیدترین مقالات شامل \" <strong>%(query)s</strong>  \""
 
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/search_results.html:19
 #: templates/aldryn_newsblog/includes/search_results.html:21
 msgid "No articles found"
-msgstr ""
+msgstr "هیچ مقاله ای یافت نشد"
 
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/includes/search_results.html:21
 #: templates/aldryn_newsblog/includes/search_results.html:23
 msgid "Enter a query above"
-msgstr ""
+msgstr "یک پرس و جو در بالا وارد کنید"
 
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/article_search.html:8
 #: templates/aldryn_newsblog/plugins/article_search.html:6
 msgid "Keyword search"
-msgstr ""
+msgstr "جستجو کلمه کلیدی"
 
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/article_search.html:9
 #: templates/aldryn_newsblog/plugins/article_search.html:7
 msgid "Keyword"
-msgstr ""
+msgstr "کلمه کلیدی"
 
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/article_search.html:11
 #: templates/aldryn_newsblog/plugins/article_search.html:10
 msgid "Go"
-msgstr ""
+msgstr "برو"
 
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/categories.html:6
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/tags.html:6
 #: templates/aldryn_newsblog/plugins/categories.html:5
 #: templates/aldryn_newsblog/plugins/tags.html:5
 msgid "All"
-msgstr ""
+msgstr "همه"
 
 #: boilerplates/bootstrap3/templates/aldryn_newsblog/plugins/related_articles.html:9
 #: templates/aldryn_newsblog/plugins/related_articles.html:8
 msgid "by"
-msgstr ""
+msgstr "با"
 
 #: cms_appconfig.py:19
 msgid "the-eagle-has-landed/"
@@ -157,19 +158,19 @@ msgstr ""
 
 #: cms_appconfig.py:27
 msgid "Allow"
-msgstr ""
+msgstr "اجازه دادن"
 
 #: cms_appconfig.py:28
 msgid "Redirect to permalink (default)"
-msgstr ""
+msgstr "تغییر مسیر به پیوند یکتا (پیشفرض)"
 
 #: cms_appconfig.py:29
 msgid "Permanent redirect to permalink"
-msgstr ""
+msgstr "تغییر مسیر دائمی به پیوند یکتا"
 
 #: cms_appconfig.py:30
 msgid "Return 404: Not Found"
-msgstr ""
+msgstr "بازگشت. 404: یافت نشد"
 
 #: cms_appconfig.py:42
 msgid "application title"
@@ -177,13 +178,13 @@ msgstr ""
 
 #: cms_appconfig.py:45
 msgid "permalink type"
-msgstr ""
+msgstr "نوع پیوند یکتا"
 
 #: cms_appconfig.py:47
 msgid ""
 "Choose the style of urls to use from the examples. (Note, all types are "
 "relative to apphook)"
-msgstr ""
+msgstr "استایل آدرس url را از بین مثال ها انتخاب کنید. (دقت کنید تمام نوع ها مرتبط با قلاب برنامه (apphook) هستند)"
 
 #: cms_appconfig.py:51
 msgid "non-permalink handling"
@@ -195,35 +196,35 @@ msgstr ""
 
 #: cms_appconfig.py:57
 msgid "Paginate size"
-msgstr ""
+msgstr "اندازه صفحه بندی"
 
 #: cms_appconfig.py:60
 msgid "When paginating list views, how many articles per page?"
-msgstr ""
+msgstr "هنگام مشاهده لیست صفحه بندی، چند مقاله در یک صفحه نمایش داده شود؟"
 
 #: cms_appconfig.py:63
 msgid "Pagination pages start"
-msgstr ""
+msgstr "ابتدای صفحه بندی صفحات"
 
 #: cms_appconfig.py:66
 msgid ""
 "When paginating list views, after how many pages should we start grouping "
 "the page numbers."
-msgstr ""
+msgstr "هنگام مشاهده لیست صفحه بندی، بعد از چند صفحه باید گروه بندی شماره صفحات آغاز شود."
 
 #: cms_appconfig.py:70
 msgid "Pagination pages visible"
-msgstr ""
+msgstr "قابل نمایش بودن صفحه بندی صفحات"
 
 #: cms_appconfig.py:73
 msgid ""
 "When grouping page numbers, this determines how many pages are visible on "
 "each side of the active page."
-msgstr ""
+msgstr "هنگام گروه بندی شماره صفحات، این گزینه تعداد صفحاتی که در هر طرف صفحه فعال قابل دیدن است را مشخص می کند."
 
 #: cms_appconfig.py:77
 msgid "Excluded featured articles count"
-msgstr ""
+msgstr "تعداد مقالات ویژه خارج شده"
 
 #: cms_appconfig.py:81
 msgid ""
@@ -231,7 +232,7 @@ msgid ""
 "may prefer to exclude featured articles from the article list itself to "
 "avoid duplicates. To do this, enter the same number here as in your Featured"
 " Articles plugin."
-msgstr ""
+msgstr "اگر از پلاگین مقالات ویژه (Featured Articles) برای مشاهده لیست مقالات استفاده می کنید، برای جلوگیری از کپی شدن مجدد مقالات ویژه، ممکن است ترجیح دهید آنها را از لیست مقالات خارج کنید. برای این کار همان عددی را که در پلاگین مقالات ویژه وارد کرده اید بنویسید.  "
 
 #: cms_appconfig.py:90
 msgid "Prefix for template dirs"
@@ -239,11 +240,11 @@ msgstr ""
 
 #: cms_appconfig.py:94
 msgid "Auto-create authors?"
-msgstr ""
+msgstr "ساختن خودکار نویسندگان؟"
 
 #: cms_appconfig.py:96
 msgid "Automatically create authors from logged-in user?"
-msgstr ""
+msgstr "نویسندگان به صورت خودکار از کاربران وارد شده ساخته شوند؟"
 
 #: cms_appconfig.py:101
 msgid "Include in search index?"
@@ -255,7 +256,7 @@ msgstr ""
 
 #: cms_appconfig.py:142
 msgid "untitled"
-msgstr ""
+msgstr "بدون عنوان"
 
 #: cms_appconfig.py:145
 #| msgid "application title"
@@ -269,67 +270,67 @@ msgstr ""
 
 #: cms_appconfig.py:151
 msgid "Post published by default"
-msgstr ""
+msgstr "نوشته به صورت پیشفرض منتشر شد"
 
 #: cms_apps.py:15
 msgid "NewsBlog"
-msgstr ""
+msgstr "NewsBlog"
 
 #: cms_plugins.py:66
 msgid "Archive"
-msgstr ""
+msgstr "بایگانی"
 
 #: cms_plugins.py:86
 msgid "Article Search"
-msgstr ""
+msgstr "جستجو مقاله"
 
 #: cms_plugins.py:100
 msgid "Authors"
-msgstr ""
+msgstr "نویسندگان"
 
 #: cms_plugins.py:118
 msgid "Categories"
-msgstr ""
+msgstr "دسته بندی ها"
 
 #: cms_plugins.py:135
 msgid "Featured Articles"
-msgstr ""
+msgstr "مقالات ویژه"
 
 #: cms_plugins.py:149
 msgid "Latest Articles"
-msgstr ""
+msgstr "آخرین مقالات"
 
 #: cms_plugins.py:163
 msgid "Related Articles"
-msgstr ""
+msgstr "مقالات مرتبط"
 
 #: cms_plugins.py:191
 msgid "Tags"
-msgstr ""
+msgstr "برچسب ها"
 
 #: cms_toolbars.py:92
 msgid "Configure addon"
-msgstr ""
+msgstr "پیکربندی افزونه"
 
 #: cms_toolbars.py:103
 msgid "Article list"
-msgstr ""
+msgstr "لیست مقاله"
 
 #: cms_toolbars.py:110
 msgid "Add new article"
-msgstr ""
+msgstr "مقاله جدید اضافه کنید"
 
 #: cms_toolbars.py:118
 msgid "Edit this article"
-msgstr ""
+msgstr "این مقاله را ویرایش کنید"
 
 #: cms_toolbars.py:126
 msgid "Delete this article"
-msgstr ""
+msgstr "این مقاله را حذف کنید"
 
 #: cms_wizards.py:68
 msgid "Content"
-msgstr ""
+msgstr "محتوا"
 
 #: cms_wizards.py:72
 msgid ""
@@ -343,33 +344,33 @@ msgstr ""
 
 #: cms_wizards.py:132
 msgid "New news/blog article"
-msgstr ""
+msgstr "مقاله جدید news/blog"
 
 #: cms_wizards.py:135
 msgid "Create a new news/blog article."
-msgstr ""
+msgstr "یک مقاله جدید news/blog بسازید."
 
 #: feeds.py:37
 #, python-format
 #| msgid "Articles on {0}"
 msgid "Articles on %(site_name)s"
-msgstr ""
+msgstr "مقالات در %(site_name)s"
 
 #: menu.py:20
 msgid "Aldryn NewsBlog Menu"
-msgstr ""
+msgstr "منو Aldryn NewsBlog"
 
 #: models.py:77
 msgid "untitled-article"
-msgstr ""
+msgstr "مقاله بدون عنوان"
 
 #: models.py:88
 msgid "title"
-msgstr ""
+msgstr "عنوان"
 
 #: models.py:90
 msgid "slug"
-msgstr ""
+msgstr "نامک"
 
 #: models.py:95
 msgid ""
@@ -389,39 +390,39 @@ msgstr ""
 
 #: models.py:108
 msgid "meta title"
-msgstr ""
+msgstr "عنوان متا"
 
 #: models.py:111
 msgid "meta description"
-msgstr ""
+msgstr "توضیحات متا"
 
 #: models.py:113
 msgid "meta keywords"
-msgstr ""
+msgstr "کلمات کلیدی متا"
 
 #: models.py:122
 msgid "author"
-msgstr ""
+msgstr "نویسنده"
 
 #: models.py:123
 msgid "owner"
-msgstr ""
+msgstr "مالک"
 
 #: models.py:125 models.py:286
 msgid "Apphook configuration"
-msgstr ""
+msgstr "پیکربندی قلاب برنامه (Apphook)"
 
 #: models.py:127
 msgid "categories"
-msgstr ""
+msgstr "دسته بندی ها"
 
 #: models.py:129
 msgid "publishing date"
-msgstr ""
+msgstr "تاریخ انتشار"
 
 #: models.py:131
 msgid "is published"
-msgstr ""
+msgstr "منتشر شده"
 
 #: models.py:133
 msgid "is featured"
@@ -430,57 +431,57 @@ msgstr ""
 #: models.py:136
 #| msgid "featured article"
 msgid "featured image"
-msgstr ""
+msgstr "تصویر ویژه"
 
 #: models.py:152
 msgid "related articles"
-msgstr ""
+msgstr "مقالات مرتبط"
 
 #: models.py:271
 msgid ""
 "The maximum duration (in seconds) that this plugin's content should be "
 "cached."
-msgstr ""
+msgstr "بیشترین بازه زمانی (برحسب ثانیه) که محتوای این پلاگین باید کش شوند."
 
 #: models.py:301 models.py:312
 #, python-format
 msgid "%s archive"
-msgstr ""
+msgstr "بایگانی %s"
 
 #: models.py:306
 msgid "max articles"
-msgstr ""
+msgstr "بیشترین مقالات"
 
 #: models.py:308
 msgid "The maximum number of found articles display."
-msgstr ""
+msgstr "بیشترین تعداد نمایش مقالات پیدا شده"
 
 #: models.py:353
 #, python-format
 msgid "%s authors"
-msgstr ""
+msgstr "نویسندگان %s"
 
 #: models.py:359
 #, python-format
 msgid "%s categories"
-msgstr ""
+msgstr "دسته بندی های %s"
 
 #: models.py:403
 msgid "The maximum number of featured articles display."
-msgstr ""
+msgstr "بیشترین تعداد نمایش مقالات ویژه"
 
 #: models.py:426
 msgid "featured article"
-msgstr ""
+msgstr "مقاله ویژه"
 
 #: models.py:428
 #, python-format
 msgid "featured articles: %(count)s"
-msgstr ""
+msgstr "مقالات ویژه: %(count)s"
 
 #: models.py:440
 msgid "The maximum number of latest articles to display."
-msgstr ""
+msgstr "بیشترین تعداد آخرین مقالات برای نمایش"
 
 #: models.py:446
 msgid ""
@@ -491,16 +492,16 @@ msgstr ""
 #: models.py:474
 #, python-format
 msgid "%(app_title)s latest articles: %(latest_articles)s"
-msgstr ""
+msgstr "آخرین مقالات %(app_title)s : %(latest_articles)s"
 
 #: models.py:502
 msgid "Related articles"
-msgstr ""
+msgstr "مقالات مرتبط"
 
 #: models.py:544
 #, python-format
 msgid "%s tags"
-msgstr ""
+msgstr "%s برچسب ها"
 
 #~ msgid "app. config"
 #~ msgstr "app. config"
