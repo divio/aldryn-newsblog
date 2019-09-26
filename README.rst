@@ -4,7 +4,7 @@ This project is no longer supported.
 
 Divio will undertake no further development or maintenance of this project. If you are interested in  taking responsibility for this project as its maintainer, please contact us via www.divio.com.
 
-Please have a look at alternatives such as `djangocms-blog`<https://github.com/nephila/djangocms-blog>.
+Please have a look at alternatives such as `djangocms-blog <https://github.com/nephila/djangocms-blog>`_.
 
 #################################
 Aldryn News & Blog for django CMS
